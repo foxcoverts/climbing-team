@@ -7,14 +7,14 @@
 
     <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="py-6 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <header class="px-6">
+            <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <header class="px-6 py-4">
                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                         {{ $user->name }}
                     </h2>
                 </header>
 
-                <div class="px-6 py-2">
+                <div class="px-6 py-4">
                     <div>
                         <p class="mt-2 text-gray-800 dark:text-gray-200">
                             {{ __('Email') }}:
@@ -31,9 +31,9 @@
                     </div>
                 </div>
 
-                <footer class="px-6 pt-2 border-t border-t-black">
-                    <a href="{{ route('user.edit', $user) }}">{{ __('Edit') }}</a>
-                    <button> {{ __('Delete') }}</button>
+                <footer class="px-4 border-t border-t-black">
+                    <a href="{{ route('user.edit', $user) }}" class="p-2">{{ __('Edit') }}</a>
+                    <button class="p-2">{{ __('Delete') }}</button>
                 </footer>
             </div>
         </div>

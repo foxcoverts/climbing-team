@@ -7,13 +7,13 @@
 
     <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="py-4 sm:py-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+            <div class="sm:py-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="grid grid-cols-1 divide-y">
                     @each('user.item', $users, 'user', 'user.empty')
                 </div>
 
-                <footer class="px-6 pt-2 sm:px-8 border-t border-t-black">
-                    <a href="{{ route('user.create') }}">{{ __('Register') }}</a>
+                <footer class="px-6 sm:px-8 border-t border-t-black">
+                    <a href="{{ route('user.create') }}" class="block py-2">{{ __('Register') }}</a>
                 </footer>
             </div>
         </div>
