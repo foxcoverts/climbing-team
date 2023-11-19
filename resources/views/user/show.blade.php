@@ -7,7 +7,7 @@
 
     <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+            <div class="bg-white dark:bg-gray-700 shadow sm:rounded-lg">
                 <header class="px-6 py-4">
                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                         {{ $user->name }}
@@ -31,9 +31,9 @@
                     </div>
                 </div>
 
-                <footer class="px-4 border-t border-t-black">
-                    <a href="{{ route('user.edit', $user) }}" class="p-2">{{ __('Edit') }}</a>
-                    <button class="p-2">{{ __('Delete') }}</button>
+                <footer class="flex px-4 border-t border-t-gray-200">
+                    <x-admin.button-link href="{{ route('user.edit', $user) }}">{{ __('Edit') }}</x-admin.button-link>
+                    <x-admin.button>{{ __('Delete') }}</x-admin.button>
                 </footer>
             </div>
         </div>

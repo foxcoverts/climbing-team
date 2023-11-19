@@ -1,7 +1,7 @@
-<x-app-layout :title="__('Register')">
+<x-app-layout :title="__('Events')">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Register') }}
+            {{ __('Add Event') }}
         </h2>
     </x-slot>
 
@@ -16,9 +16,9 @@
 
                 <footer class="flex px-2 border-t border-t-gray-200">
                     <x-admin.button>
-                        {{ __('Register') }}
+                        {{ __('Add Event') }}
                     </x-admin.button>
-                    <x-admin.button-link :href="route('user.index')">
+                    <x-admin.button-link :href="route('event.index')">
                         {{ __('Cancel') }}
                     </x-admin.button-link>
                 </footer>

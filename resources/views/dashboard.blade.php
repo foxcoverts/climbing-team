@@ -7,11 +7,10 @@
 
     <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="py-4 sm:py-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div>
-                    <ul class="grid grid-cols-1 divide-y">
-                        <li><a href="{{ route('user.index') }}" class="block px-6">Users</a></li>
-                    </ul>
+            <div class="py-2 bg-white dark:bg-gray-700 shadow sm:rounded-lg">
+                <div class="grid grid-cols-1 divide-y divide-gray-700 dark:divide-gray-300">
+                    <x-admin.link href="{{ route('event.index') }}">{{ __('Events') }}</x-admin.link>
+                    <x-admin.link href="{{ route('user.index') }}">{{ __('Users') }}</x-admin.link>
                 </div>
             </div>
         </div>
