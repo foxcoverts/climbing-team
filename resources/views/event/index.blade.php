@@ -12,11 +12,11 @@
                     @each('event.item', $events, 'event', 'event.empty')
                 </div>
 
-                <footer class="flex px-2 border-t border-t-gray-200">
-                    <x-admin.button-link :href="route('event.create')">
+                <x-admin.footer>
+                    <x-admin.button :href="route('event.create')" style='primary'>
                         {{ __('Add Event') }}
-                    </x-admin.button-link>
-                </footer>
+                    </x-admin.button>
+                </x-admin.footer>
             </div>
         </div>
     </section>

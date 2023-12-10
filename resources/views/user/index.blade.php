@@ -12,11 +12,11 @@
                     @each('user.item', $users, 'user', 'user.empty')
                 </div>
 
-                <footer class="flex px-2 border-t border-t-gray-200">
-                    <x-admin.button-link :href="route('user.create')">
+                <x-admin.footer>
+                    <x-admin.button :href="route('user.create')" style='primary'>
                         {{ __('Register') }}
-                    </x-admin.button-link>
-                </footer>
+                    </x-admin.button>
+                </x-admin.footer>
             </div>
         </div>
     </section>
