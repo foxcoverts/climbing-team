@@ -1,11 +1,5 @@
-<x-app-layout :title="__('Users')">
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Users') }}
-        </h2>
-    </x-slot>
-
-    <section class="py-12">
+<x-layout.app :title="__('Users')">
+    <section class="sm:py-8 lg:py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="py-2 bg-white dark:bg-gray-700 shadow sm:rounded-lg">
                 <div class="grid grid-cols-1 divide-y divide-gray-200">
@@ -20,4 +14,4 @@
             </div>
         </div>
     </section>
-</x-app-layout>
+</x-layout.app>
