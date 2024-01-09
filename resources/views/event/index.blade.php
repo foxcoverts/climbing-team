@@ -7,9 +7,9 @@
                 </div>
 
                 <x-admin.footer>
-                    <x-admin.button :href="route('event.create')" style='primary'>
+                    <x-button.primary :href="route('event.create')">
                         {{ __('Add Event') }}
-                    </x-admin.button>
+                    </x-button.primary>
                 </x-admin.footer>
             </div>
         </div>

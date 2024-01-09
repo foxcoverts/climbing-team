@@ -27,9 +27,10 @@
                 </div>
 
                 <x-admin.footer>
-                    <x-admin.button href="{{ route('user.edit', $user) }}"
-                        style='primary'>{{ __('Edit') }}</x-admin.button>
-                    <x-admin.button style='danger'>{{ __('Delete') }}</x-admin.button>
+                    <x-button.primary href="{{ route('user.edit', $user) }}">
+                        {{ __('Edit') }}</x-button.primary>
+                    <x-button.danger>
+                        {{ __('Delete') }}</x-button.danger>
                 </x-admin.footer>
             </div>
         </div>

@@ -9,12 +9,12 @@
                 </div>
 
                 <x-admin.footer>
-                    <x-admin.button style='primary'>
+                    <x-button.primary>
                         {{ __('Register') }}
-                    </x-admin.button>
-                    <x-admin.button :href="route('user.index')">
+                    </x-button.primary>
+                    <x-button.secondary :href="route('user.index')">
                         {{ __('Cancel') }}
-                    </x-admin.button>
+                    </x-button.secondary>
                 </x-admin.footer>
             </div>
         </div>

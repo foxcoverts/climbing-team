@@ -9,12 +9,12 @@
                 </div>
 
                 <x-admin.footer>
-                    <x-admin.button style='primary'>
+                    <x-button.primary>
                         {{ __('Add Event') }}
-                    </x-admin.button>
-                    <x-admin.button :href="route('event.index')">
+                    </x-button.primary>
+                    <x-button.secondary :href="route('event.index')">
                         {{ __('Cancel') }}
-                    </x-admin.button>
+                    </x-button.secondary>
                 </x-admin.footer>
             </div>
         </div>
