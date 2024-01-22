@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Auth\Events\Registered;
 
 class UserController extends Controller
 {
@@ -35,7 +36,16 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        //
+        $user = User::create(
+            $request->safe()
+                ->merge(['password' => ''])
+                ->only(['name', 'email', 'password'])
+        );
+
+        event(new Registered($user));
+
+        return redirect()->route('user.show', $user)
+            ->with('success', 'User created successfully');
     }
 
     /**

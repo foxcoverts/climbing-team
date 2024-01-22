@@ -10,7 +10,6 @@
                             </h2>
                         </header>
 
-
                         <div class="mt-6 space-y-6">
                             <div>
                                 <p class="mt-2 text-gray-800 dark:text-gray-200">
