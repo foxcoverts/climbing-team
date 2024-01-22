@@ -32,7 +32,7 @@
 
                                 @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
                                     <div class="text-sm mt-2 text-orange-800 dark:text-orange-200">
-                                        {{ __('This email address has not been verified.') }}
+                                        {{ __('This email address is unverified.') }}
                                     </div>
                                 @endif
                             </div>
