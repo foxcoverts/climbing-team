@@ -36,6 +36,8 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(StoreUserRequest $request)
     {
@@ -92,6 +94,8 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy(DestroyUserRequest $request, User $user): RedirectResponse
     {
