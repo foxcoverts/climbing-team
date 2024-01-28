@@ -20,7 +20,7 @@
             </x-input-label>
 
             <x-text-input id="confirm" name="confirm" type="text" class="mt-1 block w-3/4" :value="old('confirm')"
-                required />
+                autocapitalize="characters" autofocus required />
 
             <x-input-error :messages="$errors->userDeletion->get('confirm')" class="mt-2" />
         </div>
