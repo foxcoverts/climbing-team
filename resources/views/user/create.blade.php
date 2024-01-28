@@ -26,9 +26,11 @@
                                     :value="old('email', $user->email)" required />
                                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
-                                <div class="text-sm mt-2 text-blue-800 dark:text-blue-200">
-                                    {{ __('This user will be asked to verify this email address.') }}
-                                </div>
+                                @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
+                                    <div class="text-sm mt-2 text-blue-800 dark:text-blue-200">
+                                        {{ __('This user will be asked to verify this email address.') }}
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="flex items-center gap-4">
