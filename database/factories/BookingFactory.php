@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Booking>
  */
-class EventFactory extends Factory
+class BookingFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -42,9 +42,8 @@ class EventFactory extends Factory
         ]);
 
         return [
-            'start_on' => $start->format('Y-m-d'),
-            'start_at' => '09:00',
-            'end_at' => '11:00',
+            'start_at' => $start,
+            'end_at' => $start->addHours(2),
             'location' => 'Fox Coverts Campsite',
             'group_name' => "$group $section",
             'notes' => "x12 $section",

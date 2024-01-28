@@ -11,19 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->date('start_on');
-            $table->time('start_at');
-            $table->time('end_at');
+            $table->datetime('start_at');
+            $table->datetime('end_at');
             $table->string('location');
             $table->string('group_name');
-            $table->text('notes');
-            $table->unsignedBigInteger('primary_instructor_id');
+            $table->text('notes')->nullable();
             $table->timestamps();
-
-            // TODO
-            // $table->foreign('primary_instructor_id')->references('id')->on('instructors');
         });
     }
 
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('bookings');
     }
 };
