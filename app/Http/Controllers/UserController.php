@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\DestroyUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Auth\Events\Registered;
+
+use function PHPUnit\Framework\returnSelf;
 
 class UserController extends Controller
 {
@@ -75,17 +78,28 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $user->update($request->safe()->only(['name', 'email']));
+        $user->fill($request->validated());
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return redirect()->route('user.index')
-            ->with('success', 'User updated successfully');
+            ->with('status', 'User updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(DestroyUserRequest $request, User $user): RedirectResponse
     {
-        //
+        $request->validate([]);
+
+        $user->delete();
+
+        return redirect()->route('user.index')
+            ->with('status', 'User account deleted.');
     }
 }

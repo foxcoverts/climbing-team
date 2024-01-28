@@ -31,9 +31,7 @@
                                 <x-button.primary href="{{ route('user.edit', $user) }}">
                                     {{ __('Edit') }}
                                 </x-button.primary>
-                                <x-button.danger>
-                                    {{ __('Delete') }}
-                                </x-button.danger>
+                                @include('user.partials.delete-button')
                             </div>
                         </div>
                     </section>

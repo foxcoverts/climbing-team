@@ -20,7 +20,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-gray-100" x-data="{ sidebarOpen: false }">
+<body class="font-sans antialiased bg-gray-100" x-data="{ sidebarOpen: false, alertOpen: true }">
     <div class="leading-normal tracking-normal" id="main-body">
         <div class="flex flex-wrap">
             <div class="w-full bg-gray-100 min-h-screen flex flex-col" id="main-content">
@@ -30,6 +30,8 @@
                     <x-layout.app.sidebar />
 
                     <main class="lg:pl-64 w-full">
+                        <x-layout.app.alert />
+
                         {{ $slot }}
                     </main>
                 </div>
