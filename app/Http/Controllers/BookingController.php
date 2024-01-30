@@ -56,7 +56,7 @@ class BookingController extends Controller
     public function show(Booking $booking)
     {
         return view('booking.show', [
-            'booking' => $booking
+            'booking' => $booking,
         ]);
     }
 
@@ -65,7 +65,9 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking)
     {
-        //
+        return view('booking.edit', [
+            'booking' => $booking,
+        ]);
     }
 
     /**
@@ -73,7 +75,11 @@ class BookingController extends Controller
      */
     public function update(UpdateBookingRequest $request, Booking $booking)
     {
-        //
+        $booking->fill($request->validated());
+        $booking->save();
+
+        return redirect()->route('booking.show', $booking)
+            ->with('status', 'Booking updated successfully');
     }
 
     /**
