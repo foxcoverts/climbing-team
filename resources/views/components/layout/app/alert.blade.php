@@ -1,7 +1,18 @@
 @if (session('status'))
     <div class="bg-blue-100 mb-2 sm:mb-0 border-blue-200 text-black px-4 py-3 flex items-center"
         :class="{ 'hidden': !alertOpen }" role="alert">
-        <p class="text-sm flex-grow">{{ session('status') }}</p>
+        <p class="text-sm flex-grow">
+            {{ session('status') }}
+
+            @if (session('restore'))
+                <form action="{{ session('restore') }}" method="post">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="deleted_at" value="0">
+                    <button class="text-gray-400 hover:text-gray-900 underline">{{ __('Undo') }}</button>
+                </form>
+            @endif
+        </p>
 
         <svg class="fill-current h-6 w-6 text-blue-500" role="button" xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20" @click="alertOpen = false">

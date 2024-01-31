@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('booking', BookingController::class);
+    Route::prefix('trash')->name('trash.')->group(function () {
+        Route::resource('booking', TrashedBookingController::class)
+            ->only(['index', 'show', 'update', 'destroy'])
+            ->withTrashed(['show', 'update', 'destroy']);
+    });
     Route::resource('user', UserController::class);
 });
 

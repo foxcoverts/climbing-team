@@ -2,8 +2,8 @@
     <section class="sm:py-8 lg:py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 bg-white dark:bg-gray-700 shadow sm:rounded-lg">
-                <div class="prose md:prose-lg lg:prose-xl max-w-none">
-                    <h2>Lorem ipsum dolor sit amet</h2>
+                <div class="prose md:prose-lg lg:prose-xl max-w-none text-gray-900 dark:text-gray-100">
+                    <h2 class="text-gray-900 dark:text-gray-100">Lorem ipsum dolor sit amet</h2>
 
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sodales aliquam urna
                         accumsan venenatis. Proin aliquam tristique leo eu accumsan. Aliquam viverra auctor dui, euismod

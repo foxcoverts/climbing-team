@@ -22,17 +22,15 @@
                         </div>
 
                         <div class="mt-6 flex items-center gap-4">
-                            <x-button.primary :href="route('booking.edit', $booking)">
-                                {{ __('Edit') }}
-                            </x-button.primary>
-                            <form method="post" action="{{ route('booking.destroy', $booking) }}">
+                            <form method="POST" action="{{ route('trash.booking.show', $booking) }}">
                                 @csrf
-                                @method('delete')
-
-                                <x-button.danger>
-                                    {{ __('Delete') }}
-                                </x-button.danger>
+                                @method('PATCH')
+                                <input type="hidden" name="deleted_at" value="0" />
+                                <x-button.primary>
+                                    {{ __('Restore') }}
+                                </x-button.primary>
                             </form>
+                            @include('trash.booking.partials.delete-button')
                         </div>
                     </section>
                 </div>

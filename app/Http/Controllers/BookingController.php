@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
-use Illuminate\View\View;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class BookingController extends Controller
 {
@@ -37,7 +38,7 @@ class BookingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBookingRequest $request)
+    public function store(StoreBookingRequest $request): RedirectResponse
     {
         $booking = Booking::create(
             $request->safe()
@@ -47,13 +48,13 @@ class BookingController extends Controller
         // event(new Registered($booking));
 
         return redirect()->route('booking.show', $booking)
-            ->with('success', 'Booking created successfully');
+            ->with('success', __('Booking created successfully'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking)
+    public function show(Booking $booking): View
     {
         return view('booking.show', [
             'booking' => $booking,
@@ -63,7 +64,7 @@ class BookingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Booking $booking)
+    public function edit(Booking $booking): View
     {
         return view('booking.edit', [
             'booking' => $booking,
@@ -73,20 +74,24 @@ class BookingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBookingRequest $request, Booking $booking)
+    public function update(UpdateBookingRequest $request, Booking $booking): RedirectResponse
     {
         $booking->fill($request->validated());
         $booking->save();
 
         return redirect()->route('booking.show', $booking)
-            ->with('status', 'Booking updated successfully');
+            ->with('status', __('Booking updated successfully'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Mark the specified resource as deleted.
      */
-    public function destroy(Booking $booking)
+    public function destroy(Booking $booking): RedirectResponse
     {
-        //
+        $booking->delete();
+
+        return redirect()->route('booking.index')
+            ->with('status', __('Booking deleted.'))
+            ->with('restore', route('trash.booking.update', $booking));
     }
 }

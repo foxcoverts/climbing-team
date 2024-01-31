@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Http\Requests\DestroyUserRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Illuminate\Auth\Events\Registered;
-
-use function PHPUnit\Framework\returnSelf;
 
 class UserController extends Controller
 {
@@ -99,8 +97,6 @@ class UserController extends Controller
      */
     public function destroy(DestroyUserRequest $request, User $user): RedirectResponse
     {
-        $request->validate([]);
-
         $user->delete();
 
         return redirect()->route('user.index')
