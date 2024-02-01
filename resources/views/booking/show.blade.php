@@ -16,8 +16,8 @@
                             <p><strong>{{ __('Location') }}:</strong> {{ $booking->location }}</p>
                             <p><strong>{{ __('Group Name') }}:</strong> {{ $booking->group_name }}</p>
                             @if (!empty($booking->notes))
-                                {{-- TODO: Format the notes for newlines. Markdown? --}}
-                                <p><strong>{{ __('Notes') }}:</strong> {{ $booking->notes }}</p>
+                                <p><strong>{{ __('Notes') }}:</strong></p>
+                                <div class="prose">@markdown($booking->notes)</div>
                             @endif
                         </div>
 

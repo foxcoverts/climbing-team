@@ -160,6 +160,7 @@ return [
          * Package Service Providers...
          */
         Spatie\Html\HtmlServiceProvider::class,
+        GrahamCampbell\Markdown\MarkdownServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -183,7 +184,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
+        'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
     ])->toArray(),
 
 ];
