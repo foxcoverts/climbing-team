@@ -1,3 +1,4 @@
+@use('App\Enums\BookingStatus')
 <x-layout.app :title="__('Edit Booking')">
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -26,6 +27,13 @@
                                 <x-text-input id="end_at" name="end_at" type="datetime-local" class="mt-1 block"
                                     :value="old('end_at', $booking->end_at)" placeholder="yyyy-mm-dd hh:mm:ss" required />
                                 <x-input-error class="mt-2" :messages="$errors->get('end_at')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="status" :value="__('Status')" />
+                                <x-select-input id="status" name="status" :options="BookingStatus::class" class="mt-1 block"
+                                    :value="old('status', $booking->status)" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('status')" />
                             </div>
 
                             <div>

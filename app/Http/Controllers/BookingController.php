@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BookingStatus;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
@@ -30,6 +31,7 @@ class BookingController extends Controller
             'booking' => new Booking([
                 'start_at' => Carbon::now()->setTime(9, 30, 0, 0),
                 'end_at' => Carbon::now()->setTime(11, 30, 0, 0),
+                'status' => BookingStatus::Tentative,
                 'location' => 'Fox Coverts Campsite'
             ])
         ]);
@@ -40,10 +42,7 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request): RedirectResponse
     {
-        $booking = Booking::create(
-            $request->safe()
-                ->only(['start_at', 'end_at', 'location', 'group_name', 'notes'])
-        );
+        $booking = Booking::create($request->validated());
 
         // event(new Registered($booking));
 

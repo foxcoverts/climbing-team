@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\BookingStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreBookingRequest extends FormRequest
 {
@@ -26,6 +28,7 @@ class StoreBookingRequest extends FormRequest
         return [
             'start_at' => ['required', 'date', 'after:now'],
             'end_at' => ['required', 'date', 'after:start_at'],
+            'status' => ['required', Rule::enum(BookingStatus::class)],
             'location' => ['required', 'string', 'max:255'],
             'group_name' => ['required', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
@@ -35,11 +38,12 @@ class StoreBookingRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'start_at' => 'Start',
-            'end_at' => 'End',
-            'location' => 'Location',
-            'group_name' => 'Group Name',
-            'notes' => 'Notes',
+            'start_at' => __('Start'),
+            'end_at' => __('End'),
+            'status' => __('Status'),
+            'location' => __('Location'),
+            'group_name' => __('Group Name'),
+            'notes' => __('Notes'),
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BookingStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,6 +19,7 @@ class Booking extends Model
     protected $fillable = [
         'start_at',
         'end_at',
+        'status',
         'location',
         'group_name',
         'notes',
@@ -31,5 +33,6 @@ class Booking extends Model
     protected $casts = [
         'start_at' => 'datetime',
         'end_at' => 'datetime',
+        'status' => BookingStatus::class,
     ];
 }

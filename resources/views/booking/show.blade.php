@@ -13,6 +13,7 @@
                         <div class="space-y-2 my-2">
                             <p><strong>{{ __('Start') }}:</strong> {{ $booking->start_at }}</p>
                             <p><strong>{{ __('End') }}:</strong> {{ $booking->end_at }}</p>
+                            <p><strong>{{ __('Status') }}:</strong> {{ __($booking->status->name) }}</p>
                             <p><strong>{{ __('Location') }}:</strong> {{ $booking->location }}</p>
                             <p><strong>{{ __('Group Name') }}:</strong> {{ $booking->group_name }}</p>
                             @if (!empty($booking->notes))
