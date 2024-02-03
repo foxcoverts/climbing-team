@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/booking.ics', [BookingController::class, 'index_ics'])->name('booking.ics');
+    Route::get('/booking/{booking}.ics', [BookingController::class, 'show_ics'])->name('booking.show.ics');
     Route::resource('booking', BookingController::class);
     Route::prefix('trash')->name('trash.')->group(function () {
         Route::resource('booking', TrashedBookingController::class)
