@@ -13,6 +13,14 @@ use Illuminate\View\View;
 class UserController extends Controller
 {
     /**
+     * Create the controller instance.
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(User::class, 'user');
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(): View
