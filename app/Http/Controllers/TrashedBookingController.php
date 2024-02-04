@@ -15,6 +15,7 @@ class TrashedBookingController extends Controller
      */
     public function index(): View
     {
+        $this->authorize('viewAny', Booking::class);
         return view('trash.booking.index', [
             'bookings' => Booking::onlyTrashed()->get(),
         ]);
@@ -25,6 +26,7 @@ class TrashedBookingController extends Controller
      */
     public function show(Booking $booking): View
     {
+        $this->authorize('view', $booking);
         return view('trash.booking.show', [
             'booking' => $booking,
         ]);
@@ -35,6 +37,7 @@ class TrashedBookingController extends Controller
      */
     public function update(RestoreTrashedBookingRequest $request, Booking $booking): RedirectResponse
     {
+        $this->authorize('restore', $booking);
         $booking->restore();
 
         return redirect(route('booking.show', $booking))
@@ -46,6 +49,7 @@ class TrashedBookingController extends Controller
      */
     public function destroy(DestroyTrashedBookingRequest $request, Booking $booking): RedirectResponse
     {
+        $this->authorize('forceDelete', $booking);
         $booking->forceDelete();
 
         return redirect(route('booking.index'))

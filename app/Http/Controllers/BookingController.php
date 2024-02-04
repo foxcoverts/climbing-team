@@ -14,6 +14,14 @@ use Illuminate\View\View;
 class BookingController extends Controller
 {
     /**
+     * Create the controller instance.
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Booking::class, 'booking');
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(): View
