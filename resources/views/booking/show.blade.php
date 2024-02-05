@@ -6,7 +6,7 @@
                     <section>
                         <header>
                             <h2 class="text-lg font-medium">
-                                {{ __('Booking') }}
+                                {{ $booking->activity }}
                             </h2>
                         </header>
 

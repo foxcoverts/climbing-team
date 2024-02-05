@@ -21,6 +21,7 @@ class UpdateBookingRequest extends FormRequest
             'end_at' => ['required', 'date', 'after:start_at'],
             'status' => ['required', Rule::enum(BookingStatus::class)],
             'location' => ['required', 'string', 'max:255'],
+            'activity' => ['required', 'string', 'max:255'],
             'group_name' => ['required', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
         ];
@@ -33,6 +34,7 @@ class UpdateBookingRequest extends FormRequest
             'end_at' => __('End'),
             'status' => __('Status'),
             'location' => __('Location'),
+            'activity' => __('Activity'),
             'group_name' => __('Group Name'),
             'notes' => __('Notes'),
         ];

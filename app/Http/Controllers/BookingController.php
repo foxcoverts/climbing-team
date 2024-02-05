@@ -87,9 +87,8 @@ class BookingController extends Controller
             'booking' => new Booking([
                 'start_at' => Carbon::now()->setTime(9, 30, 0, 0),
                 'end_at' => Carbon::now()->setTime(11, 30, 0, 0),
-                'status' => BookingStatus::Tentative,
-                'location' => 'Fox Coverts Campsite'
-            ])
+            ]),
+            'activity_suggestions' => Booking::distinct()->orderBy('activity')->get(['activity'])->pluck('activity'),
         ]);
     }
 

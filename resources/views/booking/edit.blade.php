@@ -44,6 +44,13 @@
                             </div>
 
                             <div>
+                                <x-input-label for="activity" :value="__('Activity')" />
+                                <x-text-input id="activity" name="activity" type="text" class="mt-1 block w-full"
+                                    :value="old('activity', $booking->activity)" maxlength="255" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('activity')" />
+                            </div>
+
+                            <div>
                                 <x-input-label for="group_name" :value="__('Group Name')" />
                                 <x-text-input id="group_name" name="group_name" type="text" class="mt-1 block w-full"
                                     :value="old('group_name', $booking->group_name)" maxlength="255" required />

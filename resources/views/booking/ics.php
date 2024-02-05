@@ -29,7 +29,7 @@ foreach ($bookings as $booking) {
     $uid = sprintf('booking-%s@%s', $booking->id, $domain);
 
     $event = (new Event(new UniqueIdentifier($uid)))
-        ->setSummary('Climbing')
+        ->setSummary($booking->activity)
         ->setLocation(
             new Location($booking->location)
         )

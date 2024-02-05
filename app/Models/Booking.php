@@ -23,8 +23,20 @@ class Booking extends Model
         'end_at',
         'status',
         'location',
+        'activity',
         'group_name',
         'notes',
+    ];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'status' => BookingStatus::Tentative->value,
+        'location' => 'Fox Coverts Campsite',
+        'activity' => 'Climbing',
     ];
 
     /**
