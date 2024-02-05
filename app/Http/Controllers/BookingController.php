@@ -32,11 +32,11 @@ class BookingController extends Controller
         $bookings = Booking::query();
         switch ($period) {
             case BookingPeriod::Past:
-                $bookings->past();
+                $bookings->past()->latest('end_at')->latest('start_at');
                 break;
 
             default:
-                $bookings->future();
+                $bookings->future()->oldest('start_at')->oldest('end_at');
                 break;
         }
 
