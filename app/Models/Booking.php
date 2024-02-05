@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\BookingStatus;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,4 +37,19 @@ class Booking extends Model
         'end_at' => 'datetime',
         'status' => BookingStatus::class,
     ];
+
+    public function scopePast(Builder $builder): Builder
+    {
+        return $builder->whereDate('end_at', '<=', Carbon::now());
+    }
+
+    public function scopeFuture(Builder $builder): Builder
+    {
+        return $builder->whereDate('end_at', '>', Carbon::now());
+    }
+
+    public function scopeOfStatus(Builder $builder, BookingStatus ...$status): Builder
+    {
+        return $builder->whereIn('status', $status);
+    }
 }

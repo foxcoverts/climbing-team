@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BookingPeriod;
 use App\Enums\BookingStatus;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
 class BookingController extends Controller
@@ -24,10 +27,41 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request, BookingPeriod $period = BookingPeriod::Future): View
     {
+        $bookings = Booking::query();
+        switch ($period) {
+            case BookingPeriod::Past:
+                $bookings->past();
+                break;
+
+            default:
+                $bookings->future();
+                break;
+        }
+
+        if ($request->get('status') == 'all') {
+            $status = collect(BookingStatus::cases());
+        } else {
+            $status = collect($request->get('status'))
+                ->map(
+                    fn (string $item) => BookingStatus::tryFrom($item)
+                )
+                ->reject(
+                    fn ($status) => is_null($status)
+                )
+                ->unique();
+        }
+        if ($status->isEmpty()) {
+            $bookings->ofStatus(BookingStatus::Tentative, BookingStatus::Confirmed);
+        } else {
+            $bookings->ofStatus(...$status->all());
+        }
+
         return view('booking.index', [
-            'bookings' => Booking::all(),
+            'bookings' => $bookings->get(),
+            'period' => $period,
+            'status' => $status,
         ]);
     }
 
