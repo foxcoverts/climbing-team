@@ -18,7 +18,7 @@
                             <p><strong>{{ __('Group Name') }}:</strong> {{ $booking->group_name }}</p>
                             @if (!empty($booking->notes))
                                 <p><strong>{{ __('Notes') }}:</strong></p>
-                                <div class="prose dark:prose-invert">@markdown($booking->notes)</div>
+                                <x-markdown :text="$booking->notes" />
                             @endif
                         </div>
 

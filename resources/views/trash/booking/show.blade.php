@@ -1,4 +1,4 @@
-<x-layout.app :title="__('Booking')">
+<x-layout.app :title="__('booking.title')">
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white text-gray-900 dark:text-gray-100 dark:bg-gray-800 shadow sm:rounded-lg">
@@ -6,7 +6,7 @@
                     <section>
                         <header>
                             <h2 class="text-lg font-medium">
-                                {{ __('Booking') }}
+                                {{ $booking->activity }}
                             </h2>
                         </header>
 
@@ -16,8 +16,8 @@
                             <p><strong>{{ __('Location') }}:</strong> {{ $booking->location }}</p>
                             <p><strong>{{ __('Group Name') }}:</strong> {{ $booking->group_name }}</p>
                             @if (!empty($booking->notes))
-                                {{-- TODO: Format the notes for newlines. Markdown? --}}
-                                <p><strong>{{ __('Notes') }}:</strong> {{ $booking->notes }}</p>
+                                <p><strong>{{ __('Notes') }}:</strong></p>
+                                <x-markdown :text="$booking->notes" />
                             @endif
                         </div>
 
