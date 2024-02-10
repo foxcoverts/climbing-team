@@ -30,8 +30,8 @@
 
                             <div>
                                 <x-input-label for="status" :value="__('Status')" />
-                                <x-select-input id="status" name="status" :options="BookingStatus::class" class="mt-1 block"
-                                    :value="old('status', $booking->status)" required />
+                                <x-select-input id="status" name="status" :options="BookingStatus::class"
+                                    lang="booking.status.:value" class="mt-1 block" :value="old('status', $booking->status)" required />
                                 <x-input-error class="mt-2" :messages="$errors->get('status')" />
                             </div>
 
