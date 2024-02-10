@@ -11,14 +11,20 @@
                         </header>
 
                         <div class="space-y-2 my-2">
-                            <p><strong>{{ __('Start') }}:</strong> {{ $booking->start_at }}</p>
-                            <p><strong>{{ __('End') }}:</strong> {{ $booking->end_at }}</p>
-                            <p><strong>{{ __('Status') }}:</strong> {{ __($booking->status->name) }}</p>
-                            <p><strong>{{ __('Location') }}:</strong> {{ $booking->location }}</p>
-                            <p><strong>{{ __('Group Name') }}:</strong> {{ $booking->group_name }}</p>
+                            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Start') }}</dfn>
+                                {{ $booking->start_at }}</p>
+                            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('End') }}</dfn>
+                                {{ $booking->end_at }}</p>
+                            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Status') }}</dfn>
+                                {{ __($booking->status->name) }}</p>
+                            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Location') }}</dfn>
+                                {{ $booking->location }}</p>
+                            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Group Name') }}</dfn>
+                                {{ $booking->group_name }}</p>
                             @if (!empty($booking->notes))
-                                <p><strong>{{ __('Notes') }}:</strong></p>
-                                <x-markdown :text="$booking->notes" />
+                                <div><dfn class="not-italic font-bold after:content-[':']">{{ __('Notes') }}</dfn>
+                                    <x-markdown :text="$booking->notes" />
+                                </div>
                             @endif
                         </div>
 
