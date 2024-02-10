@@ -25,3 +25,8 @@ body::-webkit-scrollbar {
         position: fixed;
     }
 }
+
+/* hide elements with x-cloak until Alpine.js has loaded */
+[x-cloak] {
+    display: none !important;
+}

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
@@ -49,6 +50,14 @@ class Booking extends Model
         'end_at' => 'datetime',
         'status' => BookingStatus::class,
     ];
+
+    public function attendees(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)
+            ->withTimestamps()
+            ->withPivot('status', 'role')->as('attendance')
+            ->using(Attendance::class);
+    }
 
     public function scopePast(Builder $builder): Builder
     {

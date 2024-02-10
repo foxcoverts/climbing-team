@@ -1,4 +1,4 @@
-@props(['options', 'value'])
+@props(['options', 'value', 'lang' => ':name', 'except' => []])
 
 @php
     // old('value') is not automatically cast to the Enum
@@ -13,6 +13,18 @@
     'style' => 'color-scheme: light dark',
 ]) !!}>
     @foreach ($options::cases() as $option)
-        <option value="{{ $option->value }}" @selected($value == $option)>{{ __($option->name) }}</option>
+        @unless (in_array($option, $except))
+            <option value="{{ $option->value }}" @selected($value == $option)>
+                {{ __(
+                    Str::swap(
+                        [
+                            ':name' => $option->name,
+                            ':value' => $option->value,
+                        ],
+                        $lang,
+                    ),
+                ) }}
+            </option>
+        @endunless
     @endforeach
 </select>

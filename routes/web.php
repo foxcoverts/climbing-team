@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\BookingPeriod;
+use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\TrashedBookingController;
@@ -36,11 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/booking/{period}', [BookingController::class, 'index'])->name('booking.period')
         ->whereIn('period', [BookingPeriod::Past->value]);
     Route::resource('booking', BookingController::class);
+
+    Route::singleton('booking.attendance', BookingAttendanceController::class)->except(['edit']);
+
     Route::prefix('trash')->name('trash.')->group(function () {
         Route::resource('booking', TrashedBookingController::class)
             ->only(['index', 'show', 'update', 'destroy'])
             ->withTrashed(['show', 'update', 'destroy']);
     });
+
     Route::resource('user', UserController::class);
 });
 

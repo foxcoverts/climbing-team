@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
 class BookingController extends Controller
@@ -72,7 +71,7 @@ class BookingController extends Controller
     {
         return response()
             ->view('booking.ics', [
-                'bookings' => Booking::all(),
+                'bookings' => Booking::all()->load('attendees'),
             ])
             ->header('Content-Type', 'text/calendar; charset=utf-8')
             ->header('Content-Disposition', 'attachment; filename="booking.ics"');
@@ -108,10 +107,11 @@ class BookingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking): View
+    public function show(Request $request, Booking $booking): View
     {
         return view('booking.show', [
             'booking' => $booking,
+            'attendance' => $booking->attendees()->find($request->user())?->attendance,
         ]);
     }
 
