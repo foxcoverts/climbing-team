@@ -6,7 +6,7 @@
                 <div class="max-w-xl">
                     <section>
                         <header>
-                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                            <h2 class="text-3xl font-medium text-gray-900 dark:text-gray-100">
                                 {{ __('Create Booking') }}
                             </h2>
                         </header>

@@ -1,7 +1,7 @@
 <x-layout.app :title="__('Dashboard')">
     <section class="sm:py-8 lg:py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 bg-white dark:bg-gray-700 shadow sm:rounded-lg">
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="prose dark:prose-invert md:prose-lg lg:prose-xl max-w-none">
                     <h2>Lorem ipsum dolor sit amet</h2>
 
