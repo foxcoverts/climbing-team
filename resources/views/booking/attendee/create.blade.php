@@ -1,5 +1,5 @@
 @use('App\Enums\AttendeeStatus')
-<x-layout.app :title="__('Edit Attendance')">
+<x-layout.app :title="__('Add Attendee')">
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white text-gray-900 dark:text-gray-100 dark:bg-gray-800 shadow sm:rounded-lg">
@@ -31,24 +31,32 @@
                                 {{ $booking->start_at->diffAsCarbonInterval($booking->end_at) }}</p>
                         </div>
 
-                        <form method="post" action="{{ route('booking.attendance.update', $booking) }}"
+                        <form method="post" action="{{ route('booking.attendee.store', $booking) }}"
                             class="mt-6 space-y-6">
                             @csrf
-                            @method('PUT')
 
                             <div>
-                                <x-input-label for="status" :value="__('Attendance')" />
+                                <x-input-label for="user_id" :value="__('User')" />
+                                <x-select-input id="user_id" name="user_id" class="mt-1 block" required
+                                    :value="old('user_id')">
+                                    <option value="">{{ __('-- Select User --') }}</option>
+                                    <x-select-input.collection :options="$users" label_key="name" />
+                                </x-select-input>
+                                <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="status" :value="__('Status')" />
                                 <x-select-input id="status" name="status" class="mt-1 block" required
-                                    :value="old('status', $status)">
-                                    <x-select-input.enum :options="AttendeeStatus::class" :except="[AttendeeStatus::NeedsAction]"
-                                        lang="attendee.status.:value" />
+                                    :value="old('status', AttendeeStatus::NeedsAction)">
+                                    <x-select-input.enum :options="AttendeeStatus::class" lang="attendee.status.:value" />
                                 </x-select-input>
                                 <x-input-error class="mt-2" :messages="$errors->get('status')" />
                             </div>
 
                             <div class="flex items-center gap-4">
                                 <x-button.primary>
-                                    {{ __('Update') }}
+                                    {{ __('Add Attendee') }}
                                 </x-button.primary>
 
                                 <x-button.secondary :href="route('booking.show', $booking)">
