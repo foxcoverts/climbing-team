@@ -4,7 +4,8 @@
             <div class="p-4 sm:p-8 bg-white text-gray-900 dark:text-gray-100 dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     <section>
-                        @include('booking/partials/details', ['booking' => $booking])
+                        @include('booking.partials.header', ['booking' => $booking])
+                        @include('booking.partials.details', ['booking' => $booking])
 
                         <div class="mt-6 flex items-center gap-4">
                             <form method="POST" action="{{ route('trash.booking.show', $booking) }}">
