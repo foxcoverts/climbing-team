@@ -3,7 +3,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="py-2 bg-white dark:bg-gray-700 shadow sm:rounded-lg">
                 <div class="grid grid-cols-1 divide-y divide-gray-200">
-                    @each('trash.booking.item', $bookings, 'booking', 'trash.booking.empty')
+                    @forelse ($bookings as $booking)
+                        @include('booking.partials.item', [
+                            'booking' => $booking,
+                            'route' => 'trash.booking.show',
+                        ])
+                    @empty
+                        @include('booking.partials.empty')
+                    @endforelse
                 </div>
             </div>
         </div>
