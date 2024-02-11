@@ -17,7 +17,14 @@
                                 <h3 class="text-lg">{{ __("attendee.status.$status") }}</h3>
                                 <ul class="mb-3">
                                     @foreach ($attendees as $attendee)
-                                        <li><a href="{{ route('user.show', $attendee) }}">{{ $attendee->name }}</a></li>
+                                        <li class="flex space-x-1 items-start">
+                                            <a href="{{ route('user.show', $attendee) }}">{{ $attendee->name }}</a>
+                                            <a href="{{ route('booking.attendee.edit', [$booking, $attendee]) }}">
+                                                <x-icon.edit-pencil
+                                                    class="w-3 h-3 fill-current inline-block align-text-top"
+                                                    title="{{ __('Edit Attendance') }}" />
+                                            </a>
+                                        </li>
                                     @endforeach
                                 </ul>
                             @empty

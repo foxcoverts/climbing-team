@@ -5,14 +5,12 @@
             <div class="p-4 sm:p-8 bg-white text-gray-900 dark:text-gray-100 dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     <section>
-                        <header class="border-b border-gray-800 dark:border-gray-200">
-                            <h2 class="text-3xl font-medium">
-                                {{ $booking->activity }} - {{ $booking->start_at->format('D j M') }}
-                            </h2>
-                            <p class="text-lg text-gray-800 dark:text-gray-200">{{ $booking->location }}</p>
-                        </header>
+                        @include('booking.partials.header', ['booking' => $booking])
+                        <div class="space-y-1 mt-2 max-w-xl flex-grow">
+                            <p
+                                class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200">
+                                {{ $booking->location }}</p>
 
-                        <div class="space-y-1 my-2">
                             <p><dfn class="not-italic font-bold after:content-[':']">{{ __('When') }}</dfn>
                                 @if ($booking->start_at->isSameDay($booking->end_at))
                                     {{ __(':start_date from :start_time to :end_time', [
@@ -32,12 +30,17 @@
                         </div>
 
                         <form method="post" action="{{ route('booking.attendee.update', [$booking, $attendee]) }}"
-                            class="mt-6 space-y-6">
+                            class="space-y-1">
                             @csrf
                             @method('PUT')
 
+                            <h3 class="text-xl font-medium">{{ __('Attendance') }}</h3>
+                            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('attendee.title') }}</dfn>
+                                {{ $attendee->name }}</p>
+
                             <div>
-                                <x-input-label for="status" :value="__('Status')" />
+                                <x-input-label for="status" :value="__('Status')"
+                                    class="not-italic font-bold after:content-[':']" />
                                 <x-select-input id="status" name="status" class="mt-1 block" required
                                     :value="old('status', $attendee->attendance->status)">
                                     <x-select-input.enum :options="AttendeeStatus::class" lang="attendee.status.:value" />
@@ -45,7 +48,7 @@
                                 <x-input-error class="mt-2" :messages="$errors->get('status')" />
                             </div>
 
-                            <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-4 pt-2">
                                 <x-button.primary>
                                     {{ __('Update Attendance') }}
                                 </x-button.primary>
