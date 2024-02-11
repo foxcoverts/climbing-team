@@ -13,9 +13,9 @@
                                 {{ __('Guest list') }}
                             </h2>
 
-                            @forelse ($booking->attendees->groupBy('attendance.status') as $status => $attendees)
+                            @forelse ($attendees->groupBy('attendance.status') as $status => $attendees)
                                 <h3 class="text-lg">{{ __("attendee.status.$status") }}</h3>
-                                <ul>
+                                <ul class="mb-3">
                                     @foreach ($attendees as $attendee)
                                         <li><a href="{{ route('user.show', $attendee) }}">{{ $attendee->name }}</a></li>
                                     @endforeach

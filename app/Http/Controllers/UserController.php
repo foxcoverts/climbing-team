@@ -56,7 +56,7 @@ class UserController extends Controller
         event(new Registered($user));
 
         return redirect()->route('user.show', $user)
-            ->with('success', 'User created successfully');
+            ->with('success', __('User created successfully'));
     }
 
     /**
@@ -95,7 +95,7 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->route('user.index')
-            ->with('status', 'User updated successfully');
+            ->with('status', __('User updated successfully'));
     }
 
     /**
@@ -108,6 +108,6 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('user.index')
-            ->with('status', 'User account deleted.');
+            ->with('status', __('User account deleted.'));
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'title' => 'Attendee',
     'status' => [
         'accepted' => 'Going',
         'tentative' => 'Maybe',

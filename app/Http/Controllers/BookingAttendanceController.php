@@ -32,6 +32,6 @@ class BookingAttendanceController extends Controller
         ]);
 
         return redirect(route('booking.show', $booking))
-            ->with('status', 'Updated your attendance successfully.');
+            ->with('status', __('Updated your attendance successfully.'));
     }
 }

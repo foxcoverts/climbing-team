@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
 
     Route::singleton('booking.attendance', BookingAttendanceController::class)->except(['edit']);
 
-    Route::resource('booking.attendee', BookingAttendeeController::class);
+    Route::resource('booking.attendee', BookingAttendeeController::class)->scoped();
 
     Route::get('/booking.ics', [BookingController::class, 'index_ics'])->name('booking.ics');
     Route::get('/booking/{booking}.ics', [BookingController::class, 'show_ics'])->name('booking.show.ics');
