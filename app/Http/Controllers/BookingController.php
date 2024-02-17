@@ -58,7 +58,9 @@ class BookingController extends Controller
         }
 
         return view('booking.index', [
-            'bookings' => $bookings->get(),
+            'bookings' => $bookings->get()->groupBy(function (Booking $booking): Carbon {
+                return $booking->start_at->startOfDay();
+            }),
             'period' => $period,
             'status' => $status,
         ]);
