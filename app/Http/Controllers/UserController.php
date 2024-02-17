@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index(): View
     {
         return view('user.index', [
-            'users' => User::all()
+            'users' => User::orderBy('name')->get()
         ]);
     }
 
