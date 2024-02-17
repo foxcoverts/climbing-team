@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookingAttendeeRequest;
-use App\Http\Requests\UpdateBookingAttendanceRequest;
+use App\Http\Requests\UpdateBookingAttendeeRequest;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class BookingAttendeeController extends Controller
 {
@@ -72,7 +71,7 @@ class BookingAttendeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBookingAttendanceRequest $request, Booking $booking, User $attendee): RedirectResponse
+    public function update(UpdateBookingAttendeeRequest $request, Booking $booking, User $attendee): RedirectResponse
     {
         $booking->attendees()->syncWithoutDetaching([
             $attendee->id => $request->validated(),
