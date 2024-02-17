@@ -33,7 +33,7 @@ if ($domain == 'localhost') {
 }
 
 foreach ($bookings as $booking) {
-    $uid = sprintf('booking-%s@%s', $booking->id, $domain);
+    $uid = sprintf('%s@%s', $booking->id, $domain);
 
     $description = $booking->group_name;
     if (is_string($booking->notes)) {
@@ -73,7 +73,7 @@ foreach ($bookings as $booking) {
     }
 
     foreach ($booking->attendees as $attendee) {
-        $protectedEmailAddress = new EmailAddress(sprintf('user-%d@%s', $attendee->id, $domain));
+        $protectedEmailAddress = new EmailAddress(sprintf('%s@%s', $attendee->id, $domain));
 
         $evAttendee = (new Attendee($protectedEmailAddress))
             ->setCalendarUserType(CalendarUserType::INDIVIDUAL())

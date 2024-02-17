@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bookings', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->timestamp('start_at', 6);
             $table->timestamp('end_at', 6);
             $table->string('location');

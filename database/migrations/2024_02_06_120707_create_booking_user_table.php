@@ -14,8 +14,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('booking_user', function (Blueprint $table) {
-            $table->foreignId('booking_id')->index();
-            $table->foreignId('user_id')->index();
+            $table->foreignUlid('booking_id')->constrained();
+            $table->foreignUlid('user_id')->constrained();
             $table->enum('status', ['accepted', 'tentative', 'declined', 'needs-action'])
                 ->default('needs-action');
             $table->enum('role', ['lead-instructor'])->nullable()->default(null);
