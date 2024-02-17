@@ -3,16 +3,16 @@
     <p class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200">
         {{ $booking->location }}</p>
     <p><dfn class="not-italic font-bold after:content-[':']">{{ __('When') }}</dfn>
-        @if ($booking->start_at->isSameDay($booking->end_at))
+        @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
             {{ __(':start_date from :start_time to :end_time', [
-                'start_date' => $booking->start_at->toFormattedDayDateString(),
-                'start_time' => $booking->start_at->format('H:i'),
-                'end_time' => $booking->end_at->format('H:i'),
+                'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
+                'start_time' => localDate($booking->start_at)->format('H:i'),
+                'end_time' => localDate($booking->end_at)->format('H:i'),
             ]) }}
         @else
             {{ __(':start to :end', [
-                'start' => $booking->start_at->toDayDateTimeString(),
-                'end' => $booking->end_at->toDayDateTimeString(),
+                'start' => localDate($booking->start_at)->toDayDateTimeString(),
+                'end' => localDate($booking->end_at)->toDayDateTimeString(),
             ]) }}
         @endif
     </p>
