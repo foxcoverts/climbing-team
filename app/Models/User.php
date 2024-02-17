@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Timezone;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'timezone',
     ];
 
     /**
@@ -34,6 +36,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'timezone' => 'UTC',
+    ];
+
     /**
      * The attributes that should be cast.
      *
@@ -41,5 +53,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'timezone' => Timezone::class,
     ];
 }

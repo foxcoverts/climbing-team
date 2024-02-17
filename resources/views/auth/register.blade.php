@@ -1,12 +1,21 @@
 <x-layout.guest :title="__('Register')">
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" x-data="{
+        user: {},
+        init() {
+            $nextTick(() => {
+                if (!this.user.timezone || this.user.timezone == 'UTC') {
+                    this.user.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                }
+            });
+        },
+    }">
         @csrf
 
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required
-                autofocus autocomplete="name" />
+                autofocus autocomplete="name" x-model.fill="user.name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
@@ -14,7 +23,7 @@
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
-                required autocomplete="username" />
+                required autocomplete="username" x-model.fill="user.email" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -23,7 +32,7 @@
             <x-input-label for="password" :value="__('Password')" />
 
             <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                autocomplete="new-password" />
+                autocomplete="new-password" x-model.fill="user.password" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
@@ -33,9 +42,20 @@
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
             <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                name="password_confirmation" required autocomplete="new-password" />
+                name="password_confirmation" required autocomplete="new-password"
+                x-model.fill="user.password_confirmation" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <!-- Timezone -->
+        <div class="mt-4 hidden">
+            <x-input-label for="timezone" :value="__('Timezone')" />
+            <x-select-input id="timezone" name="timezone" class="mt-1 block" required :value="old('timezone')"
+                x-model.fill="user.timezone">
+                <x-select-input.timezones />
+            </x-select-input>
+            <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
         </div>
 
         <div class="flex items-center justify-end mt-4">

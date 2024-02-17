@@ -36,7 +36,7 @@ class UserController extends Controller
     public function create(): View
     {
         return view('user.create', [
-            'user' => new User
+            'user' => new User,
         ]);
     }
 
@@ -48,9 +48,10 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $user = User::create(
-            $request->safe()
-                ->merge(['password' => ''])
-                ->only(['name', 'email', 'password'])
+            array_merge(
+                $request->validated(),
+                ['password' => '']
+            )
         );
 
         event(new Registered($user));

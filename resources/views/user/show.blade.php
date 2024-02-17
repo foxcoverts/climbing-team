@@ -27,6 +27,14 @@
                                 @endif
                             </div>
 
+
+                            <div>
+                                <p class="mt-2 text-gray-800 dark:text-gray-200">
+                                    <dfn class="not-italic font-bold after:content-[':']">{{ __('Timezone') }}</dfn>
+                                    {{ $user->timezone }}
+                                </p>
+                            </div>
+
                             <div class="flex items-center gap-4">
                                 <x-button.primary href="{{ route('user.edit', $user) }}">
                                     {{ __('Edit') }}
