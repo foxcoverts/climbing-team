@@ -5,6 +5,7 @@
                 class="p-4 sm:p-8 bg-white text-gray-900 dark:text-gray-100 dark:bg-gray-800 shadow sm:rounded-lg space-y-4">
                 <section>
                     @include('booking.partials.header', ['booking' => $booking])
+
                     <div class="md:flex md:space-x-2">
                         @include('booking.partials.details', ['booking' => $booking])
 
@@ -33,7 +34,7 @@
                         </aside>
                     </div>
 
-                    <footer class="flex items-center gap-4 my-2">
+                    <footer class="flex items-center gap-4 mt-2">
                         <x-button.primary :href="route('booking.edit', $booking)">
                             {{ __('Edit') }}
                         </x-button.primary>
