@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('booking/{booking}/attendee/invite', [BookingAttendeeInviteController::class, 'create'])->name('booking.attendee.invite');
     Route::post('booking/{booking}/attendee/invite', [BookingAttendeeInviteController::class, 'store'])->name('booking.attendee.invite.store');
 
-    Route::resource('booking.attendee', BookingAttendeeController::class)->scoped();
+    Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except(['edit']);
 
     Route::get('/booking.ics', [BookingController::class, 'index_ics'])->name('booking.ics');
     Route::get('/booking/{booking}.ics', [BookingController::class, 'show_ics'])->name('booking.show.ics');

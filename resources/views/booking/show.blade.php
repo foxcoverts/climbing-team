@@ -20,7 +20,7 @@
                                     @foreach ($attendees as $attendee)
                                         <li class="flex space-x-1 items-start">
                                             <a href="{{ route('user.show', $attendee) }}">{{ $attendee->name }}</a>
-                                            <a href="{{ route('booking.attendee.edit', [$booking, $attendee]) }}">
+                                            <a href="{{ route('booking.attendee.show', [$booking, $attendee]) }}">
                                                 <x-icon.edit-pencil
                                                     class="w-3 h-3 fill-current inline-block align-text-top"
                                                     title="{{ __('Edit Attendance') }}" />

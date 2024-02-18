@@ -1,12 +1,13 @@
 @use('App\Enums\AttendeeStatus')
-<x-layout.app :title="__('attendee.title')">
+<x-layout.app :title="__('Update Attendance')">
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white text-gray-900 dark:text-gray-100 dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     <section>
                         @include('booking.partials.header', ['booking' => $booking])
-                        <div class="space-y-1 my-2 max-w-xl flex-grow">
+
+                        <div class="space-y-1 mt-2 max-w-xl flex-grow">
                             <p
                                 class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200">
                                 {{ $booking->location }}</p>
@@ -27,28 +28,46 @@
                             </p>
                             <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Duration') }}</dfn>
                                 {{ $booking->start_at->diffAsCarbonInterval($booking->end_at) }}</p>
+                        </div>
+
+                        <form method="post" action="{{ route('booking.attendee.update', [$booking, $attendee]) }}"
+                            id="update-attendance" class="space-y-1">
+                            @csrf
+                            @method('PUT')
 
                             <h3 class="text-xl font-medium">{{ __('Attendance') }}</h3>
                             <p><dfn class="not-italic font-bold after:content-[':']">{{ __('attendee.title') }}</dfn>
                                 {{ $attendee->name }}</p>
-                            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Status') }}</dfn>
-                                {{ __('attendee.status.' . $attendee->attendance->status->value) }}</p>
-                        </div>
 
+                            <div>
+                                <x-input-label for="status" :value="__('Status')"
+                                    class="not-italic font-bold after:content-[':']" />
+                                <x-select-input id="status" name="status" class="mt-1 block" required
+                                    :value="old('status', $attendee->attendance->status)">
+                                    <x-select-input.enum :options="AttendeeStatus::class" lang="attendee.status.:value" />
+                                </x-select-input>
+                                <x-input-error class="mt-2" :messages="$errors->get('status')" />
+                            </div>
+                        </form>
 
-                        <footer class="flex items-center gap-4 my-2">
-                            <x-button.primary :href="route('booking.attendee.edit', [$booking, $attendee])">
-                                {{ __('Change') }}
+                        <form method="post" id="destroy-attendance"
+                            action="{{ route('booking.attendee.destroy', [$booking, $attendee]) }}">
+                            @csrf
+                            @method('delete')
+                        </form>
+
+                        <footer class="flex items-center gap-4 mt-4">
+                            <x-button.primary form="update-attendance">
+                                {{ __('Update Attendance') }}
                             </x-button.primary>
-                            <form method="post"
-                                action="{{ route('booking.attendee.destroy', [$booking, $attendee]) }}">
-                                @csrf
-                                @method('delete')
 
-                                <x-button.danger>
-                                    {{ __('Delete') }}
-                                </x-button.danger>
-                            </form>
+                            <x-button.danger form="destroy-attendance">
+                                {{ __('Remove Attendance') }}
+                            </x-button.danger>
+
+                            <x-button.secondary :href="route('booking.show', $booking)">
+                                {{ __('Cancel') }}
+                            </x-button.secondary>
                         </footer>
                     </section>
                 </div>
