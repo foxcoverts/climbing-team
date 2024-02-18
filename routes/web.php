@@ -3,6 +3,7 @@
 use App\Enums\BookingPeriod;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
+use App\Http\Controllers\BookingAttendeeInviteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\TrashedBookingController;
@@ -34,6 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::singleton('booking.attendance', BookingAttendanceController::class)->except(['edit']);
+
+    Route::get('booking/{booking}/attendee/invite', [BookingAttendeeInviteController::class, 'create'])->name('booking.attendee.invite');
+    Route::post('booking/{booking}/attendee/invite', [BookingAttendeeInviteController::class, 'store'])->name('booking.attendee.invite.store');
 
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped();
 

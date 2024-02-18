@@ -6,6 +6,7 @@ use App\Casts\Timezone;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -55,4 +56,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'timezone' => Timezone::class,
     ];
+
+    public function bookings(): BelongsToMany
+    {
+        return $this->belongsToMany(Booking::class)
+            ->withTimestamps()
+            ->withPivot('status', 'role')->as('attendance')
+            ->using(Attendance::class);
+    }
 }

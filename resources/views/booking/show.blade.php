@@ -50,8 +50,8 @@
                             'booking' => $booking,
                             'attendance' => $attendance,
                         ])
-                        <x-button.secondary :href="route('booking.attendee.create', $booking)">
-                            {{ __('Add Attendee') }}
+                        <x-button.secondary :href="route('booking.attendee.invite', $booking)">
+                            {{ __('Invite Attendee') }}
                         </x-button.secondary>
                     </footer>
                 </section>
