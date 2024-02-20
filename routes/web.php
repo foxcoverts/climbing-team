@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\BookingPeriod;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingAttendeeInviteController;
@@ -43,8 +42,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/booking.ics', [BookingController::class, 'index_ics'])->name('booking.ics');
     Route::get('/booking/{booking}.ics', [BookingController::class, 'show_ics'])->name('booking.show.ics');
-    Route::get('/booking/{period}', [BookingController::class, 'index'])->name('booking.period')
-        ->whereIn('period', [BookingPeriod::Past->value]);
     Route::resource('booking', BookingController::class);
 
     Route::prefix('trash')->name('trash.')->group(function () {

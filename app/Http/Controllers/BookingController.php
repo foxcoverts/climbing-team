@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\BookingPeriod;
-use App\Enums\BookingStatus;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
@@ -26,44 +24,9 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, BookingPeriod $period = BookingPeriod::Future): View
+    public function index(): View
     {
-        $bookings = Booking::query();
-        switch ($period) {
-            case BookingPeriod::Past:
-                $bookings->past()->latest('end_at')->latest('start_at');
-                break;
-
-            default:
-                $bookings->future()->oldest('start_at')->oldest('end_at');
-                break;
-        }
-
-        if ($request->get('status') == 'all') {
-            $status = collect(BookingStatus::cases());
-        } else {
-            $status = collect($request->get('status'))
-                ->map(
-                    fn (string $item) => BookingStatus::tryFrom($item)
-                )
-                ->reject(
-                    fn ($status) => is_null($status)
-                )
-                ->unique();
-        }
-        if ($status->isEmpty()) {
-            $bookings->ofStatus(BookingStatus::Tentative, BookingStatus::Confirmed);
-        } else {
-            $bookings->ofStatus(...$status->all());
-        }
-
-        return view('booking.index', [
-            'bookings' => $bookings->get()->groupBy(function (Booking $booking): Carbon {
-                return $booking->start_at->startOfDay();
-            }),
-            'period' => $period,
-            'status' => $status,
-        ]);
+        return view('booking.index');
     }
 
     /**
@@ -102,7 +65,8 @@ class BookingController extends Controller
 
         // event(new Registered($booking));
 
-        return redirect()->route('booking.show', $booking)
+        return redirect()
+            ->route('booking.show', $booking)
             ->with('success', __('Booking created successfully'));
     }
 
@@ -149,7 +113,8 @@ class BookingController extends Controller
         $booking->fill($request->validated());
         $booking->save();
 
-        return redirect()->route('booking.show', $booking)
+        return redirect()
+            ->route('booking.show', $booking)
             ->with('status', __('Booking updated successfully'));
     }
 
@@ -160,7 +125,8 @@ class BookingController extends Controller
     {
         $booking->delete();
 
-        return redirect()->route('booking.index')
+        return redirect()
+            ->route('booking.index')
             ->with('status', __('Booking deleted.'))
             ->with('restore', route('trash.booking.update', $booking));
     }

@@ -16,7 +16,7 @@ class StoreBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'start_at' => ['required', 'date', 'after:now'],
+            'start_at' => ['required', 'date'],
             'end_at' => ['required', 'date', 'after:start_at'],
             'status' => ['required', Rule::enum(BookingStatus::class)],
             'location' => ['required', 'string', 'max:255'],
