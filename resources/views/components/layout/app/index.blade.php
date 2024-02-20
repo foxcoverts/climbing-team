@@ -20,25 +20,20 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-gray-100" x-data="{ sidebarOpen: false, alertOpen: true }">
-    <div class="leading-normal tracking-normal" id="main-body">
-        <div class="flex flex-wrap">
-            <div class="w-full bg-gray-100 min-h-screen flex flex-col" id="main-content">
-                <x-layout.app.topbar />
+<body
+    class="font-sans antialiased leading-normal tracking-normal bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100"
+    x-data="{ sidebarOpen: false, alertOpen: true }">
+    <div class="w-full  min-h-screen flex flex-col" id="main-content">
+        <x-layout.app.topbar />
+        <x-layout.app.sidebar />
 
-                <div class="flex-1 lg:flex lg:flex-row">
-                    <x-layout.app.sidebar />
+        <main class="flex-grow lg:pl-64 w-full text-gray-900 dark:text-white bg-white dark:bg-gray-800">
+            <x-layout.app.alert />
 
-                    <main class="lg:pl-64 w-full">
-                        <x-layout.app.alert />
+            {{ $slot }}
+        </main>
 
-                        {{ $slot }}
-                    </main>
-                </div>
-
-                <x-layout.app.footer />
-            </div>
-        </div>
+        <x-layout.app.footer />
     </div>
 </body>
 

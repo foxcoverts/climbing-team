@@ -1,8 +1,8 @@
-<nav class="w-full pt-8 border-b md:bottom-0 md:fixed md:top-20 lg:block lg:w-64 lg:border-r bg-gray-100 overflow-y-auto"
+<nav class="w-full pt-4 pb-2 border-b md:bottom-0 md:fixed md:top-16 md:z-20 lg:block lg:w-64 lg:border-b-0 lg:border-r bg-gray-100 dark:bg-gray-900 overflow-y-auto space-y-4"
     :class="{ 'hidden': !sidebarOpen }" id="main-nav">
 
-    <div class="mb-4 px-4">
-        <p class="pl-4 text-sm font-semibold mb-1 uppercase">Main</p>
+    <div>
+        <x-sidebar.heading>{{ __('Main') }}</x-sidebar.heading>
         <x-sidebar.link route='dashboard' :label="__('Dashboard')">
             <x-slot:icon>
                 <path
@@ -33,8 +33,8 @@
         </x-sidebar.link>
     </div>
 
-    <div class="mb-4 px-4">
-        <p class="pl-4 text-sm font-semibold mb-1 uppercase">Bookings</p>
+    <div>
+        <x-sidebar.heading>{{ __('Bookings') }}</x-sidebar.heading>
         <x-sidebar.link route='booking.create' :label="__('Add Booking')">
             <x-slot:icon>
                 <path
@@ -51,8 +51,8 @@
         </x-sidebar.link>
     </div>
 
-    <div class="mb-4 px-4">
-        <p class="pl-4 text-sm font-semibold mb-1 uppercase">Users</p>
+    <div>
+        <x-sidebar.heading>{{ __('Users') }}</x-sidebar.heading>
         <x-sidebar.link route='user.create' :label="__('Add User')">
             <x-slot:icon>
                 <path
@@ -69,8 +69,8 @@
         </x-sidebar.link>
     </div>
 
-    <div class="mb-4 px-4">
-        <p class="pl-4 text-sm font-semibold mb-1 uppercase">Account</p>
+    <div>
+        <x-sidebar.heading>{{ __('Account') }}</x-sidebar.heading>
         <x-sidebar.link route='profile.edit' match-routes='' :label="__('Notices')">
             <x-slot:icon>
                 <path
