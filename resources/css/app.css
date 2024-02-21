@@ -42,3 +42,6 @@ body::-webkit-scrollbar {
     flex-wrap: wrap;
     column-gap: 0.75em;
 }
+.fc-event:hover {
+    opacity: 1 !important;
+}

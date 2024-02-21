@@ -77,9 +77,6 @@ window.Calendar = new Calendar(calendarEl, {
         },
     },
     eventDidMount(info) {
-        if (info.event.extendedProps.status == "cancelled") {
-            info.el.style.color = "silver";
-        }
         if (info.view.type == "timeGridDay") {
             var container = info.el.getElementsByClassName(
                 "fc-event-title-container"
@@ -89,9 +86,9 @@ window.Calendar = new Calendar(calendarEl, {
             notesEl.innerHTML = info.event.extendedProps.notes;
             container.appendChild(notesEl);
         }
-    },
-    validRange(nowDate) {
-        return { start: nowDate };
+        if (info.isPast || info.event.extendedProps.status == "cancelled") {
+            info.el.style.opacity = "0.5";
+        }
     },
 });
 
