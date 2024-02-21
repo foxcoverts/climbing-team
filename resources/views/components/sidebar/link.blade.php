@@ -1,5 +1,5 @@
-@props(['route', 'matchRoutes' => null, 'fragment' => '', 'icon', 'label'])
-<a href="{{ route($route) . $fragment }}" @class([
+@props(['route', 'matchRoutes' => null, 'icon', 'label'])
+<a href="{{ route($route) }}" @class([
     'w-full flex items-center text-blue-400 h-10 pl-4 sm:pl-8 lg:pl-4 hover:bg-gray-200 focus:bg-gray-200 active:bg-gray-200 dark:hover:bg-gray-700 dark:focus:bg-gray-700 dark:active:bg-gray-700',
     'bg-white dark:bg-gray-800 dark:text-white' => Route::is(
         $matchRoutes ?? $route),

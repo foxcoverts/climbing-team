@@ -1,19 +1,12 @@
 import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import listPlugin from "@fullcalendar/list";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import momentPlugin from "@fullcalendar/moment";
 
 const calendarEl = document.getElementById("fullcalendar");
 window.Calendar = new Calendar(calendarEl, {
-    plugins: [dayGridPlugin, listPlugin, timeGridPlugin, momentPlugin],
+    plugins: [dayGridPlugin, timeGridPlugin, momentPlugin],
     views: {
-        list: {
-            type: "list",
-            titleFormat: "{{D} MMM}, YYYY",
-            buttonText: "list",
-            duration: { days: 90 },
-        },
         dayGridMonth: {
             titleFormat: "{MMMM} YYYY",
             fixedWeekCount: false,
@@ -29,11 +22,9 @@ window.Calendar = new Calendar(calendarEl, {
             dayHeaders: false,
         },
     },
-
-    listDayFormat: "ddd, D MMM, YYYY",
     eventTimeFormat: "HH:mm",
     slotLabelFormat: "HH:mm",
-    initialView: "list",
+    initialView: "dayGridMonth",
     contentHeight: "auto",
     stickyHeaderDates: true,
     customButtons: {
@@ -47,7 +38,7 @@ window.Calendar = new Calendar(calendarEl, {
     headerToolbar: {
         left: "title",
         center: "",
-        right: "dayGridMonth,list,timeGridDay today prev,next",
+        right: "dayGridMonth,timeGridDay today prev,next",
     },
     footerToolbar: {
         right: "create",
@@ -99,22 +90,6 @@ window.Calendar = new Calendar(calendarEl, {
             container.appendChild(notesEl);
         }
     },
-    viewClassNames(info) {
-        switch (info.view.type) {
-            case "dayGridMonth":
-                window.location.hash = "#calendar";
-                break;
-            case "timeGridDay":
-            case "listDay":
-                window.location.hash = "#day";
-                break;
-            case "list":
-            default:
-                window.location.hash = "#list";
-                break;
-        }
-        return [];
-    },
     validRange(nowDate) {
         return { start: nowDate };
     },
@@ -131,21 +106,5 @@ function bookingStatusToColor(status) {
             return "dodgerBlue";
     }
 }
-
-function locationHashChange() {
-    switch (location.hash) {
-        case "#calendar":
-            window.Calendar.changeView("dayGridMonth");
-            break;
-        case "#list":
-            window.Calendar.changeView("list");
-            break;
-        case "#day":
-            window.Calendar.changeView("timeGridDay");
-            break;
-    }
-}
-window.addEventListener("hashchange", locationHashChange);
-locationHashChange();
 
 window.Calendar.render();

@@ -18,13 +18,13 @@
 
     <div>
         <x-sidebar.heading>{{ __('Bookings') }}</x-sidebar.heading>
-        <x-sidebar.link route='booking.index' fragment='#calendar' :match-routes="['booking.index', 'booking.show', 'booking.edit']" :label="__('Calendar')">
+        <x-sidebar.link route='booking.index' :match-routes="['booking.index', 'booking.show', 'booking.edit']" :label="__('Calendar')">
             <x-slot:icon>
                 <path
                     d="M1 4c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4zm2 2v12h14V6H3zm2-6h2v2H5V0zm8 0h2v2h-2V0zM5 9h2v2H5V9zm0 4h2v2H5v-2zm4-4h2v2H9V9zm0 4h2v2H9v-2zm4-4h2v2h-2V9zm0 4h2v2h-2v-2z" />
             </x-slot:icon>
         </x-sidebar.link>
-        <x-sidebar.link route='booking.index' fragment='#list' match-routes='' :label="__('Enquiries')">
+        <x-sidebar.link route='booking.index' match-routes='' :label="__('Enquiries')">
             <x-slot:icon>
                 <path
                     d="M2 4v14h14v-6l2-2v10H0V2h10L8 4H2zm10.3-.3l4 4L8 16H4v-4l8.3-8.3zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z" />
