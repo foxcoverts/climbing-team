@@ -30,3 +30,11 @@ body::-webkit-scrollbar {
 [x-cloak] {
     display: none !important;
 }
+
+/* full calendar overrides */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --fc-page-bg-color: #111827; /* grey-900 */
+        --fc-list-event-hover-bg-color: #374151; /* grey-700 */
+    }
+}
