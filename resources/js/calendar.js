@@ -2,32 +2,39 @@ import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import listPlugin from "@fullcalendar/list";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import momentPlugin from "@fullcalendar/moment";
 
 const calendarEl = document.getElementById("fullcalendar");
 window.Calendar = new Calendar(calendarEl, {
-    plugins: [dayGridPlugin, listPlugin, timeGridPlugin],
+    plugins: [dayGridPlugin, listPlugin, timeGridPlugin, momentPlugin],
     views: {
         list: {
             type: "list",
-            duration: { days: 90 },
+            titleFormat: "{{D} MMM}, YYYY",
             buttonText: "list",
+            duration: { days: 90 },
         },
         dayGridMonth: {
+            titleFormat: "{MMMM} YYYY",
             fixedWeekCount: false,
         },
         timeGridDay: {
+            titleFormat: "{{ddd, D} MMM}, YYYY",
             buttonText: "day",
             allDaySlot: false,
             scrollTime: "09:00",
-            dayHeaderFormat: {
-                weekday: "long",
-                day: "numeric",
-                month: "long",
-            },
+            slotMinTime: "08:00",
+            slotMaxTime: "20:00",
+            expandRows: true,
+            dayHeaders: false,
         },
     },
+
+    listDayFormat: "ddd, D MMM, YYYY",
+    eventTimeFormat: "HH:mm",
+    slotLabelFormat: "HH:mm",
     initialView: "list",
-    height: "auto",
+    contentHeight: "auto",
     stickyHeaderDates: true,
     customButtons: {
         create: {
