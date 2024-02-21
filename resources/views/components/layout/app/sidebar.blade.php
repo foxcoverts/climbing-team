@@ -61,12 +61,12 @@
 
     <div>
         <x-sidebar.heading>{{ __('Account') }}</x-sidebar.heading>
-        <x-sidebar.link route='profile.edit' match-routes='' :label="__('Notices')">
+        <x-sidebar.link route='profile.show' match-routes='' :label="__('Notices')">
             <x-slot:icon>
                 <path d="M11 12h6v-1l-3-1V2l3-1V0H3v1l3 1v8l-3 1v1h6v7l1 1 1-1v-7z" />
             </x-slot:icon>
         </x-sidebar.link>
-        <x-sidebar.link route='profile.edit' :label="__('Profile')">
+        <x-sidebar.link route='profile.show' :label="__('Profile')">
             <x-slot:icon>
                 <path
                     d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm7 4v2a3 3 0 1 0 6 0V6a3 3 0 1 0-6 0zm11 9.14A15.93 15.93 0 0 0 10 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z" />

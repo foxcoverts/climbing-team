@@ -21,23 +21,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect('/dashboard');
-})->middleware(['auth', 'verified']);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/', function () {
+        return redirect('/dashboard');
+    });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::singleton('profile', ProfileController::class)->destroyable()->except(['edit']);
 
     Route::singleton('booking.attendance', BookingAttendanceController::class)->except(['edit']);
 
-    Route::get('booking/{booking}/attendee/invite', [BookingAttendeeInviteController::class, 'create'])->name('booking.attendee.invite');
-    Route::post('booking/{booking}/attendee/invite', [BookingAttendeeInviteController::class, 'store'])->name('booking.attendee.invite.store');
+    Route::controller(BookingAttendeeInviteController::class)->group(function () {
+        Route::get('booking/{booking}/attendee/invite', 'create')->name('booking.attendee.invite');
+        Route::post('booking/{booking}/attendee/invite', 'store')->name('booking.attendee.invite.store');
+    });
 
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except(['edit']);
 
