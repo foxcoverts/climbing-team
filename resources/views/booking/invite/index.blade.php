@@ -1,4 +1,4 @@
-<x-layout.app :title="__('Bookings')" assets="resources/js/booking/calendar.js">
+<x-layout.app :title="__('Booking Invites')" assets="resources/js/booking/invite.js">
     <section class="p-4 sm:px-8 grow">
         <div id="fullcalendar"></div>
     </section>

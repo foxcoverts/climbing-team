@@ -5,6 +5,7 @@ use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingAttendeeInviteController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingIcsController;
+use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\UserController;
@@ -40,6 +41,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except(['edit']);
+
+    Route::get('/booking/invite', BookingInviteController::class)->name('booking.invite');
 
     Route::controller(BookingIcsController::class)->group(function () {
         Route::get('/booking.ics', 'index')->name('booking.ics');

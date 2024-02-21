@@ -15,10 +15,12 @@ class BookingAttendanceController extends Controller
      */
     public function show(Request $request, Booking $booking): View
     {
-        $attendee = $booking->attendees()->find($request->user());
+        $attendee = $booking->attendees()
+            ->find($request->user());
+
         return view('booking.attendance.edit', [
             'booking' => $booking,
-            'status' => $attendee?->attendance->status ?? AttendeeStatus::NeedsAction,
+            'attendance' => $attendee?->attendance,
         ]);
     }
 
@@ -31,7 +33,8 @@ class BookingAttendanceController extends Controller
             $request->user()->id => $request->validated()
         ]);
 
-        return redirect(route('booking.show', $booking))
+        return redirect()
+            ->back()
             ->with('status', __('Updated your attendance successfully.'));
     }
 }

@@ -62,10 +62,16 @@ class BookingController extends Controller
      */
     public function show(Request $request, Booking $booking): View
     {
+        $attendees = $booking->attendees()
+            ->orderBy('booking_user.status')
+            ->orderBy('users.name');
+        $attendee = $booking->attendees()
+            ->find($request->user());
+
         return view('booking.show', [
             'booking' => $booking,
-            'attendees' => $booking->attendees()->orderBy('booking_user.status')->orderBy('users.name')->get(),
-            'attendance' => $booking->attendees()->find($request->user())?->attendance,
+            'attendees' => $attendees->get(),
+            'attendance' => $attendee?->attendance,
         ]);
     }
 
