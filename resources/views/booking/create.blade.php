@@ -10,7 +10,42 @@
         <form method="post" action="{{ route('booking.store') }}" class="mt-6 space-y-6 max-w-xl">
             @csrf
 
-            <div class="flex space-x-6">
+            <div class="flex space-x-6" x-data="{
+                start_time: '',
+                end_time: '',
+                duration: 0,
+            
+                timeToMinutes(timeString) {
+                    var time = timeString.match(/^([012]\d)[:](\d\d)/i);
+                    if (time == null) return 0;
+            
+                    return ((parseInt(time[1], 10) || 0) * 60) +
+                        (parseInt(time[2], 10) || 0);
+                },
+                minutesToTime(minutes) {
+                    return (new String(Math.floor(minutes / 60))).padStart(2, '0') + ':' +
+                        (new String(minutes % 60)).padStart(2, '0');
+                },
+                syncEndTime() {
+                    var endMinutes = this.timeToMinutes(this.start_time) + this.duration;
+                    if (endMinutes > 1440) {
+                        this.end_time = '23:59';
+                    } else {
+                        this.end_time = this.minutesToTime(endMinutes);
+                    }
+                },
+                syncDuration() {
+                    this.duration = this.timeToMinutes(this.end_time) - this.timeToMinutes(this.start_time);
+                    if (this.duration < 0) {
+                        this.end_time = this.start_time;
+                        this.duration = 0;
+                    }
+                },
+            
+                init() {
+                    $nextTick(() => { this.syncDuration() });
+                }
+            }">
                 <div>
                     <x-input-label for="start_date" :value="__('Date')" />
                     <x-text-input id="start_date" name="start_date" type="date" class="mt-1 block" :value="old('start_date', $booking->start_date)"
@@ -21,14 +56,15 @@
                 <div>
                     <x-input-label for="start_time" :value="__('Start')" />
                     <x-text-input id="start_time" name="start_time" type="time" class="mt-1 block" step="60"
-                        :value="old('start_time', $booking->start_time)" placeholder="hh:mm" required />
+                        :value="old('start_time', $booking->start_time)" placeholder="hh:mm" required x-model.fill="start_time"
+                        @change="syncEndTime" />
                     <x-input-error class="mt-2" :messages="$errors->get('start_time')" />
                 </div>
 
                 <div>
                     <x-input-label for="end_time" :value="__('End')" />
                     <x-text-input id="end_time" name="end_time" type="time" class="mt-1 block" step="60"
-                        :value="old('end_time', $booking->end_time)" placeholder="hh:mm" required />
+                        :value="old('end_time', $booking->end_time)" placeholder="hh:mm" required x-model.fill="end_time" @blur="syncDuration" />
                     <x-input-error class="mt-2" :messages="$errors->get('end_time')" />
                 </div>
             </div>
