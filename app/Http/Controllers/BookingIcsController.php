@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Ics;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Response;
 
-class BookingController extends Controller
+class BookingIcsController extends Controller
 {
     /**
      * Create the controller instance.
