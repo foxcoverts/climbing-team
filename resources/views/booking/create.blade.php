@@ -10,18 +10,27 @@
         <form method="post" action="{{ route('booking.store') }}" class="mt-6 space-y-6 max-w-xl">
             @csrf
 
-            <div>
-                <x-input-label for="start_at" :value="__('Start')" />
-                <x-text-input id="start_at" name="start_at" type="datetime-local" class="mt-1 block" :value="old('start_at', $booking->start_at)"
-                    placeholder="yyyy-mm-dd hh:mm:ss" required />
-                <x-input-error class="mt-2" :messages="$errors->get('start_at')" />
-            </div>
+            <div class="flex space-x-6">
+                <div>
+                    <x-input-label for="start_date" :value="__('Date')" />
+                    <x-text-input id="start_date" name="start_date" type="date" class="mt-1 block" :value="old('start_date', $booking->start_date)"
+                        placeholder="yyyy-mm-dd" required />
+                    <x-input-error class="mt-2" :messages="$errors->get('start_date')" />
+                </div>
 
-            <div>
-                <x-input-label for="end_at" :value="__('End')" />
-                <x-text-input id="end_at" name="end_at" type="datetime-local" class="mt-1 block" :value="old('end_at', $booking->end_at)"
-                    placeholder="yyyy-mm-dd hh:mm:ss" required />
-                <x-input-error class="mt-2" :messages="$errors->get('end_at')" />
+                <div>
+                    <x-input-label for="start_time" :value="__('Start')" />
+                    <x-text-input id="start_time" name="start_time" type="time" class="mt-1 block" step="60"
+                        :value="old('start_time', $booking->start_time)" placeholder="hh:mm" required />
+                    <x-input-error class="mt-2" :messages="$errors->get('start_time')" />
+                </div>
+
+                <div>
+                    <x-input-label for="end_time" :value="__('End')" />
+                    <x-text-input id="end_time" name="end_time" type="time" class="mt-1 block" step="60"
+                        :value="old('end_time', $booking->end_time)" placeholder="hh:mm" required />
+                    <x-input-error class="mt-2" :messages="$errors->get('end_time')" />
+                </div>
             </div>
 
             <div>

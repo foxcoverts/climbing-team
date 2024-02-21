@@ -16,8 +16,9 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'start_at' => ['sometimes', 'required', 'date'],
-            'end_at' => ['sometimes', 'required_with:start_at', 'date', 'after:start_at'],
+            'start_date' => ['sometimes', 'required', 'date'],
+            'start_time' => ['sometimes', 'required', 'date_format:H:i'],
+            'end_time' => ['sometimes', 'required', 'date_format:H:i', 'after:start_time'],
             'status' => ['sometimes', 'required', Rule::enum(BookingStatus::class)],
             'location' => ['sometimes', 'required', 'string', 'max:255'],
             'activity' => ['sometimes', 'required', 'string', 'max:255'],
@@ -29,25 +30,14 @@ class UpdateBookingRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'start_at' => __('Start'),
-            'end_at' => __('End'),
+            'start_date' => __('Date'),
+            'start_time' => __('Start'),
+            'end_time' => __('End'),
             'status' => __('Status'),
             'location' => __('Location'),
             'activity' => __('Activity'),
             'group_name' => __('Group Name'),
             'notes' => __('Notes'),
-        ];
-    }
-
-    /**
-     * Get the custom validation error messages.
-     *
-     * @return array<string>
-     */
-    public function messages(): array
-    {
-        return [
-            'start_at.after' => 'The :attribute field must be a date in the future.'
         ];
     }
 }

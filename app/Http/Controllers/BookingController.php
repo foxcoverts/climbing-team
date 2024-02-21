@@ -36,8 +36,9 @@ class BookingController extends Controller
     {
         return view('booking.create', [
             'booking' => new Booking([
-                'start_at' => Carbon::now()->setTime(9, 30, 0, 0),
-                'end_at' => Carbon::now()->setTime(11, 30, 0, 0),
+                'start_date' => Carbon::now(),
+                'start_time' => '09:30',
+                'end_time' => '11:30',
             ]),
             'activity_suggestions' => Booking::distinct()->orderBy('activity')->get(['activity'])->pluck('activity'),
         ]);

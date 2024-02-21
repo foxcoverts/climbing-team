@@ -16,8 +16,9 @@ class StoreBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'start_at' => ['required', 'date'],
-            'end_at' => ['required', 'date', 'after:start_at'],
+            'start_date' => ['required', 'date'],
+            'start_time' => ['required', 'date_format:H:i'],
+            'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
             'status' => ['required', Rule::enum(BookingStatus::class)],
             'location' => ['required', 'string', 'max:255'],
             'activity' => ['required', 'string', 'max:255'],
@@ -29,25 +30,14 @@ class StoreBookingRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'start_at' => __('Start'),
-            'end_at' => __('End'),
+            'start_date' => __('Date'),
+            'start_time' => __('Start'),
+            'end_time' => __('End'),
             'status' => __('Status'),
             'location' => __('Location'),
             'activity' => __('Activity'),
             'group_name' => __('Group Name'),
             'notes' => __('Notes'),
-        ];
-    }
-
-    /**
-     * Get the custom validation error messages.
-     *
-     * @return array<string>
-     */
-    public function messages(): array
-    {
-        return [
-            'start_at.after' => 'The :attribute field must be a date in the future.'
         ];
     }
 }

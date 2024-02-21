@@ -21,8 +21,9 @@ class Booking extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'start_at',
-        'end_at',
+        'start_date',
+        'start_time',
+        'end_time',
         'status',
         'location',
         'activity',
@@ -51,6 +52,62 @@ class Booking extends Model
         'end_at' => 'datetime',
         'status' => BookingStatus::class,
     ];
+
+    protected function getStartDateAttribute()
+    {
+        return $this->start_at->toDateString();
+    }
+
+    protected function setStartDateAttribute($value)
+    {
+        $new_date = Carbon::parse($value);
+
+        if (is_null($this->start_at)) {
+            $this->start_at = $new_date;
+        } else {
+            $this->start_at = $this->start_at->setDateFrom($new_date);
+        }
+
+        if (is_null($this->end_at)) {
+            $this->end_at = $new_date;
+        } else {
+            $this->end_at = $this->end_at->setDateFrom($new_date);
+        }
+    }
+
+    protected function getStartTimeAttribute()
+    {
+        return $this->start_at->format('H:i');
+    }
+
+    protected function setStartTimeAttribute($value)
+    {
+        $new_time = Carbon::parse($value);
+        if (is_null($this->start_at)) {
+            $this->start_at = $new_time;
+        } else {
+            $this->start_at = $this->start_at->setTimeFrom($new_time);
+        }
+    }
+
+    protected function getEndTimeAttribute()
+    {
+        return $this->end_at->format('H:i');
+    }
+
+    protected function setEndTimeAttribute($value)
+    {
+        $new_time = Carbon::parse($value);
+        if (is_null($this->end_at)) {
+            if (!is_null($this->start_at)) {
+                $this->end_at = $this->start_at->setTimeFrom($new_time);
+            } else {
+                $this->end_at = $new_time;
+            }
+        } else {
+            $this->end_at = $this->end_at->setTimeFrom($new_time);
+        }
+    }
 
     public function attendees(): BelongsToMany
     {
