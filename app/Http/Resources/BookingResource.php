@@ -15,6 +15,8 @@ class BookingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $attendee = $this->attendees()->find($request->user());
+
         return [
             'id' => $this->id,
             'start_at' => $this->start_at,
@@ -32,6 +34,7 @@ class BookingResource extends JsonResource
                 'html_input' => 'strip',
                 'allow_unsafe_links' => false,
             ]),
+            'attendance' => $attendee?->attendance->status,
             'url' => route('booking.show', $this),
         ];
     }

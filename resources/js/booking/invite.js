@@ -11,14 +11,12 @@ window.Calendar = new Calendar(calendarEl, {
             titleFormat: function () {
                 return "Booking Invites";
             },
-            buttonText: "list",
             duration: { years: 1 },
         },
     },
-
+    initialView: "list",
     listDayFormat: "ddd, D MMM, YYYY",
     eventTimeFormat: "HH:mm",
-    initialView: "list",
     contentHeight: "auto",
     stickyHeaderDates: true,
     headerToolbar: {
@@ -26,7 +24,6 @@ window.Calendar = new Calendar(calendarEl, {
         center: "",
         right: "",
     },
-    firstDay: 1,
     navLinks: true,
     events: {
         url: "/api/booking/invite",
@@ -42,9 +39,7 @@ window.Calendar = new Calendar(calendarEl, {
                     content.group_name +
                     " at " +
                     content.location +
-                    " (" +
-                    content.status +
-                    ")",
+                    attendanceToTitle(content.attendance),
                 start: content.start_at,
                 end: content.end_at,
                 url: content.url + "/attendance",
@@ -59,24 +54,23 @@ window.Calendar = new Calendar(calendarEl, {
             };
         },
     },
-    eventDidMount(info) {
-        if (info.event.extendedProps.status == "cancelled") {
-            info.el.style.color = "silver";
-        }
-        if (info.view.type == "timeGridDay") {
-            var container = info.el.getElementsByClassName(
-                "fc-event-title-container"
-            )[0];
-
-            var notesEl = document.createElement("div");
-            notesEl.innerHTML = info.event.extendedProps.notes;
-            container.appendChild(notesEl);
-        }
-    },
     validRange(nowDate) {
         return { start: nowDate };
     },
 });
+
+function attendanceToTitle(attendance) {
+    switch (attendance) {
+        case "tentative":
+            return " (maybe)";
+        case "needs-action":
+            return " (invited)";
+        case null:
+            return " (new booking)";
+        default:
+            return "";
+    }
+}
 
 function bookingStatusToColor(status) {
     switch (status) {
