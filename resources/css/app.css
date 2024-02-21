@@ -38,3 +38,7 @@ body::-webkit-scrollbar {
         --fc-list-event-hover-bg-color: #374151; /* grey-700 */
     }
 }
+.fc .fc-toolbar {
+    flex-wrap: wrap;
+    column-gap: 0.75em;
+}
