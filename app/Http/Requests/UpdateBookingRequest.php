@@ -16,14 +16,13 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // TODO: Will not be able to save past events with this rule?
-            'start_at' => ['required', 'date', 'after:now'],
-            'end_at' => ['required', 'date', 'after:start_at'],
-            'status' => ['required', Rule::enum(BookingStatus::class)],
-            'location' => ['required', 'string', 'max:255'],
-            'activity' => ['required', 'string', 'max:255'],
-            'group_name' => ['required', 'string', 'max:255'],
-            'notes' => ['nullable', 'string'],
+            'start_at' => ['sometimes', 'required', 'date'],
+            'end_at' => ['sometimes', 'required_with:start_at', 'date', 'after:start_at'],
+            'status' => ['sometimes', 'required', Rule::enum(BookingStatus::class)],
+            'location' => ['sometimes', 'required', 'string', 'max:255'],
+            'activity' => ['sometimes', 'required', 'string', 'max:255'],
+            'group_name' => ['sometimes', 'required', 'string', 'max:255'],
+            'notes' => ['sometimes', 'nullable', 'string'],
         ];
     }
 

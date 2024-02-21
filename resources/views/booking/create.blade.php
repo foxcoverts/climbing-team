@@ -70,7 +70,7 @@
                 </x-button.primary>
 
                 <x-button.secondary :href="route('booking.index')">
-                    {{ __('Cancel') }}
+                    {{ __('Back') }}
                 </x-button.secondary>
             </div>
         </form>

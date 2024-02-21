@@ -23,7 +23,7 @@
 
 <body
     class="font-sans antialiased leading-normal tracking-normal bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100"
-    x-data="{ sidebarOpen: false, alertOpen: true }">
+    x-data="{ sidebarOpen: false }">
     <div class="w-full  min-h-screen flex flex-col" id="main-content">
         <x-layout.app.topbar />
         <x-layout.app.sidebar />

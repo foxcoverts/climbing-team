@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BookingStatus;
+use App\Http\Requests\DestroyBookingRequest;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
@@ -121,7 +123,7 @@ class BookingController extends Controller
     /**
      * Mark the specified resource as deleted.
      */
-    public function destroy(Booking $booking): RedirectResponse
+    public function destroy(DestroyBookingRequest $request, Booking $booking): RedirectResponse
     {
         $booking->delete();
 

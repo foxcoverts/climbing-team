@@ -57,7 +57,7 @@
                 </x-button.primary>
 
                 <x-button.secondary :href="route('user.show', $user)">
-                    {{ __('Cancel') }}
+                    {{ __('Back') }}
                 </x-button.secondary>
             </div>
         </form>

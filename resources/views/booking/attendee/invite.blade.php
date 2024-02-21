@@ -71,7 +71,7 @@
                     </x-button.primary>
 
                     <x-button.secondary :href="route('booking.show', $booking)">
-                        {{ __('Cancel') }}
+                        {{ __('Back') }}
                     </x-button.secondary>
                 </footer>
             </form>
@@ -80,7 +80,7 @@
             <p>{{ __('All users have already been invited to this booking.') }}</p>
             <footer class="flex items-center gap-4 pt-2">
                 <x-button.secondary :href="route('booking.show', $booking)">
-                    {{ __('Cancel') }}
+                    {{ __('Back') }}
                 </x-button.secondary>
             </footer>
         @endif

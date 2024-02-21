@@ -1,3 +1,4 @@
+@use(App\Enums\BookingStatus)
 <x-layout.app :title="$booking->activity . ' - ' . localDate($booking->start_at)->toFormattedDayDateString()">
     <section class="p-4 sm:p-8">
         @include('booking.partials.header', ['booking' => $booking])
@@ -33,14 +34,25 @@
             <x-button.primary :href="route('booking.edit', $booking)">
                 {{ __('Edit') }}
             </x-button.primary>
-            <form method="post" action="{{ route('booking.destroy', $booking) }}">
-                @csrf
-                @method('delete')
+            @if ($booking->status == BookingStatus::Cancelled)
+                <form method="post" action="{{ route('booking.destroy', $booking) }}">
+                    @csrf
+                    @method('delete')
 
-                <x-button.danger>
-                    {{ __('Delete') }}
-                </x-button.danger>
-            </form>
+                    <x-button.danger>
+                        {{ __('Delete') }}
+                    </x-button.danger>
+                </form>
+            @else
+                <form method="post" action="{{ route('booking.update', $booking) }}">
+                    @csrf
+                    @method('patch')
+                    <input type="hidden" name="status" value="{{ BookingStatus::Cancelled }}" />
+                    <x-button.danger>
+                        {{ __('Cancel Booking') }}
+                    </x-button.danger>
+                </form>
+            @endif
             @include('booking.partials.respond-button', [
                 'booking' => $booking,
                 'attendance' => $attendance,
