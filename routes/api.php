@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\BookingInviteController;
+use App\Http\Controllers\Api\TrashedBookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,4 +23,5 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::get('/booking/invite', BookingInviteController::class);
     Route::apiResource('/booking', BookingController::class);
+    Route::get('/trash/booking', TrashedBookingController::class);
 });
