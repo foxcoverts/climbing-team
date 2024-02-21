@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\BookingStatus;
 use App\Http\Requests\DestroyBookingRequest;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
@@ -10,7 +9,6 @@ use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class BookingController extends Controller
@@ -29,19 +27,6 @@ class BookingController extends Controller
     public function index(): View
     {
         return view('booking.index');
-    }
-
-    /**
-     * Display an iCal listing of the resource.
-     */
-    public function index_ics(): Response
-    {
-        return response()
-            ->view('booking.ics', [
-                'bookings' => Booking::all()->load('attendees'),
-            ])
-            ->header('Content-Type', 'text/calendar; charset=utf-8')
-            ->header('Content-Disposition', 'attachment; filename="booking.ics"');
     }
 
     /**
@@ -82,19 +67,6 @@ class BookingController extends Controller
             'attendees' => $booking->attendees()->orderBy('booking_user.status')->orderBy('users.name')->get(),
             'attendance' => $booking->attendees()->find($request->user())?->attendance,
         ]);
-    }
-
-    /**
-     * Display an iCal listing for the specified resource.
-     */
-    public function show_ics(Booking $booking): Response
-    {
-        return response()
-            ->view('booking.ics', [
-                'bookings' => [$booking],
-            ])
-            ->header('Content-Type', 'text/calendar; charset=utf-8')
-            ->header('Content-Disposition', sprintf('attachment; filename="booking-%s.ics"', $booking->id));
     }
 
     /**

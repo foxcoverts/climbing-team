@@ -3,8 +3,9 @@
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingAttendeeInviteController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Ics\BookingController as IcsBookingController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -40,8 +41,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except(['edit']);
 
-    Route::get('/booking.ics', [BookingController::class, 'index_ics'])->name('booking.ics');
-    Route::get('/booking/{booking}.ics', [BookingController::class, 'show_ics'])->name('booking.show.ics');
+    Route::controller(IcsBookingController::class)->group(function () {
+        Route::get('/booking.ics', 'index')->name('booking.ics');
+        Route::get('/booking/{booking}.ics', 'show')->name('booking.show.ics');
+    });
+
     Route::resource('booking', BookingController::class);
 
     Route::prefix('trash')->name('trash.')->group(function () {
