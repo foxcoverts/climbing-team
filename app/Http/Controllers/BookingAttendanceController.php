@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AttendeeStatus;
 use App\Http\Requests\UpdateBookingAttendanceRequest;
 use App\Models\Booking;
 use Illuminate\Http\Request;
@@ -29,12 +28,20 @@ class BookingAttendanceController extends Controller
      */
     public function update(UpdateBookingAttendanceRequest $request, Booking $booking)
     {
+        if ($booking->isPast()) {
+            return redirect()->back()
+                ->with('error', __('You cannot change your attendance on bookings in the past.'));
+        }
+        if ($booking->isCancelled()) {
+            return redirect()->back()
+                ->with('error', __('You cannot change your attendance on cancelled bookings.'));
+        }
+
         $booking->attendees()->syncWithoutDetaching([
             $request->user()->id => $request->validated()
         ]);
 
-        return redirect()
-            ->back()
+        return redirect()->back()
             ->with('status', __('Updated your attendance successfully.'));
     }
 }

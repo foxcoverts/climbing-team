@@ -34,13 +34,18 @@
             <p><dfn class="not-italic font-bold after:content-[':']">{{ __('attendee.title') }}</dfn>
                 {{ $attendee->name }}</p>
 
-            <div>
-                <x-input-label for="status" :value="__('Status')" class="not-italic font-bold after:content-[':']" />
-                <x-select-input id="status" name="status" class="mt-1 block" required :value="old('status', $attendee->attendance->status)">
-                    <x-select-input.enum :options="AttendeeStatus::class" lang="attendee.status.:value" />
-                </x-select-input>
-                <x-input-error class="mt-2" :messages="$errors->get('status')" />
-            </div>
+            @if ($booking->isFuture() && !$booking->isCancelled())
+                <div>
+                    <x-input-label for="status" :value="__('Status')" class="not-italic font-bold after:content-[':']" />
+                    <x-select-input id="status" name="status" class="mt-1 block" required :value="old('status', $attendee->attendance->status)">
+                        <x-select-input.enum :options="AttendeeStatus::class" lang="attendee.status.:value" />
+                    </x-select-input>
+                    <x-input-error class="mt-2" :messages="$errors->get('status')" />
+                </div>
+            @else
+                <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Status') }}</dfn>
+                    {{ __("attendee.status.{$attendee->attendance->status->value}") }}</p>
+            @endif
         </form>
 
         <form method="post" id="destroy-attendance"
@@ -50,14 +55,18 @@
         </form>
 
         <footer class="flex items-center gap-4 mt-4">
-            <x-button.primary form="update-attendance">
-                {{ __('Update Attendance') }}
-            </x-button.primary>
-
+            @if ($booking->isFuture() && !$booking->isCancelled())
+                <x-button.primary form="update-attendance">
+                    {{ __('Update Attendance') }}
+                </x-button.primary>
+            @endif
             <x-button.danger form="destroy-attendance">
-                {{ __('Remove Attendance') }}
+                @if ($attendee->attendance->status == AttendeeStatus::NeedsAction)
+                    {{ __('Remove Invitation') }}
+                @else
+                    {{ __('Remove Attendance') }}
+                @endif
             </x-button.danger>
-
             <x-button.secondary :href="route('booking.show', $booking)">
                 {{ __('Back') }}
             </x-button.secondary>

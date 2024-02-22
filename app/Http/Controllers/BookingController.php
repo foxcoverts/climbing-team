@@ -53,8 +53,7 @@ class BookingController extends Controller
 
         // event(new Registered($booking));
 
-        return redirect()
-            ->route('booking.show', $booking)
+        return redirect()->route('booking.show', $booking)
             ->with('success', __('Booking created successfully'));
     }
 
@@ -94,8 +93,7 @@ class BookingController extends Controller
         $booking->fill($request->validated());
         $booking->save();
 
-        return redirect()
-            ->route('booking.show', $booking)
+        return redirect()->route('booking.show', $booking)
             ->with('status', __('Booking updated successfully'));
     }
 
@@ -106,8 +104,7 @@ class BookingController extends Controller
     {
         $booking->delete();
 
-        return redirect()
-            ->route('booking.index')
+        return redirect()->route('booking.index')
             ->with('status', __('Booking deleted.'))
             ->with('restore', route('trash.booking.update', $booking));
     }

@@ -117,18 +117,24 @@ class Booking extends Model
             ->using(Attendance::class);
     }
 
-    public function scopePast(Builder $builder): Builder
+    public function isPast(): bool
     {
-        return $builder->whereDate('end_at', '<=', Carbon::now());
+        if (is_null($this->end_at)) {
+            return false;
+        }
+        return $this->end_at->isPast();
     }
 
-    public function scopeFuture(Builder $builder): Builder
+    public function isFuture(): bool
     {
-        return $builder->whereDate('end_at', '>', Carbon::now());
+        if (is_null($this->end_at)) {
+            return false;
+        }
+        return $this->end_at->isFuture();
     }
 
-    public function scopeOfStatus(Builder $builder, BookingStatus ...$status): Builder
+    public function isCancelled(): bool
     {
-        return $builder->whereIn('status', $status);
+        return ($this->status == BookingStatus::Cancelled);
     }
 }

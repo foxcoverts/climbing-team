@@ -25,6 +25,10 @@ class BookingAttendeeController extends Controller
      */
     public function create(Booking $booking): View
     {
+        if ($booking->isPast() || $booking->isCancelled()) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
         return view('booking.attendee.create', [
             'booking' => $booking,
             'users' => User::query()->orderBy('name')->get(),
@@ -36,6 +40,15 @@ class BookingAttendeeController extends Controller
      */
     public function store(StoreBookingAttendeeRequest $request, Booking $booking): RedirectResponse
     {
+        if ($booking->isPast()) {
+            return redirect()->back()
+                ->with('error', __('You cannot change attendance on past bookings.'));
+        }
+        if ($booking->isCancelled()) {
+            return redirect()->back()
+                ->with('error', __('You cannot change attendance on cancelled bookings.'));
+        }
+
         $user_id = $request->safe()->only('user_id')['user_id'];
         $options = $request->safe()->except(['user_id']);
 
@@ -63,6 +76,15 @@ class BookingAttendeeController extends Controller
      */
     public function update(UpdateBookingAttendeeRequest $request, Booking $booking, User $attendee): RedirectResponse
     {
+        if ($booking->isPast()) {
+            return redirect()->back()
+                ->with('error', __('You cannot change attendance on past bookings.'));
+        }
+        if ($booking->isCancelled()) {
+            return redirect()->back()
+                ->with('error', __('You cannot change attendance on cancelled bookings.'));
+        }
+
         $booking->attendees()->syncWithoutDetaching([
             $attendee->id => $request->validated(),
         ]);

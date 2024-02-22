@@ -29,7 +29,7 @@
         <x-layout.app.sidebar />
 
         <main class="flex-grow lg:pl-64 w-full text-gray-900 dark:text-white bg-white dark:bg-gray-800 flex flex-col">
-            <x-layout.app.alert />
+            <x-layout.app.alerts />
 
             {{ $slot }}
         </main>
