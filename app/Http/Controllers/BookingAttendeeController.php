@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookingAttendeeController extends Controller
 {
@@ -16,7 +17,7 @@ class BookingAttendeeController extends Controller
      */
     public function index(Booking $booking): RedirectResponse
     {
-        return redirect()->route('booking.show', $booking);
+        return redirect(status: Response::HTTP_SEE_OTHER)->route('booking.show', $booking);
     }
 
     /**
