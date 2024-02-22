@@ -38,7 +38,7 @@ class TrashedBookingController extends Controller
         $this->authorize('restore', $booking);
         $booking->restore();
 
-        return redirect(route('booking.show', $booking))
+        return redirect()->route('booking.show', $booking)
             ->with('status', __('Booking restored successfully.'));
     }
 
@@ -50,7 +50,7 @@ class TrashedBookingController extends Controller
         $this->authorize('forceDelete', $booking);
         $booking->forceDelete();
 
-        return redirect(route('booking.index'))
+        return redirect()->route('booking.index')
             ->with('status', __('Booking permanently deleted.'));
     }
 }

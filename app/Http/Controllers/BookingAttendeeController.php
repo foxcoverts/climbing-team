@@ -16,7 +16,7 @@ class BookingAttendeeController extends Controller
      */
     public function index(Booking $booking): RedirectResponse
     {
-        return redirect(route('booking.show', $booking));
+        return redirect()->route('booking.show', $booking);
     }
 
     /**
@@ -42,7 +42,7 @@ class BookingAttendeeController extends Controller
             $user_id => $options,
         ]);
 
-        return redirect(route('booking.show', $booking))
+        return redirect()->route('booking.show', $booking)
             ->with('status', __('Added attendee successfully.'));
     }
 
@@ -66,7 +66,7 @@ class BookingAttendeeController extends Controller
             $attendee->id => $request->validated(),
         ]);
 
-        return redirect(route('booking.show', $booking))
+        return redirect()->route('booking.show', $booking)
             ->with('status', __('Updated attendance successfully.'));
     }
 
@@ -77,7 +77,7 @@ class BookingAttendeeController extends Controller
     {
         $booking->attendees()->detach($attendee);
 
-        return redirect(route('booking.show', $booking))
+        return redirect()->route('booking.show', $booking)
             ->with('status', __('Removed attendee successfully.'));
     }
 }

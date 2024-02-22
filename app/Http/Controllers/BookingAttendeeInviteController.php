@@ -45,7 +45,7 @@ class BookingAttendeeInviteController extends Controller
 
         // @todo fire invited event & background job.
 
-        return redirect(route('booking.show', $booking))
+        return redirect()->route('booking.show', $booking)
             ->with('status', 'Attendees invited successfully.');
     }
 }
