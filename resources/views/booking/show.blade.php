@@ -11,7 +11,7 @@
                 </h2>
 
                 @forelse ($attendees->groupBy('attendance.status') as $status => $attendees)
-                    <h3 class="text-lg">{{ __("attendee.status.$status") }}</h3>
+                    <h3 class="text-lg">{{ __("app.attendee.status.$status") }}</h3>
                     <ul class="mb-3">
                         @foreach ($attendees as $attendee)
                             <li class="flex space-x-1 items-start">

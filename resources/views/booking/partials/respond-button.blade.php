@@ -10,7 +10,7 @@
                     {{ __('Respond') }}
                 @else
                     <x-icon.checkmark-outline class="h-4 w-4 fill-current" />
-                    {{ __("attendee.status.{$attendance->status->value}") }}
+                    {{ __("app.attendee.status.{$attendance->status->value}") }}
                 @endif
 
                 <x-icon.cheveron-down class="w-4 h-4 fill-current" x-show="!open" />
@@ -28,13 +28,13 @@
                             <button type="button" @click="open = false"
                                 class="flex gap-2 flex-nowrap items-center min-w-full px-4 py-2 text-xs uppercase font-semibold tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25">
                                 <x-icon.checkmark-outline class="h-4 w-4 fill-current" />
-                                <span class="text-nowrap">{{ __("attendee.status.$status") }}</span>
+                                <span class="text-nowrap">{{ __("app.attendee.status.$status") }}</span>
                             </button>
                         @else
                             <button
                                 class="flex gap-2 flex-nowrap items-center min-w-full px-4 py-2 text-xs uppercase font-semibold tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25">
                                 <x-icon.empty-outline class="h-4 w-4 fill-current" />
-                                <span class="text-nowrap">{{ __("attendee.status.$status") }}</span>
+                                <span class="text-nowrap">{{ __("app.attendee.status.$status") }}</span>
                             </button>
                         @endif
                     </form>
@@ -47,7 +47,7 @@
         <div
             class="flex gap-2 px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm disabled:opacity-25">
             <x-icon.checkmark-outline class="h-4 w-4 fill-current" />
-            {{ __("attendee.status.{$attendance->status->value}") }}
+            {{ __("app.attendee.status.{$attendance->status->value}") }}
         </div>
     @endif
 @endif

@@ -31,20 +31,20 @@
             @method('PUT')
 
             <h3 class="text-xl font-medium">{{ __('Attendance') }}</h3>
-            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('attendee.title') }}</dfn>
+            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Attendee') }}</dfn>
                 {{ $attendee->name }}</p>
 
             @if ($booking->isFuture() && !$booking->isCancelled())
                 <div>
                     <x-input-label for="status" :value="__('Status')" class="not-italic font-bold after:content-[':']" />
                     <x-select-input id="status" name="status" class="mt-1 block" required :value="old('status', $attendee->attendance->status)">
-                        <x-select-input.enum :options="AttendeeStatus::class" lang="attendee.status.:value" />
+                        <x-select-input.enum :options="AttendeeStatus::class" lang="app.attendee.status.:value" />
                     </x-select-input>
                     <x-input-error class="mt-2" :messages="$errors->get('status')" />
                 </div>
             @else
                 <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Status') }}</dfn>
-                    {{ __("attendee.status.{$attendee->attendance->status->value}") }}</p>
+                    {{ __("app.attendee.status.{$attendee->attendance->status->value}") }}</p>
             @endif
         </form>
 

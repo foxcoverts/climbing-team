@@ -30,7 +30,7 @@
             <h3 class="text-xl font-medium">{{ __('Attendance') }}</h3>
 
             <div>
-                <x-input-label for="user_id" :value="__('attendee.title')" />
+                <x-input-label for="user_id" :value="__('Attendee')" />
                 <x-select-input id="user_id" name="user_id" class="mt-1 block" required :value="old('user_id')">
                     <option value="" disabled selected>{{ __('-- Select User --') }}</option>
                     <x-select-input.collection :options="$users" label_key="name" />
@@ -41,7 +41,7 @@
             <div>
                 <x-input-label for="status" :value="__('Status')" />
                 <x-select-input id="status" name="status" class="mt-1 block" required :value="old('status', AttendeeStatus::NeedsAction)">
-                    <x-select-input.enum :options="AttendeeStatus::class" lang="attendee.status.:value" />
+                    <x-select-input.enum :options="AttendeeStatus::class" lang="app.attendee.status.:value" />
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('status')" />
             </div>
