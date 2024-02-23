@@ -1,3 +1,4 @@
+@use(App\Enums\Role)
 <x-layout.app :header="$user->name" :title="__('Update - :name', $user->only('name'))">
     <section class="p-4 sm:p-8 max-w-xl">
         <header>
@@ -49,6 +50,14 @@
                     <x-select-input.timezones />
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
+            </div>
+
+            <div>
+                <x-input-label for="role" :value="__('Role')" />
+                <x-select-input id="role" name="role" class="mt-1 block" required :value="old('role', $user->role)"
+                    x-model.fill="user.role">
+                    <x-select-input.enum :options="Role::class" lang="app.user.role.:value" />
+                </x-select-input>
             </div>
 
             <div class="flex items-center gap-4">

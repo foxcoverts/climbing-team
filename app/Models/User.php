@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\Timezone;
+use App\Enums\Role;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'timezone',
+        'role',
     ];
 
     /**
@@ -45,6 +47,7 @@ class User extends Authenticatable
      */
     protected $attributes = [
         'timezone' => 'UTC',
+        'role' => Role::Guest->value,
     ];
 
     /**
@@ -55,6 +58,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'timezone' => Timezone::class,
+        'role' => Role::class,
     ];
 
     public function bookings(): BelongsToMany

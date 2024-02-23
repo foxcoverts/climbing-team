@@ -6,6 +6,11 @@
 
         <div class="space-y-2 max-w-xl flex-grow">
             <p>
+                <dfn class="not-italic font-bold after:content-[':']">{{ __('Role') }}</dfn>
+                {{ __("app.user.role.{$user->role->value}") }}
+            </p>
+
+            <p>
                 <dfn class="not-italic font-bold after:content-[':']">{{ __('Email') }}</dfn>
                 <a href="mailto:{{ $user->email }}"
                     class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">{{ $user->email }}</a>
