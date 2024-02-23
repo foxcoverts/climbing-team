@@ -8,6 +8,13 @@ return [
             'needs-action' => 'Invited',
         ],
     ],
+    'booking' => [
+        'status' => [
+            'confirmed' => 'Confirmed',
+            'tentative' => 'Tentative',
+            'cancelled' => 'Cancelled',
+        ],
+    ],
     'user' => [
         'role' => [
             'guest' => 'Guest',

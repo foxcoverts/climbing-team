@@ -1,4 +1,4 @@
-<x-layout.app :title="__('booking.title')">
+<x-layout.app :title="__('Booking')">
     <section class="p-4 sm:p-8 max-w-xl">
         @include('booking.partials.header', ['booking' => $booking])
         @include('booking.partials.details', ['booking' => $booking])

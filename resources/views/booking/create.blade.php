@@ -72,7 +72,7 @@
             <div>
                 <x-input-label for="status" :value="__('Status')" />
                 <x-select-input id="status" name="status" class="mt-1 block" required :value="old('status', $booking->status)">
-                    <x-select-input.enum :options="BookingStatus::class" lang="booking.status.:value" />
+                    <x-select-input.enum :options="BookingStatus::class" lang="app.booking.status.:value" />
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('status')" />
             </div>
