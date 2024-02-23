@@ -42,11 +42,11 @@ class BookingAttendeeController extends Controller
     {
         if ($booking->isPast()) {
             return redirect()->back()
-                ->with('error', __('You cannot change attendance on past bookings.'));
+                ->with('alert.error', __('You cannot change attendance on past bookings.'));
         }
         if ($booking->isCancelled()) {
             return redirect()->back()
-                ->with('error', __('You cannot change attendance on cancelled bookings.'));
+                ->with('alert.error', __('You cannot change attendance on cancelled bookings.'));
         }
 
         $user_id = $request->safe()->only('user_id')['user_id'];
@@ -57,7 +57,7 @@ class BookingAttendeeController extends Controller
         ]);
 
         return redirect()->route('booking.show', $booking)
-            ->with('status', __('Added attendee successfully.'));
+            ->with('alert.info', __('Added attendee successfully.'));
     }
 
     /**
@@ -78,11 +78,11 @@ class BookingAttendeeController extends Controller
     {
         if ($booking->isPast()) {
             return redirect()->back()
-                ->with('error', __('You cannot change attendance on past bookings.'));
+                ->with('alert.error', __('You cannot change attendance on past bookings.'));
         }
         if ($booking->isCancelled()) {
             return redirect()->back()
-                ->with('error', __('You cannot change attendance on cancelled bookings.'));
+                ->with('alert.error', __('You cannot change attendance on cancelled bookings.'));
         }
 
         $booking->attendees()->syncWithoutDetaching([
@@ -90,7 +90,7 @@ class BookingAttendeeController extends Controller
         ]);
 
         return redirect()->route('booking.show', $booking)
-            ->with('status', __('Updated attendance successfully.'));
+            ->with('alert.info', __('Updated attendance successfully.'));
     }
 
     /**
@@ -101,6 +101,6 @@ class BookingAttendeeController extends Controller
         $booking->attendees()->detach($attendee);
 
         return redirect()->route('booking.show', $booking)
-            ->with('status', __('Removed attendee successfully.'));
+            ->with('alert.info', __('Removed attendee successfully.'));
     }
 }

@@ -30,11 +30,11 @@ class BookingAttendanceController extends Controller
     {
         if ($booking->isPast()) {
             return redirect()->back()
-                ->with('error', __('You cannot change your attendance on bookings in the past.'));
+                ->with('alert.error', __('You cannot change your attendance on bookings in the past.'));
         }
         if ($booking->isCancelled()) {
             return redirect()->back()
-                ->with('error', __('You cannot change your attendance on cancelled bookings.'));
+                ->with('alert.error', __('You cannot change your attendance on cancelled bookings.'));
         }
 
         $booking->attendees()->syncWithoutDetaching([
@@ -42,6 +42,6 @@ class BookingAttendanceController extends Controller
         ]);
 
         return redirect()->back()
-            ->with('status', __('Updated your attendance successfully.'));
+            ->with('alert.info', __('Updated your attendance successfully.'));
     }
 }

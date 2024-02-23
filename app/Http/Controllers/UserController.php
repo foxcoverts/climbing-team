@@ -96,7 +96,7 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->route('user.index')
-            ->with('status', __('User updated successfully'));
+            ->with('alert.info', __('User updated successfully'));
     }
 
     /**
@@ -109,6 +109,6 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('user.index')
-            ->with('status', __('User account deleted.'));
+            ->with('alert.info', __('User account deleted.'));
     }
 }

@@ -1,9 +1,6 @@
-@if (session('status'))
-    <x-alert :restore="session('restore')">{{ session('status') }}</x-alert>
+@if (session('alert.info'))
+    <x-alert :restore="session('restore')">{{ session('alert.info') }}</x-alert>
 @endif
-@if (session('error'))
-    <x-alert color='red'>{{ session('error') }}</x-alert>
-@endif
-@if ($errors->any())
-    <x-alert color='red'>{{ $errors->first() }}</x-alert>
+@if (session('alert.error'))
+    <x-alert color='red'>{{ session('alert.error') }}</x-alert>
 @endif

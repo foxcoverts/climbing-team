@@ -39,7 +39,7 @@ class TrashedBookingController extends Controller
         $booking->restore();
 
         return redirect()->route('booking.show', $booking)
-            ->with('status', __('Booking restored successfully.'));
+            ->with('alert.info', __('Booking restored successfully.'));
     }
 
     /**
@@ -51,6 +51,6 @@ class TrashedBookingController extends Controller
         $booking->forceDelete();
 
         return redirect()->route('booking.index')
-            ->with('status', __('Booking permanently deleted.'));
+            ->with('alert.info', __('Booking permanently deleted.'));
     }
 }

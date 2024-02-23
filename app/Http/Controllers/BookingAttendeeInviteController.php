@@ -37,11 +37,11 @@ class BookingAttendeeInviteController extends Controller
     {
         if ($booking->isPast()) {
             return redirect()->back()
-                ->with('error', __('You cannot invite people to past bookings.'));
+                ->with('alert.error', __('You cannot invite people to past bookings.'));
         }
         if ($booking->isCancelled()) {
             return redirect()->back()
-                ->with('error', __('You cannot invite people to cancelled bookings.'));
+                ->with('alert.error', __('You cannot invite people to cancelled bookings.'));
         }
 
         $attendees = $booking->attendees;
@@ -60,6 +60,6 @@ class BookingAttendeeInviteController extends Controller
         // @todo fire invited event & background job.
 
         return redirect()->route('booking.show', $booking)
-            ->with('status', 'Attendees invited successfully.');
+            ->with('alert.info', __('Attendees invited successfully.'));
     }
 }

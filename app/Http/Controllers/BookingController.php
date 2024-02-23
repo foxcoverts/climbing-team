@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DestroyBookingRequest;
+use App\Enums\BookingStatus;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
@@ -94,18 +94,23 @@ class BookingController extends Controller
         $booking->save();
 
         return redirect()->route('booking.show', $booking)
-            ->with('status', __('Booking updated successfully'));
+            ->with('alert.info', __('Booking updated successfully'));
     }
 
     /**
      * Mark the specified resource as deleted.
      */
-    public function destroy(DestroyBookingRequest $request, Booking $booking): RedirectResponse
+    public function destroy(Booking $booking): RedirectResponse
     {
+        if ($booking->status != BookingStatus::Cancelled) {
+            return redirect()->back()
+                ->with('alert.error', __('You must cancel this booking before you can delete it.'));
+        }
+
         $booking->delete();
 
         return redirect()->route('booking.index')
-            ->with('status', __('Booking deleted.'))
+            ->with('alert.info', __('Booking deleted.'))
             ->with('restore', route('trash.booking.update', $booking));
     }
 }
