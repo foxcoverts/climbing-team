@@ -61,7 +61,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Booking::class)
             ->withTimestamps()
-            ->withPivot('status', 'role')->as('attendance')
+            ->withPivot('status')->as('attendance')
             ->using(Attendance::class);
     }
 }

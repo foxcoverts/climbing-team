@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignUlid('user_id')->constrained();
             $table->enum('status', ['accepted', 'tentative', 'declined', 'needs-action'])
                 ->default('needs-action');
-            $table->enum('role', ['lead-instructor'])->nullable()->default(null);
             $table->timestamps(6);
 
             $table->unique(['booking_id', 'user_id']);

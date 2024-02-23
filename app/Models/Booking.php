@@ -113,7 +113,7 @@ class Booking extends Model
     {
         return $this->belongsToMany(User::class)
             ->withTimestamps()
-            ->withPivot('status', 'role')->as('attendance')
+            ->withPivot('status')->as('attendance')
             ->using(Attendance::class);
     }
 

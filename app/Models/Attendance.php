@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\AttendeeRole;
 use App\Enums\AttendeeStatus;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -16,7 +15,6 @@ class Attendance extends Pivot
      */
     protected $fillable = [
         'status',
-        'role',
     ];
 
 
@@ -27,7 +25,6 @@ class Attendance extends Pivot
      */
     protected $attributes = [
         'status' => AttendeeStatus::NeedsAction,
-        'role' => null,
     ];
 
 
@@ -38,6 +35,5 @@ class Attendance extends Pivot
      */
     protected $casts = [
         'status' => AttendeeStatus::class,
-        'role' => AttendeeRole::class,
     ];
 }
