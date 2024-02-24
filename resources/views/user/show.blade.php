@@ -39,9 +39,11 @@
         </div>
 
         <footer class="flex items-center gap-4">
-            <x-button.primary href="{{ route('user.edit', $user) }}">
-                {{ __('Edit') }}
-            </x-button.primary>
+            @can('update', $user)
+                <x-button.primary href="{{ route('user.edit', $user) }}">
+                    {{ __('Edit') }}
+                </x-button.primary>
+            @endcan
             @include('user.partials.delete-button')
         </footer>
     </section>

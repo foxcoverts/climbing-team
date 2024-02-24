@@ -43,21 +43,25 @@
         </x-sidebar.link>
     </div>
 
-    <div>
-        <x-sidebar.heading>{{ __('Users') }}</x-sidebar.heading>
-        <x-sidebar.link route='user.index' :match-routes="['user.index', 'user.show', 'user.edit']" :label="__('View Users')">
-            <x-slot:icon>
-                <path
-                    d="M7 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 0 1 7 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 1 1-1.33 7.76 5.96 5.96 0 0 0 0-7.52C12.1.1 12.53 0 13 0z" />
-            </x-slot:icon>
-        </x-sidebar.link>
-        <x-sidebar.link route='user.create' :label="__('Add User')">
-            <x-slot:icon>
-                <path
-                    d="M2 6H0v2h2v2h2V8h2V6H4V4H2v2zm7 0a3 3 0 0 1 6 0v2a3 3 0 0 1-6 0V6zm11 9.14A15.93 15.93 0 0 0 12 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z" />
-            </x-slot:icon>
-        </x-sidebar.link>
-    </div>
+    @can('viewAny', App\Models\User::class)
+        <div>
+            <x-sidebar.heading>{{ __('Users') }}</x-sidebar.heading>
+            <x-sidebar.link route='user.index' :match-routes="['user.index', 'user.show', 'user.edit']" :label="__('View Users')">
+                <x-slot:icon>
+                    <path
+                        d="M7 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 0 1 7 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 1 1-1.33 7.76 5.96 5.96 0 0 0 0-7.52C12.1.1 12.53 0 13 0z" />
+                </x-slot:icon>
+            </x-sidebar.link>
+            @can('create', App\Models\User::class)
+                <x-sidebar.link route='user.create' :label="__('Add User')">
+                    <x-slot:icon>
+                        <path
+                            d="M2 6H0v2h2v2h2V8h2V6H4V4H2v2zm7 0a3 3 0 0 1 6 0v2a3 3 0 0 1-6 0V6zm11 9.14A15.93 15.93 0 0 0 12 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z" />
+                    </x-slot:icon>
+                </x-sidebar.link>
+            @endcan
+        </div>
+    @endcan
 
     <div>
         <x-sidebar.heading>{{ __('Account') }}</x-sidebar.heading>

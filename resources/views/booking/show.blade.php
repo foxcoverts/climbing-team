@@ -15,13 +15,17 @@
                     <ul class="mb-3">
                         @foreach ($attendees as $attendee)
                             <li class="flex space-x-1 items-start">
-                                <a href="{{ route('user.show', $attendee) }}">{{ $attendee->name }}</a>
-                                @if ($booking->isFuture() && !$booking->isCancelled())
-                                    <a href="{{ route('booking.attendee.show', [$booking, $attendee]) }}">
-                                        <x-icon.edit-pencil class="w-3 h-3 fill-current inline-block align-text-top"
-                                            title="{{ __('Edit Attendance') }}" />
-                                    </a>
-                                @endif
+                                @can('view', $attendee)
+                                    <a href="{{ route('user.show', $attendee) }}">{{ $attendee->name }}</a>
+                                    @if ($booking->isFuture() && !$booking->isCancelled())
+                                        <a href="{{ route('booking.attendee.show', [$booking, $attendee]) }}">
+                                            <x-icon.edit-pencil class="w-3 h-3 fill-current inline-block align-text-top"
+                                                title="{{ __('Edit Attendance') }}" />
+                                        </a>
+                                    @endif
+                                @else
+                                    {{ $attendee->name }}
+                                @endcan
                             </li>
                         @endforeach
                     </ul>

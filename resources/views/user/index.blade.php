@@ -1,3 +1,4 @@
+@use(App\Models\User)
 <x-layout.app :title="__('Users')">
     <section class="p-4 sm:p-8">
         <header>
@@ -11,9 +12,11 @@
         </div>
 
         <x-admin.footer>
-            <x-button.primary :href="route('user.create')">
-                {{ __('Register') }}
-            </x-button.primary>
+            @can('create', User::class)
+                <x-button.primary :href="route('user.create')">
+                    {{ __('Register') }}
+                </x-button.primary>
+            @endcan
         </x-admin.footer>
     </section>
 </x-layout.app>

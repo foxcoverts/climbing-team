@@ -54,28 +54,32 @@
                 <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
             </div>
 
-            <div>
-                <x-input-label for="role" :value="__('Role')" />
-                <x-select-input id="role" name="role" class="mt-1 block" required x-model="user.role">
-                    <x-select-input.enum :options="Role::class" lang="app.user.role.:value" />
-                </x-select-input>
-            </div>
+            @can('manage', $user)
+                <div>
+                    <x-input-label for="role" :value="__('Role')" />
+                    <x-select-input id="role" name="role" class="mt-1 block" required x-model="user.role">
+                        <x-select-input.enum :options="Role::class" lang="app.user.role.:value" />
+                    </x-select-input>
+                </div>
+            @endcan
 
-            <fieldset x-data="checkboxes({{ json_encode(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations">
-                <legend class="text-xl font-medium">{{ __('Accreditations') }}</legend>
+            @can('manage', $user)
+                <fieldset x-data="checkboxes({{ json_encode(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations">
+                    <legend class="text-xl font-medium">{{ __('Accreditations') }}</legend>
 
-                <label class="mt-1 block w-full">
-                    <input type="checkbox" x-model="all" x-effect="$el.indeterminate = indeterminate()" />
-                    {{ __('Select all') }}</label>
-
-                @foreach (Accreditation::cases() as $accreditation)
                     <label class="mt-1 block w-full">
-                        <input type="checkbox" value="{{ $accreditation->value }}" name="accreditations[]"
-                            x-model="values" />
-                        {{ __("app.user.accreditation.$accreditation->value") }}</label>
-                @endforeach
-                <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
-            </fieldset>
+                        <input type="checkbox" x-model="all" x-effect="$el.indeterminate = indeterminate()" />
+                        {{ __('Select all') }}</label>
+
+                    @foreach (Accreditation::cases() as $accreditation)
+                        <label class="mt-1 block w-full">
+                            <input type="checkbox" value="{{ $accreditation->value }}" name="accreditations[]"
+                                x-model="values" />
+                            {{ __("app.user.accreditation.$accreditation->value") }}</label>
+                    @endforeach
+                    <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
+                </fieldset>
+            @endcan
 
             <div class="flex items-center gap-4">
                 <x-button.primary>
