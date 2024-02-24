@@ -8,12 +8,6 @@
                 <path d="M8 20H3V10H0L10 0l10 10h-3v10h-5v-6H8v6z" />
             </x-slot:icon>
         </x-sidebar.link>
-        <x-sidebar.link route='dashboard' match-routes='' :label="__('Inventory')">
-            <x-slot:icon>
-                <path
-                    d="M9 12H1v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6h-8v2H9v-2zm0-1H0V5c0-1.1.9-2 2-2h4V2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1h4a2 2 0 0 1 2 2v6h-9V9H9v2zm3-8V2H8v1h4z" />
-            </x-slot:icon>
-        </x-sidebar.link>
     </div>
 
     @can('viewAny', App\Models\Booking::class)
@@ -71,11 +65,6 @@
 
     <div>
         <x-sidebar.heading>{{ __('Account') }}</x-sidebar.heading>
-        <x-sidebar.link route='profile.show' match-routes='' :label="__('Notices')">
-            <x-slot:icon>
-                <path d="M11 12h6v-1l-3-1V2l3-1V0H3v1l3 1v8l-3 1v1h6v7l1 1 1-1v-7z" />
-            </x-slot:icon>
-        </x-sidebar.link>
         <x-sidebar.link route='profile.show' :label="__('Profile')">
             <x-slot:icon>
                 <path
