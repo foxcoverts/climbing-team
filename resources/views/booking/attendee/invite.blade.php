@@ -26,47 +26,26 @@
 
         @if ($users->isNotEmpty())
             <form method="post" action="{{ route('booking.attendee.invite.store', $booking) }}" class="space-y-1"
-                x-data="{
-                    form: { user_ids: [] },
-                    all: false,
-                    all_user_ids: {{ $users->pluck('id') }},
-                    toggleAll() {
-                        if (this.all) {
-                            this.form.user_ids = this.all_user_ids;
-                        } else {
-                            this.form.user_ids = [];
-                        }
-                    },
-                    checkAll() {
-                        if (this.all_user_ids.every(value => this.form.user_ids.includes(value))) {
-                            this.all = true;
-                            $refs.all.indeterminate = false;
-                        } else {
-                            this.all = false;
-                            $refs.all.indeterminate = (this.form.user_ids.length > 0);
-                        }
-                    },
-                }">
+                x-data="{ form: { user_ids: [] } }">
                 @csrf
 
-                <fieldset>
+                <fieldset x-data="checkboxes({{ $users->pluck('id') }})" x-modelable="values" x-model="form.user_ids">
                     <legend class="text-xl font-medium">{{ __('Invite Attendees') }}</legend>
 
                     <label class="mt-1 block w-full">
-                        <input type="checkbox" x-ref="all" x-model="all" @change="toggleAll" />
+                        <input type="checkbox" x-model="all" x-effect="$el.indeterminate = indeterminate()" />
                         {{ __('Invite all') }}</label>
 
                     @foreach ($users as $user)
                         <label class="mt-1 block w-full">
-                            <input type="checkbox" value="{{ $user->id }}" name="user_ids[]"
-                                x-model="form.user_ids" @change="checkAll" />
+                            <input type="checkbox" value="{{ $user->id }}" name="user_ids[]" x-model="values" />
                             {{ $user->name }}</label>
                     @endforeach
                     <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
                 </fieldset>
 
                 <footer class="flex items-center gap-4 pt-2">
-                    <x-button.primary x-bind:disabled="form.user_ids.length == 0">
+                    <x-button.primary disabled x-bind:disabled="form.user_ids.length == 0">
                         {{ __('Invite') }}
                     </x-button.primary>
 
