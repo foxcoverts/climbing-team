@@ -27,21 +27,10 @@ window.Calendar = new Calendar(calendarEl, {
     initialView: "dayGridMonth",
     contentHeight: "auto",
     stickyHeaderDates: true,
-    customButtons: {
-        create: {
-            text: "Add Booking",
-            click() {
-                window.location = "/booking/create";
-            },
-        },
-    },
     headerToolbar: {
         left: "title",
         center: "",
         right: "dayGridMonth,timeGridDay today prev,next",
-    },
-    footerToolbar: {
-        right: "create",
     },
     firstDay: 1,
     navLinks: true,

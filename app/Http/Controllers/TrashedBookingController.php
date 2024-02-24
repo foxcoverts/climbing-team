@@ -15,7 +15,7 @@ class TrashedBookingController extends Controller
      */
     public function index(): View
     {
-        $this->authorize('viewAny', Booking::class);
+        $this->authorize('viewTrashed', Booking::class);
         return view('booking.trashed.index');
     }
 

@@ -36,9 +36,11 @@
         </div>
 
         <footer class="flex items-center gap-4 mt-2">
-            <x-button.primary :href="route('booking.edit', $booking)">
-                {{ __('Edit') }}
-            </x-button.primary>
+            @can('update', $booking)
+                <x-button.primary :href="route('booking.edit', $booking)">
+                    {{ __('Edit') }}
+                </x-button.primary>
+            @endcan
             @include('booking.partials.delete-button', [
                 'booking' => $booking,
             ])

@@ -2,9 +2,10 @@
 
 namespace App\Policies;
 
+use App\Enums\Accreditation;
+use App\Enums\Role;
 use App\Models\Booking;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class BookingPolicy
 {
@@ -13,7 +14,8 @@ class BookingPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return ($user->role != Role::Guest) ||
+            $user->accreditations->contains(Accreditation::ManageBookings);
     }
 
     /**
@@ -21,7 +23,12 @@ class BookingPolicy
      */
     public function view(User $user, Booking $booking): bool
     {
-        return true;
+        if ($booking->trashed()) {
+            return $user->accreditations->contains(Accreditation::ManageBookings);
+        } else {
+            return ($user->role != Role::Guest) ||
+                $user->accreditations->contains(Accreditation::ManageBookings);
+        }
     }
 
     /**
@@ -29,7 +36,7 @@ class BookingPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->accreditations->contains(Accreditation::ManageBookings);
     }
 
     /**
@@ -37,7 +44,7 @@ class BookingPolicy
      */
     public function update(User $user, Booking $booking): bool
     {
-        return true;
+        return $user->accreditations->contains(Accreditation::ManageBookings);
     }
 
     /**
@@ -45,7 +52,15 @@ class BookingPolicy
      */
     public function delete(User $user, Booking $booking): bool
     {
-        return true;
+        return $user->accreditations->contains(Accreditation::ManageBookings);
+    }
+
+    /**
+     * Determine whether the user can view trashed models.
+     */
+    public function viewTrashed(User $user): bool
+    {
+        return $user->accreditations->contains(Accreditation::ManageBookings);
     }
 
     /**
@@ -53,7 +68,7 @@ class BookingPolicy
      */
     public function restore(User $user, Booking $booking): bool
     {
-        return true;
+        return $user->accreditations->contains(Accreditation::ManageBookings);
     }
 
     /**
@@ -61,6 +76,7 @@ class BookingPolicy
      */
     public function forceDelete(User $user, Booking $booking): bool
     {
-        return true;
+        return ($user->role == Role::TeamLeader) &&
+            $user->accreditations->contains(Accreditation::ManageBookings);
     }
 }

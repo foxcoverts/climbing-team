@@ -10,9 +10,11 @@
         </form>
 
         <div class="mt-6 flex items-center gap-4">
-            <x-button.primary form="restore">
-                {{ __('Restore') }}
-            </x-button.primary>
+            @can('restore', $booking)
+                <x-button.primary form="restore">
+                    {{ __('Restore') }}
+                </x-button.primary>
+            @endcan
             @include('booking.partials.force-delete-button')
             <x-button.secondary :href="route('trash.booking.index')">
                 {{ __('Back') }}
