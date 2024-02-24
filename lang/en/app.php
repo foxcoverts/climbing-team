@@ -16,6 +16,10 @@ return [
         ],
     ],
     'user' => [
+        'accreditation' => [
+            'manage-bookings' => 'Manage Bookings',
+            'manage-users' => 'Manage Users',
+        ],
         'role' => [
             'guest' => 'Guest',
             'team-member' => 'Team Member',

@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use App\Casts\Timezone;
+use App\Enums\Accreditation;
 use App\Enums\Role;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -67,5 +70,40 @@ class User extends Authenticatable
             ->withTimestamps()
             ->withPivot('status')->as('attendance')
             ->using(Attendance::class);
+    }
+
+    protected function user_accreditations(): HasMany
+    {
+        return $this->hasMany(UserAccreditation::class);
+    }
+
+    public function getAccreditationsAttribute(): Collection
+    {
+        return $this->user_accreditations
+            ->pluck('accreditation');
+    }
+
+    /**
+     * Sync accreditations to the given list.
+     *
+     * @param null|array<string|Accreditation> $newAccreditations
+     * @return void
+     */
+    public function setAccreditationsAttribute($newAccreditations)
+    {
+        $accreditations = $this->accreditations->pluck('value');
+        $accreditationsToRemove = $accreditations->diff($newAccreditations);
+        $accreditationsToAdd = collect($newAccreditations)->diff($accreditations);
+
+        if ($accreditationsToRemove->count() > 0) {
+            $this->user_accreditations()->whereIn('accreditation', $accreditationsToRemove)->delete();
+        }
+        if ($accreditationsToAdd->count() > 0) {
+            $this->user_accreditations()->saveMany(
+                $accreditationsToAdd->map(
+                    fn ($accreditation) => new UserAccreditation(['accreditation' => $accreditation])
+                )
+            );
+        }
     }
 }

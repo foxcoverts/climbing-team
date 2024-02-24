@@ -6,6 +6,7 @@ use App\Http\Requests\DestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Models\UserAccreditation;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -49,10 +50,11 @@ class UserController extends Controller
     {
         $user = User::create(
             array_merge(
-                $request->validated(),
+                $request->safe()->except(['accreditations']),
                 ['password' => '']
             )
         );
+        $user->accreditations = $request->input('accreditations');
 
         event(new Registered($user));
 
@@ -87,15 +89,16 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $user->fill($request->validated());
+        $user->fill($request->safe()->except(['accreditations']));
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
-
         $user->save();
 
-        return redirect()->route('user.index')
+        $user->accreditations = $request->input('accreditations');
+
+        return redirect()->route('user.show', $user)
             ->with('alert.info', __('User updated successfully'));
     }
 

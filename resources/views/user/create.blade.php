@@ -1,3 +1,4 @@
+@use(App\Enums\Accreditation)
 @use(App\Enums\Role)
 <x-layout.app :title="__('Create User')">
     <section class="p-4 sm:p-8 max-w-xl">
@@ -8,7 +9,13 @@
         </header>
 
         <form method="post" action="{{ route('user.store') }}" class="mt-6 space-y-6" x-data="{
-            user: {},
+            user: {
+                name: '{{ old('name', $user->name) }}',
+                email: '{{ old('email', $user->email) }}',
+                timezone: '{{ old('timezone', $user->timezone) }}',
+                role: '{{ old('role', $user->role) }}',
+                accreditations: {{ old('accreditations', $user->accreditations) }},
+            },
             init() {
                 $nextTick(() => {
                     if (!this.user.timezone || this.user.timezone == 'UTC') {
@@ -21,15 +28,15 @@
 
             <div>
                 <x-input-label for="name" :value="__('Name')" />
-                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
-                    maxlength="255" required autofocus x-model.fill="user.name" />
+                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" maxlength="255"
+                    required autofocus x-model="user.name" />
                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
             </div>
 
             <div>
                 <x-input-label for="email" :value="__('Email')" />
-                <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)"
-                    maxlength="255" required x-model.fill="user.email" />
+                <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" maxlength="255"
+                    required x-model="user.email" />
                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
                 @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
@@ -41,8 +48,7 @@
 
             <div>
                 <x-input-label for="timezone" :value="__('Timezone')" />
-                <x-select-input id="timezone" name="timezone" class="mt-1 block" required :value="old('timezone', $user->timezone)"
-                    x-model.fill="user.timezone">
+                <x-select-input id="timezone" name="timezone" class="mt-1 block" required x-model="user.timezone">
                     <x-select-input.timezones />
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
@@ -50,11 +56,26 @@
 
             <div>
                 <x-input-label for="role" :value="__('Role')" />
-                <x-select-input id="role" name="role" class="mt-1 block" required :value="old('role', $user->role)"
-                    x-model.fill="user.role">
+                <x-select-input id="role" name="role" class="mt-1 block" required x-model="user.role">
                     <x-select-input.enum :options="Role::class" lang="app.user.role.:value" />
                 </x-select-input>
             </div>
+
+            <fieldset x-data="checkboxes({{ json_encode(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations">
+                <legend class="text-xl font-medium">{{ __('Accreditations') }}</legend>
+
+                <label class="mt-1 block w-full">
+                    <input type="checkbox" x-model="all" x-effect="$el.indeterminate = indeterminate()" />
+                    {{ __('Select all') }}</label>
+
+                @foreach (Accreditation::cases() as $accreditation)
+                    <label class="mt-1 block w-full">
+                        <input type="checkbox" value="{{ $accreditation->value }}" name="accreditations[]"
+                            x-model="values" />
+                        {{ __("app.user.accreditation.$accreditation->value") }}</label>
+                @endforeach
+                <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
+            </fieldset>
 
             <div class="flex items-center gap-4">
                 <x-button.primary>

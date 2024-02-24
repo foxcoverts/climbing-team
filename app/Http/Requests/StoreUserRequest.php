@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
@@ -21,6 +22,7 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)],
             'timezone' => ['required', 'string', 'max:100', 'timezone:all'],
             'role' => ['required', Rule::enum(Role::class)],
+            'accreditation.*' => ['required', Rule::enum(Accreditation::class)],
         ];
     }
 }
