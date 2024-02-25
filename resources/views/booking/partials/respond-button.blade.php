@@ -1,5 +1,6 @@
 @props(['booking', 'attendance'])
-@if ($booking->isFuture() && !$booking->isCancelled())
+@use('Illuminate\Contracts\Auth\Access\Gate')
+@if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('respond', [$booking, auth()->user()]))
     <div class="flex" x-data="{ open: false }">
         <div class="relative">
             <button
@@ -42,12 +43,10 @@
             </div>
         </div>
     </div>
-@else
-    @if (!is_null($attendance))
-        <div
-            class="flex gap-2 px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm disabled:opacity-25">
-            <x-icon.checkmark-outline class="h-4 w-4 fill-current" />
-            {{ __("app.attendee.status.{$attendance->status->value}") }}
-        </div>
-    @endif
+@elseif (!is_null($attendance))
+    <div
+        class="flex gap-2 px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm disabled:opacity-25">
+        <x-icon.checkmark-outline class="h-4 w-4 fill-current" />
+        {{ __("app.attendee.status.{$attendance->status->value}") }}
+    </div>
 @endif

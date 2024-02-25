@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookingAttendeeRequest;
 use App\Http\Requests\UpdateBookingAttendeeRequest;
+use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -17,6 +18,8 @@ class BookingAttendeeController extends Controller
      */
     public function index(Booking $booking): RedirectResponse
     {
+        $this->authorize('viewAny', [Attendance::class, $booking]);
+
         return redirect(status: Response::HTTP_SEE_OTHER)->route('booking.show', $booking);
     }
 
@@ -25,6 +28,8 @@ class BookingAttendeeController extends Controller
      */
     public function create(Booking $booking): View
     {
+        $this->authorize('create', [Attendance::class, $booking]);
+
         if ($booking->isPast() || $booking->isCancelled()) {
             abort(Response::HTTP_NOT_FOUND);
         }
@@ -40,6 +45,8 @@ class BookingAttendeeController extends Controller
      */
     public function store(StoreBookingAttendeeRequest $request, Booking $booking): RedirectResponse
     {
+        $this->authorize('create', [Attendance::class, $booking]);
+
         if ($booking->isPast()) {
             return redirect()->back()
                 ->with('alert.error', __('You cannot change attendance on past bookings.'));
@@ -65,6 +72,8 @@ class BookingAttendeeController extends Controller
      */
     public function show(Booking $booking, User $attendee): View
     {
+        $this->authorize('view', $attendee->attendance);
+
         return view('booking.attendee.show', [
             'booking' => $booking,
             'attendee' => $attendee,
@@ -76,6 +85,8 @@ class BookingAttendeeController extends Controller
      */
     public function update(UpdateBookingAttendeeRequest $request, Booking $booking, User $attendee): RedirectResponse
     {
+        $this->authorize('update', $attendee->attendance);
+
         if ($booking->isPast()) {
             return redirect()->back()
                 ->with('alert.error', __('You cannot change attendance on past bookings.'));
@@ -98,6 +109,8 @@ class BookingAttendeeController extends Controller
      */
     public function destroy(Booking $booking, User $attendee): RedirectResponse
     {
+        $this->authorize('delete', $attendee->attendance);
+
         $booking->attendees()->detach($attendee);
 
         return redirect()->route('booking.show', $booking)

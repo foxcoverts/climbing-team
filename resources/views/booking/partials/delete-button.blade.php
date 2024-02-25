@@ -1,4 +1,4 @@
-@use(App\Enums\BookingStatus)
+@use('App\Enums\BookingStatus')
 @props(['booking'])
 @if ($booking->isCancelled())
     @can('delete', $booking)

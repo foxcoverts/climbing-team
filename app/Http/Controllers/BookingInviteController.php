@@ -13,6 +13,7 @@ class BookingInviteController extends Controller
     public function __invoke(): View
     {
         $this->authorize('viewAny', Booking::class);
+
         return view('booking.invite.index');
     }
 }

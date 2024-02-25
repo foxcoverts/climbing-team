@@ -1,3 +1,5 @@
+@use('App\Models\Attendance')
+@use('Illuminate\Contracts\Auth\Access\Gate')
 <x-layout.app :title="$booking->activity . ' - ' . localDate($booking->start_at)->toFormattedDayDateString()">
     <section class="p-4 sm:p-8">
         @include('booking.partials.header', ['booking' => $booking])
@@ -15,14 +17,9 @@
                     <ul class="mb-3">
                         @foreach ($attendees as $attendee)
                             <li class="flex space-x-1 items-start">
-                                @can('view', $attendee)
-                                    <a href="{{ route('user.show', $attendee) }}">{{ $attendee->name }}</a>
-                                    @if ($booking->isFuture() && !$booking->isCancelled())
-                                        <a href="{{ route('booking.attendee.show', [$booking, $attendee]) }}">
-                                            <x-icon.edit-pencil class="w-3 h-3 fill-current inline-block align-text-top"
-                                                title="{{ __('Edit Attendance') }}" />
-                                        </a>
-                                    @endif
+                                @can('view', $attendee->attendance)
+                                    <a
+                                        href="{{ route('booking.attendee.show', [$booking, $attendee]) }}">{{ $attendee->name }}</a>
                                 @else
                                     {{ $attendee->name }}
                                 @endcan
@@ -48,7 +45,10 @@
                 'booking' => $booking,
                 'attendance' => $attendance,
             ])
-            @if ($booking->isFuture() && !$booking->isCancelled())
+            @if (
+                $booking->isFuture() &&
+                    !$booking->isCancelled() &&
+                    app(Gate::class)->check('create', [Attendance::class, $booking]))
                 <x-button.secondary :href="route('booking.attendee.invite', $booking)">
                     {{ __('Invite Attendee') }}
                 </x-button.secondary>

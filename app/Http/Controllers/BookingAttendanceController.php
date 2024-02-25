@@ -3,21 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateBookingAttendanceRequest;
+use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class BookingAttendanceController extends Controller
 {
+    protected function authorizeAttendance(string $action, Booking $booking, User $user)
+    {
+        if ($attendee = $booking->attendees()->find($user)) {
+            $attendance = $attendee->attendance;
+        } else {
+            $attendance = Attendance::build($booking, $user);
+        }
+        return $this->authorize($action, $attendance);
+    }
+
     /**
      * Display the resource.
      */
     public function show(Request $request, Booking $booking): View
     {
+        $this->authorizeAttendance('view', $booking, $request->user());
+
         $attendee = $booking->attendees()
             ->find($request->user());
 
-        return view('booking.attendance.edit', [
+        return view('booking.attendance.show', [
             'booking' => $booking,
             'attendance' => $attendee?->attendance,
         ]);
@@ -28,6 +42,8 @@ class BookingAttendanceController extends Controller
      */
     public function update(UpdateBookingAttendanceRequest $request, Booking $booking)
     {
+        $this->authorizeAttendance('update', $booking, $request->user());
+
         if ($booking->isPast()) {
             return redirect()->back()
                 ->with('alert.error', __('You cannot change your attendance on bookings in the past.'));

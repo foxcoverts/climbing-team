@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Enums\Accreditation;
 use App\Enums\Role;
+use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
 
@@ -25,9 +26,12 @@ class BookingPolicy
     {
         if ($booking->trashed()) {
             return $user->accreditations->contains(Accreditation::ManageBookings);
+        } else if ($user->role != Role::Guest) {
+            return true;
+        } else if ($booking->attendees()->find($user)) {
+            return true;
         } else {
-            return ($user->role != Role::Guest) ||
-                $user->accreditations->contains(Accreditation::ManageBookings);
+            return $user->accreditations->contains(Accreditation::ManageBookings);
         }
     }
 
@@ -45,6 +49,20 @@ class BookingPolicy
     public function update(User $user, Booking $booking): bool
     {
         return $user->accreditations->contains(Accreditation::ManageBookings);
+    }
+
+    /**
+     * Determine whether the user can update attendance on the booking.
+     */
+    public function respond(User $user, Booking $booking, User $model): bool
+    {
+        if ($attendee = $booking->attendees()->find($model)) {
+            $attendance = $attendee->attendance;
+        } else {
+            $attendance = Attendance::build($booking, $model);
+        }
+
+        return $user->can('update', $attendance);
     }
 
     /**

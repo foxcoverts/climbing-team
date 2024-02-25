@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\AttendeeStatus;
 use App\Http\Requests\InviteBookingAttendeeRequest;
+use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -18,6 +19,8 @@ class BookingAttendeeInviteController extends Controller
      */
     public function create(Booking $booking): View
     {
+        $this->authorize('create', [Attendance::class, $booking]);
+
         if ($booking->isPast() || $booking->isCancelled()) {
             abort(Response::HTTP_NOT_FOUND);
         }
@@ -35,6 +38,8 @@ class BookingAttendeeInviteController extends Controller
      */
     public function store(InviteBookingAttendeeRequest $request, Booking $booking): RedirectResponse
     {
+        $this->authorize('create', [Attendance::class, $booking]);
+
         if ($booking->isPast()) {
             return redirect()->back()
                 ->with('alert.error', __('You cannot invite people to past bookings.'));
