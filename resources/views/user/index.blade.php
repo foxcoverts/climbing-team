@@ -10,13 +10,5 @@
         <div class="grid grid-cols-1 divide-y divide-gray-200 border-y border-gray-200 my-2">
             @each('user.partials.item', $users, 'user', 'user.partials.empty')
         </div>
-
-        <x-admin.footer>
-            @can('create', User::class)
-                <x-button.primary :href="route('user.create')">
-                    {{ __('Register') }}
-                </x-button.primary>
-            @endcan
-        </x-admin.footer>
     </section>
 </x-layout.app>

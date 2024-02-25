@@ -3,14 +3,13 @@
         @include('booking.partials.header', ['booking' => $booking])
         @include('booking.partials.details', ['booking' => $booking])
 
-        <form method="POST" action="{{ route('trash.booking.update', $booking) }}" id="restore">
-            @csrf
-            @method('PATCH')
-            <input type="hidden" name="deleted_at" value="0" />
-        </form>
-
         <div class="mt-6 flex items-center gap-4">
             @can('restore', $booking)
+                <form method="POST" action="{{ route('trash.booking.update', $booking) }}" id="restore">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="deleted_at" value="0" />
+                </form>
                 <x-button.primary form="restore">
                     {{ __('Restore') }}
                 </x-button.primary>

@@ -10,21 +10,23 @@
         </x-sidebar.link>
     </div>
 
-    @can('viewAny', App\Models\Booking::class)
+    @canany(['viewAny', 'viewTrashed', 'create'], App\Models\Booking::class)
         <div>
             <x-sidebar.heading>{{ __('Bookings') }}</x-sidebar.heading>
-            <x-sidebar.link route='booking.index' :match-routes="['booking.index', 'booking.show', 'booking.edit']" :label="__('Calendar')">
-                <x-slot:icon>
-                    <path
-                        d="M1 4c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4zm2 2v12h14V6H3zm2-6h2v2H5V0zm8 0h2v2h-2V0zM5 9h2v2H5V9zm0 4h2v2H5v-2zm4-4h2v2H9V9zm0 4h2v2H9v-2zm4-4h2v2h-2V9zm0 4h2v2h-2v-2z" />
-                </x-slot:icon>
-            </x-sidebar.link>
-            <x-sidebar.link route='booking.invite' :match-routes="['booking.invite', 'booking.attendance.*']" :label="__('Invites')">
-                <x-slot:icon>
-                    <path
-                        d="M2 4v14h14v-6l2-2v10H0V2h10L8 4H2zm10.3-.3l4 4L8 16H4v-4l8.3-8.3zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z" />
-                </x-slot:icon>
-            </x-sidebar.link>
+            @can('viewAny', App\Models\Booking::class)
+                <x-sidebar.link route='booking.index' :match-routes="['booking.index', 'booking.show', 'booking.edit']" :label="__('Calendar')">
+                    <x-slot:icon>
+                        <path
+                            d="M1 4c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4zm2 2v12h14V6H3zm2-6h2v2H5V0zm8 0h2v2h-2V0zM5 9h2v2H5V9zm0 4h2v2H5v-2zm4-4h2v2H9V9zm0 4h2v2H9v-2zm4-4h2v2h-2V9zm0 4h2v2h-2v-2z" />
+                    </x-slot:icon>
+                </x-sidebar.link>
+                <x-sidebar.link route='booking.invite' :match-routes="['booking.invite', 'booking.attendance.*']" :label="__('Invites')">
+                    <x-slot:icon>
+                        <path
+                            d="M2 4v14h14v-6l2-2v10H0V2h10L8 4H2zm10.3-.3l4 4L8 16H4v-4l8.3-8.3zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z" />
+                    </x-slot:icon>
+                </x-sidebar.link>
+            @endcan
             @can('viewTrashed', App\Models\Booking::class)
                 <x-sidebar.link route='trash.booking.index' match-routes='trash.booking.*' :label="__('Deleted')">
                     <x-slot:icon>
@@ -41,17 +43,19 @@
                 </x-sidebar.link>
             @endcan
         </div>
-    @endcan
+    @endcanany
 
-    @can('viewAny', App\Models\User::class)
+    @canany(['viewAny', 'create'], App\Models\User::class)
         <div>
             <x-sidebar.heading>{{ __('Users') }}</x-sidebar.heading>
-            <x-sidebar.link route='user.index' :match-routes="['user.index', 'user.show', 'user.edit']" :label="__('View Users')">
-                <x-slot:icon>
-                    <path
-                        d="M7 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 0 1 7 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 1 1-1.33 7.76 5.96 5.96 0 0 0 0-7.52C12.1.1 12.53 0 13 0z" />
-                </x-slot:icon>
-            </x-sidebar.link>
+            @can('viewAny', App\Models\User::class)
+                <x-sidebar.link route='user.index' :match-routes="['user.index', 'user.show', 'user.edit']" :label="__('View Users')">
+                    <x-slot:icon>
+                        <path
+                            d="M7 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 0 1 7 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 1 1-1.33 7.76 5.96 5.96 0 0 0 0-7.52C12.1.1 12.53 0 13 0z" />
+                    </x-slot:icon>
+                </x-sidebar.link>
+            @endcan
             @can('create', App\Models\User::class)
                 <x-sidebar.link route='user.create' :label="__('Add User')">
                     <x-slot:icon>
@@ -61,7 +65,7 @@
                 </x-sidebar.link>
             @endcan
         </div>
-    @endcan
+    @endcanany
 
     <div>
         <x-sidebar.heading>{{ __('Account') }}</x-sidebar.heading>
