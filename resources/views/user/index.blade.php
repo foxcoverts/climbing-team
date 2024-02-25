@@ -1,4 +1,4 @@
-@use(App\Models\User)
+@use('App\Models\User')
 <x-layout.app :title="__('Users')">
     <section class="p-4 sm:p-8">
         <header>

@@ -1,5 +1,5 @@
-@use(App\Enums\Accreditation)
-@use(App\Enums\Role)
+@use('App\Enums\Accreditation')
+@use('App\Enums\Role')
 <x-layout.app :title="__('Create User')">
     <section class="p-4 sm:p-8 max-w-xl">
         <header>

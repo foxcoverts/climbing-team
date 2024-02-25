@@ -1,4 +1,4 @@
-@use(Carbon\CarbonTimeZone)
+@use('Carbon\CarbonTimeZone')
 @aware(['value'])
 
 @php
