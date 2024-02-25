@@ -3,7 +3,9 @@
     'border-b mb-2 sm:mb-0 text-black px-4 py-3 flex items-center',
     'bg-blue-100 border-blue-200' => $color == 'blue',
     'bg-red-100 border-red-200' => $color == 'red',
-]) role="alert" x-data="{ open: true }" x-transition x-show="open">
+]) role="alert" x-data="{ open: true }" x-show="open"
+    x-transition:leave="transition ease-in duration-300 origin-top" x-transition:leave-start="opacity-100 scale-y-100"
+    x-transition:leave-end="opacity-10 scale-y-0">
     <p class="flex-grow">
         {{ $slot }}
         @if (!empty($restore))
