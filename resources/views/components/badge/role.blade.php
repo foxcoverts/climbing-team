@@ -3,7 +3,7 @@
 
 @switch($role)
     @case(Role::TeamLeader)
-        @php($color = 'yellow')
+        @php($color = 'lime')
     @break
 
     @case(Role::TeamMember)
@@ -14,4 +14,4 @@
         @php($color = 'gray')
 @endswitch
 
-<x-badge :color="$color">{{ __("app.user.role.{$role->value}") }}</x-badge>
+<x-badge :color="$color" {{ $attributes }}>{{ __("app.user.role.{$role->value}") }}</x-badge>

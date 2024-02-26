@@ -43,6 +43,7 @@ window.Calendar = new Calendar(calendarEl, {
                 start: content.start_at,
                 end: content.end_at,
                 url: content.url + "/attendance",
+                className: ["fc-event-" + content.status],
                 color: bookingStatusToColor(content.status),
                 extendedProps: {
                     activity: content.activity,
@@ -74,13 +75,12 @@ function attendanceToTitle(attendance) {
 
 function bookingStatusToColor(status) {
     switch (status) {
-        case "tentative":
-            return "darkOrange";
         case "cancelled":
             return "silver";
+        case "tentative":
         case "confirmed":
         default:
-            return "dodgerBlue";
+            return "limeGreen";
     }
 }
 

@@ -1,28 +1,8 @@
 @use('App\Enums\AttendeeStatus')
 <x-layout.app :title="__('Add Attendee')">
-    <section class="p-4 sm:p-8 max-w-xl">
+    <section class="p-4 sm:p-8">
         @include('booking.partials.header', ['booking' => $booking])
-        <div class="space-y-1 mt-2 max-w-xl flex-grow">
-            <p class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200">
-                {{ $booking->location }}</p>
-
-            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('When') }}</dfn>
-                @if ($booking->start_at->isSameDay($booking->end_at))
-                    {{ __(':start_date from :start_time to :end_time', [
-                        'start_date' => $booking->start_at->toFormattedDayDateString(),
-                        'start_time' => $booking->start_at->format('H:i'),
-                        'end_time' => $booking->end_at->format('H:i'),
-                    ]) }}
-                @else
-                    {{ __(':start to :end', [
-                        'start' => $booking->start_at->toDayDateTimeString(),
-                        'end' => $booking->end_at->toDayDateTimeString(),
-                    ]) }}
-                @endif
-            </p>
-            <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Duration') }}</dfn>
-                {{ $booking->start_at->diffAsCarbonInterval($booking->end_at) }}</p>
-        </div>
+        @include('booking.partials.details', ['booking' => $booking])
 
         <form method="post" action="{{ route('booking.attendee.store', $booking) }}" class="space-y-1">
             @csrf

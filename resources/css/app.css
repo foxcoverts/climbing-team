@@ -45,3 +45,13 @@ body::-webkit-scrollbar {
 .fc-event:hover {
     opacity: 1 !important;
 }
+.fc-event-tentative {
+    background-image: repeating-linear-gradient(
+        -55deg,
+        rgba(255, 255, 255, 0.25),
+        rgba(255, 255, 255, 0.25) 6px,
+        transparent 6px,
+        transparent 15px
+    );
+    background-position: left;
+}

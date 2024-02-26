@@ -39,6 +39,7 @@ class BookingController extends Controller
                 'start_date' => Carbon::now(),
                 'start_time' => '09:30',
                 'end_time' => '11:30',
+                'status' => BookingStatus::Tentative,
             ]),
             'activity_suggestions' => Booking::distinct()->orderBy('activity')->get(['activity'])->pluck('activity'),
         ]);
@@ -84,6 +85,7 @@ class BookingController extends Controller
     {
         return view('booking.edit', [
             'booking' => $booking,
+            'activity_suggestions' => Booking::distinct()->orderBy('activity')->get(['activity'])->pluck('activity'),
         ]);
     }
 

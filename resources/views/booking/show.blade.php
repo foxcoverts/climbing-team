@@ -27,11 +27,11 @@
                                 @endcan
 
                                 @if ($attendee->accreditations->contains(Accreditation::PermitHolder))
-                                    <x-badge.accreditation :accreditation="Accreditation::PermitHolder" />
+                                    <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-xs" />
                                 @endif
 
                                 @if ($attendee->role == Role::Guest)
-                                    <x-badge.role :role="Role::Guest" />
+                                    <x-badge.role :role="Role::Guest" class="text-xs" />
                                 @endif
                             </li>
                         @endforeach
