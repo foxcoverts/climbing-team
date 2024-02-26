@@ -20,7 +20,8 @@
             <x-badge.booking-status :status="$booking->status" class="text-sm" />
         </p>
 
-        <form method="post" action="{{ route('booking.update', $booking) }}" class="space-y-6 max-w-xl">
+        <form method="post" action="{{ route('booking.update', $booking) }}" id="update-booking"
+            class="space-y-6 max-w-xl mb-6">
             @csrf
             @method('PATCH')
 
@@ -115,15 +116,28 @@
                 <x-input-error :messages="$errors->get('notes')" />
             </div>
 
-            <div class="flex items-center gap-4">
-                <x-button.primary>
-                    {{ __('Update') }}
-                </x-button.primary>
-
-                <x-button.secondary :href="route('booking.show', $booking)">
-                    {{ __('Back') }}
-                </x-button.secondary>
-            </div>
+            @if ($booking->isCancelled())
+                <div class="space-y-1">
+                    <span class="font-bold after:content-[':']">Cancelled</span>
+                    <label class="mt-1 w-full flex space-x-1 items-center">
+                        <input type="checkbox" id="status" name="status" value="{{ BookingStatus::Tentative }}" />
+                        <span>{{ __('Restore booking') }}</span>
+                    </label>
+                    <x-input-error :messages="$errors->get('status')" />
+                </div>
+            @endif
         </form>
+
+        <div class="flex items-center gap-4">
+            <x-button.primary form="update-booking">
+                {{ __('Update') }}
+            </x-button.primary>
+            @include('booking.partials.delete-button', [
+                'booking' => $booking,
+            ])
+            <x-button.secondary :href="route('booking.show', $booking)">
+                {{ __('Back') }}
+            </x-button.secondary>
+        </div>
     </section>
 </x-layout.app>

@@ -18,7 +18,7 @@
             @method('patch')
             <input type="hidden" name="status" value="{{ BookingStatus::Cancelled }}" />
             <x-button.danger>
-                {{ __('Cancel Booking') }}
+                {{ __('Cancel') }}
             </x-button.danger>
         </form>
     @endcan

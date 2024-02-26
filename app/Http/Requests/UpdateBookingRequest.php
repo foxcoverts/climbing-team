@@ -23,6 +23,9 @@ class UpdateBookingRequest extends FormRequest
             'activity' => ['sometimes', 'required', 'string', 'max:255'],
             'group_name' => ['sometimes', 'required', 'string', 'max:255'],
             'notes' => ['sometimes', 'nullable', 'string'],
+
+            // Status is updated in secret ways.
+            'status' => ['sometimes', 'required', Rule::enum(BookingStatus::class)],
         ];
     }
 
@@ -36,6 +39,8 @@ class UpdateBookingRequest extends FormRequest
             'activity' => __('Activity'),
             'group_name' => __('Group Name'),
             'notes' => __('Notes'),
+
+            'status' => __('Status'),
         ];
     }
 }

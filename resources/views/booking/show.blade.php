@@ -48,9 +48,6 @@
                     {{ __('Edit') }}
                 </x-button.primary>
             @endcan
-            @include('booking.partials.delete-button', [
-                'booking' => $booking,
-            ])
             @include('booking.partials.respond-button', [
                 'booking' => $booking,
                 'attendance' => $attendance,
