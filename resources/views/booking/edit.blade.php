@@ -13,7 +13,10 @@
 
         <p
             class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 my-2 flex items-center justify-between max-w-xl">
-            <span x-text="booking.location"></span>
+            <span class="flex items-center">
+                <x-icon.location class="h-5 w-5 fill-current mr-1" />
+                <span x-text="booking.location"></span>
+            </span>
             <x-badge.booking-status :status="$booking->status" class="text-sm" />
         </p>
 

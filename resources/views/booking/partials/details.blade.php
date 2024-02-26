@@ -2,7 +2,10 @@
 <div class="space-y-1 my-2 max-w-xl flex-grow">
     <p
         class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between max-w-xl">
-        {{ $booking->location }}
+        <span class="flex items-center">
+            <x-icon.location class="h-5 w-5 fill-current mr-1" />
+            {{ $booking->location }}
+        </span>
         <x-badge.booking-status :status="$booking->status" class="text-sm" />
     </p>
     <p><dfn class="not-italic font-bold after:content-[':']">{{ __('When') }}</dfn>
