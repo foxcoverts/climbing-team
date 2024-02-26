@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\Accreditation;
+use App\Enums\BookingStatus;
 use App\Enums\Role;
 use App\Models\Attendance;
 use App\Models\Booking;
@@ -44,7 +45,18 @@ class AttendancePolicy
             return true;
         }
         if ($attendance->user->is($user)) {
-            return ($attendance->exists) || ($user->role != Role::Guest);
+            if ($attendance->exists) {
+                // If the user has been invited, or has already responded, let them change their response.
+                return true;
+            } else if ($user->role == Role::Guest) {
+                // Guests cannot invite themselves to any bookings.
+                return false;
+            } else {
+                // Permit holders can invite themselves to bookings which have not yet been confirmed,
+                // Any team member or team leader can invite themselves to confirmed bookings.
+                return ($attendance->booking->status == BookingStatus::Confirmed) ||
+                    ($user->accreditations->contains(Accreditation::PermitHolder));
+            }
         }
         return false;
     }

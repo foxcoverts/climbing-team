@@ -42,6 +42,12 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    /**
+     * Relationships that should always be eager loaded.
+     */
+    protected $with = [
+        'user_accreditations',
+    ];
 
     /**
      * The model's default values for attributes.
@@ -72,7 +78,7 @@ class User extends Authenticatable
             ->using(Attendance::class);
     }
 
-    protected function user_accreditations(): HasMany
+    public function user_accreditations(): HasMany
     {
         return $this->hasMany(UserAccreditation::class);
     }

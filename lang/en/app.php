@@ -19,6 +19,7 @@ return [
         'accreditation' => [
             'manage-bookings' => 'Manage Bookings',
             'manage-users' => 'Manage Users',
+            'permit-holder' => 'Permit Holder',
         ],
         'role' => [
             'guest' => 'Guest',

@@ -6,4 +6,5 @@ enum Accreditation: string
 {
     case ManageBookings = 'manage-bookings';
     case ManageUsers = 'manage-users';
+    case PermitHolder = 'permit-holder';
 }

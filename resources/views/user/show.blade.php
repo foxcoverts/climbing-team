@@ -5,19 +5,9 @@
         </header>
 
         <div class="space-y-2 max-w-xl flex-grow">
-            <p>
-                <dfn class="not-italic font-bold after:content-[':']">{{ __('Role') }}</dfn>
-                {{ __("app.user.role.{$user->role->value}") }}
-            </p>
-
-            <p>
-                <dfn class="not-italic font-bold after:content-[':']">{{ __('Accreditations') }}</dfn>
-                @forelse ($user->accreditations as $accreditation)
-                    <span
-                        class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/25 dark:ring-gray-300/25">{{ __("app.user.accreditation.$accreditation->value") }}</span>
-                @empty
-                    None
-                @endforelse
+            <p class="flex space-x-1 items-center">
+                <x-badge.role :role="$user->role" />
+                @each('components.badge.accreditation', $user->accreditations, 'accreditation')
             </p>
 
             <p>

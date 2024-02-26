@@ -1,3 +1,5 @@
+@use('App\Enums\Accreditation')
+@use('App\Enums\Role')
 @use('App\Models\Attendance')
 @use('Illuminate\Contracts\Auth\Access\Gate')
 <x-layout.app :title="$booking->activity . ' - ' . localDate($booking->start_at)->toFormattedDayDateString()">
@@ -14,15 +16,23 @@
 
                 @forelse ($attendees->groupBy('attendance.status') as $status => $attendees)
                     <h3 class="text-lg">{{ __("app.attendee.status.$status") }}</h3>
-                    <ul class="mb-3">
+                    <ul class="mb-3 space-y-1">
                         @foreach ($attendees as $attendee)
-                            <li class="flex space-x-1 items-start">
+                            <li class="flex space-x-1 items-center">
                                 @can('view', $attendee->attendance)
                                     <a
                                         href="{{ route('booking.attendee.show', [$booking, $attendee]) }}">{{ $attendee->name }}</a>
                                 @else
-                                    {{ $attendee->name }}
+                                    <span>{{ $attendee->name }}</span>
                                 @endcan
+
+                                @if ($attendee->accreditations->contains(Accreditation::PermitHolder))
+                                    <x-badge.accreditation :accreditation="Accreditation::PermitHolder" />
+                                @endif
+
+                                @if ($attendee->role == Role::Guest)
+                                    <x-badge.role :role="Role::Guest" />
+                                @endif
                             </li>
                         @endforeach
                     </ul>

@@ -1,3 +1,4 @@
+@use('App\Enums\Accreditation')
 @use('App\Enums\AttendeeStatus')
 <x-layout.app :title="__('Invite Attendees')">
     <section class="p-4 sm:p-8 max-w-xl">
@@ -32,14 +33,22 @@
                 <fieldset x-data="checkboxes({{ $users->pluck('id') }})" x-modelable="values" x-model="form.user_ids">
                     <legend class="text-xl font-medium">{{ __('Invite Attendees') }}</legend>
 
-                    <label class="mt-1 block w-full">
+                    <label class="mt-1  w-full flex space-x-1 items-center">
                         <input type="checkbox" x-model="all" x-effect="$el.indeterminate = indeterminate()" />
-                        {{ __('Invite all') }}</label>
+                        <span>{{ __('Invite all') }}</span>
+                    </label>
 
                     @foreach ($users as $user)
-                        <label class="mt-1 block w-full">
+                        <label class="mt-1 w-full flex space-x-1 items-center">
                             <input type="checkbox" value="{{ $user->id }}" name="user_ids[]" x-model="values" />
-                            {{ $user->name }}</label>
+                            <span>{{ $user->name }}</span>
+
+                            <x-badge.role :role="$user->role" />
+
+                            @if ($user->accreditations->contains(Accreditation::PermitHolder))
+                                <x-badge.accreditation :accreditation="Accreditation::PermitHolder" />
+                            @endif
+                        </label>
                     @endforeach
                     <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
                 </fieldset>
