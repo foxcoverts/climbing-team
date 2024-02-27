@@ -100,8 +100,26 @@ class BookingController extends Controller
      */
     public function update(UpdateBookingRequest $request, Booking $booking): RedirectResponse
     {
+        $invites = [];
         $booking->fill($request->validated());
+        if ($booking->isDirty('status')) {
+            if ($booking->getOriginal('status') == BookingStatus::Cancelled) {
+                // When restoring a cancelled booking, re-invite any 'Going' and 'Maybe' attendees.
+                $booking->lead_instructor_id = null;
+                $invites = $booking->attendees->reject(function ($attendee) {
+                    return $attendee->attendance->status == AttendeeStatus::Declined;
+                })->pluck('id');
+            }
+        }
         $booking->save();
+
+        if (count($invites) > 0) {
+            $booking->attendees()->syncWithPivotValues(
+                $invites,
+                ['status' => AttendeeStatus::NeedsAction],
+                false
+            );
+        }
 
         return redirect()->route('booking.show', $booking)
             ->with('alert.info', __('Booking updated successfully'));
