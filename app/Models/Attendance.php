@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Attendance extends Pivot
 {
+    protected $table = 'booking_user';
+
     /**
      * Create a new instance from a User and a Booking.
      *

@@ -7,6 +7,7 @@ use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
+use App\Models\Attendance;
 use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -109,6 +110,11 @@ class BookingController extends Controller
                 $invites = $booking->attendees->reject(function ($attendee) {
                     return $attendee->attendance->status == AttendeeStatus::Declined;
                 })->pluck('id');
+            } else if ($booking->status == BookingStatus::Cancelled) {
+                // Remove invited attendees
+                Attendance::where('booking_id', $booking->id)
+                    ->where('status', AttendeeStatus::NeedsAction)
+                    ->delete();
             }
         }
         $booking->save();
