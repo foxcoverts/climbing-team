@@ -99,7 +99,7 @@
                             <p>{{ __('No instructors are going to this booking yet. Try again when someone responds.') }}
                             </p>
                         @else
-                            <x-select-input id="lead_instructor" name="lead_instructor_id" class="mt-1 block" required
+                            <x-select-input id="lead_instructor" name="lead_instructor_id" class="mt-1 block"
                                 x-model="user.lead_instructor_id">
                                 @if (is_null($booking->lead_instructor))
                                     <option value="" selected disabled>{{ __('-- Lead Instructor --') }}</option>
