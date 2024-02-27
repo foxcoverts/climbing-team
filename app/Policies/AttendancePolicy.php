@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\Accreditation;
+use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
 use App\Enums\Role;
 use App\Models\Attendance;
@@ -32,7 +33,8 @@ class AttendancePolicy
      */
     public function view(User $user, Attendance $attendance): bool
     {
-        return ($attendance->user->is($user)) ||
+        return ($user->is($attendance->user)) ||
+            ($user->is($attendance->booking->lead_instructor)) ||
             ($user->accreditations->contains(Accreditation::ManageBookings));
     }
 
@@ -41,10 +43,15 @@ class AttendancePolicy
      */
     public function update(User $user, Attendance $attendance): bool
     {
-        if ($user->accreditations->contains(Accreditation::ManageBookings)) {
+        if (
+            $attendance->user->is($attendance->booking->lead_instructor) &&
+            ($attendance->status == AttendeeStatus::Accepted)
+        ) {
+            // The Lead Instructor cannot resign from a Booking.
+            return false;
+        } else if ($user->accreditations->contains(Accreditation::ManageBookings)) {
             return true;
-        }
-        if ($attendance->user->is($user)) {
+        } else if ($attendance->user->is($user)) {
             if ($attendance->exists) {
                 // If the user has been invited, or has already responded, let them change their response.
                 return true;
@@ -57,8 +64,9 @@ class AttendancePolicy
                 return ($attendance->booking->status == BookingStatus::Confirmed) ||
                     ($user->accreditations->contains(Accreditation::PermitHolder));
             }
+        } else {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -66,6 +74,13 @@ class AttendancePolicy
      */
     public function delete(User $user, Attendance $attendance): bool
     {
+        if (
+            $attendance->user->is($attendance->booking->lead_instructor) &&
+            ($attendance->status == AttendeeStatus::Accepted)
+        ) {
+            // The Lead Instructor cannot resign from a Booking.
+            return false;
+        }
         return $user->accreditations->contains(Accreditation::ManageBookings);
     }
 }

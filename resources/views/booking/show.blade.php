@@ -8,38 +8,10 @@
 
         <div class="md:flex md:space-x-4">
             @include('booking.partials.details', ['booking' => $booking])
-
-            <aside class="my-2 flex-grow max-w-xl">
-                <h2 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200">
-                    {{ __('Guest list') }}
-                </h2>
-
-                @forelse ($attendees->groupBy('attendance.status') as $status => $attendees)
-                    <h3 class="text-lg">{{ __("app.attendee.status.$status") }}</h3>
-                    <ul class="mb-3 space-y-1">
-                        @foreach ($attendees as $attendee)
-                            <li class="flex space-x-1 items-center">
-                                @can('view', $attendee->attendance)
-                                    <a
-                                        href="{{ route('booking.attendee.show', [$booking, $attendee]) }}">{{ $attendee->name }}</a>
-                                @else
-                                    <span>{{ $attendee->name }}</span>
-                                @endcan
-
-                                @if ($attendee->accreditations->contains(Accreditation::PermitHolder))
-                                    <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-xs" />
-                                @endif
-
-                                @if ($attendee->role == Role::Guest)
-                                    <x-badge.role :role="Role::Guest" class="text-xs" />
-                                @endif
-                            </li>
-                        @endforeach
-                    </ul>
-                @empty
-                    <p>No one has been invited.</p>
-                @endforelse
-            </aside>
+            @include('booking.partials.guest-list', [
+                'attendees' => $attendees,
+                'booking' => $booking,
+            ])
         </div>
 
         <footer class="flex items-center gap-4 mt-2">

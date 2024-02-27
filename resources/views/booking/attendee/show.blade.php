@@ -34,7 +34,7 @@
         <footer class="flex items-center gap-4 mt-4">
             @if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('update', $attendee->attendance))
                 <x-button.primary form="update-attendance">
-                    {{ __('Update Attendance') }}
+                    {{ __('Update') }}
                 </x-button.primary>
             @endif
             @can('delete', $attendee->attendance)
@@ -43,9 +43,9 @@
                     @method('delete')
                     <x-button.danger>
                         @if ($attendee->attendance->status == AttendeeStatus::NeedsAction)
-                            {{ __('Remove Invitation') }}
+                            {{ __('Remove') }}
                         @else
-                            {{ __('Remove Attendance') }}
+                            {{ __('Remove') }}
                         @endif
                     </x-button.danger>
                 </form>

@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Accreditation;
+use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class BookingController extends Controller
@@ -63,17 +68,13 @@ class BookingController extends Controller
      */
     public function show(Request $request, Booking $booking): View
     {
-        $attendees = $booking->attendees()
-            ->with('user_accreditations')
-            ->orderBy('booking_user.status')
-            ->orderBy('users.name');
         $attendee = $booking->attendees()
             ->with('user_accreditations')
             ->find($request->user());
 
         return view('booking.show', [
             'booking' => $booking,
-            'attendees' => $attendees->get(),
+            'attendees' => $this->getGuestListAttendees($booking),
             'attendance' => $attendee?->attendance,
         ]);
     }
@@ -83,9 +84,14 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking): View
     {
+        $activity_suggestions = Booking::distinct()
+            ->orderBy('activity')->get(['activity'])->pluck('activity');
+
         return view('booking.edit', [
             'booking' => $booking,
-            'activity_suggestions' => Booking::distinct()->orderBy('activity')->get(['activity'])->pluck('activity'),
+            'activity_suggestions' => $activity_suggestions,
+            'attendees' => $this->getGuestListAttendees($booking),
+            'lead_instructors' => $this->getPossibleLeadInstructors(($booking)),
         ]);
     }
 
@@ -116,5 +122,33 @@ class BookingController extends Controller
         return redirect()->route('booking.index')
             ->with('alert.info', __('Booking deleted.'))
             ->with('restore', route('trash.booking.update', $booking));
+    }
+
+    protected function getGuestListAttendees(Booking $booking): Collection
+    {
+        $attendees = $booking->attendees()
+            ->with('user_accreditations');
+        if ($booking->lead_instructor) {
+            $attendees->whereNot('users.id', $booking->lead_instructor_id);
+        }
+        return $attendees
+            ->orderBy('booking_user.status')
+            ->orderBy('users.name')
+            ->get();
+    }
+
+    protected function getPossibleLeadInstructors(Booking $booking): Collection
+    {
+        return $booking->attendees()
+            ->wherePivot('status', AttendeeStatus::Accepted)
+            ->whereExists(function (Builder $query) {
+                $query->select(DB::raw(1))
+                    ->from('user_accreditations')
+                    ->whereColumn('user_accreditations.user_id', 'users.id')
+                    ->where('user_accreditations.accreditation', Accreditation::PermitHolder)
+                    ->limit(1);
+            })
+            ->orderBy('users.name')
+            ->get();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\BookingStatus;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -24,6 +25,9 @@ class UpdateBookingRequest extends FormRequest
             'group_name' => ['sometimes', 'required', 'string', 'max:255'],
             'notes' => ['sometimes', 'nullable', 'string'],
 
+            // TODO: Restrict only to 'PermitHolder' attendees of the booking.
+            'lead_instructor_id' => ['sometimes', 'nullable', 'ulid', Rule::exists(User::class, 'id')],
+
             // Status is updated in secret ways.
             'status' => ['sometimes', 'required', Rule::enum(BookingStatus::class)],
         ];
@@ -39,7 +43,7 @@ class UpdateBookingRequest extends FormRequest
             'activity' => __('Activity'),
             'group_name' => __('Group Name'),
             'notes' => __('Notes'),
-
+            'lead_instructor_id' => __('Lead Instructor'),
             'status' => __('Status'),
         ];
     }
