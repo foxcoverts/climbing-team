@@ -132,4 +132,9 @@ class User extends Authenticatable
     {
         return $this->accreditations->contains(Accreditation::ManageBookings);
     }
+
+    public function isUserManager(): bool
+    {
+        return $this->accreditations->contains(Accreditation::ManageUsers);
+    }
 }

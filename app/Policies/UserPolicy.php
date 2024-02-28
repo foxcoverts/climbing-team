@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\Accreditation;
 use App\Models\User;
 
 class UserPolicy
@@ -12,7 +11,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->accreditations->contains(Accreditation::ManageUsers);
+        return $user->isUserManager();
     }
 
     /**
@@ -20,8 +19,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return ($user->is($model)) ||
-            $user->accreditations->contains(Accreditation::ManageUsers);
+        return $user->is($model) || $user->isUserManager();
     }
 
     /**
@@ -29,7 +27,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->accreditations->contains(Accreditation::ManageUsers);
+        return $user->isUserManager();
     }
 
     /**
@@ -41,8 +39,7 @@ class UserPolicy
             // Only team leaders can update other team leaders.
             return false;
         }
-        return ($user->is($model)) ||
-            $user->accreditations->contains(Accreditation::ManageUsers);
+        return $user->is($model) || $user->isUserManager();
     }
 
     /**
@@ -55,8 +52,7 @@ class UserPolicy
     public function manage(User $user, User $model): bool
     {
         // Only team leaders can manage roles and accreditations
-        return ($user->isTeamLeader()) &&
-            $user->accreditations->contains(Accreditation::ManageUsers);
+        return $user->isTeamLeader() && $user->isUserManager();
     }
 
     /**
@@ -69,8 +65,7 @@ class UserPolicy
             return false;
         }
 
-        return ($user->is($model)) ||
-            $user->accreditations->contains(Accreditation::ManageUsers);
+        return $user->is($model) || $user->isUserManager();
     }
 
     /**
@@ -79,8 +74,7 @@ class UserPolicy
     public function restore(User $user, User $model): bool
     {
         // Only team leaders can restore deleted users.
-        return $user->isTeamLeader() &&
-            $user->accreditations->contains(Accreditation::ManageUsers);
+        return $user->isTeamLeader() && $user->isUserManager();
     }
 
     /**
@@ -89,7 +83,6 @@ class UserPolicy
     public function forceDelete(User $user, User $model): bool
     {
         // Only team leaders can permanently delete users.
-        return $user->isTeamLeader() &&
-            $user->accreditations->contains(Accreditation::ManageUsers);
+        return $user->isTeamLeader() && $user->isUserManager();
     }
 }
