@@ -108,7 +108,7 @@ class BookingController extends Controller
                 // When restoring a cancelled booking, re-invite any 'Going' and 'Maybe' attendees.
                 $booking->lead_instructor_id = null;
                 $invites = $booking->attendees->reject(function ($attendee) {
-                    return $attendee->attendance->status == AttendeeStatus::Declined;
+                    return $attendee->attendance->isDeclined();
                 })->pluck('id');
             } else if ($booking->isCancelled()) {
                 // Remove invited attendees

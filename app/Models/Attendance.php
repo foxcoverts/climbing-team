@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\AttendeeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 
 class Attendance extends Pivot
 {
@@ -67,5 +68,10 @@ class Attendance extends Pivot
     public function isAccepted(): bool
     {
         return $this->status == AttendeeStatus::Accepted;
+    }
+
+    public function isDeclined(): bool
+    {
+        return $this->status == AttendeeStatus::Declined;
     }
 }
