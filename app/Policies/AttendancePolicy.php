@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\Accreditation;
 use App\Enums\AttendeeStatus;
 use App\Models\Attendance;
 use App\Models\Booking;
@@ -23,7 +22,7 @@ class AttendancePolicy
      */
     public function create(User $user, Booking $booking): bool
     {
-        return $user->accreditations->contains(Accreditation::ManageBookings);
+        return $user->isBookingManager();
     }
 
     /**
@@ -33,7 +32,7 @@ class AttendancePolicy
     {
         return ($user->is($attendance->user)) ||
             ($user->is($attendance->booking->lead_instructor)) ||
-            ($user->accreditations->contains(Accreditation::ManageBookings));
+            ($user->isBookingManager());
     }
 
     /**
@@ -47,7 +46,7 @@ class AttendancePolicy
         ) {
             // The Lead Instructor cannot resign from a Booking.
             return false;
-        } else if ($user->accreditations->contains(Accreditation::ManageBookings)) {
+        } else if ($user->isBookingManager()) {
             return true;
         } else if ($attendance->user->is($user)) {
             if ($attendance->exists) {
@@ -59,8 +58,7 @@ class AttendancePolicy
             } else {
                 // Permit holders can invite themselves to bookings which have not yet been confirmed,
                 // Any team member or team leader can invite themselves to confirmed bookings.
-                return ($attendance->booking->isConfirmed()) ||
-                    ($user->isPermitHolder());
+                return ($attendance->booking->isConfirmed()) || ($user->isPermitHolder());
             }
         } else {
             return false;
@@ -79,6 +77,6 @@ class AttendancePolicy
             // The Lead Instructor cannot resign from a Booking.
             return false;
         }
-        return $user->accreditations->contains(Accreditation::ManageBookings);
+        return $user->isBookingManager();
     }
 }

@@ -15,7 +15,7 @@ class BookingPolicy
     public function viewAny(User $user): bool
     {
         return (!$user->isGuest()) ||
-            $user->accreditations->contains(Accreditation::ManageBookings);
+            $user->isBookingManager();
     }
 
     /**
@@ -24,13 +24,13 @@ class BookingPolicy
     public function view(User $user, Booking $booking): bool
     {
         if ($booking->trashed()) {
-            return $user->accreditations->contains(Accreditation::ManageBookings);
+            return $user->isBookingManager();
         } else if (!$user->isGuest()) {
             return true;
         } else if ($booking->attendees()->find($user)) {
             return true;
         } else {
-            return $user->accreditations->contains(Accreditation::ManageBookings);
+            return $user->isBookingManager();
         }
     }
 
@@ -39,7 +39,7 @@ class BookingPolicy
      */
     public function create(User $user): bool
     {
-        return $user->accreditations->contains(Accreditation::ManageBookings);
+        return $user->isBookingManager();
     }
 
     /**
@@ -47,7 +47,7 @@ class BookingPolicy
      */
     public function update(User $user, Booking $booking): bool
     {
-        return $user->accreditations->contains(Accreditation::ManageBookings);
+        return $user->isBookingManager();
     }
 
     /**
@@ -69,7 +69,7 @@ class BookingPolicy
      */
     public function delete(User $user, Booking $booking): bool
     {
-        return $user->accreditations->contains(Accreditation::ManageBookings);
+        return $user->isBookingManager();
     }
 
     /**
@@ -77,7 +77,7 @@ class BookingPolicy
      */
     public function viewTrashed(User $user): bool
     {
-        return $user->accreditations->contains(Accreditation::ManageBookings);
+        return $user->isBookingManager();
     }
 
     /**
@@ -85,7 +85,7 @@ class BookingPolicy
      */
     public function restore(User $user, Booking $booking): bool
     {
-        return $user->accreditations->contains(Accreditation::ManageBookings);
+        return $user->isBookingManager();
     }
 
     /**
@@ -94,6 +94,6 @@ class BookingPolicy
     public function forceDelete(User $user, Booking $booking): bool
     {
         return ($user->isTeamLeader()) &&
-            $user->accreditations->contains(Accreditation::ManageBookings);
+            $user->isBookingManager();
     }
 }
