@@ -32,10 +32,13 @@ body::-webkit-scrollbar {
 }
 
 /* full calendar overrides */
+:root {
+    --fc-list-event-hover-bg-color: rgba(0, 0, 0, 0.15);
+}
 @media (prefers-color-scheme: dark) {
     :root {
         --fc-page-bg-color: #111827; /* grey-900 */
-        --fc-list-event-hover-bg-color: #374151; /* grey-700 */
+        --fc-list-event-hover-bg-color: rgba(255, 255, 255, 0.1);
     }
 }
 .fc .fc-toolbar {
@@ -48,8 +51,30 @@ body::-webkit-scrollbar {
 .fc-event-tentative {
     background-image: repeating-linear-gradient(
         -55deg,
-        rgba(255, 255, 255, 0.25),
-        rgba(255, 255, 255, 0.25) 6px,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 6px,
+        transparent 6px,
+        transparent 15px
+    );
+    background-position: left;
+}
+@media (prefers-color-scheme: dark) {
+    .fc-event-tentative {
+        background-image: repeating-linear-gradient(
+            -55deg,
+            rgba(255, 255, 255, 0.25),
+            rgba(255, 255, 255, 0.25) 6px,
+            transparent 6px,
+            transparent 15px
+        );
+        background-position: left;
+    }
+}
+.fc-event-tentative:hover {
+    background-image: repeating-linear-gradient(
+        -55deg,
+        var(--fc-list-event-hover-bg-color),
+        var(--fc-list-event-hover-bg-color) 6px,
         transparent 6px,
         transparent 15px
     );
