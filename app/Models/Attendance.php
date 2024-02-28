@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\AttendeeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 
 class Attendance extends Pivot
 {
@@ -78,5 +77,10 @@ class Attendance extends Pivot
     public function needsAction(): bool
     {
         return $this->status == AttendeeStatus::NeedsAction;
+    }
+
+    public function isLeadInstructor(): bool
+    {
+        return $this->user->is($this->booking->lead_instructor);
     }
 }

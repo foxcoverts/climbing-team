@@ -29,9 +29,7 @@ class AttendancePolicy
      */
     public function view(User $user, Attendance $attendance): bool
     {
-        return ($user->is($attendance->user)) ||
-            ($user->is($attendance->booking->lead_instructor)) ||
-            ($user->isBookingManager());
+        return $user->is($attendance->user) || $user->is($attendance->booking->lead_instructor) || $user->isBookingManager();
     }
 
     /**
@@ -39,10 +37,7 @@ class AttendancePolicy
      */
     public function update(User $user, Attendance $attendance): bool
     {
-        if (
-            $attendance->user->is($attendance->booking->lead_instructor) &&
-            ($attendance->isAccepted())
-        ) {
+        if ($attendance->isLeadInstructor() && $attendance->isAccepted()) {
             // The Lead Instructor cannot resign from a Booking.
             return false;
         } else if ($user->isBookingManager()) {
@@ -57,7 +52,7 @@ class AttendancePolicy
             } else {
                 // Permit holders can invite themselves to bookings which have not yet been confirmed,
                 // Any team member or team leader can invite themselves to confirmed bookings.
-                return ($attendance->booking->isConfirmed()) || ($user->isPermitHolder());
+                return $attendance->booking->isConfirmed() || $user->isPermitHolder();
             }
         } else {
             return false;
@@ -69,10 +64,7 @@ class AttendancePolicy
      */
     public function delete(User $user, Attendance $attendance): bool
     {
-        if (
-            $attendance->user->is($attendance->booking->lead_instructor) &&
-            ($attendance->isAccepted())
-        ) {
+        if ($attendance->isLeadInstructor() && $attendance->isAccepted()) {
             // The Lead Instructor cannot resign from a Booking.
             return false;
         }
