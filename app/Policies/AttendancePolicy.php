@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\AttendeeStatus;
 use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
@@ -42,7 +41,7 @@ class AttendancePolicy
     {
         if (
             $attendance->user->is($attendance->booking->lead_instructor) &&
-            ($attendance->status == AttendeeStatus::Accepted)
+            ($attendance->isAccepted())
         ) {
             // The Lead Instructor cannot resign from a Booking.
             return false;
@@ -72,7 +71,7 @@ class AttendancePolicy
     {
         if (
             $attendance->user->is($attendance->booking->lead_instructor) &&
-            ($attendance->status == AttendeeStatus::Accepted)
+            ($attendance->isAccepted())
         ) {
             // The Lead Instructor cannot resign from a Booking.
             return false;

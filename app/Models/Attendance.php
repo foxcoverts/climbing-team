@@ -63,4 +63,9 @@ class Attendance extends Pivot
     {
         return $this->belongsTo(User::class);
     }
+
+    public function isAccepted(): bool
+    {
+        return $this->status == AttendeeStatus::Accepted;
+    }
 }
