@@ -42,7 +42,7 @@
                     @csrf
                     @method('delete')
                     <x-button.danger>
-                        @if ($attendee->attendance->status == AttendeeStatus::NeedsAction)
+                        @if ($attendee->attendance->needsAction())
                             {{ __('Remove') }}
                         @else
                             {{ __('Remove') }}

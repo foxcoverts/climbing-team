@@ -74,4 +74,9 @@ class Attendance extends Pivot
     {
         return $this->status == AttendeeStatus::Declined;
     }
+
+    public function needsAction(): bool
+    {
+        return $this->status == AttendeeStatus::NeedsAction;
+    }
 }
