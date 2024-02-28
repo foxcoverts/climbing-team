@@ -60,7 +60,7 @@ class AttendancePolicy
                 // Permit holders can invite themselves to bookings which have not yet been confirmed,
                 // Any team member or team leader can invite themselves to confirmed bookings.
                 return ($attendance->booking->isConfirmed()) ||
-                    ($user->accreditations->contains(Accreditation::PermitHolder));
+                    ($user->isPermitHolder());
             }
         } else {
             return false;

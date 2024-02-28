@@ -1,5 +1,4 @@
 @use('App\Enums\Accreditation')
-@use('App\Enums\AttendeeStatus')
 <x-layout.app :title="__('Invite Attendees')">
     <section class="p-4 sm:p-8">
         @include('booking.partials.header', ['booking' => $booking])
@@ -25,7 +24,7 @@
 
                             <x-badge.role :role="$user->role" class="text-xs" />
 
-                            @if ($user->accreditations->contains(Accreditation::PermitHolder))
+                            @if ($user->isPermitHolder())
                                 <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-xs" />
                             @endif
                         </label>

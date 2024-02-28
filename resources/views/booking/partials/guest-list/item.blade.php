@@ -8,7 +8,7 @@
     <span>{{ $attendee->name }}</span>
 @endcan
 
-@if ($attendee->accreditations->contains(Accreditation::PermitHolder))
+@if ($attendee->isPermitHolder())
     <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-xs" />
 @endif
 

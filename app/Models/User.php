@@ -122,4 +122,9 @@ class User extends Authenticatable
     {
         return $this->role == Role::Guest;
     }
+
+    public function isPermitHolder(): bool
+    {
+        return $this->accreditations->contains(Accreditation::PermitHolder);
+    }
 }
