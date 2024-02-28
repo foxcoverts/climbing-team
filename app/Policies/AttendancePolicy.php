@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Enums\Accreditation;
 use App\Enums\AttendeeStatus;
-use App\Enums\BookingStatus;
 use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
@@ -60,7 +59,7 @@ class AttendancePolicy
             } else {
                 // Permit holders can invite themselves to bookings which have not yet been confirmed,
                 // Any team member or team leader can invite themselves to confirmed bookings.
-                return ($attendance->booking->status == BookingStatus::Confirmed) ||
+                return ($attendance->booking->isConfirmed()) ||
                     ($user->accreditations->contains(Accreditation::PermitHolder));
             }
         } else {

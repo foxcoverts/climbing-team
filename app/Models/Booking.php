@@ -145,6 +145,11 @@ class Booking extends Model
         return ($this->status == BookingStatus::Cancelled);
     }
 
+    public function isConfirmed(): bool
+    {
+        return ($this->status == BookingStatus::Confirmed);
+    }
+
     public function isTentative(): bool
     {
         return ($this->status == BookingStatus::Tentative);

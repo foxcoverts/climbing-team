@@ -110,7 +110,7 @@ class BookingController extends Controller
                 $invites = $booking->attendees->reject(function ($attendee) {
                     return $attendee->attendance->status == AttendeeStatus::Declined;
                 })->pluck('id');
-            } else if ($booking->status == BookingStatus::Cancelled) {
+            } else if ($booking->isCancelled()) {
                 // Remove invited attendees
                 Attendance::where('booking_id', $booking->id)
                     ->where('status', AttendeeStatus::NeedsAction)
