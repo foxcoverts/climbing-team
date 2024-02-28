@@ -160,7 +160,7 @@
                     @elseif ($booking->isTentative())
                         <div class="space-y-1">
                             <span class="font-bold after:content-[':']">{{ __('Confirm Booking') }}</span>
-                            @if ($instructors_attending->isEmpty())
+                            @if ($instructors_attending->isEmpty() && !auth()->user()->isTeamLeader())
                                 <p>
                                     {{ __('You can only confirm a booking when there is an instructor attending.') }}
                                 </p>

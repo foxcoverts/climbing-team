@@ -112,4 +112,9 @@ class User extends Authenticatable
             );
         }
     }
+
+    public function isTeamLeader(): bool
+    {
+        return $this->role == Role::TeamLeader;
+    }
 }

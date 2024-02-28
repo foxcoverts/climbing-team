@@ -38,10 +38,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        if (
-            $model->role == Role::TeamLeader &&
-            $user->role != Role::TeamLeader
-        ) {
+        if ($model->isTeamLeader() && !$user->isTeamLeader()) {
             // Only team leaders can update other team leaders.
             return false;
         }
@@ -59,7 +56,7 @@ class UserPolicy
     public function manage(User $user, User $model): bool
     {
         // Only team leaders can manage roles and accreditations
-        return ($user->role == Role::TeamLeader) &&
+        return ($user->isTeamLeader()) &&
             $user->accreditations->contains(Accreditation::ManageUsers);
     }
 
@@ -68,10 +65,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        if (
-            $model->role == Role::TeamLeader &&
-            $user->role != Role::TeamLeader
-        ) {
+        if ($model->isTeamLeader() && !$user->isTeamLeader()) {
             // Only team leaders can delete other team leaders.
             return false;
         }
@@ -86,7 +80,7 @@ class UserPolicy
     public function restore(User $user, User $model): bool
     {
         // Only team leaders can restore deleted users.
-        return $user->role == Role::TeamLeader &&
+        return $user->isTeamLeader() &&
             $user->accreditations->contains(Accreditation::ManageUsers);
     }
 
@@ -96,7 +90,7 @@ class UserPolicy
     public function forceDelete(User $user, User $model): bool
     {
         // Only team leaders can permanently delete users.
-        return $user->role == Role::TeamLeader &&
+        return $user->isTeamLeader() &&
             $user->accreditations->contains(Accreditation::ManageUsers);
     }
 }

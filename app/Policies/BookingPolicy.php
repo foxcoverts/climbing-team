@@ -94,7 +94,7 @@ class BookingPolicy
      */
     public function forceDelete(User $user, Booking $booking): bool
     {
-        return ($user->role == Role::TeamLeader) &&
+        return ($user->isTeamLeader()) &&
             $user->accreditations->contains(Accreditation::ManageBookings);
     }
 }
