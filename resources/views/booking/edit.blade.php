@@ -146,7 +146,10 @@
 
                     @if ($booking->isCancelled())
                         <div class="space-y-1">
-                            <span class="font-bold after:content-[':']">Cancelled</span>
+                            <span class="font-bold after:content-[':']">{{ __('Restore Booking') }}</span>
+                            <p>
+                                {{ __('This booking has been cancelled. If you restore this booking you will need to find instructors and confirm the booking again. If you do not want to invite any of the previous attendees you should remove them from the booking first.') }}
+                            </p>
                             <label class="mt-1 w-full flex space-x-1 items-center">
                                 <input type="checkbox" id="status" name="status"
                                     value="{{ BookingStatus::Tentative }}" />
