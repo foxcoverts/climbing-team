@@ -23,9 +23,9 @@ class StoreUserRequest extends FormRequest
             'timezone' => ['required', 'string', 'max:100', 'timezone:all'],
         ];
 
-        if ($this->user()->can('manage', $this->user)) {
+        if ($this->user()->can('manage', new User)) {
             $rules['role'] = ['required', Rule::enum(Role::class)];
-            $rules['accreditation.*'] = [Rule::enum(Accreditation::class)];
+            $rules['accreditations.*'] = [Rule::enum(Accreditation::class)];
         }
 
         return $rules;

@@ -53,7 +53,7 @@ class UserController extends Controller
                 ['password' => '']
             )
         );
-        $user->accreditations = $request->input('accreditations');
+        $user->accreditations = $request->safe()->accreditations;
 
         event(new Registered($user));
 
@@ -95,7 +95,7 @@ class UserController extends Controller
         }
         $user->save();
 
-        $user->accreditations = $request->input('accreditations');
+        $user->accreditations = $request->safe()->accreditations;
 
         return redirect()->route('user.show', $user)
             ->with('alert.info', __('User updated successfully'));

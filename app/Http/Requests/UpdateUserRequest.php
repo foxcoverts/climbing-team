@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
 
         if ($this->user()->can('manage', $this->user)) {
             $rules['role'] = ['required', Rule::enum(Role::class)];
-            $rules['accreditation.*'] = [Rule::enum(Accreditation::class)];
+            $rules['accreditations.*'] = [Rule::enum(Accreditation::class)];
         }
 
         return $rules;
