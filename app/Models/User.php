@@ -117,4 +117,9 @@ class User extends Authenticatable
     {
         return $this->role == Role::TeamLeader;
     }
+
+    public function isGuest(): bool
+    {
+        return $this->role == Role::Guest;
+    }
 }

@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Enums\Accreditation;
 use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
-use App\Enums\Role;
 use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
@@ -55,7 +54,7 @@ class AttendancePolicy
             if ($attendance->exists) {
                 // If the user has been invited, or has already responded, let them change their response.
                 return true;
-            } else if ($user->role == Role::Guest) {
+            } else if ($user->isGuest()) {
                 // Guests cannot invite themselves to any bookings.
                 return false;
             } else {

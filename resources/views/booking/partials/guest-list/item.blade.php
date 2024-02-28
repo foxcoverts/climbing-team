@@ -12,6 +12,6 @@
     <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-xs" />
 @endif
 
-@if ($attendee->role == Role::Guest)
+@if ($attendee->isGuest())
     <x-badge.role :role="Role::Guest" class="text-xs" />
 @endif

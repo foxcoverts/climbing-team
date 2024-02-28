@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Enums\Accreditation;
-use App\Enums\Role;
 use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
@@ -15,7 +14,7 @@ class BookingPolicy
      */
     public function viewAny(User $user): bool
     {
-        return ($user->role != Role::Guest) ||
+        return (!$user->isGuest()) ||
             $user->accreditations->contains(Accreditation::ManageBookings);
     }
 
@@ -26,7 +25,7 @@ class BookingPolicy
     {
         if ($booking->trashed()) {
             return $user->accreditations->contains(Accreditation::ManageBookings);
-        } else if ($user->role != Role::Guest) {
+        } else if (!$user->isGuest()) {
             return true;
         } else if ($booking->attendees()->find($user)) {
             return true;
