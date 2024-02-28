@@ -95,6 +95,10 @@ class UserController extends Controller
         }
         $user->save();
 
+        if ($user->wasChanged('email')) {
+            $user->sendEmailVerificationNotification();
+        }
+
         $user->accreditations = $request->safe()->accreditations;
 
         return redirect()->route('user.show', $user)
