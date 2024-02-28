@@ -92,7 +92,7 @@ class BookingController extends Controller
             'booking' => $booking,
             'activity_suggestions' => $activity_suggestions,
             'attendees' => $this->getGuestListAttendees($booking),
-            'lead_instructors' => $this->getPossibleLeadInstructors(($booking)),
+            'instructors_attending' => $this->getPossibleLeadInstructors(($booking)),
         ]);
     }
 

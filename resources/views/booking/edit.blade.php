@@ -95,16 +95,15 @@
 
                     <div class="space-y-1">
                         <x-input-label for="lead_instructor" :value="__('Lead Instructor')" />
-                        @if ($lead_instructors->isEmpty())
-                            <p>{{ __('No instructors are going to this booking yet. Try again when someone responds.') }}
-                            </p>
+                        @if ($instructors_attending->isEmpty())
+                            <p>{{ __('No instructors are going to this booking yet.') }}</p>
                         @else
                             <x-select-input id="lead_instructor" name="lead_instructor_id" class="mt-1 block"
                                 x-model="user.lead_instructor_id">
                                 @if (is_null($booking->lead_instructor))
                                     <option value="" selected disabled>{{ __('-- Lead Instructor --') }}</option>
                                 @endif
-                                <x-select-input.collection :options="$lead_instructors" label_key="name" />
+                                <x-select-input.collection :options="$instructors_attending" label_key="name" />
                             </x-select-input>
                             <p class="text-sm">
                                 {{ __('Someone missing? Only instructors who are going to this booking will appear here.') }}
@@ -148,6 +147,34 @@
                                 <span>{{ __('Restore booking') }}</span>
                             </label>
                             <x-input-error :messages="$errors->get('status')" />
+                        </div>
+                    @elseif ($booking->isTentative())
+                        <div class="space-y-1">
+                            <span class="font-bold after:content-[':']">{{ __('Confirm Booking') }}</span>
+                            @if ($instructors_attending->isEmpty())
+                                <p>
+                                    {{ __('You can only confirm a booking when there is an instructor attending.') }}
+                                </p>
+                            @else
+                                <p>
+                                    {{ __('Before you confirm this booking you should ensure that there are enough instructors attending. It is also recommended that you have chosen a ') }}
+                                    <a href="#lead_instructor">{{ __('Lead Instructor') }}</a>.
+                                </p>
+                                <label class="mt-1 w-full flex space-x-1 items-center">
+                                    <input type="checkbox" id="status" name="status"
+                                        value="{{ BookingStatus::Confirmed }}" />
+                                    <span>{{ __('Confirm booking') }}</span>
+                                </label>
+                            @endif
+                        </div>
+                    @else
+                        {{-- Booking is confirmed --}}
+                        <div class="space-y-1">
+                            <span class="font-bold after:content-[':']">{{ __('Confirm Booking') }}</span>
+                            <label class="mt-1 w-full flex space-x-1 items-center">
+                                <input type="checkbox" checked disabled required />
+                                <span>{{ __('This booking has been confirmed. No further status changes can be made.') }}</span>
+                            </label>
                         </div>
                     @endif
                 </form>
