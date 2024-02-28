@@ -97,6 +97,9 @@
                         <x-input-label for="lead_instructor" :value="__('Lead Instructor')" />
                         @if ($instructors_attending->isEmpty())
                             <p>{{ __('No instructors are going to this booking yet.') }}</p>
+                        @elseif ($booking->isCancelled())
+                            <input type="text" class="mt-1 block" value="{{ $booking->lead_instructor?->name }}"
+                                placeholder="{{ __('No lead instructor') }}" readonly />
                         @else
                             <x-select-input id="lead_instructor" name="lead_instructor_id" class="mt-1 block"
                                 x-model.fill="booking.lead_instructor_id">

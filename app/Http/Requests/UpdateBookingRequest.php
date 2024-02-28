@@ -26,7 +26,10 @@ class UpdateBookingRequest extends FormRequest
             'notes' => ['sometimes', 'nullable', 'string'],
 
             // TODO: Restrict only to 'PermitHolder' attendees of the booking.
-            'lead_instructor_id' => ['sometimes', 'nullable', 'ulid', Rule::exists(User::class, 'id')],
+            'lead_instructor_id' => [
+                'exclude_if:status,' . BookingStatus::Cancelled->value,
+                'sometimes', 'nullable', 'ulid', Rule::exists(User::class, 'id')
+            ],
 
             // Status is updated in secret ways.
             'status' => ['sometimes', 'required', Rule::enum(BookingStatus::class)],
