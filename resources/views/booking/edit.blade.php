@@ -102,11 +102,14 @@
                                 placeholder="{{ __('No lead instructor') }}" readonly />
                         @else
                             <x-select-input id="lead_instructor" name="lead_instructor_id" class="mt-1 block"
-                                x-model.fill="booking.lead_instructor_id">
-                                @if (is_null($booking->lead_instructor))
-                                    <option value="" selected disabled>{{ __('-- Lead Instructor --') }}</option>
+                                x-model.fill="booking.lead_instructor_id" :value="$booking->lead_instructor_id">
+                                @if (is_null($booking->lead_instructor) || $booking->isTentative())
+                                    <option value="" @selected(is_null($booking->lead_instructor))>{{ __('No lead instructor') }}
+                                    </option>
                                 @endif
-                                <x-select-input.collection :options="$instructors_attending" label_key="name" />
+                                <optgroup label="{{ __('Permit Holders') }}">
+                                    <x-select-input.collection :options="$instructors_attending" label_key="name" />
+                                </optgroup>
                             </x-select-input>
                             <p class="text-sm">
                                 {{ __('Someone missing? Only instructors who are going to this booking will appear here.') }}
