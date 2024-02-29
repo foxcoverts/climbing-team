@@ -28,6 +28,8 @@
                 class="font-semibold text-2xl text-blue-400 pl-4 uppercase">{{ config('app.name', 'Climbing Team') }}</a>
         </div>
 
+        <x-layout.guest.alerts />
+
         <div
             class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
             @if (!empty($title))
