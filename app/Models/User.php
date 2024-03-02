@@ -113,6 +113,19 @@ class User extends Authenticatable implements MustVerifyEmail
         }
     }
 
+    /**
+     * Has the user activated their account?
+     *
+     * When an admin creates a User the password is empty so that no one can
+     * log in. When the user has set a password, the account is considered 'active'.
+     *
+     * @return boolean
+     */
+    public function isActive(): bool
+    {
+        return $this->password != "";
+    }
+
     public function isTeamLeader(): bool
     {
         return $this->role == Role::TeamLeader;

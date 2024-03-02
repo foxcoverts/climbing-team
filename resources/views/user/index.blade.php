@@ -12,8 +12,11 @@
             <thead>
                 <tr>
                     <th
-                        class="px-1 text-left sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
-                        Name</th>
+                        class="px-1 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
+                        {{ __('Name') }}</th>
+                    <th class="px-1 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300"
+                        width="1">
+                        {{ __('Active') }}</th>
                     <th class="px-1 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300"
                         width="1">Role</th>
                     @foreach (Accreditation::cases() as $accreditation)
@@ -33,6 +36,8 @@
                     <tr class="hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                         @click="window.location='{{ route('user.show', $user) }}'">
                         <td class="px-1"><a href="{{ route('user.show', $user) }}">{{ $user->name }}</a></td>
+                        <td class="px-1 text-center"><x-badge.active :active="$user->isActive()" class="text-sm text-nowrap" />
+                        </td>
                         <td class="px-1 text-center"><x-badge.role :role="$user->role" class="text-sm text-nowrap" /></td>
                         @foreach (Accreditation::cases() as $accreditation)
                             <td @class([

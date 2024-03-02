@@ -6,6 +6,9 @@
 
         <div class="space-y-2 max-w-xl flex-grow">
             <p class="flex space-x-1 items-center">
+                @unless ($user->isActive())
+                    <x-badge.active :active="false" class="text-sm" />
+                @endunless
                 <x-badge.role :role="$user->role" class="text-sm" />
                 @foreach ($user->accreditations as $accreditation)
                     <x-badge.accreditation :accreditation="$accreditation" class="text-sm" />
