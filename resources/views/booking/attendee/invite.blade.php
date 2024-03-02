@@ -29,10 +29,13 @@
                             @endif
                         </label>
                     @endforeach
+                    <p class="text-sm pt-2">
+                        {{ __('Someone missing? Only users who have verified their email address will appear here.') }}
+                    </p>
                     <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
                 </fieldset>
 
-                <footer class="flex items-center gap-4 pt-2">
+                <footer class="flex items-center gap-4 pt-4">
                     <x-button.primary disabled x-bind:disabled="form.user_ids.length == 0">
                         {{ __('Invite') }}
                     </x-button.primary>

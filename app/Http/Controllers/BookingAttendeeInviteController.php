@@ -27,9 +27,11 @@ class BookingAttendeeInviteController extends Controller
 
         return view('booking.attendee.invite', [
             'booking' => $booking,
-            'users' => User::whereDoesntHave('bookings', function (Builder $query) use ($booking) {
-                $query->where('booking_id', $booking->id);
-            })->orderBy('name')->get(),
+            'users' => User::whereNotNull('email_verified_at')
+                ->whereDoesntHave('bookings', function (Builder $query) use ($booking) {
+                    $query->where('booking_id', $booking->id);
+                })
+                ->orderBy('name')->get(),
         ]);
     }
 
@@ -50,7 +52,7 @@ class BookingAttendeeInviteController extends Controller
         }
 
         $attendees = $booking->attendees;
-        $user_ids = collect($request->safe()['user_ids']);
+        $user_ids = collect($request->safe()->user_ids);
 
         $user_ids->reject(function (string $id) use ($attendees): bool {
             return $attendees->contains('id', $id);
