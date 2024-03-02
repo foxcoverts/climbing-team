@@ -26,7 +26,7 @@
         </ul>
     @endforeach
 
-    @if ($attendees->isEmpty())
+    @if (!$attendee)
         <p class="my-1">{{ __('No one has responded to this booking yet.') }}</p>
     @endempty
 
