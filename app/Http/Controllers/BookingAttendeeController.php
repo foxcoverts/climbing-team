@@ -8,6 +8,7 @@ use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,7 +37,11 @@ class BookingAttendeeController extends Controller
 
         return view('booking.attendee.create', [
             'booking' => $booking,
-            'users' => User::query()->orderBy('name')->get(),
+            'users' => User::query()
+                ->whereDoesntHave('bookings', function (Builder $query) use ($booking) {
+                    $query->where('booking_id', $booking->id);
+                })
+                ->orderBy('name')->get(),
         ]);
     }
 

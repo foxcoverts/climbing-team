@@ -27,7 +27,8 @@ class BookingAttendeeInviteController extends Controller
 
         return view('booking.attendee.invite', [
             'booking' => $booking,
-            'users' => User::whereNotNull('email_verified_at')
+            'users' => User::query()
+                ->whereNotNull('email_verified_at')
                 ->whereDoesntHave('bookings', function (Builder $query) use ($booking) {
                     $query->where('booking_id', $booking->id);
                 })
