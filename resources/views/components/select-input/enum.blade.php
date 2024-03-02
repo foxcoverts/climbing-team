@@ -6,6 +6,9 @@
     if (is_string($value)) {
         $value = $options::tryFrom($value);
     }
+    if (!is_array($except)) {
+        $except = [$except];
+    }
 @endphp
 
 @foreach ($options::cases() as $option)

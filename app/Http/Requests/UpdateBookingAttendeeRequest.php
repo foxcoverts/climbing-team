@@ -16,7 +16,7 @@ class UpdateBookingAttendeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', Rule::enum(AttendeeStatus::class)],
+            'status' => ['required', Rule::enum(AttendeeStatus::class)->except(AttendeeStatus::NeedsAction)],
         ];
     }
 

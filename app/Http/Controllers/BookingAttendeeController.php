@@ -56,7 +56,7 @@ class BookingAttendeeController extends Controller
                 ->with('alert.error', __('You cannot change attendance on cancelled bookings.'));
         }
 
-        $user_id = $request->safe()->only('user_id')['user_id'];
+        $user_id = $request->safe()->user_id;
         $options = $request->safe()->except(['user_id']);
 
         $booking->attendees()->syncWithoutDetaching([

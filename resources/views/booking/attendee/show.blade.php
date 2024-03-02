@@ -20,7 +20,8 @@
                         <x-input-label for="status" :value="__('Status')"
                             class="not-italic font-bold after:content-[':']" />
                         <x-select-input id="status" name="status" class="mt-1 block" required :value="old('status', $attendee->attendance->status)">
-                            <x-select-input.enum :options="AttendeeStatus::class" lang="app.attendee.status.:value" />
+                            <x-select-input.enum :options="AttendeeStatus::class" :except="AttendeeStatus::NeedsAction"
+                                lang="app.attendee.status.:value" />
                         </x-select-input>
                         <x-input-error class="mt-2" :messages="$errors->get('status')" />
                     </div>
