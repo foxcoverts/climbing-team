@@ -34,6 +34,11 @@
                                 <x-input-error class="mt-2" :messages="$errors->get('status')" />
                             </div>
                         </form>
+                    @elseif ($booking->lead_instructor->is($attendee))
+                        <div>
+                            <x-input-label for="status" :value="__('Status')" />
+                            <x-text-input id="status" class="mt-1 block" readonly :value="__('Lead Instructor')" />
+                        </div>
                     @else
                         <div>
                             <x-input-label for="status" :value="__('Status')" />
