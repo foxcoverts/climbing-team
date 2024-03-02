@@ -31,6 +31,10 @@ window.Calendar = new Calendar(calendarEl, {
             return content.data;
         },
         eventDataTransform(content) {
+            if (Date.parse(content.end_at) < Date.now()) {
+                return false;
+            }
+
             return {
                 id: content.id,
                 title:
