@@ -8,7 +8,7 @@
 
             <div class="flex-grow my-2">
                 @if ($users->isNotEmpty())
-                    <form method="post" action="{{ route('booking.attendee.store', $booking) }}">
+                    <form method="post" action="{{ route('booking.attendee.store', $booking) }}" x-data="{ form: {} }">
                         @csrf
                         <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                             {{ __('Attendance') }}</h3>
@@ -17,7 +17,7 @@
                             <div>
                                 <x-input-label for="user_id" :value="__('Attendee')" />
                                 <x-select-input id="user_id" name="user_id" class="mt-1 block" required
-                                    :value="old('user_id')">
+                                    :value="old('user_id')" x-model.fill="form.user_id">
                                     <option value="" disabled selected>{{ __('-- Select User --') }}</option>
                                     <x-select-input.collection :options="$users" label_key="name" />
                                 </x-select-input>
@@ -27,7 +27,7 @@
                             <div>
                                 <x-input-label for="status" :value="__('Status')" />
                                 <x-select-input id="status" name="status" class="mt-1 block" required
-                                    :value="old('status', AttendeeStatus::Accepted)">
+                                    :value="old('status', AttendeeStatus::Accepted)" x-model.fill="form.status">
                                     <x-select-input.enum :options="AttendeeStatus::class" :except="AttendeeStatus::NeedsAction"
                                         lang="app.attendee.status.:value" />
                                 </x-select-input>
@@ -36,7 +36,7 @@
                         </div>
 
                         <footer class="flex items-center gap-4 mt-4">
-                            <x-button.primary>
+                            <x-button.primary x-bind:disabled="!form.user_id">
                                 {{ __('Add Attendee') }}
                             </x-button.primary>
 
