@@ -1,7 +1,7 @@
 <x-layout.app :title="__('Booking')">
     <section class="p-4 sm:p-8">
-        @include('booking.partials.header', ['booking' => $booking])
-        @include('booking.partials.details', ['booking' => $booking])
+        @include('booking.partials.header')
+        @include('booking.partials.details')
 
         <footer class="mt-6 flex items-center gap-4">
             @can('restore', $booking)

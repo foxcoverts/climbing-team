@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateBookingAttendanceRequest;
 use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -34,6 +35,7 @@ class BookingAttendanceController extends Controller
         return view('booking.attendance.show', [
             'booking' => $booking,
             'attendance' => $attendee?->attendance,
+            'attendees' => $this->getGuestListAttendees($booking),
         ]);
     }
 
@@ -59,5 +61,19 @@ class BookingAttendanceController extends Controller
 
         return redirect()->back()
             ->with('alert.info', __('Updated your attendance successfully.'));
+    }
+
+
+    protected function getGuestListAttendees(Booking $booking): Collection
+    {
+        $attendees = $booking->attendees()
+            ->with('user_accreditations');
+        if ($booking->lead_instructor) {
+            $attendees->whereNot('users.id', $booking->lead_instructor_id);
+        }
+        return $attendees
+            ->orderBy('booking_user.status')
+            ->orderBy('users.name')
+            ->get();
     }
 }

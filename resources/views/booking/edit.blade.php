@@ -189,19 +189,14 @@
                 </form>
             </div>
 
-            @include('booking.partials.guest-list', [
-                'attendees' => $attendees,
-                'booking' => $booking,
-            ])
+            @include('booking.partials.guest-list', ['showTools' => false])
         </div>
 
         <footer class="flex items-center gap-4 mt-6">
             <x-button.primary form="update-booking">
                 {{ __('Update') }}
             </x-button.primary>
-            @include('booking.partials.delete-button', [
-                'booking' => $booking,
-            ])
+            @include('booking.partials.delete-button')
             <x-button.secondary :href="route('booking.show', $booking)">
                 {{ __('Back') }}
             </x-button.secondary>

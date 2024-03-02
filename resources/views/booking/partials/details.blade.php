@@ -1,7 +1,7 @@
 @props(['booking'])
-<div class="space-y-1 my-2 max-w-xl flex-grow">
+<div class="space-y-1 my-2 w-full max-w-xl flex-grow">
     <p
-        class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between max-w-xl">
+        class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between">
         <span class="flex items-center">
             <x-icon.location class="h-5 w-5 fill-current mr-1" />
             {{ $booking->location }}
