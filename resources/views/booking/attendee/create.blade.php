@@ -4,37 +4,51 @@
         @include('booking.partials.header', ['booking' => $booking])
         @include('booking.partials.details', ['booking' => $booking])
 
-        <form method="post" action="{{ route('booking.attendee.store', $booking) }}" class="space-y-1">
-            @csrf
+        <div class="max-w-xl">
+            @if ($users->isNotEmpty())
+                <form method="post" action="{{ route('booking.attendee.store', $booking) }}" class="space-y-1">
+                    @csrf
 
-            <h3 class="text-xl font-medium">{{ __('Attendance') }}</h3>
+                    <h3 class="text-xl font-medium">{{ __('Attendance') }}</h3>
 
-            <div>
-                <x-input-label for="user_id" :value="__('Attendee')" />
-                <x-select-input id="user_id" name="user_id" class="mt-1 block" required :value="old('user_id')">
-                    <option value="" disabled selected>{{ __('-- Select User --') }}</option>
-                    <x-select-input.collection :options="$users" label_key="name" />
-                </x-select-input>
-                <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
-            </div>
+                    <div>
+                        <x-input-label for="user_id" :value="__('Attendee')" />
+                        <x-select-input id="user_id" name="user_id" class="mt-1 block" required :value="old('user_id')">
+                            <option value="" disabled selected>{{ __('-- Select User --') }}</option>
+                            <x-select-input.collection :options="$users" label_key="name" />
+                        </x-select-input>
+                        <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
+                    </div>
 
-            <div>
-                <x-input-label for="status" :value="__('Status')" />
-                <x-select-input id="status" name="status" class="mt-1 block" required :value="old('status', AttendeeStatus::Accepted)">
-                    <x-select-input.enum :options="AttendeeStatus::class" :except="AttendeeStatus::NeedsAction" lang="app.attendee.status.:value" />
-                </x-select-input>
-                <x-input-error class="mt-2" :messages="$errors->get('status')" />
-            </div>
+                    <div>
+                        <x-input-label for="status" :value="__('Status')" />
+                        <x-select-input id="status" name="status" class="mt-1 block" required :value="old('status', AttendeeStatus::Accepted)">
+                            <x-select-input.enum :options="AttendeeStatus::class" :except="AttendeeStatus::NeedsAction"
+                                lang="app.attendee.status.:value" />
+                        </x-select-input>
+                        <x-input-error class="mt-2" :messages="$errors->get('status')" />
+                    </div>
 
-            <div class="flex items-center gap-4 pt-2">
-                <x-button.primary>
-                    {{ __('Add Attendee') }}
-                </x-button.primary>
+                    <div class="flex items-center gap-4 pt-2">
+                        <x-button.primary>
+                            {{ __('Add Attendee') }}
+                        </x-button.primary>
 
-                <x-button.secondary :href="route('booking.show', $booking)">
-                    {{ __('Back') }}
-                </x-button.secondary>
-            </div>
-        </form>
+                        <x-button.secondary :href="route('booking.show', $booking)">
+                            {{ __('Back') }}
+                        </x-button.secondary>
+                    </div>
+                </form>
+            @else
+                <h3 class="text-xl font-medium">{{ __('Attendance') }}</h3>
+                <p>{{ __('All users have already been invited to this booking. You may change their response on the guest list.') }}
+                </p>
+                <footer class="flex items-center gap-4 pt-2">
+                    <x-button.secondary :href="route('booking.show', $booking)">
+                        {{ __('Back') }}
+                    </x-button.secondary>
+                </footer>
+            @endif
+        </div>
     </section>
 </x-layout.app>
