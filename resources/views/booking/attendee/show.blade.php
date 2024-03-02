@@ -37,8 +37,7 @@
                     @else
                         <div>
                             <x-input-label for="status" :value="__('Status')" />
-                            <x-text-input id="status" class="mt-1 block" readonly
-                                value="{{ __("app.attendee.status.{$attendee->attendance->status->value}") }}" />
+                            <x-text-input id="status" class="mt-1 block" readonly :value='__("app.attendee.status.{$attendee->attendance->status->value}")' />
                         </div>
                     @endif
                 </div>
