@@ -15,7 +15,7 @@
 
     @foreach ($attendees->groupBy('attendance.status') as $status => $attendees)
         <h3 class="text-lg">{{ __("app.attendee.status.$status") }}
-            <span class="bg-gray-200 px-2 rounded-xl">{{ count($attendees) }}</span>
+            <span class="bg-gray-200 dark:bg-gray-600 dark:text-white px-2 rounded-xl">{{ count($attendees) }}</span>
         </h3>
         <ul class="mb-3 space-y-1">
             @foreach ($attendees as $attendee)
