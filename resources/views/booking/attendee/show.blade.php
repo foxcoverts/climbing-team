@@ -7,7 +7,7 @@
         <div class="md:flex md:space-x-4">
             @include('booking.partials.details')
 
-            <div class="flex-grow my-2">
+            <div class="flex-grow my-2" x-data="{ form: {} }">
                 <div class="space-y-1">
                     <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                         {{ __('Attendance') }}</h3>
@@ -27,7 +27,12 @@
                                 <x-input-label for="status" :value="__('Status')"
                                     class="not-italic font-bold after:content-[':']" />
                                 <x-select-input id="status" name="status" class="mt-1 block" required
-                                    :value="old('status', $attendee->attendance->status)">
+                                    :value="old('status', $attendee->attendance->status)" x-model.fill="form.status">
+                                    @if ($attendee->attendance->status == AttendeeStatus::NeedsAction)
+                                        <option value="" selected disabled>
+                                            {{ __('app.attendee.status.' . AttendeeStatus::NeedsAction->value) }}
+                                        </option>
+                                    @endif
                                     <x-select-input.enum :options="AttendeeStatus::class" lang="app.attendee.status.:value"
                                         :except="[AttendeeStatus::NeedsAction]" />
                                 </x-select-input>
@@ -49,7 +54,7 @@
 
                 <footer class="flex items-center gap-4 mt-4">
                     @if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('update', $attendee->attendance))
-                        <x-button.primary form="update-attendance">
+                        <x-button.primary form="update-attendance" x-bind:disabled="form.status == ''">
                             {{ __('Update') }}
                         </x-button.primary>
                     @endif
