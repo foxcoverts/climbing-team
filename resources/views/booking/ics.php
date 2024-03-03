@@ -76,10 +76,14 @@ foreach ($bookings as $booking) {
         $evAttendee = (new Attendee($protectedEmailAddress))
             ->setCalendarUserType(CalendarUserType::INDIVIDUAL())
             ->setDisplayName($attendee->name);
+
+        if ($attendee->hasVerifiedEmail()) {
+            $evAttendee->setResponseNeededFromAttendee(true);
+        }
+
         switch ($attendee->attendance->status) {
             case AttendeeStatus::NeedsAction:
                 $evAttendee->setParticipationStatus(ParticipationStatus::NEEDS_ACTION());
-                $evAttendee->setResponseNeededFromAttendee(true);
                 break;
             case AttendeeStatus::Accepted:
                 $evAttendee->setParticipationStatus(ParticipationStatus::ACCEPTED());
