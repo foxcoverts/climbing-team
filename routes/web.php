@@ -61,10 +61,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('user', UserController::class);
 });
 
-Route::middleware(['signed'])->group(function () {
+Route::middleware(['signed', 'auth.param:attendee'])->group(function () {
     Route::controller(RespondController::class)->group(function () {
-        Route::get('respond/{booking}/{user}', 'show')->name('respond');
-        Route::post('respond/{booking}/{user}', 'store');
+        Route::get('respond/{booking}/{attendee}', 'show')->scopeBindings()->name('respond');
+        Route::post('respond/{booking}/{attendee}', 'store')->scopeBindings();
     });
 });
 
