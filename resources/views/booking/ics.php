@@ -4,7 +4,6 @@ use App\Enums\AttendeeStatus;
 use Eluceo\iCal\Domain\Entity\Attendee;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
-use Eluceo\iCal\Domain\Entity\TimeZone;
 use Eluceo\iCal\Domain\Enum\CalendarUserType;
 use Eluceo\iCal\Domain\Enum\EventStatus;
 use Eluceo\iCal\Domain\Enum\ParticipationStatus;
@@ -20,7 +19,6 @@ use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use Illuminate\Support\Facades\Request;
 
 $calendar = new Calendar();
-$calendar->addTimeZone(new TimeZone('Europe/London'));
 
 $organiser = new Organizer(
     new EmailAddress('climbing@foxcoverts.org.uk'),
