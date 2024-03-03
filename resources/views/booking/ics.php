@@ -72,10 +72,12 @@ foreach ($bookings as $booking) {
     }
 
     foreach ($booking->attendees as $attendee) {
+        $emailAddress = new EmailAddress(sprintf('%s@%s', $attendee->id, $domain));
         if ($attendee->is($user)) {
-            $emailAddress = new EmailAddress($attendee->email);
-        } else {
-            $emailAddress = new EmailAddress(sprintf('%s@%s', $attendee->id, $domain));
+            try {
+                $emailAddress = new EmailAddress($attendee->email);
+            } catch (InvalidArgumentException $e) {
+            }
         }
 
         $evAttendee = (new Attendee($emailAddress))

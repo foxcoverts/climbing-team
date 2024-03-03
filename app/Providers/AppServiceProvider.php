@@ -7,6 +7,7 @@ use App\Models\PersonalAccessToken;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
         Model::shouldBeStrict();
         DB::connection()->setQueryGrammar(new MySqlGrammar);
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+        View::addExtension('md.blade.php', 'blade');
     }
 }

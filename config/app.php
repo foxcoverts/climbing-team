@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Climbing Team'),
+    'name' => env('APP_NAME', 'Fox Coverts Climbing'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://climbing.foxcoverts.org.uk'),
 
     'asset_url' => env('ASSET_URL'),
 

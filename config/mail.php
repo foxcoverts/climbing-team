@@ -98,8 +98,13 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'noreply@climbing.foxcoverts.org.uk'),
+        'name' => env('MAIL_FROM_NAME', 'Fox Coverts Climbing'),
+    ],
+
+    'reply_to' => [
+        'address' => 'climbing@foxcoverts.org.uk',
+        'name' => 'Fox Coverts Climbing Manager',
     ],
 
     /*

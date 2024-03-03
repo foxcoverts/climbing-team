@@ -25,7 +25,7 @@
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
         <div class="items-center">
             <a href="/"
-                class="font-semibold text-2xl text-blue-400 pl-4 uppercase">{{ config('app.name', 'Climbing Team') }}</a>
+                class="font-semibold text-2xl text-blue-400 uppercase">{{ config('app.name', 'Climbing Team') }}</a>
         </div>
 
         <x-layout.guest.alerts />
@@ -34,7 +34,7 @@
             class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
             @if (!empty($title))
                 <div>
-                    <h1 class="border-b mb-4 font-bold">{{ $title }}</h1>
+                    <h1 class="border-b mb-4 font-bold text-lg">{{ $title }}</h1>
                 </div>
             @endif
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect('/dashboard');
     });
 
-    Route::get('/dashboard', function () {
+    Route::get('dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
@@ -42,11 +43,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except(['edit']);
 
-    Route::get('/booking/invite', BookingInviteController::class)->name('booking.invite');
+    Route::get('booking/invite', BookingInviteController::class)->name('booking.invite');
 
     Route::controller(BookingIcsController::class)->group(function () {
-        Route::get('/booking.ics', 'index')->name('booking.ics');
-        Route::get('/booking/{booking}.ics', 'show')->name('booking.show.ics');
+        Route::get('booking.ics', 'index')->name('booking.ics');
+        Route::get('booking/{booking}.ics', 'show')->name('booking.show.ics');
     });
 
     Route::resource('booking', BookingController::class);
@@ -58,6 +59,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::resource('user', UserController::class);
+});
+
+Route::middleware(['signed'])->group(function () {
+    Route::controller(RespondController::class)->group(function () {
+        Route::get('respond/{booking}/{user}', 'show')->name('respond');
+        Route::post('respond/{booking}/{user}', 'store');
+    });
 });
 
 require __DIR__ . '/auth.php';

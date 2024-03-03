@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AttendeeStatus;
+use App\Events\BookingInvite;
 use App\Http\Requests\InviteBookingAttendeeRequest;
 use App\Models\Attendance;
 use App\Models\Booking;
@@ -65,7 +66,9 @@ class BookingAttendeeInviteController extends Controller
             false
         );
 
-        // @todo fire invited event & background job.
+        foreach (User::find($user_ids) as $user) {
+            event(new BookingInvite($booking, $user));
+        }
 
         return redirect()->route('booking.show', $booking)
             ->with('alert.info', __('Attendees invited successfully.'));
