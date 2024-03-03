@@ -21,7 +21,7 @@ class BookingIcsController extends Controller
     public function index(): Response
     {
         return $this->ics(
-            Booking::all()->load('attendees')
+            Booking::all()->load('attendees', 'lead_instructor')
         );
     }
 

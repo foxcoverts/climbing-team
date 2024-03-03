@@ -7,6 +7,7 @@ use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\Enum\CalendarUserType;
 use Eluceo\iCal\Domain\Enum\EventStatus;
 use Eluceo\iCal\Domain\Enum\ParticipationStatus;
+use Eluceo\iCal\Domain\Enum\RoleType;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
@@ -79,6 +80,10 @@ foreach ($bookings as $booking) {
 
         if ($attendee->hasVerifiedEmail()) {
             $evAttendee->setResponseNeededFromAttendee(true);
+        }
+
+        if ($attendee->is($booking->lead_instructor)) {
+            $evAttendee->setRole(RoleType::CHAIR());
         }
 
         switch ($attendee->attendance->status) {
