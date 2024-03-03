@@ -72,9 +72,13 @@ foreach ($bookings as $booking) {
     }
 
     foreach ($booking->attendees as $attendee) {
-        $protectedEmailAddress = new EmailAddress(sprintf('%s@%s', $attendee->id, $domain));
+        if ($attendee->is($user)) {
+            $emailAddress = new EmailAddress($attendee->email);
+        } else {
+            $emailAddress = new EmailAddress(sprintf('%s@%s', $attendee->id, $domain));
+        }
 
-        $evAttendee = (new Attendee($protectedEmailAddress))
+        $evAttendee = (new Attendee($emailAddress))
             ->setCalendarUserType(CalendarUserType::INDIVIDUAL())
             ->setDisplayName($attendee->name);
 
