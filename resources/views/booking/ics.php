@@ -84,6 +84,8 @@ foreach ($bookings as $booking) {
 
         if ($attendee->is($booking->lead_instructor)) {
             $evAttendee->setRole(RoleType::CHAIR());
+        } else {
+            $evAttendee->setRole(RoleType::REQ_PARTICIPANT());
         }
 
         switch ($attendee->attendance->status) {
