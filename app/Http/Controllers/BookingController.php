@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Enums\Accreditation;
 use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
+use App\Events\BookingInvite;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
@@ -101,15 +103,21 @@ class BookingController extends Controller
      */
     public function update(UpdateBookingRequest $request, Booking $booking): RedirectResponse
     {
-        $invites = [];
+        $attendees = collect([]);
         $booking->fill($request->validated());
         if ($booking->isDirty('status')) {
             if ($booking->getOriginal('status') == BookingStatus::Cancelled) {
                 // When restoring a cancelled booking, re-invite any 'Going' and 'Maybe' attendees.
                 $booking->lead_instructor_id = null;
-                $invites = $booking->attendees->reject(function ($attendee) {
-                    return $attendee->attendance->isDeclined();
-                })->pluck('id');
+                $attendees = $booking->attendees->mapWithKeys(function ($attendee) {
+                    if ($attendee->attendance->status == AttendeeStatus::Declined) {
+                        return [$attendee->id => ['status' => AttendeeStatus::Declined]];
+                    }
+                    if ($attendee->hasVerifiedEmail()) {
+                        return [$attendee->id => ['status' => AttendeeStatus::NeedsAction]];
+                    }
+                    return [];
+                });
             } else if ($booking->isCancelled()) {
                 // Remove invited attendees
                 Attendance::where('booking_id', $booking->id)
@@ -119,12 +127,16 @@ class BookingController extends Controller
         }
         $booking->save();
 
-        if (count($invites) > 0) {
-            $booking->attendees()->syncWithPivotValues(
-                $invites,
-                ['status' => AttendeeStatus::NeedsAction],
-                false
+        if ($attendees->count() > 0) {
+            $booking->attendees()->sync(
+                $attendees->all()
             );
+            $invites = $attendees->filter(function ($meta) {
+                return $meta['status'] == AttendeeStatus::NeedsAction;
+            })->keys()->all();
+            foreach (User::find($invites) as $user) {
+                event(new BookingInvite($booking, $user));
+            }
         }
 
         return redirect()->route('booking.show', $booking)
