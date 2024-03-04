@@ -16,4 +16,8 @@
     @if ($attendee->isGuest())
         <x-badge.role :role="Role::Guest" class="text-xs" />
     @endif
+
+    @if ($attendee->is(auth()->user()))
+        <x-badge color="lime" class="text-xs">{{ __('You') }}</x-badge>
+    @endif
 </div>
