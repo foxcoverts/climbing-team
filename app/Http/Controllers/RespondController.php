@@ -43,6 +43,6 @@ class RespondController extends Controller
         ]);
 
         $request->session()->put('alert.info', __('Thank-you. Your response has been recorded.'));
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->route('booking.invite');
     }
 }
