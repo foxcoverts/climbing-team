@@ -29,8 +29,19 @@ class BookingAttendanceController extends Controller
     {
         $this->authorizeAttendance('view', $booking, $request->user());
 
-        $attendee = $booking->attendees()
-            ->find($request->user());
+        if ($request->session()->has('url.referer')) {
+            $request->session()->reflash('url.referer');
+        } else if ($request->headers->get('referer')) {
+            $referer_host = parse_url($request->headers->get('referer'), PHP_URL_HOST);
+            if ($request->getHttpHost() == $referer_host) {
+                $request->session()->flash('url.referer', $request->headers->get('referer'));
+            }
+        }
+        if (!$request->session()->has('url.referer')) {
+            $request->session()->flash('url.referer', route('booking.invite'));
+        }
+
+        $attendee = $booking->attendees()->find($request->user());
 
         return view('booking.attendance.show', [
             'booking' => $booking,
@@ -59,10 +70,9 @@ class BookingAttendanceController extends Controller
             $request->user()->id => $request->validated()
         ]);
 
-        return redirect()->back()
+        return redirect($request->session()->get('url.referer', url()->previous()))
             ->with('alert.info', __('Updated your attendance successfully.'));
     }
-
 
     protected function getGuestListAttendees(Booking $booking): Collection
     {
