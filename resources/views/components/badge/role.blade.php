@@ -3,7 +3,7 @@
 
 @switch($role)
     @case(Role::TeamLeader)
-        @php($color = 'lime')
+        @php($color = 'yellow')
     @break
 
     @case(Role::TeamMember)
