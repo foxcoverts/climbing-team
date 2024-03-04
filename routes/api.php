@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->name('api.')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
-    });
-    Route::get('/booking/invite', BookingInviteController::class);
+    })->name('user');
+    Route::get('/booking/invite', BookingInviteController::class)->name('booking.invite');
     Route::apiResource('/booking', BookingController::class);
-    Route::get('/trash/booking', TrashedBookingController::class);
+    Route::get('/trash/booking', TrashedBookingController::class)->name('trash.booking.index');
 });
