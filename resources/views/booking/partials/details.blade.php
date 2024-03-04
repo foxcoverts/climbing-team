@@ -1,5 +1,5 @@
 @props(['booking'])
-<div class="space-y-1 my-2 w-full max-w-xl flex-grow">
+<div class="space-y-2 my-2 w-full max-w-xl flex-grow">
     <p
         class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between">
         <span class="flex items-center">
@@ -8,7 +8,7 @@
         </span>
         <x-badge.booking-status :status="$booking->status" class="text-sm" />
     </p>
-    <p><dfn class="not-italic font-bold after:content-[':']">{{ __('When') }}</dfn>
+    <p><dfn class="not-italic font-medium block">{{ __('When') }}</dfn>
         @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
             {{ __(':start_date from :start_time to :end_time', [
                 'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
@@ -21,13 +21,16 @@
                 'end' => localDate($booking->end_at)->toDayDateTimeString(),
             ]) }}
         @endif
+        ({{ $booking->start_at->diffAsCarbonInterval($booking->end_at) }})
     </p>
-    <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Duration') }}</dfn>
-        {{ $booking->start_at->diffAsCarbonInterval($booking->end_at) }}</p>
-    <p><dfn class="not-italic font-bold after:content-[':']">{{ __('Group Name') }}</dfn>
+    <p><dfn class="not-italic font-medium block">{{ __('Location') }}</dfn>
+        {{ $booking->location }}</p>
+    <p><dfn class="not-italic font-medium block">{{ __('Activity') }}</dfn>
+        {{ $booking->activity }}</p>
+    <p><dfn class="not-italic font-medium block">{{ __('Group Name') }}</dfn>
         {{ $booking->group_name }}</p>
     @if (!empty($booking->notes))
-        <div><dfn class="not-italic font-bold after:content-[':']">{{ __('Notes') }}</dfn>
+        <div><dfn class="not-italic font-medium block">{{ __('Notes') }}</dfn>
             <x-markdown :text="$booking->notes" />
         </div>
     @endif
