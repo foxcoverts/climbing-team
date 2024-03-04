@@ -19,26 +19,19 @@
 
             <div x-show="open" x-cloak x-on:click.outside="open = false"
                 class="absolute left-0 -mt-px z-20 shadow-xl border border-gray-300 dark:border-gray-500 min-w-full">
-                @foreach (['accepted', 'tentative', 'declined'] as $status)
-                    <form method="post" action="{{ route('booking.attendance.update', $booking) }}">
-                        @csrf
-                        @method('PUT')
-                        <input name="status" value="{{ $status }}" type="hidden" />
-                        @if ($status == $attendance?->status->value)
-                            <button type="button" @click="open = false"
-                                class="flex gap-2 flex-nowrap items-center min-w-full px-4 py-2 text-xs uppercase font-semibold tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25">
-                                @include('booking.partials.attendance-icon')
-                                <span class="text-nowrap">{{ __("app.attendee.status.$status") }}</span>
-                            </button>
-                        @else
-                            <button
+                <form method="post" action="{{ route('booking.attendance.update', $booking) }}">
+                    @csrf
+                    @method('PUT')
+                    @foreach (['accepted', 'tentative', 'declined'] as $status)
+                        @if ($status != $attendance?->status->value)
+                            <button name="status" value="{{ $status }}"
                                 class="flex gap-2 flex-nowrap items-center min-w-full px-4 py-2 text-xs uppercase font-semibold tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25">
                                 <x-icon.empty-outline class="h-4 w-4 fill-current" />
-                                <span class="text-nowrap">{{ __("app.attendee.status.$status") }}</span>
+                                <span class="flex-grow text-left">{{ __("app.attendee.status.$status") }}</span>
                             </button>
                         @endif
-                    </form>
-                @endforeach
+                    @endforeach
+                </form>
             </div>
         </div>
     </div>
