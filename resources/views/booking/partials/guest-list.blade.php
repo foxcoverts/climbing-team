@@ -8,9 +8,11 @@
 
     @if ($attendee = $booking->attendees()->find($booking->lead_instructor))
         <h3 class="text-lg">{{ __('Lead Instructor') }}</h3>
-        <p class="mb-3 flex space-x-1 items-center">
-            @include('booking.partials.guest-list.item')
-        </p>
+        <ul class="mb-3 space-y-1">
+            <li class="flex space-x-1 items-center">
+                @include('booking.partials.guest-list.item')
+            </li>
+        </ul>
     @endif
 
     @foreach ($attendees->groupBy('attendance.status') as $status => $attendees)
