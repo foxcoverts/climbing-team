@@ -66,6 +66,8 @@ class BookingAttendeeInviteController extends Controller
             false
         );
 
+        $booking->refresh();
+
         foreach (User::find($user_ids) as $user) {
             event(new BookingInvite($booking, $user));
         }

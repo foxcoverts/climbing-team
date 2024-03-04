@@ -127,6 +127,7 @@ class BookingController extends Controller
                 $booking->attendees()->sync(
                     $attendees->all()
                 );
+                $booking->refresh();
                 $invites = $attendees->filter(function ($meta) {
                     return $meta['status'] == AttendeeStatus::NeedsAction;
                 })->keys()->all();
@@ -140,6 +141,7 @@ class BookingController extends Controller
                 Attendance::where('booking_id', $booking->id)
                     ->where('status', AttendeeStatus::NeedsAction)
                     ->delete();
+                $booking->refresh();
                 event(new BookingCancelled($booking));
             }
         }
