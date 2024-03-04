@@ -22,7 +22,7 @@ use Eluceo\iCal\Domain\ValueObject\Uri;
 use Illuminate\Support\Facades\Request;
 
 $calendar = new Calendar();
-$calendar->setMethod(CalendarMethod::Publish);
+$calendar->setMethod($method ?? CalendarMethod::Publish);
 
 $organiser = new Organizer(
     new EmailAddress('climbing@foxcoverts.org.uk'),

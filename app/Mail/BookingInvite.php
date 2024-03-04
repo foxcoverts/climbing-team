@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\iCal\Domain\Enum\CalendarMethod;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -93,6 +94,7 @@ class BookingInvite extends Mailable
             fn () => view('booking.ics', [
                 'bookings' => [$this->booking],
                 'user' => $this->attendee,
+                'method' => CalendarMethod::Request,
             ])->render(),
             'invite.ics'
         )->withMime('text/calendar');
