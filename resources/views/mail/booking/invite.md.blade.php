@@ -11,6 +11,11 @@
 **{{ __('Activity') }}**<br>
 {{ $booking->activity }}
 
+@if ($booking->lead_instructor)
+**{{ __('Lead Instructor') }}**<br>
+{{ $booking->lead_instructor->name }}
+@endif
+
 **{{ __('Group') }}**<br>
 {{ $booking->group_name }}
 

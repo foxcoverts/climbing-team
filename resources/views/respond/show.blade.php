@@ -24,6 +24,12 @@
             {{ $booking->activity }}
         </p>
 
+        @if ($booking->lead_instructor)
+            <p><dfn class="block not-italic font-medium">{{ __('Lead Instructor') }}</dfn>
+                {{ $booking->lead_instructor->name }}
+            </p>
+        @endif
+
         <p><dfn class="block not-italic font-medium">{{ __('Group') }}</dfn>
             {{ $booking->group_name }}
         </p>
