@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Accreditation;
 use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
+use App\Events\BookingCancelled;
 use App\Events\BookingConfirmed;
 use App\Events\BookingInvite;
 use App\Http\Requests\StoreBookingRequest;
@@ -139,6 +140,7 @@ class BookingController extends Controller
                 Attendance::where('booking_id', $booking->id)
                     ->where('status', AttendeeStatus::NeedsAction)
                     ->delete();
+                event(new BookingCancelled($booking));
             }
         }
 
