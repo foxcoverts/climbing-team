@@ -4,11 +4,11 @@ namespace App\iCal\Presentation\Factory;
 
 use App\iCal\Domain\Entity\Calendar;
 use App\iCal\Domain\Enum\CalendarMethod;
+use App\iCal\Presentation\Factory\EventFactory;
 use Eluceo\iCal\Presentation\Component;
 use Eluceo\iCal\Presentation\Component\Property;
 use Eluceo\iCal\Presentation\Component\Property\Value\DurationValue;
 use Eluceo\iCal\Presentation\Component\Property\Value\TextValue;
-use Eluceo\iCal\Presentation\Factory\EventFactory;
 use Eluceo\iCal\Presentation\Factory\TimeZoneFactory;
 use Generator;
 

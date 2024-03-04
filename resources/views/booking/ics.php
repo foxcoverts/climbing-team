@@ -2,10 +2,11 @@
 
 use App\Enums\AttendeeStatus;
 use App\iCal\Domain\Entity\Calendar;
+use App\iCal\Domain\Entity\Event;
 use App\iCal\Domain\Enum\CalendarMethod;
+use App\iCal\Domain\ValueObject\Sequence;
 use App\iCal\Presentation\Factory\CalendarFactory;
 use Eluceo\iCal\Domain\Entity\Attendee;
-use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\Enum\CalendarUserType;
 use Eluceo\iCal\Domain\Enum\EventStatus;
 use Eluceo\iCal\Domain\Enum\ParticipationStatus;
@@ -41,7 +42,9 @@ foreach ($bookings as $booking) {
         $description .= "\n" . $booking->notes;
     }
 
-    $event = (new Event(new UniqueIdentifier($uid)))
+    $event = new Event(new UniqueIdentifier($uid));
+    $event->setSequence(new Sequence(0));
+    $event
         ->setOccurrence(
             new TimeSpan(
                 new DateTime($booking->start_at, true),
