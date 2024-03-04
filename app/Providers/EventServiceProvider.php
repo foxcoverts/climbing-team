@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\BookingConfirmed;
 use App\Events\BookingInvite;
+use App\Listeners\SendBookingConfirmedEmail;
 use App\Listeners\SendBookingInviteEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -21,7 +23,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         BookingInvite::class => [
             SendBookingInviteEmail::class,
-        ]
+        ],
+        BookingConfirmed::class => [
+            SendBookingConfirmedEmail::class,
+        ],
     ];
 
     /**

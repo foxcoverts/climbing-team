@@ -11,10 +11,8 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Str;
 
-class BookingInvite extends Mailable
+class BookingConfirmed extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -23,7 +21,7 @@ class BookingInvite extends Mailable
      */
     public function __construct(
         public Booking $booking,
-        public User $attendee,
+        public User $attendee
     ) {
     }
 
@@ -34,13 +32,13 @@ class BookingInvite extends Mailable
     {
         return new Envelope(
             subject: __(
-                "Invitation: :activity @ :start",
+                "Confirmed: :activity @ :start",
                 [
                     'activity' => $this->booking->activity,
                     'start' => localDate($this->booking->start_at)->toFormattedDayDateString(),
                 ]
             ),
-            tags: ['invite'],
+            tags: ['confirmed'],
             metadata: [
                 'booking_id' => $this->booking->id,
             ]
@@ -53,10 +51,10 @@ class BookingInvite extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.booking.invite',
+            markdown: 'mail.booking.confirmed',
             with: [
                 'date' => $this->dateString(),
-                'url' => URL::signedRoute('respond', [$this->booking, $this->attendee]),
+                'url' => route('booking.show', [$this->booking]),
             ]
         );
     }
