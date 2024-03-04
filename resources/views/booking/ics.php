@@ -1,8 +1,10 @@
 <?php
 
 use App\Enums\AttendeeStatus;
+use App\iCal\Domain\Entity\Calendar;
+use App\iCal\Domain\Enum\CalendarMethod;
+use App\iCal\Presentation\Factory\CalendarFactory;
 use Eluceo\iCal\Domain\Entity\Attendee;
-use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\Enum\CalendarUserType;
 use Eluceo\iCal\Domain\Enum\EventStatus;
@@ -16,10 +18,10 @@ use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Domain\ValueObject\Uri;
-use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use Illuminate\Support\Facades\Request;
 
 $calendar = new Calendar();
+$calendar->setMethod(CalendarMethod::Publish);
 
 $organiser = new Organizer(
     new EmailAddress('climbing@foxcoverts.org.uk'),
@@ -115,5 +117,5 @@ foreach ($bookings as $booking) {
     $calendar->addEvent($event);
 }
 
-$componentFactory = new CalendarFactory();
-echo $componentFactory->createCalendar($calendar);
+$calendarFactory = new CalendarFactory();
+echo $calendarFactory->createCalendar($calendar);
