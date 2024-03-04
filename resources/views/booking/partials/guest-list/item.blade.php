@@ -2,16 +2,18 @@
 @use(App\Enums\Role)
 @props(['booking', 'attendee'])
 
-@can('view', $attendee->attendance)
-    <a href="{{ route('booking.attendee.show', [$booking, $attendee]) }}">{{ $attendee->name }}</a>
-@else
-    <span>{{ $attendee->name }}</span>
-@endcan
+<div x-data @click="if ($refs.link) window.location = $refs.link.href;" :class="{ 'cursor-pointer': $refs.link }">
+    @can('view', $attendee->attendance)
+        <a href="{{ route('booking.attendee.show', [$booking, $attendee]) }}" x-ref="link">{{ $attendee->name }}</a>
+    @else
+        <span>{{ $attendee->name }}</span>
+    @endcan
 
-@if ($attendee->isPermitHolder())
-    <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-xs" />
-@endif
+    @if ($attendee->isPermitHolder())
+        <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-xs" />
+    @endif
 
-@if ($attendee->isGuest())
-    <x-badge.role :role="Role::Guest" class="text-xs" />
-@endif
+    @if ($attendee->isGuest())
+        <x-badge.role :role="Role::Guest" class="text-xs" />
+    @endif
+</div>
