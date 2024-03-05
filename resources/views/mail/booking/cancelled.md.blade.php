@@ -2,6 +2,10 @@
 
 # {{ __('Booking Cancelled') }}
 
+<x-mail::panel>
+{{ __('This booking has been cancelled.') }}
+</x-mail::panel>
+
 **{{ __('When') }}**<br>
 {{ $date }}
 

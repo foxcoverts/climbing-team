@@ -33,7 +33,7 @@ class BookingCancelled extends Mailable
     {
         return new Envelope(
             subject: __(
-                "Cancelled: :activity @ :start",
+                "Cancelled invitation: :activity @ :start",
                 [
                     'activity' => $this->booking->activity,
                     'start' => localDate($this->booking->start_at)->toFormattedDayDateString(),
