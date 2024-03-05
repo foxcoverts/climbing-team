@@ -89,7 +89,7 @@ foreach ($bookings as $booking) {
             ->setCalendarUserType(CalendarUserType::INDIVIDUAL())
             ->setDisplayName($attendee->name);
 
-        if ($attendee->hasVerifiedEmail()) {
+        if ($attendee->hasVerifiedEmail() && isset($method) && ($method === CalendarMethod::Request)) {
             $evAttendee->setResponseNeededFromAttendee(true);
         }
 
