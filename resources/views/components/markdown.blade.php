@@ -1,3 +1,4 @@
+@props(['text' => $slot])
 {!! Str::markdown($text, [
     'renderer' => [
         'block_separator' => "\n",

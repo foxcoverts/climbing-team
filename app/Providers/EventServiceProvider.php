@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Events\BookingCancelled;
+use App\Events\BookingChanged;
 use App\Events\BookingConfirmed;
 use App\Events\BookingInvite;
 use App\Listeners\SendBookingCancelledEmail;
+use App\Listeners\SendBookingChangedEmail;
 use App\Listeners\SendBookingConfirmedEmail;
 use App\Listeners\SendBookingInviteEmail;
 use Illuminate\Auth\Events\Registered;
@@ -25,6 +27,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         BookingInvite::class => [
             SendBookingInviteEmail::class,
+        ],
+        BookingChanged::class => [
+            SendBookingChangedEmail::class,
         ],
         BookingConfirmed::class => [
             SendBookingConfirmedEmail::class,

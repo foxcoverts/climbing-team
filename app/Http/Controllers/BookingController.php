@@ -6,6 +6,7 @@ use App\Enums\Accreditation;
 use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
 use App\Events\BookingCancelled;
+use App\Events\BookingChanged;
 use App\Events\BookingConfirmed;
 use App\Events\BookingInvite;
 use App\Http\Requests\StoreBookingRequest;
@@ -144,6 +145,8 @@ class BookingController extends Controller
                 $booking->refresh();
                 event(new BookingCancelled($booking));
             }
+        } else if ($booking->wasChanged(['start_at', 'end_at'])) {
+            event(new BookingChanged($booking, $booking->getChanges()));
         }
 
         return redirect()->route('booking.show', $booking)
