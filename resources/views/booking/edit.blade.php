@@ -94,14 +94,20 @@
                     </div>
 
                     <div class="space-y-1">
-                        <x-input-label for="lead_instructor" :value="__('Lead Instructor')" />
                         @if ($instructors_attending->isEmpty())
+                            <p class="block not-italic font-bold after:content-[':'] text-gray-900 dark:text-gray-100">
+                                {{ __('Lead Instructor') }}</p>
                             <p>{{ __('No instructors are going to this booking yet.') }}</p>
                         @elseif ($booking->isCancelled())
-                            <input type="text" class="mt-1 block" value="{{ $booking->lead_instructor?->name }}"
-                                placeholder="{{ __('No lead instructor') }}" readonly />
+                            <p class="block not-italic font-bold after:content-[':'] text-gray-900 dark:text-gray-100">
+                                {{ __('Lead Instructor') }}</p>
+                            <div
+                                class="form-input border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                {{ __('No lead instructor') }}
+                            </div>
                         @else
-                            <x-select-input id="lead_instructor" name="lead_instructor_id" class="mt-1 block"
+                            <x-input-label for="lead_instructor_id" :value="__('Lead Instructor')" />
+                            <x-select-input id="lead_instructor_id" name="lead_instructor_id" class="mt-1 block"
                                 x-model.fill="booking.lead_instructor_id" :value="$booking->lead_instructor_id">
                                 @if (is_null($booking->lead_instructor) || $booking->isTentative())
                                     <option value="" @selected(is_null($booking->lead_instructor))>{{ __('No lead instructor') }}
