@@ -76,7 +76,7 @@ foreach ($bookings as $booking) {
             break;
     }
 
-    foreach ($booking->attendees as $attendee) {
+    if ($attendee = $booking->attendees->find($user)) {
         $emailAddress = new EmailAddress(sprintf('%s@%s', $attendee->id, $domain));
         if ($attendee->is($user)) {
             try {
