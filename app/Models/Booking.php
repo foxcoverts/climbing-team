@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Sequence;
 use App\Enums\BookingStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
 {
-    use HasFactory, HasUlids, SoftDeletes;
+    use HasFactory, HasUlids, SoftDeletes, Concerns\HasSequence;
 
     /**
      * The attributes that are mass assignable.
@@ -53,7 +54,20 @@ class Booking extends Model
         'start_at' => 'datetime',
         'end_at' => 'datetime',
         'status' => BookingStatus::class,
+        'sequence' => Sequence::class,
     ];
+
+    /**
+     * The attributes that cause the `sequence` to increase.
+     */
+    protected function sequenced(): array
+    {
+        return [
+            'start_at',
+            'end_at',
+            'status'
+        ];
+    }
 
     protected function getStartDateAttribute()
     {

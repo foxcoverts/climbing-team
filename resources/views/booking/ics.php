@@ -43,7 +43,7 @@ foreach ($bookings as $booking) {
     }
 
     $event = new Event(new UniqueIdentifier($uid));
-    $event->setSequence(new Sequence(0));
+    $event->setSequence(new Sequence($booking->sequence));
     $event
         ->setOccurrence(
             new TimeSpan(
