@@ -56,8 +56,17 @@ class BookingInvite extends Mailable
         return new Content(
             markdown: 'mail.booking.invite',
             with: [
-                'date' => $this->dateString(),
-                'url' => URL::signedRoute('respond', [$this->booking, $this->attendee]),
+                'title' => __('Invitation'),
+                'change_summary' => '',
+                'when' => $this->dateString(),
+                'when_changed' => '',
+                'location_changed' => '',
+                'activity_changed' => '',
+                'lead_instructor_changed' => '',
+                'group_changed' => '',
+                'notes_changed' => '',
+                'button_label' => __('Respond'),
+                'button_url' => URL::signedRoute('respond', [$this->booking, $this->attendee]),
             ]
         );
     }

@@ -53,7 +53,7 @@ class BookingChanged extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.booking.changed',
+            markdown: 'mail.booking.invite',
             with: [
                 'title' => __('Booking Changed'),
                 'change_summary' => $this->changeSummary(),

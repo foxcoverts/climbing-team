@@ -1,31 +1,40 @@
 <x-mail::message>
 
-# {{ __('Invitation') }}
+# {{ $title }}
 
-**{{ __('When') }}**<br>
-{{ $date }}
+@if (!empty($change_summary))
+<x-mail::panel>
+**{{ __('This booking has been updated') }}**<br>
+**{{ __('Changes') }}:** {{ $change_summary }}.
+</x-mail::panel>
+@endif
 
-**{{ __('Location') }}**<br>
+**{{ __('When') }}**{{ $when_changed }}<br>
+{{ $when }}
+
+**{{ __('Location') }}**{{ $location_changed }}<br>
 {{ $booking->location }}
 
-**{{ __('Activity') }}**<br>
+**{{ __('Activity') }}**{{ $activity_changed }}<br>
 {{ $booking->activity }}
 
 @if ($booking->lead_instructor)
-**{{ __('Lead Instructor') }}**<br>
+**{{ __('Lead Instructor') }}**{{ $lead_instructor_changed }}<br>
 {{ $booking->lead_instructor->name }}
 @endif
 
-**{{ __('Group') }}**<br>
+**{{ __('Group') }}**{{ $group_changed }}<br>
 {{ $booking->group_name }}
 
 @if ($booking->notes)
-**{{ __('Notes') }}**<br>
+<x-markdown>
+**{{ __('Notes') }}**{{ $notes_changed }}<br>
 {{ $booking->notes }}
+</x-markdown>
 @endif
 
-<x-mail::button :url="$url">
-{{ __('Respond' )}}
+<x-mail::button :url="$button_url">
+{{ $button_label }}
 </x-mail::button>
 
 {{ __('Thanks,') }}<br>
