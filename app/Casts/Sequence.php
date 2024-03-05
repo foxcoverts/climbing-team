@@ -25,7 +25,7 @@ class Sequence implements CastsAttributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): array
     {
-        if ($value < $attributes[$key]) {
+        if (array_key_exists($key, $attributes) && ($value < $attributes[$key])) {
             throw new InvalidArgumentException("Attribute `$key` may not be decreased. Was: $attributes[$key]. Given: $value.");
         }
         if ($value < 0) {
