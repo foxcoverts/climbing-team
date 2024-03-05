@@ -9,6 +9,11 @@
 </x-mail::panel>
 @endif
 
+@if ($status_changed != '')
+**{{ __('Status') }}**{{ $status_changed }}<br>
+{{ __("app.booking.status.{$booking->status->value}") }}
+@endif
+
 **{{ __('When') }}**{{ $when_changed }}<br>
 {{ $when }}
 

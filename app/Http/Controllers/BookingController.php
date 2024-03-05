@@ -136,7 +136,7 @@ class BookingController extends Controller
                     event(new BookingInvite($booking, $user));
                 }
             } else if ($booking->isConfirmed()) {
-                event(new BookingConfirmed($booking));
+                event(new BookingConfirmed($booking, $booking->getChanges()));
             } else if ($booking->isCancelled()) {
                 // Remove attendees with outstanding invites.
                 Attendance::where('booking_id', $booking->id)

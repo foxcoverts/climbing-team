@@ -58,6 +58,7 @@ class BookingInvite extends Mailable
             with: [
                 'title' => __('Invitation'),
                 'change_summary' => '',
+                'status_changed' => '',
                 'when' => $this->dateString(),
                 'when_changed' => '',
                 'location_changed' => '',

@@ -19,7 +19,8 @@ class BookingConfirmed
      * Create a new event instance.
      */
     public function __construct(
-        public Booking $booking
+        public Booking $booking,
+        public array $changes,
     ) {
     }
 

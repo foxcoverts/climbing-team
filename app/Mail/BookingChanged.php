@@ -57,6 +57,8 @@ class BookingChanged extends Mailable
             with: [
                 'title' => __('Booking Changed'),
                 'change_summary' => $this->changeSummary(),
+                'status_changed' => array_key_exists('status', $this->changes)
+                    ? ' (changed)' : '',
                 'when' => $this->dateString(),
                 'when_changed' => array_key_exists('start_at', $this->changes) || array_key_exists('end_at', $this->changes)
                     ? ' (changed)' : '',
@@ -79,6 +81,7 @@ class BookingChanged extends Mailable
     protected function changeSummary(): string
     {
         $labels = [
+            'status' => __('Status'),
             'start_at' => __('When'),
             'end_at' => __('When'),
             'location' => __('Location'),

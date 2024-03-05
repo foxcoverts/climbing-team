@@ -15,14 +15,12 @@ class SendBookingConfirmedEmail
     public function handle(BookingConfirmed $event): void
     {
         foreach ($event->booking->attendees as $attendee) {
-            if (in_array($attendee->attendance->status, [
-                AttendeeStatus::Accepted,
-                AttendeeStatus::Tentative
-            ])) {
+            if ($attendee->attendance->status !== AttendeeStatus::Declined) {
                 Mail::to($attendee->email)
                     ->send(new MailBookingConfirmed(
                         $event->booking,
-                        $attendee
+                        $attendee,
+                        $event->changes
                     ));
             }
         }
