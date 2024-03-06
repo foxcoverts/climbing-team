@@ -2,10 +2,10 @@
 
 # {{ $title }}
 
-@if (!empty($change_summary))
+@if (!empty($changed_summary))
 <x-mail::panel>
 **{{ __('This booking has been updated') }}**<br>
-**{{ __('Changes') }}:** {{ $change_summary }}.
+**{{ __('Changes') }}:** {{ $changed_summary }}.
 </x-mail::panel>
 @endif
 

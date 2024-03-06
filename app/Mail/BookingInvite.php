@@ -25,7 +25,18 @@ class BookingInvite extends Mailable
     public function __construct(
         public Booking $booking,
         public User $attendee,
+        public array $changes = [],
     ) {
+    }
+
+    /**
+     * The subject line for the email.
+     *
+     * Will be translated with `:activity` and `:start` passed in.
+     */
+    public function getSubject(): string
+    {
+        return 'Invitation: :activity @ :start';
     }
 
     /**
@@ -35,7 +46,7 @@ class BookingInvite extends Mailable
     {
         return new Envelope(
             subject: __(
-                "Invitation: :activity @ :start",
+                $this->getSubject(),
                 [
                     'activity' => $this->booking->activity,
                     'start' => localDate($this->booking->start_at)->toFormattedDayDateString(),
@@ -49,30 +60,104 @@ class BookingInvite extends Mailable
     }
 
     /**
+     * The title line in the body of the email
+     */
+    public function getTitle(): string
+    {
+        return 'Invitation';
+    }
+
+    /**
+     * The label for the call to action button.
+     */
+    public function getButtonLabel(): string
+    {
+        return 'Respond';
+    }
+
+    /**
+     * The URL for the call to action button.
+     */
+    public function getButtonUrl(): string
+    {
+        return URL::signedRoute('respond', [$this->booking, $this->attendee]);
+    }
+
+    /**
      * Get the message content definition.
      */
     public function content(): Content
     {
         return new Content(
             markdown: 'mail.booking.invite',
-            with: [
-                'title' => __('Invitation'),
-                'change_summary' => '',
-                'status_changed' => '',
-                'when' => $this->dateString(),
-                'when_changed' => '',
-                'location_changed' => '',
-                'activity_changed' => '',
-                'lead_instructor_changed' => '',
-                'group_changed' => '',
-                'notes_changed' => '',
-                'button_label' => __('Respond'),
-                'button_url' => URL::signedRoute('respond', [$this->booking, $this->attendee]),
-            ]
+            with: array_merge([
+                'title' => __($this->getTitle()),
+                'changed_summary' => $this->buildChangedSummary(),
+                'when' => $this->buildDateString(),
+                'button_label' => __($this->getButtonLabel()),
+                'button_url' => $this->getButtonUrl(),
+            ], $this->buildChangedList())
         );
     }
 
-    protected function dateString(): string
+    protected function buildChangedList(): array
+    {
+        $label = ' (' . __('changed') . ')';
+
+        $fields = [
+            'status',
+            'start_at' => 'when',
+            'end_at' => 'when',
+            'location',
+            'activity',
+            'lead_instructor_id' => 'lead_instructor',
+            'group_name' => 'group',
+            'notes',
+        ];
+
+        $changed_list = [];
+
+        foreach ($fields as $value) {
+            $changed_key = $value . '_changed';
+            $changed_list[$changed_key] = '';
+        }
+
+        foreach ($fields as $key => $value) {
+            $changed_key = $value . '_changed';
+            if (array_key_exists($key, $this->changes) || array_key_exists($value, $this->changes)) {
+                $changed_list[$changed_key] = $label;
+            }
+        }
+
+        return $changed_list;
+    }
+
+    protected function buildChangedSummary(): string
+    {
+        $labels = [
+            'status' => __('Status'),
+            'start_at' => __('When'),
+            'end_at' => __('When'),
+            'location' => __('Location'),
+            'activity' => __('Activity'),
+            'lead_instructor_id' => __('Lead Instructor'),
+            'group_name' => __('Group'),
+            'notes' => __('Notes'),
+        ];
+
+        return collect($this->changes)
+            ->map(function ($value, $key) use ($labels) {
+                if (array_key_exists($key, $labels)) {
+                    return $labels[$key];
+                }
+                return null;
+            })
+            ->filter()
+            ->unique()
+            ->join(', ', ' and ');
+    }
+
+    protected function buildDateString(): string
     {
         if (localDate($this->booking->start_at)->isSameDay(localDate($this->booking->end_at))) {
             return __(':start_date from :start_time to :end_time', [
