@@ -155,8 +155,12 @@
                             <p class="block not-italic font-bold after:content-[':'] text-gray-900 dark:text-gray-100">
                                 {{ __('Lead Instructor') }}</p>
                             <div
-                                class="form-input border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                {{ __('No lead instructor') }}
+                                class="form-input cursor-default border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                @if ($booking->lead_instructor)
+                                    {{ $booking->lead_instructor->name }}
+                                @else
+                                    {{ __('No lead instructor.') }}
+                                @endif
                             </div>
                         @else
                             <x-input-label for="lead_instructor_id" :value="__('Lead Instructor')" />
