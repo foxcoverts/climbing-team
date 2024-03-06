@@ -177,6 +177,43 @@ class BookingInvite extends Mailable
         }
     }
 
+    /**
+     * The method for the calendar attachment.
+     */
+    public function getCalendarMethod(): CalendarMethod
+    {
+        return CalendarMethod::Request;
+    }
+
+    protected function getCalendarMethodAsString(): string
+    {
+        switch ($this->getCalendarMethod()) {
+            case CalendarMethod::Add:
+                return 'ADD';
+
+            case CalendarMethod::Cancel:
+                return 'CANCEL';
+
+            case CalendarMethod::Counter:
+                return 'COUNTER';
+
+            case CalendarMethod::DeclineCounter:
+                return 'DECLINECOUNTER';
+
+            case CalendarMethod::Publish:
+                return 'PUBLISH';
+
+            case CalendarMethod::Refresh:
+                return 'REFRESH';
+
+            case CalendarMethod::Reply:
+                return 'REPLY';
+
+            case CalendarMethod::Request:
+                return 'REQUEST';
+        }
+    }
+
     protected function attachCalendarData(Email $message): void
     {
         // We need to include the calendar data in two different ways to
@@ -184,6 +221,7 @@ class BookingInvite extends Mailable
         //  as an inline 'alternative' part of the email, and others expect it
         //  as an 'attachment'.
         $icsData = $this->buildCalendarData();
+        $icsMethod = $this->getCalendarMethodAsString();
 
         // Ideally the inline data would be an 'alternative' part, before the
         //  HTML, but that requires manually handling all the email parts.
@@ -193,7 +231,7 @@ class BookingInvite extends Mailable
             'Content-Type',
             'text/calendar',
             [
-                'method' => 'REQUEST',
+                'method' => $icsMethod,
                 'charset' => 'utf-8',
             ]
         );
@@ -207,7 +245,7 @@ class BookingInvite extends Mailable
             'Content-Type',
             'text/calendar',
             [
-                'method' => 'REQUEST',
+                'method' => $icsMethod,
                 'charset' => 'utf-8',
                 'name' => 'invite.ics',
             ]
@@ -220,7 +258,7 @@ class BookingInvite extends Mailable
         return view('booking.ics', [
             'bookings' => [$this->booking],
             'user' => $this->attendee,
-            'method' => CalendarMethod::Request,
+            'method' => $this->getCalendarMethod(),
         ])->render();
     }
 }

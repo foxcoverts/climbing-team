@@ -1,13 +1,13 @@
 <x-mail::message>
 
-# {{ __('Booking Cancelled') }}
+# {{ $title }}
 
 <x-mail::panel>
 {{ __('This booking has been cancelled.') }}
 </x-mail::panel>
 
 **{{ __('When') }}**<br>
-{{ $date }}
+{{ $when }}
 
 **{{ __('Location') }}**<br>
 {{ $booking->location }}
