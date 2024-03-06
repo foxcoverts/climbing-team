@@ -12,19 +12,20 @@
             <thead>
                 <tr>
                     <th
-                        class="px-1 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
+                        class="px-2 py-1 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
                         {{ __('Name') }}</th>
-                    <th class="px-1 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300"
+                    <th class="px-2 py-1 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell"
                         width="1">
                         {{ __('Active') }}</th>
-                    <th class="px-1 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300"
+                    <th class="px-2 py-1 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300"
                         width="1">Role</th>
                     @foreach (Accreditation::cases() as $accreditation)
                         <th @class([
-                            'px-1 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300',
-                            'hidden md:table-cell' => in_array($accreditation, [
-                                Accreditation::ManageUsers,
+                            'px-2 py-1 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden',
+                            'sm:table-cell' => in_array($accreditation, [Accreditation::PermitHolder]),
+                            'md:table-cell' => in_array($accreditation, [
                                 Accreditation::ManageBookings,
+                                Accreditation::ManageUsers,
                             ]),
                         ]) width="1">
                             {{ __("app.user.accreditation.{$accreditation->value}") }}</th>
@@ -35,16 +36,19 @@
                 @foreach ($users as $user)
                     <tr class="hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                         @click="window.location='{{ route('user.show', $user) }}'">
-                        <td class="px-1"><a href="{{ route('user.show', $user) }}">{{ $user->name }}</a></td>
-                        <td class="px-1 text-center"><x-badge.active :active="$user->isActive()" class="text-sm text-nowrap" />
+                        <td class="px-2 py-1"><a href="{{ route('user.show', $user) }}">{{ $user->name }}</a></td>
+                        <td class="px-2 py-1 text-center hidden sm:table-cell"><x-badge.active :active="$user->isActive()"
+                                class="text-sm text-nowrap" />
                         </td>
-                        <td class="px-1 text-center"><x-badge.role :role="$user->role" class="text-sm text-nowrap" /></td>
+                        <td class="px-2 py-1 text-center"><x-badge.role :role="$user->role" class="text-sm text-nowrap" />
+                        </td>
                         @foreach (Accreditation::cases() as $accreditation)
                             <td @class([
-                                'px-1',
-                                'hidden md:table-cell' => in_array($accreditation, [
-                                    Accreditation::ManageUsers,
+                                'px-2 py-1 hidden',
+                                'sm:table-cell' => in_array($accreditation, [Accreditation::PermitHolder]),
+                                'md:table-cell' => in_array($accreditation, [
                                     Accreditation::ManageBookings,
+                                    Accreditation::ManageUsers,
                                 ]),
                             ])>
                                 @if ($user->accreditations->contains($accreditation))
