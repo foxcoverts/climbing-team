@@ -6,12 +6,12 @@ use App\Events\BookingCancelled;
 use App\Events\BookingChanged;
 use App\Events\BookingConfirmed;
 use App\Events\BookingInvite;
+use App\Events\Registered;
 use App\Listeners\SendBookingCancelledEmail;
 use App\Listeners\SendBookingChangedEmail;
 use App\Listeners\SendBookingConfirmedEmail;
 use App\Listeners\SendBookingInviteEmail;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use App\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider

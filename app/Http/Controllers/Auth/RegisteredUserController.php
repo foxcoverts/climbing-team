@@ -4,16 +4,18 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enums\Accreditation;
 use App\Enums\Role;
+use App\Events\Registered;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class RegisteredUserController extends Controller
 {
@@ -52,6 +54,51 @@ class RegisteredUserController extends Controller
         ];
 
         event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function edit(User $user): View
+    {
+        if ($user->password != '') {
+            abort(Response::HTTP_FORBIDDEN, 'Invitation expired');
+        }
+
+        return view('auth.setup-account', [
+            'user' => $user,
+        ]);
+    }
+
+    public function update(Request $request, User $user): RedirectResponse
+    {
+        if ($user->password != '') {
+            abort(Response::HTTP_FORBIDDEN, 'Invitation expired');
+        }
+
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'timezone' => ['required', 'string', 'max:100', 'timezone:all'],
+        ]);
+
+        $user->forceFill([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'timezone' => $request->timezone,
+            'email_verified_at' => $user->freshTimestamp(),
+        ]);
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+        $user->save();
+
+        if ($user->wasChanged('email')) {
+            $user->sendEmailVerificationNotification();
+        }
 
         Auth::login($user);
 

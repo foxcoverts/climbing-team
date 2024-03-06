@@ -1,10 +1,10 @@
 @use('App\Enums\Accreditation')
 @use('App\Enums\Role')
-<x-layout.app :title="__('Create User')">
+<x-layout.app :title="__('Add User')">
     <section class="p-4 sm:p-8 max-w-xl">
         <header>
             <h2 class="text-3xl font-medium text-gray-900 dark:text-gray-100">
-                {{ __('Create User') }}
+                @lang('Add User')
             </h2>
         </header>
 
@@ -38,12 +38,13 @@
                 <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" maxlength="255"
                     required x-model="user.email" />
                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            </div>
 
-                @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
-                    <div class="text-sm mt-2 text-blue-800 dark:text-blue-200">
-                        {{ __('This user will be asked to verify this email address.') }}
-                    </div>
-                @endif
+            <div>
+                <x-fake-label :value="__('Password')" />
+                <p class="mt-1 text-blue-800 dark:text-blue-200">
+                    @lang('The user will be asked to set their own password.')
+                </p>
             </div>
 
             <div>

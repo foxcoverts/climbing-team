@@ -5,8 +5,9 @@ namespace App\Models;
 use App\Casts\Timezone;
 use App\Enums\Accreditation;
 use App\Enums\Role;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use App\Notifications\SetupAccount;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -149,5 +150,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isUserManager(): bool
     {
         return $this->accreditations->contains(Accreditation::ManageUsers);
+    }
+
+    public function sendAccountSetupNotification()
+    {
+        $this->notify(new SetupAccount);
     }
 }

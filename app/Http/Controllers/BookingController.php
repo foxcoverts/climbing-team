@@ -63,8 +63,6 @@ class BookingController extends Controller
     {
         $booking = Booking::create($request->validated());
 
-        // event(new Registered($booking));
-
         return redirect()->route('booking.show', $booking)
             ->with('alert.info', __('Booking created successfully'));
     }
