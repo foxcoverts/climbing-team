@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Booking;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('booking_user', function (Blueprint $table) {
-            $table->foreignUlid('booking_id')->constrained();
-            $table->foreignUlid('user_id')->constrained();
+            $table->foreignUlid('booking_id')->constrained()->cascadeOnDelete();
+            $table->foreignUlid('user_id')->constrained()->cascadeOnDelete();
             $table->enum('status', ['accepted', 'tentative', 'declined', 'needs-action'])
                 ->default('needs-action');
             $table->timestamps(6);

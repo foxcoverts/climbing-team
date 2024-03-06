@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_accreditations', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('user_id')->constrained();
+            $table->foreignUlid('user_id')->constrained()->cascadeOnDelete();
             $table->enum('accreditation', ['manage-bookings', 'manage-users']);
             $table->timestamps();
 

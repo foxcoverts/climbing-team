@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('bookings', function (Blueprint $table) {
             $table->foreignUlid('lead_instructor_id')->nullable()->constrained(
                 table: 'users',
-            );
+            )->nullOnDelete();
         });
     }
 
