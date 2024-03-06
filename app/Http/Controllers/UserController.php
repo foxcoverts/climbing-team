@@ -53,7 +53,12 @@ class UserController extends Controller
                 ['password' => '']
             )
         );
-        $user->accreditations = $request->safe()->accreditations;
+
+        if ($request->safe()->has('accreditations')) {
+            $user->accreditations = $request->safe()->accreditations;
+        } else {
+            $user->accreditations = [];
+        }
 
         event(new Registered($user));
 
@@ -99,7 +104,11 @@ class UserController extends Controller
             $user->sendEmailVerificationNotification();
         }
 
-        $user->accreditations = $request->safe()->accreditations;
+        if ($request->safe()->has('accreditations')) {
+            $user->accreditations = $request->safe()->accreditations;
+        } else {
+            $user->accreditations = [];
+        }
 
         return redirect()->route('user.show', $user)
             ->with('alert.info', __('User updated successfully'));
