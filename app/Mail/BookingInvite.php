@@ -13,7 +13,8 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Str;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\DataPart;
 
 class BookingInvite extends Mailable
 {
@@ -55,6 +56,9 @@ class BookingInvite extends Mailable
             tags: ['invite'],
             metadata: [
                 'booking_id' => $this->booking->id,
+            ],
+            using: [
+                fn (Email $message) => $this->attachCalendarData($message),
             ]
         );
     }
@@ -173,25 +177,50 @@ class BookingInvite extends Mailable
         }
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
+    protected function attachCalendarData(Email $message): void
     {
-        return [$this->ical()];
+        // We need to include the calendar data in two different ways to
+        //  satisfy different email & calendar clients. Some expect the data
+        //  as an inline 'alternative' part of the email, and others expect it
+        //  as an 'attachment'.
+        $icsData = $this->buildCalendarData();
+
+        // Ideally the inline data would be an 'alternative' part, before the
+        //  HTML, but that requires manually handling all the email parts.
+        $icsInline = new DataPart($icsData, contentType: 'text/calendar');
+        $icsInline->asInline();
+        $icsInline->getHeaders()->addParameterizedHeader(
+            'Content-Type',
+            'text/calendar',
+            [
+                'method' => 'REQUEST',
+                'charset' => 'utf-8',
+            ]
+        );
+        $message->addPart($icsInline);
+
+        // The attachment has filenames and is not 'inline'. This could be
+        //  handled by the Laravel `attachments` function, but is included here
+        //  to keep both representations together in a similar format.
+        $icsDownload = new DataPart($icsData, filename: 'invite.ics', contentType: 'text/calendar');
+        $icsDownload->getHeaders()->addParameterizedHeader(
+            'Content-Type',
+            'text/calendar',
+            [
+                'method' => 'REQUEST',
+                'charset' => 'utf-8',
+                'name' => 'invite.ics',
+            ]
+        );
+        $message->addPart($icsDownload);
     }
 
-    protected function ical(): Attachment
+    protected function buildCalendarData(): string
     {
-        return Attachment::fromData(
-            fn () => view('booking.ics', [
-                'bookings' => [$this->booking],
-                'user' => $this->attendee,
-                'method' => CalendarMethod::Request,
-            ])->render(),
-            'invite.ics'
-        )->withMime('text/calendar');
+        return view('booking.ics', [
+            'bookings' => [$this->booking],
+            'user' => $this->attendee,
+            'method' => CalendarMethod::Request,
+        ])->render();
     }
 }
