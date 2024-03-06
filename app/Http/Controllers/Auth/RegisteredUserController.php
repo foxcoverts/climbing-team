@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\Accreditation;
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -42,7 +44,12 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'timezone' => $request->timezone,
+            'role' => Role::TeamLeader,
         ]);
+        $user->accreditations = [
+            Accreditation::ManageBookings,
+            Accreditation::ManageUsers,
+        ];
 
         event(new Registered($user));
 
