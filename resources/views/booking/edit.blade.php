@@ -77,6 +77,7 @@
                                 <input type="checkbox" name="_status" checked disabled required />
                                 <span>@lang('This booking has been confirmed.')</span>
                             </label>
+                            <x-input-error :messages="$errors->get('status')" />
                         </div>
                     @endif
                     <div class="flex gap-6" x-data="{

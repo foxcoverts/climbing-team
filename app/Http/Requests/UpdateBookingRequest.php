@@ -31,8 +31,18 @@ class UpdateBookingRequest extends FormRequest
                 'sometimes', 'nullable', 'ulid', Rule::exists(User::class, 'id')
             ],
 
-            // Status is updated in secret ways.
-            'status' => ['sometimes', 'required', Rule::enum(BookingStatus::class)],
+            'status' => [
+                'sometimes', 'required',
+                Rule::enum(BookingStatus::class)
+                    ->when(
+                        $this->booking->isConfirmed(),
+                        fn ($rule) => $rule->except(BookingStatus::Tentative)
+                    )
+                    ->when(
+                        $this->booking->isCancelled(),
+                        fn ($rule) => $rule->except(BookingStatus::Confirmed)
+                    )
+            ],
         ];
     }
 
