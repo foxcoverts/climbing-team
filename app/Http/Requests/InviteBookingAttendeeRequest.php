@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class InviteBookingAttendeeRequest extends FormRequest
 {
@@ -14,7 +16,7 @@ class InviteBookingAttendeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_ids.*' => ['alphanum'],
+            'user_ids.*' => ['required', Rule::exists(User::class, 'id')],
         ];
     }
 }

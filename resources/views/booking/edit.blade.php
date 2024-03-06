@@ -58,7 +58,8 @@
                             @else
                                 <p>
                                     {{ __('Before you confirm this booking you should ensure that there are enough instructors attending. It is also recommended that you have chosen a ') }}
-                                    <a href="#lead_instructor_id">{{ __('Lead Instructor') }}</a>.
+                                    <a href="#lead_instructor_id"
+                                        class="hover:underline">{{ __('Lead Instructor') }}</a>.
                                 </p>
                                 <label class="mt-1 w-full flex space-x-1 items-center">
                                     <input type="checkbox" id="status" name="status"

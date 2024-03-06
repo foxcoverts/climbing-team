@@ -10,7 +10,7 @@
             <div class="flex-grow my-2" x-data="{ form: {} }">
                 <div class="space-y-1">
                     <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
-                        {{ __('Attendance') }}</h3>
+                        @lang('Attendance')</h3>
 
                     <div>
                         <x-fake-label :value="__('Attendee')" />
@@ -24,17 +24,17 @@
                             @method('PUT')
 
                             <div>
-                                <x-input-label for="status" :value="__('Status')"
+                                <x-input-label for="status" :value="__('Availability')"
                                     class="not-italic font-bold after:content-[':']" />
                                 <x-select-input id="status" name="status" class="mt-1 block" required
                                     :value="old('status', $attendee->attendance->status)" x-model.fill="form.status">
                                     @if ($attendee->attendance->status == AttendeeStatus::NeedsAction)
                                         <option value="" selected disabled>
-                                            {{ __('app.attendee.status.' . AttendeeStatus::NeedsAction->value) }}
+                                            @lang('app.attendee.status.' . AttendeeStatus::NeedsAction->value)
                                         </option>
                                     @endif
                                     <x-select-input.enum :options="AttendeeStatus::class" lang="app.attendee.status.:value"
-                                        :except="[AttendeeStatus::NeedsAction]" />
+                                        :except="AttendeeStatus::NeedsAction" />
                                 </x-select-input>
                                 <x-input-error class="mt-2" :messages="$errors->get('status')" />
                             </div>
@@ -55,7 +55,7 @@
                 <footer class="flex items-center gap-4 mt-4">
                     @if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('update', $attendee->attendance))
                         <x-button.primary form="update-attendance" x-bind:disabled="form.status == ''">
-                            {{ __('Update') }}
+                            @lang('Update')
                         </x-button.primary>
                     @endif
                     @can('delete', $attendee->attendance)
@@ -63,16 +63,12 @@
                             @csrf
                             @method('delete')
                             <x-button.danger>
-                                @if ($attendee->attendance->needsAction())
-                                    {{ __('Remove') }}
-                                @else
-                                    {{ __('Remove') }}
-                                @endif
+                                @lang('Remove')
                             </x-button.danger>
                         </form>
                     @endcan
                     <x-button.secondary :href="route('booking.show', $booking)">
-                        {{ __('Back') }}
+                        @lang('Back')
                     </x-button.secondary>
                 </footer>
             </div>

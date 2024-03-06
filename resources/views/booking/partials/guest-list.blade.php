@@ -41,6 +41,9 @@
                 <x-button.primary :href="route('booking.attendee.invite', $booking)">
                     {{ __('Invite') }}
                 </x-button.primary>
+                <x-button.primary :href="route('booking.attendee.create', $booking)">
+                    {{ __('Add') }}
+                </x-button.primary>
             @endif
             @include('booking.partials.respond-button')
         </footer>

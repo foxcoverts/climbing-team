@@ -28,7 +28,7 @@ class UpdateBookingAttendeeRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'status' => __('Status'),
+            'status' => __('Availability'),
         ];
     }
 }

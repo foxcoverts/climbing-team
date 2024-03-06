@@ -14,15 +14,15 @@
 @foreach ($options::cases() as $option)
     @unless (in_array($option, $except))
         <option value="{{ $option->value }}" @selected($value == $option)>
-            {{ __(
+            @lang(
                 Str::swap(
                     [
                         ':name' => $option->name,
                         ':value' => $option->value,
                     ],
                     $lang,
-                ),
-            ) }}
+                )
+            )
         </option>
     @endunless
 @endforeach

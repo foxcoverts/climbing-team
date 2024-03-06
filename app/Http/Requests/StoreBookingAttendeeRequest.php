@@ -21,4 +21,12 @@ class StoreBookingAttendeeRequest extends FormRequest
             'status' => ['required', Rule::enum(AttendeeStatus::class)->except(AttendeeStatus::NeedsAction)]
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'user_id' => 'Attendee',
+            'status' => 'Availability',
+        ];
+    }
 }
