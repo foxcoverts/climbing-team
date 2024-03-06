@@ -22,10 +22,17 @@ class BookingIcsController extends Controller
      */
     public function index(Request $request): Response
     {
-        return $this->ics(
+        $ics = $this->ics(
             Booking::all()->load('attendees', 'lead_instructor'),
             $request->user()
         );
+
+        if (config('app.debug') && $request->get('debug')) {
+            return $ics
+                ->header('Content-Type', 'text/plain; charset=utf-8')
+                ->header('Content-Disposition', 'inline');
+        }
+        return $ics;
     }
 
     /**
@@ -33,11 +40,18 @@ class BookingIcsController extends Controller
      */
     public function show(Request $request, Booking $booking): Response
     {
-        return $this->ics(
+        $ics = $this->ics(
             [$booking],
             $request->user(),
             filename: sprintf("booking-%s", $booking->id)
         );
+
+        if (config('app.debug') && $request->get('debug')) {
+            return $ics
+                ->header('Content-Type', 'text/plain; charset=utf-8')
+                ->header('Content-Disposition', 'inline');
+        }
+        return $ics;
     }
 
     /**
@@ -49,10 +63,9 @@ class BookingIcsController extends Controller
      */
     protected function ics($bookings, User $user, string $filename = 'booking'): Response
     {
-
         return response()
             ->view('booking.ics', ['bookings' => $bookings, 'user' => $user])
             ->header('Content-Type', 'text/calendar; charset=utf-8')
-            ->header('Content-Disposition', sprintf('attachment; filename="%s.ics"', $filename));
+            ->header('Content-Disposition', sprintf('inline; filename="%s.ics"', $filename));
     }
 }
