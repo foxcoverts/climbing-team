@@ -148,20 +148,17 @@
 
                     <div class="space-y-1">
                         @if ($instructors_attending->isEmpty())
-                            <p class="block not-italic font-bold after:content-[':'] text-gray-900 dark:text-gray-100">
-                                {{ __('Lead Instructor') }}</p>
+                            <x-fake-label :value="__('Lead Instructor')" />
                             <p>{{ __('No instructors are going to this booking yet.') }}</p>
                         @elseif ($booking->isCancelled())
-                            <p class="block not-italic font-bold after:content-[':'] text-gray-900 dark:text-gray-100">
-                                {{ __('Lead Instructor') }}</p>
-                            <div
-                                class="form-input cursor-default border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                            <x-fake-label :value="__('Lead Instructor')" />
+                            <x-fake-input class="mt-1" x-bind:aria-disabled="booking.cancelled ? 'true' : ''">
                                 @if ($booking->lead_instructor)
                                     {{ $booking->lead_instructor->name }}
                                 @else
                                     {{ __('No lead instructor.') }}
                                 @endif
-                            </div>
+                            </x-fake-input>
                         @else
                             <x-input-label for="lead_instructor_id" :value="__('Lead Instructor')" />
                             <x-select-input id="lead_instructor_id" name="lead_instructor_id" class="mt-1 block"

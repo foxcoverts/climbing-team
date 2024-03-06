@@ -13,8 +13,8 @@
                         {{ __('Attendance') }}</h3>
 
                     <div>
-                        <x-input-label for="user_id" :value="__('Attendee')" />
-                        <x-text-input id="user_id" class="mt-1 block" readonly :value="$attendee->name" />
+                        <x-fake-label :value="__('Attendee')" />
+                        <x-fake-input :value="$attendee->name" class="mt-1" />
                     </div>
 
                     @if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('update', $attendee->attendance))
@@ -41,13 +41,13 @@
                         </form>
                     @elseif ($booking->lead_instructor->is($attendee))
                         <div>
-                            <x-input-label for="status" :value="__('Status')" />
-                            <x-text-input id="status" class="mt-1 block" readonly :value="__('Lead Instructor')" />
+                            <x-fake-label :value="__('Status')" />
+                            <x-fake-input class="mt-1" :value="__('Lead Instructor')" />
                         </div>
                     @else
                         <div>
-                            <x-input-label for="status" :value="__('Status')" />
-                            <x-text-input id="status" class="mt-1 block" readonly :value='__("app.attendee.status.{$attendee->attendance->status->value}")' />
+                            <x-fake-label :value="__('Status')" />
+                            <x-fake-input class="mt-1" :value='__("app.attendee.status.{$attendee->attendance->status->value}")' />
                         </div>
                     @endif
                 </div>
