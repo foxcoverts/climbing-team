@@ -58,7 +58,7 @@ class UserController extends Controller
         event(new Registered($user));
 
         return redirect()->route('user.show', $user)
-            ->with('success', __('User created successfully'));
+            ->with('alert.info', __('User created successfully'));
     }
 
     /**
