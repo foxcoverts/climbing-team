@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -225,7 +224,7 @@ class BookingInvite extends Mailable
 
         // Ideally the inline data would be an 'alternative' part, before the
         //  HTML, but that requires manually handling all the email parts.
-        $icsInline = new DataPart($icsData, contentType: 'text/calendar');
+        $icsInline = new DataPart($icsData, filename: 'invite', contentType: 'text/calendar');
         $icsInline->asInline();
         $icsInline->getHeaders()->addParameterizedHeader(
             'Content-Type',
