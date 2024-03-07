@@ -232,6 +232,7 @@ class BookingInvite extends Mailable
             [
                 'method' => $icsMethod,
                 'charset' => 'utf-8',
+                'component' => 'vevent',
             ]
         );
         $message->addPart($icsInline);
@@ -246,6 +247,7 @@ class BookingInvite extends Mailable
             [
                 'method' => $icsMethod,
                 'charset' => 'utf-8',
+                'component' => 'vevent',
                 'name' => 'invite.ics',
             ]
         );

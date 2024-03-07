@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://climbing.foxcoverts.org.uk'),
+    'url' => env('APP_URL', 'https://climbfoxcoverts.co.uk'),
 
     'asset_url' => env('ASSET_URL'),
 

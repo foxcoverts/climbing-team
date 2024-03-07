@@ -25,13 +25,14 @@ $calendar = new Calendar();
 $calendar->setMethod($method ?? CalendarMethod::Publish);
 
 $organiser = new Organizer(
-    new EmailAddress('climbing@foxcoverts.org.uk'),
-    'Fox Coverts Climbing Team'
+    new EmailAddress(config('mail.from.address')),
+    config('mail.from.name'),
+    sentBy: new EmailAddress(config('mail.reply_to.address')),
 );
 
-$domain = Request::getHost();
+$domain = parse_url(config('app.url'), PHP_URL_HOST);
 if ($domain == 'localhost') {
-    $domain = 'climbing.foxcoverts.org.uk';
+    $domain = 'climbfoxcoverts.local';
 }
 
 foreach ($bookings as $booking) {
