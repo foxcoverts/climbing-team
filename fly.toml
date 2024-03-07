@@ -16,7 +16,7 @@ console_command = 'php /var/www/html/artisan tinker'
   release_command = "php /var/www/html/artisan migrate --force"
 
 [env]
-  APP_URL = "https://climbing-team.fly.dev"
+  APP_URL = "https://climbfoxcoverts.co.uk"
   APP_ENV = 'production'
   DB_CONNECTION = 'mysql'
   DB_HOST = 'lhr.climbing-team-mysql.internal'

@@ -102,7 +102,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'climbing@foxcoverts.org.uk'),
+        'address' => env('MAIL_FROM_ADDRESS', 'team@climbfoxcoverts.co.uk'),
         'name' => env('MAIL_FROM_NAME', 'Fox Coverts Climbing Team'),
     ],
 
