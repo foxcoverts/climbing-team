@@ -13,7 +13,7 @@
                 @csrf
                 @method('PATCH')
                 <input type="hidden" name="deleted_at" value="0">
-                <button class="text-gray-400 hover:text-gray-900 underline">{{ __('Undo') }}</button>
+                <button class="text-gray-400 hover:text-gray-900 underline">@lang('Undo')</button>
             </form>
         @endif
     </p>

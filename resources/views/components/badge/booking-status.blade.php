@@ -14,4 +14,4 @@
         @php($color = 'pink')
 @endswitch
 
-<x-badge :color="$color" {{ $attributes }}>{{ __("app.booking.status.{$status->value}") }}</x-badge>
+<x-badge :color="$color" {{ $attributes }}>@lang("app.booking.status.{$status->value}")</x-badge>

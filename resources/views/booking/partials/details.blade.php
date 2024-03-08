@@ -8,7 +8,7 @@
         </span>
         <x-badge.booking-status :status="$booking->status" class="text-sm" />
     </p>
-    <p><dfn class="not-italic font-medium block">{{ __('When') }}</dfn>
+    <p><dfn class="not-italic font-medium block">@lang('When')</dfn>
         @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
             {{ __(':start_date from :start_time to :end_time', [
                 'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
@@ -23,14 +23,14 @@
         @endif
         ({{ $booking->start_at->diffAsCarbonInterval($booking->end_at) }})
     </p>
-    <p><dfn class="not-italic font-medium block">{{ __('Location') }}</dfn>
+    <p><dfn class="not-italic font-medium block">@lang('Location')</dfn>
         {{ $booking->location }}</p>
-    <p><dfn class="not-italic font-medium block">{{ __('Activity') }}</dfn>
+    <p><dfn class="not-italic font-medium block">@lang('Activity')</dfn>
         {{ $booking->activity }}</p>
-    <p><dfn class="not-italic font-medium block">{{ __('Group Name') }}</dfn>
+    <p><dfn class="not-italic font-medium block">@lang('Group Name')</dfn>
         {{ $booking->group_name }}</p>
     @if (!empty($booking->notes))
-        <div><dfn class="not-italic font-medium block">{{ __('Notes') }}</dfn>
+        <div><dfn class="not-italic font-medium block">@lang('Notes')</dfn>
             <x-markdown :text="$booking->notes" />
         </div>
     @endif

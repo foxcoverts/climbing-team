@@ -33,7 +33,7 @@
 
         <div class="flex items-center justify-end mt-4">
             <x-button.primary>
-                {{ __('Reset Password') }}
+                @lang('Reset Password')
             </x-button.primary>
         </div>
     </form>

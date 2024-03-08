@@ -3,11 +3,11 @@
 @props(['booking', 'attendees' => collect([]), 'attendance' => null, 'showTools' => true])
 <aside class="my-2 flex-grow max-w-xl">
     <h2 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200">
-        {{ __('Guest list') }}
+        @lang('Guest list')
     </h2>
 
     @if ($attendee = $booking->attendees()->find($booking->lead_instructor))
-        <h3 class="text-lg">{{ __('Lead Instructor') }}</h3>
+        <h3 class="text-lg">@lang('Lead Instructor')</h3>
         <ul class="mb-3 space-y-1">
             <li class="flex gap-1 items-center">
                 @include('booking.partials.guest-list.item')
@@ -16,7 +16,7 @@
     @endif
 
     @foreach ($attendees->groupBy('attendance.status') as $status => $attendees)
-        <h3 class="text-lg">{{ __("app.attendee.status.$status") }}
+        <h3 class="text-lg">@lang("app.attendee.status.$status")
             <span class="bg-gray-200 dark:bg-gray-600 dark:text-white px-2 rounded-xl">{{ count($attendees) }}</span>
         </h3>
         <ul class="mb-3 space-y-1">
@@ -29,7 +29,7 @@
     @endforeach
 
     @if (!$attendee)
-        <p class="my-1">{{ __('No one has responded to this booking yet.') }}</p>
+        <p class="my-1">@lang('No one has responded to this booking yet.')</p>
     @endempty
 
     @if ($showTools)
@@ -39,10 +39,10 @@
                     !$booking->isCancelled() &&
                     app(Gate::class)->check('create', [Attendance::class, $booking]))
                 <x-button.primary :href="route('booking.attendee.invite', $booking)">
-                    {{ __('Invite') }}
+                    @lang('Invite')
                 </x-button.primary>
                 <x-button.primary :href="route('booking.attendee.create', $booking)">
-                    {{ __('Add') }}
+                    @lang('Add')
                 </x-button.primary>
             @endif
             @include('booking.partials.respond-button')

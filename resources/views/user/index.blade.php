@@ -4,7 +4,7 @@
     <section class="p-4 sm:p-8">
         <header>
             <h2 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
-                {{ __('Users') }}
+                @lang('Users')
             </h2>
         </header>
 
@@ -13,10 +13,10 @@
                 <tr>
                     <th
                         class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
-                        {{ __('Name') }}</th>
+                        @lang('Name')</th>
                     <th class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell"
                         width="1">
-                        {{ __('Active') }}</th>
+                        @lang('Active')</th>
                     <th class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300"
                         width="1">Role</th>
                     @foreach (Accreditation::cases() as $accreditation)
@@ -28,7 +28,7 @@
                                 Accreditation::ManageUsers,
                             ]),
                         ]) width="1">
-                            {{ __("app.user.accreditation.{$accreditation->value}") }}</th>
+                            @lang("app.user.accreditation.{$accreditation->value}")</th>
                     @endforeach
                 </tr>
             </thead>

@@ -3,21 +3,21 @@
 # {{ $title }}
 
 <x-mail::panel>
-{{ __('This booking has been cancelled.') }}
+@lang('This booking has been cancelled.')
 </x-mail::panel>
 
-**{{ __('When') }}**<br>
+**@lang('When')**<br>
 {{ $when }}
 
-**{{ __('Location') }}**<br>
+**@lang('Location')**<br>
 {{ $booking->location }}
 
-**{{ __('Activity') }}**<br>
+**@lang('Activity')**<br>
 {{ $booking->activity }}
 
-**{{ __('Group') }}**<br>
+**@lang('Group')**<br>
 {{ $booking->group_name }}
 
-{{ __('Thanks,') }}<br>
+@lang('Thanks,')<br>
 {{ config('app.name') }}
 </x-mail::message>

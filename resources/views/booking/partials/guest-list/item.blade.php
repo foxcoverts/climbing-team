@@ -18,6 +18,6 @@
     @endif
 
     @if ($attendee->is(auth()->user()))
-        <x-badge color="lime" class="text-xs">{{ __('You') }}</x-badge>
+        <x-badge color="lime" class="text-xs">@lang('You')</x-badge>
     @endif
 </div>

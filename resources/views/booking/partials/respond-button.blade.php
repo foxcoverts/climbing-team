@@ -8,9 +8,9 @@
                 :class="{ 'rounded-b-md': !open }" x-on:click="open = true">
                 @include('booking.partials.attendance-icon')
                 @if (is_null($attendance))
-                    {{ __('Respond') }}
+                    @lang('Respond')
                 @else
-                    {{ __("app.attendee.status.{$attendance->status->value}") }}
+                    @lang("app.attendee.status.{$attendance->status->value}")
                 @endif
 
                 <x-icon.cheveron-down class="w-4 h-4 fill-current" x-show="!open" />
@@ -28,7 +28,7 @@
                                 <button name="status" value="{{ $status }}"
                                     class="relative focus:z-30 flex gap-2 flex-nowrap items-center min-w-full px-4 py-2 text-xs uppercase font-semibold tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25">
                                     <x-icon.empty-outline class="h-4 w-4 fill-current" />
-                                    <span class="flex-grow text-left">{{ __("app.attendee.status.$status") }}</span>
+                                    <span class="flex-grow text-left">@lang("app.attendee.status.$status")</span>
                                 </button>
                             @endif
                         @endforeach
@@ -41,12 +41,12 @@
     <div
         class="flex gap-2 px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm disabled:opacity-25">
         <x-icon.close-outline class="h-4 w-4 fill-current" />
-        {{ __('Cancelled') }}
+        @lang('Cancelled')
     </div>
 @elseif (!is_null($attendance))
     <div
         class="flex gap-2 px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm disabled:opacity-25">
         @include('booking.partials.attendance-icon')
-        {{ __("app.attendee.status.{$attendance->status->value}") }}
+        @lang("app.attendee.status.{$attendance->status->value}")
     </div>
 @endif

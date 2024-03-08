@@ -7,7 +7,7 @@
             @method('delete')
 
             <x-button.danger>
-                {{ __('Delete') }}
+                @lang('Delete')
             </x-button.danger>
         </form>
     @endcan
@@ -18,7 +18,7 @@
             @method('patch')
             <input type="hidden" name="status" value="{{ BookingStatus::Cancelled }}" />
             <x-button.danger>
-                {{ __('Cancel') }}
+                @lang('Cancel')
             </x-button.danger>
         </form>
     @endcan

@@ -118,11 +118,11 @@
 
             <div class="flex items-center gap-4">
                 <x-button.primary>
-                    {{ __('Create') }}
+                    @lang('Create')
                 </x-button.primary>
 
                 <x-button.secondary :href="route('booking.index')">
-                    {{ __('Back') }}
+                    @lang('Back')
                 </x-button.secondary>
             </div>
         </form>

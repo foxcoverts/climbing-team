@@ -16,25 +16,25 @@
             </p>
 
             <p>
-                <dfn class="not-italic font-bold after:content-[':']">{{ __('Email') }}</dfn>
+                <dfn class="not-italic font-bold after:content-[':']">@lang('Email')</dfn>
                 @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
                     @if ($user->hasVerifiedEmail())
                         <a href="mailto:{{ $user->email }}"
                             class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">{{ $user->email }}</a>
                         <x-badge color="lime" class="text-xs">
-                            {{ __('Verified') }}
+                            @lang('Verified')
                         </x-badge>
                     @else
                         <span>{{ $user->email }}</span>
                         <x-badge color="pink" class="text-xs">
-                            {{ __('Unverified') }}
+                            @lang('Unverified')
                         </x-badge>
                     @endif
                 @endif
             </p>
 
             <p>
-                <dfn class="not-italic font-bold after:content-[':']">{{ __('Timezone') }}</dfn>
+                <dfn class="not-italic font-bold after:content-[':']">@lang('Timezone')</dfn>
                 {{ $user->timezone }}
             </p>
         </div>
@@ -42,12 +42,12 @@
         <footer class="flex items-start gap-4">
             @can('update', $user)
                 <x-button.primary href="{{ route('user.edit', $user) }}">
-                    {{ __('Edit') }}
+                    @lang('Edit')
                 </x-button.primary>
             @endcan
             @include('user.partials.delete-button')
             <x-button.secondary href="{{ route('user.index') }}">
-                {{ __('Back') }}
+                @lang('Back')
             </x-button.secondary>
         </footer>
     </section>

@@ -2,7 +2,7 @@
     <section class="p-4 sm:p-8">
         <header>
             <h2 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
-                {{ __('Mail log') }}
+                @lang('Mail log')
             </h2>
         </header>
 
@@ -11,11 +11,11 @@
                 <tr>
                     <th
                         class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
-                        {{ __('ID') }}</th>
+                        @lang('ID')</th>
 
                     <th
                         class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
-                        {{ __('Created') }}</th>
+                        @lang('Created')</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 border-y border-gray-200">

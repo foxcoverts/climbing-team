@@ -10,7 +10,7 @@
                 <footer class="flex items-start gap-4 mt-4">
                     @can('update', $booking)
                         <x-button.primary :href="route('booking.edit', $booking)">
-                            {{ __('Edit') }}
+                            @lang('Edit')
                         </x-button.primary>
                     @endcan
                 </footer>

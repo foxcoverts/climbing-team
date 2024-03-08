@@ -10,13 +10,13 @@
                     @method('PATCH')
                     <input type="hidden" name="deleted_at" value="0" />
                     <x-button.primary form="restore">
-                        {{ __('Restore') }}
+                        @lang('Restore')
                     </x-button.primary>
                 </form>
             @endcan
             @include('booking.partials.force-delete-button')
             <x-button.secondary :href="route('trash.booking.index')">
-                {{ __('Back') }}
+                @lang('Back')
             </x-button.secondary>
         </footer>
     </section>

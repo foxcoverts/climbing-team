@@ -1,7 +1,7 @@
 @use('App\Enums\AttendeeStatus')
 <x-layout.guest :title="__('Invitation')">
     <div class="space-y-2">
-        <p><dfn class="block not-italic font-medium">{{ __('When') }}</dfn>
+        <p><dfn class="block not-italic font-medium">@lang('When')</dfn>
             @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
                 {{ __(':start_date from :start_time to :end_time', [
                     'start_time' => localDate($booking->start_at)->format('H:i'),
@@ -16,26 +16,26 @@
             @endif
         </p>
 
-        <p><dfn class="block not-italic font-medium">{{ __('Location') }}</dfn>
+        <p><dfn class="block not-italic font-medium">@lang('Location')</dfn>
             {{ $booking->location }}
         </p>
 
-        <p><dfn class="block not-italic font-medium">{{ __('Activity') }}</dfn>
+        <p><dfn class="block not-italic font-medium">@lang('Activity')</dfn>
             {{ $booking->activity }}
         </p>
 
         @if ($booking->lead_instructor)
-            <p><dfn class="block not-italic font-medium">{{ __('Lead Instructor') }}</dfn>
+            <p><dfn class="block not-italic font-medium">@lang('Lead Instructor')</dfn>
                 {{ $booking->lead_instructor->name }}
             </p>
         @endif
 
-        <p><dfn class="block not-italic font-medium">{{ __('Group') }}</dfn>
+        <p><dfn class="block not-italic font-medium">@lang('Group')</dfn>
             {{ $booking->group_name }}
         </p>
 
         @if ($booking->notes)
-            <div><dfn class="block not-italic font-medium">{{ __('Notes') }}</dfn>
+            <div><dfn class="block not-italic font-medium">@lang('Notes')</dfn>
                 <x-markdown :text="$booking->notes" />
             </div>
         @endif
@@ -45,16 +45,15 @@
         @csrf
         <div
             class="my-4 space-y-4 p-4 border text-black bg-slate-100 border-slate-400 dark:text-white dark:bg-slate-900 dark:border-slate-600">
-            <p class="text-lg text-center">{{ __('Can you attend this event?') }}</p>
+            <p class="text-lg text-center">@lang('Can you attend this event?')</p>
             <div class="flex justify-center gap-4">
-                <x-button.primary type="submit" name="status"
-                    :value="AttendeeStatus::Accepted->value">{{ __('Yes') }}</x-button.primary>
+                <x-button.primary type="submit" name="status" :value="AttendeeStatus::Accepted->value">@lang('Yes')</x-button.primary>
                 <x-button.secondary type="submit" name="status"
-                    :value="AttendeeStatus::Declined->value">{{ __('No') }}</x-button.secondary>
+                    :value="AttendeeStatus::Declined->value">@lang('No')</x-button.secondary>
                 <x-button.secondary type="submit" name="status"
-                    :value="AttendeeStatus::Tentative->value">{{ __('Maybe') }}</x-button.secondary>
+                    :value="AttendeeStatus::Tentative->value">@lang('Maybe')</x-button.secondary>
             </div>
-            <p class="text-sm text-center">{{ __('Replying for :name.', ['name' => $user->name]) }}</p>
+            <p class="text-sm text-center">@lang('Replying for :name.', ['name' => $user->name])</p>
         </div>
     </form>
 

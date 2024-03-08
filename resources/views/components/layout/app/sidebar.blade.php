@@ -2,7 +2,7 @@
     :class="{ 'hidden': !sidebarOpen }" id="main-nav">
 
     <div>
-        <x-sidebar.heading>{{ __('Main') }}</x-sidebar.heading>
+        <x-sidebar.heading>@lang('Main')</x-sidebar.heading>
         <x-sidebar.link route='dashboard' :label="__('Dashboard')">
             <x-slot:icon>
                 <path d="M8 20H3V10H0L10 0l10 10h-3v10h-5v-6H8v6z" />
@@ -12,7 +12,7 @@
 
     @canany(['viewAny', 'viewTrashed', 'create'], App\Models\Booking::class)
         <div>
-            <x-sidebar.heading>{{ __('Bookings') }}</x-sidebar.heading>
+            <x-sidebar.heading>@lang('Bookings')</x-sidebar.heading>
             @can('viewAny', App\Models\Booking::class)
                 <x-sidebar.link route='booking.index' :match-routes="['booking.index', 'booking.show', 'booking.edit']" :label="__('Calendar')">
                     <x-slot:icon>
@@ -47,7 +47,7 @@
 
     @canany(['viewAny', 'create'], App\Models\User::class)
         <div>
-            <x-sidebar.heading>{{ __('Users') }}</x-sidebar.heading>
+            <x-sidebar.heading>@lang('Users')</x-sidebar.heading>
             @can('viewAny', App\Models\User::class)
                 <x-sidebar.link route='user.index' :match-routes="['user.index', 'user.show', 'user.edit']" :label="__('View Users')">
                     <x-slot:icon>
@@ -69,7 +69,7 @@
 
     @can('viewAny', App\Models\MailLog::class)
         <div>
-            <x-sidebar.heading>{{ __('Developer') }}</x-sidebar.heading>
+            <x-sidebar.heading>@lang('Developer')</x-sidebar.heading>
             <x-sidebar.link route='mail.index' :match-routes="['mail.*']" :label="__('Mail Log')">
                 <x-slot:icon>
                     <path
@@ -80,7 +80,7 @@
     @endcan
 
     <div>
-        <x-sidebar.heading>{{ __('Account') }}</x-sidebar.heading>
+        <x-sidebar.heading>@lang('Account')</x-sidebar.heading>
         <x-sidebar.link route='profile.show' :label="__('Profile')">
             <x-slot:icon>
                 <path
