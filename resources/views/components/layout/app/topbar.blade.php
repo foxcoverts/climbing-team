@@ -1,10 +1,9 @@
 @aware(['title', 'header'])
 
-<div class="md:top-0 md:sticky lg:fixed lg:w-64 z-40">
-    <div
-        class="w-full h-16 sm:px-4 text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-900 border-b lg:border-r flex items-center">
-        <div class="flex grow">
-
+<div
+    class="md:top-0 md:sticky lg:fixed lg:w-64 z-40 text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-900 border-b lg:border-r">
+    <div class="w-full h-16 sm:px-4 flex items-center">
+        <div class="flex grow overflow-hidden">
             <div class="lg:hidden flex items-center mx-4">
                 <button class="hover:text-blue-500 dark:text-white focus:outline-none navbar-burger"
                     @click="sidebarOpen = ! sidebarOpen">
@@ -16,7 +15,11 @@
             </div>
 
             <div class="w-full">
-                <p class="font-semibold text-2xl text-blue-400 uppercase">{{ config('app.name', 'Climbing Team') }}</p>
+                <p class="font-semibold text-2xl text-blue-400 uppercase">
+                    <a href="/" class="block truncate" title="{{ config('app.name') }}">
+                        {{ config('app.name') }}
+                    </a>
+                </p>
             </div>
         </div>
     </div>
