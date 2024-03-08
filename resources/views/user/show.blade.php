@@ -5,7 +5,7 @@
         </header>
 
         <div class="space-y-2 max-w-xl flex-grow">
-            <p class="flex space-x-1 items-center">
+            <p class="flex flex-wrap gap-2 items-center mb-4">
                 @unless ($user->isActive())
                     <x-badge.active :active="false" class="text-sm" />
                 @endunless
