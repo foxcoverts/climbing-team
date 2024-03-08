@@ -33,7 +33,7 @@
     @endempty
 
     @if ($showTools)
-        <footer class="flex items-center gap-4 mt-4">
+        <footer class="flex items-start gap-4 mt-4">
             @if (
                 $booking->isFuture() &&
                     !$booking->isCancelled() &&

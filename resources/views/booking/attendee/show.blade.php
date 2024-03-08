@@ -52,7 +52,7 @@
                     @endif
                 </div>
 
-                <footer class="flex items-center gap-4 mt-4">
+                <footer class="flex items-start gap-4 mt-4">
                     @if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('update', $attendee->attendance))
                         <x-button.primary form="update-attendance" x-bind:disabled="form.status == ''">
                             @lang('Update')

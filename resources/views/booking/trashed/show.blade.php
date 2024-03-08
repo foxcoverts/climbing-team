@@ -3,7 +3,7 @@
         @include('booking.partials.header')
         @include('booking.partials.details')
 
-        <footer class="mt-6 flex items-center gap-4">
+        <footer class="mt-6 flex items-start gap-4">
             @can('restore', $booking)
                 <form method="POST" action="{{ route('trash.booking.update', $booking) }}" id="restore">
                     @csrf

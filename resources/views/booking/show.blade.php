@@ -7,7 +7,7 @@
             <div class="w-full max-w-xl">
                 @include('booking.partials.details')
 
-                <footer class="flex items-center gap-4 mt-4">
+                <footer class="flex items-start gap-4 mt-4">
                     @can('update', $booking)
                         <x-button.primary :href="route('booking.edit', $booking)">
                             {{ __('Edit') }}

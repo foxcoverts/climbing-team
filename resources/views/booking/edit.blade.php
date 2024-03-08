@@ -215,7 +215,7 @@
             @include('booking.partials.guest-list', ['showTools' => false])
         </div>
 
-        <footer class="flex items-center gap-4 mt-6">
+        <footer class="flex items-start gap-4 mt-6">
             <x-button.primary form="update-booking" x-bind:disabled="booking.cancelled">
                 @lang('Update')
             </x-button.primary>

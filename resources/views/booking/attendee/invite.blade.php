@@ -41,7 +41,7 @@
                         </p>
                     </fieldset>
 
-                    <footer class="flex items-center gap-4 pt-4">
+                    <footer class="flex items-start gap-4 pt-4">
                         <x-button.primary disabled x-bind:disabled="form.user_ids.length == 0">
                             @lang('Invite')
                         </x-button.primary>
@@ -56,7 +56,7 @@
                     <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                         @lang('Invite Attendees')</h3>
                     <p>@lang('All eligible users have already been invited to this booking.')</p>
-                    <footer class="flex items-center gap-4 pt-4">
+                    <footer class="flex items-start gap-4 pt-4">
                         <x-button.secondary :href="route('booking.show', $booking)">
                             @lang('Back')
                         </x-button.secondary>

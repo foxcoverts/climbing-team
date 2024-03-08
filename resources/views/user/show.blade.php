@@ -39,7 +39,7 @@
             </p>
         </div>
 
-        <footer class="flex items-center gap-4">
+        <footer class="flex items-start gap-4">
             @can('update', $user)
                 <x-button.primary href="{{ route('user.edit', $user) }}">
                     {{ __('Edit') }}
