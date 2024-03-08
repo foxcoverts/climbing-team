@@ -23,7 +23,7 @@
         <form method="post" action="{{ route('booking.store') }}" class="space-y-6 max-w-xl">
             @csrf
 
-            <div class="flex space-x-6" x-data="{
+            <div class="flex flex-wrap gap-6" x-data="{
                 start_time: '',
                 end_time: '',
                 duration: 0,

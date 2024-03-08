@@ -9,7 +9,7 @@
     @if ($attendee = $booking->attendees()->find($booking->lead_instructor))
         <h3 class="text-lg">{{ __('Lead Instructor') }}</h3>
         <ul class="mb-3 space-y-1">
-            <li class="flex space-x-1 items-center">
+            <li class="flex gap-1 items-center">
                 @include('booking.partials.guest-list.item')
             </li>
         </ul>
@@ -21,7 +21,7 @@
         </h3>
         <ul class="mb-3 space-y-1">
             @foreach ($attendees as $attendee)
-                <li class="flex space-x-1 items-center">
+                <li class="flex gap-1 items-center">
                     @include('booking.partials.guest-list.item')
                 </li>
             @endforeach

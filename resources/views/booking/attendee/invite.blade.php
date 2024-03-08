@@ -3,7 +3,7 @@
     <section class="p-4 sm:p-8">
         @include('booking.partials.header')
 
-        <div class="md:flex md:space-x-4">
+        <div class="flex flex-wrap gap-4">
             @include('booking.partials.details')
 
             @if ($users->isNotEmpty())
@@ -15,13 +15,13 @@
                         <legend class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                             @lang('Invite Attendees')</legend>
 
-                        <label class="mt-1  w-full flex space-x-1 items-center">
+                        <label class="mt-1 w-full flex gap-1 items-center">
                             <input type="checkbox" x-model="all" x-effect="$el.indeterminate = indeterminate()" />
                             <span>@lang('Invite all')</span>
                         </label>
 
                         @foreach ($users as $user)
-                            <label class="mt-1 w-full flex space-x-1 items-center">
+                            <label class="mt-1 w-full flex gap-1 items-center">
                                 <input type="checkbox" value="{{ $user->id }}" name="user_ids[]" x-model="values" />
                                 <span>{{ $user->name }}</span>
 

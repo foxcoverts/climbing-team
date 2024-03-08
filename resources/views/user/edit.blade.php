@@ -72,13 +72,13 @@
                     <legend class="font-bold after:content-[':'] text-gray-900 dark:text-gray-100">
                         @lang('Accreditations')</legend>
 
-                    <label class="flex w-full items-center space-x-1">
+                    <label class="flex w-full items-center gap-1">
                         <input type="checkbox" x-model="all" x-effect="$el.indeterminate = indeterminate()" />
                         <span>@lang('Select all')</span>
                     </label>
 
                     @foreach (Accreditation::cases() as $accreditation)
-                        <label class="flex w-full items-center space-x-1">
+                        <label class="flex w-full items-center gap-1">
                             <input type="checkbox" value="{{ $accreditation->value }}" name="accreditations[]"
                                 x-model="values" />
                             <span>@lang("app.user.accreditation.$accreditation->value")</span>

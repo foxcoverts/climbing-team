@@ -3,10 +3,10 @@
     <section class="p-4 sm:p-8">
         @include('booking.partials.header')
 
-        <div class="md:flex md:space-x-4">
+        <div class="flex flex-wrap gap-4">
             @include('booking.partials.details')
 
-            <div class="flex-grow my-2">
+            <div class="flex-grow my-2 max-w-xl">
                 @if ($users->isNotEmpty())
                     <form method="post" action="{{ route('booking.attendee.store', $booking) }}" x-data="{ form: {} }">
                         @csrf

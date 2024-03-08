@@ -4,10 +4,10 @@
     <section class="p-4 sm:p-8">
         @include('booking.partials.header')
 
-        <div class="md:flex md:space-x-4">
+        <div class="flex flex-wrap gap-4">
             @include('booking.partials.details')
 
-            <div class="flex-grow my-2" x-data="{ form: {} }">
+            <div class="flex-grow my-2 max-w-xl" x-data="{ form: {} }">
                 <div class="space-y-1">
                     <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                         @lang('Attendance')</h3>

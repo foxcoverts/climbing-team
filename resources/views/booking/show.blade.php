@@ -3,7 +3,7 @@
     <section class="p-4 sm:p-8">
         @include('booking.partials.header')
 
-        <div class="md:flex md:space-x-4">
+        <div class="flex flex-wrap gap-4">
             <div class="w-full max-w-xl">
                 @include('booking.partials.details')
 
