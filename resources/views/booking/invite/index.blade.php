@@ -5,6 +5,8 @@
                 @lang('Booking Invites')
             </h2>
         </header>
-        @include('booking.partials.table-list')
+        @include('booking.partials.table-list', [
+            'showRoute' => 'booking.attendance.show',
+        ])
     </section>
 </x-layout.app>
