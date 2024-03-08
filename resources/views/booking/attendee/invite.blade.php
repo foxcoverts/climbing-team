@@ -16,7 +16,8 @@
                             @lang('Invite Attendees')</legend>
 
                         <label class="mt-1 w-full flex gap-1 items-center">
-                            <input type="checkbox" name="all" @change="selectAll" x-effect="indeterminate($el)" />
+                            <input type="checkbox" name="all" @change="selectAll" x-effect="indeterminate($el)"
+                                autofocus />
                             <span>@lang('Invite all')</span>
                         </label>
 

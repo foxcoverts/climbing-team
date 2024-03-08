@@ -62,7 +62,7 @@
                 <div class="space-y-1">
                     <x-input-label for="start_date" :value="__('Date')" />
                     <x-text-input id="start_date" name="start_date" type="date" :value="old('start_date', $booking->start_date)"
-                        placeholder="yyyy-mm-dd" required x-model.fill="booking.start_date" />
+                        placeholder="yyyy-mm-dd" required autofocus x-model.fill="booking.start_date" />
                     <x-input-error :messages="$errors->get('start_date')" />
                 </div>
 

@@ -16,7 +16,7 @@
                         <div class="space-y-1 my-1">
                             <div>
                                 <x-input-label for="user_id" :value="__('Attendee')" />
-                                <x-select-input id="user_id" name="user_id" class="mt-1 block" required
+                                <x-select-input id="user_id" name="user_id" class="mt-1 block" required autofocus
                                     :value="old('user_id')" x-model.fill="form.user_id">
                                     <option value="" disabled selected>@lang('-- Select User --')</option>
                                     <x-select-input.collection :options="$users" label_key="name" />
