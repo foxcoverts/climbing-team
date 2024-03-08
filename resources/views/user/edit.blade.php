@@ -73,7 +73,7 @@
                         @lang('Accreditations')</legend>
 
                     <label class="flex w-full items-center gap-1">
-                        <input type="checkbox" x-model="all" x-effect="$el.indeterminate = indeterminate()" />
+                        <input type="checkbox" name="all" @change="selectAll" x-effect="indeterminate($el)" />
                         <span>@lang('Select all')</span>
                     </label>
 
