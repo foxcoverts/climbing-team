@@ -26,7 +26,9 @@
                                 <input type="checkbox" value="{{ $user->id }}" name="user_ids[]" x-model="values" />
                                 <span>{{ $user->name }}</span>
 
-                                <x-badge.role :role="$user->role" class="text-xs" />
+                                @if ($user->isGuest())
+                                    <x-badge.role :role="$user->role" class="text-xs" />
+                                @endif
 
                                 @if ($user->isPermitHolder())
                                     <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-xs" />
