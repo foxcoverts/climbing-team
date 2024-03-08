@@ -6,7 +6,7 @@
         <div class="flex flex-wrap gap-4">
             @include('booking.partials.details')
 
-            <div class="flex-grow my-2 max-w-xl">
+            <div class="my-2 flex-grow flex-shrink basis-80 max-w-xl">
                 @if ($users->isNotEmpty())
                     <form method="post" action="{{ route('booking.attendee.store', $booking) }}" x-data="{ form: {} }">
                         @csrf

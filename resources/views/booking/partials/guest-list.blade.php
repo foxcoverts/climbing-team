@@ -1,7 +1,7 @@
 @use('App\Models\Attendance')
 @use('Illuminate\Contracts\Auth\Access\Gate')
 @props(['booking', 'attendees' => collect([]), 'attendance' => null, 'showTools' => true])
-<aside class="my-2 flex-grow max-w-xl">
+<aside class="my-2 flex-grow flex-shrink basis-80 max-w-xl">
     <h2 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200">
         @lang('Guest list')
     </h2>

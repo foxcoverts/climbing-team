@@ -8,7 +8,7 @@
 
             @if ($users->isNotEmpty())
                 <form method="post" action="{{ route('booking.attendee.invite.store', $booking) }}"
-                    class="my-2 flex-grow max-w-xl" x-data="{ form: { user_ids: [] } }">
+                    class="my-2 flex-grow flex-shrink basis-80 max-w-xl" x-data="{ form: { user_ids: [] } }">
                     @csrf
 
                     <fieldset x-data="checkboxes({{ $users->pluck('id') }})" x-modelable="values" x-model="form.user_ids" class="m-0 p-0">
