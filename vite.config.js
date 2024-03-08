@@ -8,7 +8,6 @@ export default defineConfig({
                 "resources/css/app.css",
                 "resources/js/app.js",
                 "resources/js/booking/calendar.js",
-                "resources/js/booking/invite.js",
                 "resources/js/booking/trash.js",
             ],
             refresh: true,
