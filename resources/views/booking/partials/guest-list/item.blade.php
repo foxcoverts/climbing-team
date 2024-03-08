@@ -1,5 +1,5 @@
-@use(App\Enums\Accreditation)
-@use(App\Enums\Role)
+@use('App\Enums\Accreditation')
+@use('App\Enums\Role')
 @props(['booking', 'attendee'])
 
 <div x-data @click="if ($refs.link) window.location = $refs.link.href;" :class="{ 'cursor-pointer': $refs.link }">
