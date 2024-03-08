@@ -19,29 +19,28 @@ use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Domain\ValueObject\Uri;
-use Illuminate\Support\Facades\Request;
-
-$calendar = new Calendar();
-$calendar->setMethod($method ?? CalendarMethod::Publish);
-
-$organiser = new Organizer(
-    new EmailAddress(config('mail.from.address')),
-    config('mail.from.name'),
-    sentBy: new EmailAddress(config('mail.reply_to.address')),
-);
 
 $domain = parse_url(config('app.url'), PHP_URL_HOST);
 if ($domain == 'localhost') {
     $domain = 'climbfoxcoverts.local';
 }
 
+$calendar = new Calendar();
+$calendar->setMethod($method ?? CalendarMethod::Publish);
+
 foreach ($bookings as $booking) {
-    $uid = sprintf('%s@%s', $booking->id, $domain);
+    $uid = sprintf('booking-%s@%s', $booking->id, $domain);
 
     $description = $booking->group_name;
     if (is_string($booking->notes)) {
         $description .= "\n" . $booking->notes;
     }
+
+    $organiser = new Organizer(
+        new EmailAddress($uid),
+        config('mail.from.name'),
+        sentBy: new EmailAddress(config('mail.from.address')),
+    );
 
     $event = new Event(new UniqueIdentifier($uid));
     $event->setSequence(new Sequence($booking->sequence));
