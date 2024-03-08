@@ -23,7 +23,7 @@ class MailLogController extends Controller
      */
     public function index(): View
     {
-        return view('mail.log.index', [
+        return view('mail-log.index', [
             'mails' => MailLog::orderBy('created_at')->get(),
         ]);
     }
@@ -46,7 +46,7 @@ class MailLogController extends Controller
      */
     public function show(MailLog $mail): View
     {
-        return view('mail.log.show', [
+        return view('mail-log.show', [
             'mail' => $mail,
         ]);
     }
