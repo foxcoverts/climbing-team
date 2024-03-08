@@ -1,13 +1,17 @@
 import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import listPlugin from "@fullcalendar/list";
 import momentPlugin from "@fullcalendar/moment";
 import superagent from "superagent";
 
 const calendarEl = document.getElementById("fullcalendar");
 window.Calendar = new Calendar(calendarEl, {
-    plugins: [dayGridPlugin, timeGridPlugin, momentPlugin],
+    plugins: [dayGridPlugin, listPlugin, timeGridPlugin, momentPlugin],
     views: {
+        listMonth: {
+            buttonText: "month",
+        },
         dayGridMonth: {
             titleFormat: "{MMMM} YYYY",
             fixedWeekCount: false,
@@ -23,18 +27,24 @@ window.Calendar = new Calendar(calendarEl, {
             dayHeaders: false,
         },
     },
+    initialView: window.innerWidth < 600 ? "listMonth" : "dayGridMonth",
+    listDayFormat: "ddd, D MMM, YYYY",
+    listDaySideFormat: false,
     eventTimeFormat: "HH:mm",
     slotLabelFormat: "HH:mm",
-    initialView: "dayGridMonth",
     contentHeight: "auto",
     stickyHeaderDates: true,
     headerToolbar: {
         left: "title",
         center: "",
-        right: "dayGridMonth,timeGridDay today prev,next",
+        right:
+            (window.innerWidth < 600 ? "listMonth" : "dayGridMonth") +
+            ",timeGridDay today prev,next",
     },
     firstDay: 1,
     navLinks: true,
+    windowResize: onWindowResize,
+    datesSet: onWindowResize,
     events: function (info, successCallback, failureCallback) {
         superagent
             .get("/api/booking")
@@ -103,6 +113,21 @@ function bookingStatusToColor(status) {
         case "confirmed":
         default:
             return "limeGreen";
+    }
+}
+
+function onWindowResize() {
+    if (window.Calendar.view.type == "timeGridDay") {
+    } else if (
+        window.Calendar.view.type == "dayGridMonth" &&
+        window.innerWidth < 600
+    ) {
+        window.Calendar.changeView("listMonth");
+    } else if (
+        window.Calendar.view.type == "listMonth" &&
+        window.innerWidth >= 600
+    ) {
+        window.Calendar.changeView("dayGridMonth");
     }
 }
 
