@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DestroyTrashedBookingRequest;
 use App\Http\Requests\RestoreTrashedBookingRequest;
 use App\Models\Booking;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -16,7 +17,17 @@ class TrashedBookingController extends Controller
     public function index(): View
     {
         $this->authorize('viewTrashed', Booking::class);
-        return view('booking.trashed.index');
+
+        $bookings = Booking::onlyTrashed()
+            ->whereDate('start_at', '>=', Carbon::now())
+            ->get()
+            ->groupBy(function ($booking) {
+                return $booking->start_at->startOfDay();
+            });
+
+        return view('booking.trashed.index', [
+            'bookings' => $bookings,
+        ]);
     }
 
     /**
