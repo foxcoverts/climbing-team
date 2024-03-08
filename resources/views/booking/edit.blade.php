@@ -124,20 +124,22 @@
                             <x-input-error :messages="$errors->get('start_date')" />
                         </div>
 
-                        <div class="space-y-1">
-                            <x-input-label for="start_time" :value="__('Start')" />
-                            <x-text-input id="start_time" name="start_time" type="time" step="60"
-                                :value="old('start_time', $booking->start_time)" placeholder="hh:mm" required x-model.fill="start_time"
-                                @change="syncEndTime" x-bind:disabled="booking.cancelled" />
-                            <x-input-error :messages="$errors->get('start_time')" />
-                        </div>
+                        <div class="flex gap-6">
+                            <div class="space-y-1">
+                                <x-input-label for="start_time" :value="__('Start')" />
+                                <x-text-input id="start_time" name="start_time" type="time" step="60"
+                                    :value="old('start_time', $booking->start_time)" placeholder="hh:mm" required x-model.fill="start_time"
+                                    @change="syncEndTime" x-bind:disabled="booking.cancelled" />
+                                <x-input-error :messages="$errors->get('start_time')" />
+                            </div>
 
-                        <div class="space-y-1">
-                            <x-input-label for="end_time" :value="__('End')" />
-                            <x-text-input id="end_time" name="end_time" type="time" step="60"
-                                :value="old('end_time', $booking->end_time)" placeholder="hh:mm" required x-model.fill="end_time"
-                                @blur="syncDuration" x-bind:disabled="booking.cancelled" />
-                            <x-input-error :messages="$errors->get('end_time')" />
+                            <div class="space-y-1">
+                                <x-input-label for="end_time" :value="__('End')" />
+                                <x-text-input id="end_time" name="end_time" type="time" step="60"
+                                    :value="old('end_time', $booking->end_time)" placeholder="hh:mm" required x-model.fill="end_time"
+                                    @blur="syncDuration" x-bind:disabled="booking.cancelled" />
+                                <x-input-error :messages="$errors->get('end_time')" />
+                            </div>
                         </div>
                     </div>
 
