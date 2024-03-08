@@ -6,6 +6,7 @@ use App\Http\Controllers\BookingAttendeeInviteController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
+use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TrashedBookingController;
@@ -58,8 +59,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->withTrashed(['show', 'update', 'destroy']);
     });
 
+    Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
+
     Route::resource('user', UserController::class);
 });
+
+Route::resource('mail', MailLogController::class)->only('store');
 
 Route::middleware(['signed', 'auth.param:attendee'])->group(function () {
     Route::controller(RespondController::class)->group(function () {
