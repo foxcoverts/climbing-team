@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('mail_logs', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->timestamps(6);
-            $table->text('body');
+            $table->mediumText('body');
         });
     }
 
