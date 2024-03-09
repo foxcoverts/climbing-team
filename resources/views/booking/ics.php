@@ -31,8 +31,7 @@ foreach ($bookings as $booking) {
 
     $organiser = new Organizer(
         new EmailAddress($booking->uid),
-        config('mail.from.name'),
-        sentBy: new EmailAddress(config('mail.from.address')),
+        config('mail.from.name')
     );
 
     $event = new Event(new UniqueIdentifier($booking->uid));
