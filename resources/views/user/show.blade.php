@@ -46,6 +46,16 @@
                 </x-button.primary>
             @endcan
             @include('user.partials.delete-button')
+            @if (!$user->isActive())
+                @can('update', $user)
+                    <form method="post" action="{{ route('user.invite', $user) }}">
+                        @csrf
+                        <x-button.secondary type="submit">
+                            @lang('Re-Send Invite')
+                        </x-button.secondary>
+                    </form>
+                @endcan
+            @endif
             <x-button.secondary href="{{ route('user.index') }}">
                 @lang('Back')
             </x-button.secondary>

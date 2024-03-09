@@ -76,6 +76,21 @@ class UserController extends Controller
         ]);
     }
 
+    public function sendInvite(User $user): RedirectResponse
+    {
+        $this->authorize('update', $user);
+
+        if ($user->isActive()) {
+            return redirect()->route('user.show', $user)
+                ->with('alert.error', __(':Name has already activated their account.', ['name' => $user->name]));
+        }
+
+        $user->sendAccountSetupNotification();
+
+        return redirect()->route('user.show', $user)
+            ->with('alert.info', __('A new invitation has been sent to :name.', ['name' => $user->name]));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
