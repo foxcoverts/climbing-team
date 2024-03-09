@@ -106,11 +106,6 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Fox Coverts Climbing Team'),
     ],
 
-    'reply_to' => [
-        'address' => 'climbing@foxcoverts.org.uk',
-        'name' => 'Fox Coverts Climbing Manager',
-    ],
-
     /*
     |--------------------------------------------------------------------------
     | Markdown Mail Settings

@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
 {
-    use HasFactory, HasUlids, SoftDeletes, Concerns\HasSequence;
+    use HasFactory, HasUlids, SoftDeletes, Concerns\HasSequence, Concerns\HasUid;
 
     /**
      * The attributes that are mass assignable.

@@ -20,29 +20,22 @@ use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Domain\ValueObject\Uri;
 
-$domain = parse_url(config('app.url'), PHP_URL_HOST);
-if ($domain == 'localhost') {
-    $domain = 'climbfoxcoverts.local';
-}
-
 $calendar = new Calendar();
 $calendar->setMethod($method ?? CalendarMethod::Publish);
 
 foreach ($bookings as $booking) {
-    $uid = sprintf('booking-%s@%s', $booking->id, $domain);
-
     $description = $booking->group_name;
     if (is_string($booking->notes)) {
         $description .= "\n" . $booking->notes;
     }
 
     $organiser = new Organizer(
-        new EmailAddress($uid),
+        new EmailAddress($booking->uid),
         config('mail.from.name'),
         sentBy: new EmailAddress(config('mail.from.address')),
     );
 
-    $event = new Event(new UniqueIdentifier($uid));
+    $event = new Event(new UniqueIdentifier($booking->uid));
     $event->setSequence(new Sequence($booking->sequence));
     $event
         ->setOccurrence(
@@ -77,7 +70,7 @@ foreach ($bookings as $booking) {
     }
 
     if ($attendee = $booking->attendees->find($user)) {
-        $emailAddress = new EmailAddress(sprintf('%s@%s', $attendee->id, $domain));
+        $emailAddress = new EmailAddress($attendee->uid);
         if ($attendee->is($user)) {
             try {
                 $emailAddress = new EmailAddress($attendee->email);

@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -52,13 +53,16 @@ class BookingInvite extends Mailable
                     'start' => localDate($this->booking->start_at)->toFormattedDayDateString(),
                 ]
             ),
+            replyTo: [
+                new Address($this->booking->uid)
+            ],
             tags: ['invite'],
             metadata: [
                 'booking_id' => $this->booking->id,
             ],
             using: [
                 fn (Email $message) => $this->attachCalendarData($message),
-            ]
+            ],
         );
     }
 
