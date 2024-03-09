@@ -24,7 +24,7 @@ class MailLogController extends Controller
     public function index(): View
     {
         return view('mail-log.index', [
-            'mails' => MailLog::orderBy('created_at')->get(),
+            'mails' => MailLog::orderByDesc('created_at')->get(),
         ]);
     }
 
