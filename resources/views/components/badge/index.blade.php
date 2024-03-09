@@ -1,4 +1,4 @@
-@props(['color' => 'gray'])
+@props(['color' => 'gray', 'label' => $slot])
 <span
     {{ $attributes->class([
         'inline-flex items-center rounded-md px-2 py-1 font-medium ring-1 ring-inset',
@@ -11,4 +11,4 @@
         'bg-sky-50 dark:bg-sky-700 text-sky-600 dark:text-sky-300 ring-sky-500/25 dark:ring-sky-300/25' => $color == 'sky',
         'bg-yellow-50 dark:bg-yellow-700 text-yellow-600 dark:text-yellow-300 ring-yellow-500/25 dark:ring-yellow-300/25' =>
             $color == 'yellow',
-    ]) }}>{{ $slot }}</span>
+    ]) }}>{{ $label }}</span>

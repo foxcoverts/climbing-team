@@ -19,4 +19,21 @@ class MailLog extends Model
     protected $fillable = [
         'body'
     ];
+
+    protected $casts = [
+        'read_at' => 'datetime',
+    ];
+
+    public function isUnread(): bool
+    {
+        return is_null($this->read_at);
+    }
+
+    public function markRead(bool $force = false): static
+    {
+        if (is_null($this->read_at) || $force) {
+            $this->read_at = $this->freshTimestamp();
+        }
+        return $this;
+    }
 }

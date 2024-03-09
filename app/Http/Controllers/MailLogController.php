@@ -33,6 +33,8 @@ class MailLogController extends Controller
      */
     public function show(MailLog $mail): View
     {
+        $mail->markRead()->save();
+
         return view('mail-log.show', [
             'mail' => $mail,
         ]);

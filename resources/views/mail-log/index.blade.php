@@ -22,7 +22,11 @@
                 @forelse ($mails as $mail)
                     <tr class="hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                         @click="window.location='{{ route('mail.show', $mail) }}'">
-                        <td class="px-3 py-2"><a href="{{ route('mail.show', $mail) }}">{{ $mail->id }}</a></td>
+                        <td class="px-3 py-2"><a href="{{ route('mail.show', $mail) }}">{{ $mail->id }}</a>
+                            @if ($mail->isUnread())
+                                <x-badge :label="__('New')" color="lime" class="text-xs" />
+                            @endif
+                        </td>
                         <td class="px-3 py-2">{{ localDate($mail->created_at) }}</td>
                     </tr>
                 @empty
