@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\StoreMailLogController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,5 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
     })->name('user');
     Route::apiResource('/booking', BookingController::class);
 });
+
+Route::post('mail', StoreMailLogController::class);

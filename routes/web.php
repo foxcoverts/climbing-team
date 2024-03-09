@@ -65,8 +65,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('user', UserController::class);
 });
 
-Route::resource('mail', MailLogController::class)->only('store');
-
 Route::middleware(['signed', 'auth.param:attendee'])->group(function () {
     Route::controller(RespondController::class)->group(function () {
         Route::get('respond/{booking}/{attendee}', 'show')->scopeBindings()->name('respond');

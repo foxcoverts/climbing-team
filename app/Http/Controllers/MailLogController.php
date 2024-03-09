@@ -29,19 +29,6 @@ class MailLogController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        MailLog::create([
-            'text' => $request->body,
-        ]);
-
-        // I would prefer to return a HTTP_CREATED response but the forwardemail API says it expects HTTP_OK.
-        return response()->json("ok", Response::HTTP_OK);
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(MailLog $mail): View

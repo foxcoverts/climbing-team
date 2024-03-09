@@ -10,9 +10,7 @@
             <p><dfn class="block not-italic font-medium after:content-[':']">@lang('Created')</dfn>
                 {{ localDate($mail->created_at) }}</p>
             <div><dfn class="block not-italic font-medium after:content-[':']">@lang('Body')</dfn>
-                <div class="font-mono whitespace-pre">
-                    {{ $mail->body }}
-                </div>
+                <div class="font-mono whitespace-pre">{{ $mail->body }}</div>
             </div>
         </div>
 
