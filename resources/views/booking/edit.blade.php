@@ -174,7 +174,7 @@
                                         x-bind:disabled="booking.confirmed">@lang('No lead instructor')
                                     </option>
                                 @endif
-                                <optgroup label="@lang('Permit Holders')">
+                                <optgroup label="{{ __('Permit Holders') }}">
                                     <x-select-input.collection :options="$instructors_attending" label_key="name" />
                                 </optgroup>
                             </x-select-input>
