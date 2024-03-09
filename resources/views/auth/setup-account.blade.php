@@ -30,7 +30,7 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $user->email)"
                 required autocomplete="username" x-model.fill="user.email" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
-            <p class="text-sm mt-2 text-blue-800 dark:text-blue-200" x-cloak x-show="user.email != originalEmail">
+            <p class="text-sm mt-2 text-blue-600 dark:text-blue-400" x-cloak x-show="user.email != originalEmail">
                 @lang('You will need to verify your new email address.')
             </p>
         </div>
@@ -42,7 +42,7 @@
             <x-password-input id="password" name="password" class="block mt-1 w-full" required
                 autocomplete="new-password" x-model.fill="user.password" />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <x-password-rules :errors="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
