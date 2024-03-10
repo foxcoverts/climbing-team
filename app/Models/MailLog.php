@@ -108,4 +108,14 @@ class MailLog extends Model
 
         return User::where('email', $email)->first();
     }
+
+    public function getToBookingAttribute(): Booking|null
+    {
+        $email = $this->parseBody()?->to->value[0]->address;
+        if (empty($email)) {
+            return null;
+        }
+
+        return Booking::findByUid($email);
+    }
 }

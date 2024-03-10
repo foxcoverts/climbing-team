@@ -9,7 +9,18 @@
                 <p><dfn class="block not-italic font-medium after:content-[':']">@lang('Sent')</dfn>
                     <x-text-input name="sent_at" :value="localDate($mail->sent_at)" type="datetime-local" readonly />
                 <p><dfn class="block not-italic font-medium after:content-[':']">@lang('To')</dfn>
-                    <x-text-input name="to" :value="$mail->to" class="w-full" readonly />
+                    @if ($mail->toBooking)
+                        <x-fake-input class="w-full">
+                            <a class="flex-grow flex gap-1 items-center text-black hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                                href="{{ route('booking.show', $mail->toBooking) }}">
+                                <x-icon.calendar class="w-5 h-5 fill-current" />
+                                <span>{{ $mail->toBooking->activity }} -
+                                    {{ localDate($mail->toBooking->start_at)->toFormattedDayDateString() }}</span>
+                            </a>
+                        </x-fake-input>
+                    @else
+                        <x-text-input name="to" :value="$mail->to" class="w-full" readonly />
+                    @endif
                 </p>
                 <p><dfn class="block not-italic font-medium after:content-[':']">@lang('From')</dfn>
                     @if ($mail->fromUser)

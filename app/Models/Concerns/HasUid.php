@@ -14,4 +14,15 @@ trait HasUid
         }
         return sprintf('%s+%s@%s', Str::singular($this->getTable()), $this->id, $domain);
     }
+
+    public static function findByUid(string $uid): static|null
+    {
+        $parts = preg_split('/[+@]/', $uid);
+
+        if ($parts[0] != Str::singular((new static)->getTable())) {
+            return null;
+        }
+
+        return static::find($parts[1]);
+    }
 }
