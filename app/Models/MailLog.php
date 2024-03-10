@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
 
 class MailLog extends Model
 {
@@ -40,21 +41,36 @@ class MailLog extends Model
 
     protected mixed $jsonCache = null;
 
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setBodyAttribute(string $value): void
+    {
+        $json = json_decode($value);
+        if (empty($json)) {
+            throw new InvalidArgumentException('Body must be valid JSON.');
+        }
+        if (!property_exists($json, 'subject')) {
+            throw new InvalidArgumentException('Body does not look like an encoded email object.');
+        }
+        $this->jsonCache = $json;
+        $this->body = $value;
+    }
+
     protected function parseBody(): mixed
     {
-        if (is_null($this->jsonCache)) {
-            $json = json_decode($this->body);
-            if (property_exists($json, 'subject')) {
-                $this->jsonCache = $json;
+        if ($this->jsonCache === null) {
+            try {
+                $this->body = $this->body;
+            } catch (InvalidArgumentException) {
             }
         }
-
         return $this->jsonCache;
     }
 
     public function isValid(): bool
     {
-        return !empty($this->parseBody());
+        return $this->parseBody() !== null;
     }
 
     public function getToAttribute(): string|null

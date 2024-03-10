@@ -44,7 +44,7 @@
         @else
             <div class="space-y-2 my-2 w-full flex-grow">
                 <h3 class="text-xl font-medium">@lang('Error')</h3>
-                <p>@lang('This does not appear to be an email sent by the ForwardEmail system. You should delete this email.')</p>
+                <p>@lang('This does not look like an encoded email.')</p>
             </div>
         @endif
 
