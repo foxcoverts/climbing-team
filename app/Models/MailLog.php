@@ -43,10 +43,18 @@ class MailLog extends Model
     protected function parseBody(): mixed
     {
         if (is_null($this->jsonCache)) {
-            $this->jsonCache = json_decode($this->body);
+            $json = json_decode($this->body);
+            if (property_exists($json, 'subject')) {
+                $this->jsonCache = $json;
+            }
         }
 
         return $this->jsonCache;
+    }
+
+    public function isValid(): bool
+    {
+        return !empty($this->parseBody());
     }
 
     public function getToAttribute(): string|null
@@ -72,5 +80,16 @@ class MailLog extends Model
     public function getSentAtAttribute(): string|null
     {
         return $this->parseBody()?->date;
+    }
+
+    public function getFromUserAttribute(): User|null
+    {
+        $email = $this->parseBody()?->from->value[0]->address;
+
+        if (empty($email)) {
+            return null;
+        }
+
+        return User::where('email', $email)->first();
     }
 }
