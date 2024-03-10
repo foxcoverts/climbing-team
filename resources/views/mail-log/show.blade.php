@@ -5,12 +5,28 @@
         </header>
 
         <div class="space-y-2 my-2 w-full flex-grow">
-            <p><dfn class="block not-italic font-medium after:content-[':']">@lang('ID')</dfn>
-                {{ $mail->id }}</p>
-            <p><dfn class="block not-italic font-medium after:content-[':']">@lang('Created')</dfn>
-                {{ localDate($mail->created_at) }}</p>
-            <div><dfn class="block not-italic font-medium after:content-[':']">@lang('Body')</dfn>
-                <x-textarea class="w-full" readonly>{{ $mail->body }}</x-textarea>
+            <p><dfn class="block not-italic font-medium after:content-[':']">@lang('Sent')</dfn>
+                <x-text-input :value="localDate($mail->sent_at)" type="datetime-local" readonly />
+            <p><dfn class="block not-italic font-medium after:content-[':']">@lang('To')</dfn>
+                <x-text-input :value="$mail->to" class="w-full" readonly />
+            </p>
+            <p><dfn class="block not-italic font-medium after:content-[':']">@lang('From')</dfn>
+                <x-text-input :value="$mail->from" class="w-full" readonly />
+            </p>
+            <p><dfn class="block not-italic font-medium after:content-[':']">@lang('Subject')</dfn>
+                <x-text-input :value="$mail->subject" class="w-full" readonly />
+            </p>
+            <div x-data="{
+                body: {{ json_encode($mail->bodyHtml) }},
+                init() {
+                    this.$refs.body.contentWindow.document.open('text/html', 'replace');
+                    this.$refs.body.contentWindow.document.write(this.body);
+                    this.$refs.body.contentWindow.document.close();
+                },
+            }">
+                <dfn class="block not-italic font-medium after:content-[':']">@lang('Message')</dfn>
+                <iframe class="w-full h-dvh border border-gray-300 dark:border-gray-700 bg-white rounded-md shadow-sm"
+                    x-ref="body" src="about:blank"></iframe>
             </div>
         </div>
 

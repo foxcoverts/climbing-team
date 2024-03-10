@@ -17,8 +17,6 @@ class StoreMailLogController extends Controller
         MailLog::create([
             'body' => $request->getContent(),
         ]);
-
-        // I would prefer to return a HTTP_CREATED response but the forwardemail API says it expects HTTP_OK.
         return response()->json("ok", Response::HTTP_OK);
     }
 }

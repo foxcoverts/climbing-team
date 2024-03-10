@@ -10,7 +10,6 @@ class MailLog extends Model
 {
     use HasFactory, HasUlids;
 
-
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +21,7 @@ class MailLog extends Model
 
     protected $casts = [
         'read_at' => 'datetime',
+        'sent_at' => 'datetime',
     ];
 
     public function isUnread(): bool
@@ -35,5 +35,42 @@ class MailLog extends Model
             $this->read_at = $this->freshTimestamp();
         }
         return $this;
+    }
+
+
+    protected mixed $jsonCache = null;
+
+    protected function parseBody(): mixed
+    {
+        if (is_null($this->jsonCache)) {
+            $this->jsonCache = json_decode($this->body);
+        }
+
+        return $this->jsonCache;
+    }
+
+    public function getToAttribute(): string|null
+    {
+        return $this->parseBody()?->to?->text;
+    }
+
+    public function getFromAttribute(): string|null
+    {
+        return $this->parseBody()?->from?->text;
+    }
+
+    public function getSubjectAttribute(): string|null
+    {
+        return $this->parseBody()?->subject;
+    }
+
+    public function getBodyHtmlAttribute(): string|null
+    {
+        return $this->parseBody()?->html ?? $this->parseBody()?->textAsHtml;
+    }
+
+    public function getSentAtAttribute(): string|null
+    {
+        return $this->parseBody()?->date;
     }
 }
