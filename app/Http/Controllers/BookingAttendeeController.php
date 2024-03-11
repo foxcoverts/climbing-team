@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AttendeeStatus;
 use App\Http\Requests\StoreBookingAttendeeRequest;
 use App\Http\Requests\UpdateBookingAttendeeRequest;
 use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\Change;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class BookingAttendeeController extends Controller
@@ -68,6 +71,15 @@ class BookingAttendeeController extends Controller
             $user_id => $options,
         ]);
 
+        $change = new Change();
+        $change->author()->associate($request->user());
+        $booking->changes()->save($change);
+
+        $change_attendee = new Change\Attendee;
+        $change_attendee->attendee_id = $user_id;
+        $change_attendee->attendee_status = $options['status'];
+        $change->attendees()->save($change_attendee);
+
         return redirect()->route('booking.show', $booking)
             ->with('alert.info', __('Added attendee successfully.'));
     }
@@ -105,6 +117,15 @@ class BookingAttendeeController extends Controller
             $attendee->id => $request->validated(),
         ]);
 
+        $change = new Change();
+        $change->author()->associate($request->user());
+        $booking->changes()->save($change);
+
+        $change_attendee = new Change\Attendee;
+        $change_attendee->attendee()->associate($attendee);
+        $change_attendee->attendee_status = $request->validated()['status'];
+        $change->attendees()->save($change_attendee);
+
         return redirect()->route('booking.show', $booking)
             ->with('alert.info', __('Updated attendance successfully.'));
     }
@@ -112,11 +133,22 @@ class BookingAttendeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Booking $booking, User $attendee): RedirectResponse
+    public function destroy(Request $request, Booking $booking, User $attendee): RedirectResponse
     {
         $this->authorize('delete', $attendee->attendance);
 
         $booking->attendees()->detach($attendee);
+
+        if ($attendee->attendance != AttendeeStatus::Declined) {
+            $change = new Change();
+            $change->author()->associate($request->user());
+            $booking->changes()->save($change);
+
+            $change_attendee = new Change\Attendee;
+            $change_attendee->attendee()->associate($attendee);
+            $change_attendee->attendee_status = AttendeeStatus::Declined;
+            $change->attendees()->save($change_attendee);
+        }
 
         return redirect()->route('booking.show', $booking)
             ->with('alert.info', __('Removed attendee successfully.'));
