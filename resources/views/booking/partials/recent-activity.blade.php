@@ -1,14 +1,14 @@
 <h3 class="text-xl font-medium">@lang('Recent Activity')</h3>
 
 <div class="space-y-2">
-    <div>
-        <p><span title="{{ localDate($booking->created_at)->toDayDateTimeString() }}" class="cursor-help">
-                {{ localDate($booking->created_at)->ago() }}
-            </span></p>
-        <div class="border-l-2 ml-2 pl-2">@lang('Booking created.')</div>
-    </div>
+    @include('booking.partials.comment-form')
 
+    @php($lastChange = null)
     @foreach ($booking->changes as $change)
+        @if ($lastChange && $lastChange->attendees->pluck('attendee') == $change->attendees->pluck('attendee'))
+            {{-- Reduce noise from the same attendee changing their status in a row --}}
+            @continue
+        @endif
         <div id="{{ $change->id }}">
             <p><span title="{{ localDate($change->created_at)->toDayDateTimeString() }}" class="cursor-help">
                     {{ localDate($change->created_at)->ago() }}
@@ -41,5 +41,12 @@
                 </div>
             @endforeach
         </div>
+        @php($lastChange = $change)
     @endforeach
+    <div>
+        <p><span title="{{ localDate($booking->created_at)->toDayDateTimeString() }}" class="cursor-help">
+                {{ localDate($booking->created_at)->ago() }}
+            </span></p>
+        <div class="border-l-2 ml-2 pl-2">@lang('Booking created.')</div>
+    </div>
 </div>

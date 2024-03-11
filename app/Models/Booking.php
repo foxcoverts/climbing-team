@@ -127,7 +127,8 @@ class Booking extends Model
 
     public function changes(): HasMany
     {
-        return $this->hasMany(Change::class);
+        return $this->hasMany(Change::class)
+            ->orderByDesc('created_at');
     }
 
     public function attendees(): BelongsToMany
