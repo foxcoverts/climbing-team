@@ -35,4 +35,9 @@ class Calendar
         }
         return $events;
     }
+
+    public function getRaw(): string
+    {
+        return $this->vcalendar->serialize();
+    }
 }

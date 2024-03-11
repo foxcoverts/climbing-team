@@ -54,6 +54,10 @@
                                 </p>
                             @endforeach
                         @endforeach
+
+                        <p><dfn class="block not-italic font-medium after:content-[':']">@lang('Raw')</dfn>
+                            <x-textarea name="ics" class="w-full mt-1">{{ $mail->calendar->getRaw() }}</x-textarea>
+                        </p>
                     @else
                         <p><dfn class="block not-italic font-medium after:content-[':']">@lang('To')</dfn>
                             @if ($mail->toBooking)
