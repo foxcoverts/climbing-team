@@ -73,6 +73,11 @@ class MailLog extends Model
         return $this->parseBody() !== null;
     }
 
+    public function getSentAtAttribute(): string|null
+    {
+        return $this->parseBody()?->date;
+    }
+
     public function getToAttribute(): string|null
     {
         return $this->parseBody()?->to?->text;
@@ -88,14 +93,29 @@ class MailLog extends Model
         return $this->parseBody()?->subject;
     }
 
+    public function getCalendarAttribute(): Calendar\Calendar|null
+    {
+        $calendar = collect($this->parseBody()?->attachments)
+            ->where('contentType', 'text/calendar')
+            ->first();
+        if ($calendar?->content->type == 'Buffer') {
+            $data = '';
+            for ($i = 0; $i < count($calendar->content->data); $i++) {
+                $data .= chr($calendar->content->data[$i]);
+            }
+            return Calendar\Calendar::loadData($data);
+        }
+        return null;
+    }
+
+    public function getAttachmentsAttribute(): array|null
+    {
+        return $this->parseBody()?->attachments;
+    }
+
     public function getBodyHtmlAttribute(): string|null
     {
         return $this->parseBody()?->html ?? $this->parseBody()?->textAsHtml;
-    }
-
-    public function getSentAtAttribute(): string|null
-    {
-        return $this->parseBody()?->date;
     }
 
     public function getFromUserAttribute(): User|null
