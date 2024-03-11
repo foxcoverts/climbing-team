@@ -13,6 +13,26 @@
             <p><span title="{{ localDate($change->created_at)->toDayDateTimeString() }}" class="cursor-help">
                     {{ localDate($change->created_at)->ago() }}
                 </span></p>
+            @foreach ($change->attendees as $attendee)
+                <div class="border-l-2 ml-2 pl-2" id="{{ $attendee->id }}">
+                    <div><a href="{{ route('user.show', $attendee->attendee) }}"
+                            class="font-medium">{{ $attendee->attendee->name }}</a>
+                        @switch ($attendee->attendee_status)
+                            @case('accepted')
+                                will be going to this booking.
+                            @break
+
+                            @case('tentative')
+                                may be able to attend this booking.
+                            @break
+
+                            @case('declined')
+                                cannot attend this booking.
+                            @break
+                        @endswitch
+                    </div>
+                </div>
+            @endforeach
             @foreach ($change->comments as $comment)
                 <div class="border-l-2 ml-2 pl-2" id="{{ $comment->id }}">
                     <div><a href="{{ route('user.show', $change->author) }}"

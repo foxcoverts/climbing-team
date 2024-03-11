@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateBookingAttendanceRequest;
 use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\Change;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -69,6 +70,15 @@ class BookingAttendanceController extends Controller
         $booking->attendees()->syncWithoutDetaching([
             $request->user()->id => $request->validated()
         ]);
+
+        $change = new Change;
+        $change->author()->associate($request->user());
+        $booking->changes()->save($change);
+
+        $change_attendee = new Change\Attendee;
+        $change_attendee->attendee()->associate($request->user());
+        $change_attendee->attendee_status = $request->validated()['status'];
+        $change->attendees()->save($change_attendee);
 
         return redirect($request->session()->get('url.referer', url()->previous()))
             ->with('alert.info', __('Updated your attendance successfully.'));

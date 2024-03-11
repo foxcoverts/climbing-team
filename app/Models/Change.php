@@ -14,6 +14,8 @@ class Change extends Model
 
     protected $with = [
         'author',
+        'attendees',
+        'attendees.attendee',
         'comments',
     ];
 
@@ -25,6 +27,11 @@ class Change extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function attendees(): HasMany
+    {
+        return $this->hasMany(Change\Attendee::class);
     }
 
     public function comments(): HasMany
