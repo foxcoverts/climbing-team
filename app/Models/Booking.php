@@ -5,12 +5,12 @@ namespace App\Models;
 use App\Casts\Sequence;
 use App\Enums\BookingStatus;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
@@ -123,6 +123,11 @@ class Booking extends Model
         } else {
             $this->end_at = $this->end_at->setTimeFrom($new_time);
         }
+    }
+
+    public function changes(): HasMany
+    {
+        return $this->hasMany(Change::class);
     }
 
     public function attendees(): BelongsToMany

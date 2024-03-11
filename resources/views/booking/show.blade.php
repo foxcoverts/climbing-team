@@ -7,13 +7,17 @@
             <div class="w-full max-w-xl">
                 @include('booking.partials.details')
 
-                <footer class="flex items-start gap-4 mt-4">
-                    @can('update', $booking)
+                @include('booking.partials.recent-activity')
+
+                @include('booking.partials.comment-form')
+
+                @can('update', $booking)
+                    <footer class="flex items-start gap-4 mt-4">
                         <x-button.primary :href="route('booking.edit', $booking)">
                             @lang('Edit')
                         </x-button.primary>
-                    @endcan
-                </footer>
+                    </footer>
+                @endcan
             </div>
             @include('booking.partials.guest-list')
         </div>

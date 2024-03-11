@@ -65,6 +65,14 @@ class BookingPolicy
     }
 
     /**
+     * Determine whether the user can comment on the booking.
+     */
+    public function comment(User $user, Booking $booking): bool
+    {
+        return $user->can('view', $booking);
+    }
+
+    /**
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, Booking $booking): bool

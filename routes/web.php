@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingAttendeeInviteController;
+use App\Http\Controllers\BookingCommentController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
@@ -43,6 +44,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except(['edit']);
+
+    Route::post('booking/{booking}/comment', [BookingCommentController::class, 'store'])->name('booking.comment.create');
 
     Route::get('booking/invite', BookingInviteController::class)->name('booking.invite');
 
