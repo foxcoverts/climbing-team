@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\RespondToBookingAction;
 use App\Http\Requests\StoreRespondRequest;
 use App\Models\Booking;
 use App\Models\User;
@@ -37,9 +38,10 @@ class RespondController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Invitation expired');
         }
 
-        $booking->attendees()->syncWithoutDetaching([
-            $attendee->id => $request->validated(),
-        ]);
+        (new RespondToBookingAction($booking))(
+            $attendee,
+            $request->validated()['status']
+        );
 
         $request->session()->put('alert.info', __('Thank-you. Your response has been recorded.'));
         return redirect()->route('booking.invite');

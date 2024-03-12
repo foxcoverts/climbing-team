@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\RespondToBookingAction;
+use App\Events\AttendanceChanged;
 use App\Http\Requests\UpdateBookingAttendanceRequest;
 use App\Models\Attendance;
 use App\Models\Booking;
-use App\Models\Change;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -67,18 +68,10 @@ class BookingAttendanceController extends Controller
                 ->with('alert.error', __('You cannot change your attendance on cancelled bookings.'));
         }
 
-        $booking->attendees()->syncWithoutDetaching([
-            $request->user()->id => $request->validated()
-        ]);
-
-        $change = new Change;
-        $change->author()->associate($request->user());
-        $booking->changes()->save($change);
-
-        $change_attendee = new Change\Attendee;
-        $change_attendee->attendee()->associate($request->user());
-        $change_attendee->attendee_status = $request->validated()['status'];
-        $change->attendees()->save($change_attendee);
+        (new RespondToBookingAction($booking))(
+            attendee: $request->user(),
+            status: $request->validated()['status']
+        );
 
         return redirect($request->session()->get('url.referer', url()->previous()))
             ->with('alert.info', __('Updated your attendance successfully.'));
