@@ -62,6 +62,14 @@
                                 <x-text-input ::id="$id('attendee_status')" name="attendee[][status]" :value="__('app.attendee.status.' . $attendee->getStatus()->value)"
                                     class="w-full mt-1" readonly />
                             </div>
+
+                            @if ($attendee->getComment())
+                                <div x-id="['attendee_comment']">
+                                    <x-input-label ::for="$id('attendee_comment')">@lang('Comment')</x-input-label>
+                                    <x-text-input ::id="$id('attendee_comment')" name="attendee[][comment]" :value="$attendee->getComment()"
+                                        class="w-full mt-1" readonly />
+                                </div>
+                            @endif
                         @endforeach
                     @endforeach
 

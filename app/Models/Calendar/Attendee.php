@@ -44,4 +44,14 @@ class Attendee
                 return null; // Unsupported
         }
     }
+
+    public function getComment(): string|null
+    {
+        if (isset($this->vattendee['X-RESPONSE-COMMENT'])) {
+            return html_entity_decode(
+                str_replace('\;', ';', (string) $this->vattendee['X-RESPONSE-COMMENT'])
+            );
+        }
+        return null;
+    }
 }
