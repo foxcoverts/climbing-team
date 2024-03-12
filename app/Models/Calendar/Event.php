@@ -3,6 +3,7 @@
 namespace App\Models\Calendar;
 
 use App\Models\Booking;
+use Illuminate\Support\Collection;
 use Sabre\VObject\Component\VEvent;
 
 class Event
@@ -25,12 +26,12 @@ class Event
     /**
      * @return array<Attendee>
      */
-    public function getAttendees(): array
+    public function getAttendees(): Collection
     {
         $attendees = [];
         foreach ($this->vevent->ATTENDEE as $vattendee) {
             $attendees[] = new Attendee($vattendee);
         }
-        return $attendees;
+        return collect($attendees);
     }
 }

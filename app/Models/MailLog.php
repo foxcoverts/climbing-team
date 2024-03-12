@@ -138,4 +138,22 @@ class MailLog extends Model
 
         return Booking::findByUid($email);
     }
+
+    public function getBookingAttribute(): Booking|null
+    {
+        $booking = $this->calendar?->getEvents()->first()?->getBooking();
+        if (!$booking) {
+            return $this->toBooking;
+        }
+        return $booking;
+    }
+
+    public function getUserAttribute(): User|null
+    {
+        $attendee = $this->calendar?->getEvents()->first()?->getAttendees()->first();
+        if (!$attendee) {
+            return $this->fromUser;
+        }
+        return $attendee->getUser();
+    }
 }

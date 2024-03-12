@@ -2,6 +2,7 @@
 
 namespace App\Models\Calendar;
 
+use Illuminate\Support\Collection;
 use Sabre\VObject;
 use Sabre\VObject\Document;
 
@@ -27,13 +28,13 @@ class Calendar
     /**
      * @return array<Event>
      */
-    public function getEvents(): array
+    public function getEvents(): Collection
     {
         $events = [];
         foreach ($this->vcalendar->VEVENT as $vevent) {
             $events[] = new Event($vevent);
         }
-        return $events;
+        return collect($events);
     }
 
     public function getRaw(): string

@@ -11,23 +11,48 @@
                 <tr>
                     <th
                         class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
-                        @lang('ID')</th>
-
+                        @lang('To')</th>
                     <th
                         class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
-                        @lang('Created')</th>
+                        @lang('From')</th>
+                    <th
+                        class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
+                        @lang('Received')</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 border-y border-gray-200">
                 @forelse ($mails as $mail)
                     <tr class="hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                         @click="window.location='{{ route('mail.show', $mail) }}'">
-                        <td class="px-3 py-2"><a href="{{ route('mail.show', $mail) }}">{{ $mail->id }}</a>
+                        <td class="px-3 py-3">
+                            @if ($mail->booking)
+                                <div class="flex items-center space-x-1">
+                                    <x-icon.calendar class="w-5 h-5 fill-current" />
+                                    <span>
+                                        {{ $mail->booking->activity }}
+                                        -
+                                        {{ localDate($mail->booking->start_at)->toFormattedDayDateString() }}
+                                    </span>
+                                </div>
+                            @else
+                                {{ $mail->to }}
+                            @endif
+                        </td>
+                        <td class="px-3 py-3">
+                            @if ($mail->user)
+                                <div class="flex items-center space-x-1">
+                                    <x-icon.user-solid-square class="w-5 h-5 fill-current" />
+                                    <span>{{ $mail->user->name }} &lt;{{ $mail->user->email }}&gt;</span>
+                                </div>
+                            @else
+                                {{ $mail->from }}
+                            @endif
+                        </td>
+                        <td class="px-3 py-2">{{ localDate($mail->created_at) }}
                             @if ($mail->isUnread())
                                 <x-badge :label="__('New')" color="lime" class="text-xs" />
                             @endif
                         </td>
-                        <td class="px-3 py-2">{{ localDate($mail->created_at) }}</td>
                     </tr>
                 @empty
                     <tr>
