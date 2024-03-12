@@ -26,7 +26,7 @@ $calendar->setMethod($method ?? CalendarMethod::Publish);
 foreach ($bookings as $booking) {
     $description = $booking->group_name;
     if (is_string($booking->notes)) {
-        $description .= "\n" . $booking->notes;
+        $description .= "\n\n" . $booking->notes;
     }
 
     $organiser = new Organizer(
