@@ -9,8 +9,9 @@
         <table class="w-full mt-6 text-gray-700 dark:text-gray-300 ">
             <thead>
                 <tr>
-                    <th class="sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
-                        {{-- unread --}}</th>
+                    <th class="pl-3 sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
+                        <x-icon.empty-outline class="w-5 h-5 fill-current" />
+                    </th>
                     <th
                         class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
                         @lang('To')</th>
@@ -26,9 +27,11 @@
                 @forelse ($mails as $mail)
                     <tr class="hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                         @click="window.location='{{ route('mail.show', $mail) }}'">
-                        <td>
-                            @if ($mail->isUnread())
-                                <span class="relative inline-flex rounded-full h-3 w-3 ml-3 bg-sky-500"></span>
+                        <td @class(['pl-3', 'text-sky-500' => $mail->isUnread()])>
+                            @if ($mail->done)
+                                <x-icon.checkmark-outline class="w-5 h-5 fill-current" />
+                            @else
+                                <x-icon.question-outline class="w-5 h-5 fill-current" />
                             @endif
                         </td>
                         <td class="px-3 py-3">

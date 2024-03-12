@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\RespondToBookingAction;
 use App\Http\Controllers\Controller;
 use App\Models\MailLog;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class StoreMailLogController extends Controller
     public function __invoke(Request $request)
     {
         try {
-            MailLog::create([
+            $mail = new MailLog([
                 'body' => $request->getContent(),
             ]);
         } catch (InvalidArgumentException $e) {
@@ -24,6 +25,26 @@ class StoreMailLogController extends Controller
                 "error" => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         }
+
+        if ($mail->calendar?->getMethod() == 'REPLY') {
+            foreach ($mail->calendar->getEvents() as $event) {
+                if (!$event->getBooking()) continue;
+
+                $action = new RespondToBookingAction($event->getBooking());
+                foreach ($event->getAttendees() as $attendee) {
+                    if (!$attendee->getUser()) continue;
+
+                    $action(
+                        $attendee->getUser(),
+                        $attendee->getStatus(),
+                        $attendee->getComment()
+                    );
+                }
+            }
+            $mail->done = true;
+        }
+        $mail->save();
+
         return response()->json("ok", Response::HTTP_OK);
     }
 }
