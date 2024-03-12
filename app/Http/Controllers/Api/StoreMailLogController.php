@@ -27,6 +27,7 @@ class StoreMailLogController extends Controller
         }
 
         if ($mail->calendar?->getMethod() == 'REPLY') {
+            $changes = 0;
             foreach ($mail->calendar->getEvents() as $event) {
                 if (!$event->getBooking()) continue;
 
@@ -47,9 +48,12 @@ class StoreMailLogController extends Controller
                         $change->created_at = $event->getSentAt();
                         $change->save();
                     }
+                    $changes++;
                 }
             }
-            $mail->done = true;
+            if ($changes > 0) {
+                $mail->done = true;
+            }
         }
         $mail->save();
 
