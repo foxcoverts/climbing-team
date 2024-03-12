@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Actions\RespondToBookingAction;
 use App\Enums\AttendeeStatus;
-use App\Events\AttendanceChanged;
 use App\Http\Requests\StoreBookingAttendeeRequest;
 use App\Http\Requests\UpdateBookingAttendeeRequest;
 use App\Models\Attendance;
@@ -14,6 +13,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 
 class BookingAttendeeController extends Controller
@@ -56,19 +56,16 @@ class BookingAttendeeController extends Controller
     {
         $this->authorize('create', [Attendance::class, $booking]);
 
-        if ($booking->isPast()) {
-            return redirect()->back()
-                ->with('alert.error', __('You cannot change attendance on past bookings.'));
-        }
-        if ($booking->isCancelled()) {
-            return redirect()->back()
-                ->with('alert.error', __('You cannot change attendance on cancelled bookings.'));
-        }
-
         $user_id = $request->safe()->user_id;
         $options = $request->safe()->except(['user_id']);
 
-        (new RespondToBookingAction($booking, $request->user()))(
+        try {
+            $respondToBooking = new RespondToBookingAction($booking, $request->user());
+        } catch (InvalidArgumentException $e) {
+            return redirect()->back()->with('alert.error', $e->getMessage());
+        }
+
+        $respondToBooking(
             $user_id,
             $options['status']
         );
@@ -97,16 +94,13 @@ class BookingAttendeeController extends Controller
     {
         $this->authorize('update', $attendee->attendance);
 
-        if ($booking->isPast()) {
-            return redirect()->back()
-                ->with('alert.error', __('You cannot change attendance on past bookings.'));
-        }
-        if ($booking->isCancelled()) {
-            return redirect()->back()
-                ->with('alert.error', __('You cannot change attendance on cancelled bookings.'));
+        try {
+            $respondToBooking = new RespondToBookingAction($booking, $request->user());
+        } catch (InvalidArgumentException $e) {
+            return redirect()->back()->with('alert.error', $e->getMessage());
         }
 
-        (new RespondToBookingAction($booking, $request->user()))(
+        $respondToBooking(
             $attendee,
             $request->validated()['status']
         );
@@ -123,10 +117,12 @@ class BookingAttendeeController extends Controller
         $this->authorize('delete', $attendee->attendance);
 
         if ($attendee->attendance != AttendeeStatus::Declined) {
-            (new RespondToBookingAction($booking, $request->user()))(
-                $attendee,
-                AttendeeStatus::Declined
-            );
+            try {
+                $respondToBooking = new RespondToBookingAction($booking, $request->user());
+            } catch (InvalidArgumentException $e) {
+                return redirect()->back()->with('alert.error', $e->getMessage());
+            }
+            $respondToBooking($attendee, AttendeeStatus::Declined);
         }
         $booking->attendees()->detach($attendee);
 

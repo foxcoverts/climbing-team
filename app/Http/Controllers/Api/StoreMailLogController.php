@@ -30,15 +30,22 @@ class StoreMailLogController extends Controller
             foreach ($mail->calendar->getEvents() as $event) {
                 if (!$event->getBooking()) continue;
 
-                $action = new RespondToBookingAction($event->getBooking());
+                try {
+                    $respondToBooking = new RespondToBookingAction($event->getBooking());
+                } catch (InvalidArgumentException $e) {
+                    continue;
+                }
+
                 foreach ($event->getAttendees() as $attendee) {
                     if (!$attendee->getUser()) continue;
 
-                    $action(
+                    $change = $respondToBooking(
                         $attendee->getUser(),
                         $attendee->getStatus(),
                         $attendee->getComment()
                     );
+                    $change->created_at = $event->getSentAt();
+                    $change->save();
                 }
             }
             $mail->done = true;

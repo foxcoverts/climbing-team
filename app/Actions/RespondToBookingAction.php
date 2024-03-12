@@ -6,6 +6,7 @@ use App\Enums\AttendeeStatus;
 use App\Models\Booking;
 use App\Models\Change;
 use App\Models\User;
+use InvalidArgumentException;
 
 class RespondToBookingAction
 {
@@ -14,6 +15,12 @@ class RespondToBookingAction
         public Booking $booking,
         public ?User $user = null
     ) {
+        if ($booking->isPast()) {
+            throw new InvalidArgumentException('You cannot change attendance on past bookings.');
+        }
+        if ($booking->isCancelled()) {
+            throw new InvalidArgumentException('You cannot change attendance on cancelled bookings.');
+        }
     }
 
     public function __invoke(

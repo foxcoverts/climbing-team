@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use InvalidArgumentException;
 
 class BookingAttendanceController extends Controller
 {
@@ -59,16 +60,13 @@ class BookingAttendanceController extends Controller
     {
         $this->authorizeAttendance('update', $booking, $request->user());
 
-        if ($booking->isPast()) {
-            return redirect()->back()
-                ->with('alert.error', __('You cannot change your attendance on bookings in the past.'));
-        }
-        if ($booking->isCancelled()) {
-            return redirect()->back()
-                ->with('alert.error', __('You cannot change your attendance on cancelled bookings.'));
+        try {
+            $respondToBooking = new RespondToBookingAction($booking);
+        } catch (InvalidArgumentException $e) {
+            return redirect()->back()->with('alert.error', $e->getMessage());
         }
 
-        (new RespondToBookingAction($booking))(
+        $respondToBooking(
             attendee: $request->user(),
             status: $request->validated()['status']
         );

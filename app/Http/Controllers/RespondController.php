@@ -6,6 +6,7 @@ use App\Actions\RespondToBookingAction;
 use App\Http\Requests\StoreRespondRequest;
 use App\Models\Booking;
 use App\Models\User;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 
 class RespondController extends Controller
@@ -17,8 +18,10 @@ class RespondController extends Controller
     {
         $this->authorize('update', $attendee->attendance);
 
-        if ($booking->isPast() || $booking->isCancelled()) {
-            abort(Response::HTTP_FORBIDDEN, 'Invitation expired');
+        try {
+            new RespondToBookingAction($booking);
+        } catch (InvalidArgumentException $e) {
+            abort(Response::HTTP_FORBIDDEN, __('Invitation expired'));
         }
 
         return view('respond.show', [
@@ -34,11 +37,13 @@ class RespondController extends Controller
     {
         $this->authorize('update', $attendee->attendance);
 
-        if ($booking->isPast() || $booking->isCancelled()) {
-            abort(Response::HTTP_FORBIDDEN, 'Invitation expired');
+        try {
+            $respondToBooking = new RespondToBookingAction($booking);
+        } catch (InvalidArgumentException $e) {
+            abort(Response::HTTP_FORBIDDEN, __('Invitation expired'));
         }
 
-        (new RespondToBookingAction($booking))(
+        $respondToBooking(
             $attendee,
             $request->validated()['status']
         );
