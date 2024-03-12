@@ -54,7 +54,7 @@ class MailLog extends Model
             throw new InvalidArgumentException('Body does not look like an encoded email object.');
         }
         $this->jsonCache = $json;
-        $this->body = $value;
+        $this->attributes['body'] = $value;
     }
 
     protected function parseBody(): mixed
