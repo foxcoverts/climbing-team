@@ -62,6 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->withTrashed(['show', 'update', 'destroy']);
     });
 
+    Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
 
     Route::post('user/{user}/invite', [UserController::class, 'sendInvite'])->name('user.invite');

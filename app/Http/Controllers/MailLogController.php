@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MailLog;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 
 class MailLogController extends Controller
 {
@@ -37,6 +38,16 @@ class MailLogController extends Controller
             'mail' => $mail,
         ]);
     }
+
+    public function raw(MailLog $mail): Response
+    {
+        $this->authorize('view', $mail);
+
+        return response($mail->body, headers: [
+            'Content-Type' => 'text/plain; charset=utf-8',
+        ]);
+    }
+
 
     /**
      * Remove the specified resource from storage.
