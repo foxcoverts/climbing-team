@@ -39,13 +39,14 @@ class StoreMailLogController extends Controller
                 foreach ($event->getAttendees() as $attendee) {
                     if (!$attendee->getUser()) continue;
 
-                    $change = $respondToBooking(
+                    if ($change = $respondToBooking(
                         $attendee->getUser(),
                         $attendee->getStatus(),
                         $attendee->getComment()
-                    );
-                    $change->created_at = $event->getSentAt();
-                    $change->save();
+                    )) {
+                        $change->created_at = $event->getSentAt();
+                        $change->save();
+                    }
                 }
             }
             $mail->done = true;

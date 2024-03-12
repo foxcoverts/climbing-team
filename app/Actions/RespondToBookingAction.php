@@ -27,12 +27,18 @@ class RespondToBookingAction
         User|string $attendee,
         AttendeeStatus|string $status,
         ?string $comment = null
-    ): Change {
+    ): ?Change {
         // Prepare data
         $attendee_id = is_string($attendee) ? $attendee : $attendee->id;
         $status = is_string($status) ? AttendeeStatus::tryFrom($status) : $status;
         $author = $this->user ?? $attendee;
         $author_id = is_string($author) ? $author : $author->id;
+
+        // Validate
+        $attendance = $this->booking->attendees()->find($attendee_id);
+        if ($attendance?->attendance?->status == $status) {
+            return null;
+        }
 
         // Perform action
         $this->booking->attendees()->syncWithoutDetaching([
