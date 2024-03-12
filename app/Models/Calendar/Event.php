@@ -3,6 +3,7 @@
 namespace App\Models\Calendar;
 
 use App\Models\Booking;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Sabre\VObject\Component\VEvent;
 
@@ -11,6 +12,11 @@ class Event
     public function __construct(
         protected VEvent $vevent
     ) {
+    }
+
+    public function getSentAt(): Carbon
+    {
+        return Carbon::parse($this->vevent->DTSTAMP);
     }
 
     public function getBooking(): Booking|null
