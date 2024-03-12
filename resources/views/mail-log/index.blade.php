@@ -9,6 +9,8 @@
         <table class="w-full mt-6 text-gray-700 dark:text-gray-300 ">
             <thead>
                 <tr>
+                    <th class="sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
+                        {{-- unread --}}</th>
                     <th
                         class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
                         @lang('To')</th>
@@ -24,6 +26,11 @@
                 @forelse ($mails as $mail)
                     <tr class="hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                         @click="window.location='{{ route('mail.show', $mail) }}'">
+                        <td>
+                            @if ($mail->isUnread())
+                                <span class="relative inline-flex rounded-full h-3 w-3 ml-3 bg-sky-500"></span>
+                            @endif
+                        </td>
                         <td class="px-3 py-3">
                             @if ($mail->booking)
                                 <div class="flex items-center space-x-1">
@@ -48,11 +55,7 @@
                                 {{ $mail->from }}
                             @endif
                         </td>
-                        <td class="px-3 py-2">{{ localDate($mail->created_at) }}
-                            @if ($mail->isUnread())
-                                <x-badge :label="__('New')" color="lime" class="text-xs" />
-                            @endif
-                        </td>
+                        <td class="px-3 py-2">{{ localDate($mail->created_at) }}</td>
                     </tr>
                 @empty
                     <tr>
