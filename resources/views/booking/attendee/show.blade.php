@@ -49,7 +49,7 @@
                             @endif
                         </form>
                     @else
-                        @if ($booking->lead_instructor->is($attendee))
+                        @if ($attendee->is($booking->lead_instructor))
                             <div>
                                 <x-fake-label :value="__('Status')" />
                                 <x-fake-input class="mt-1" :value="__('Lead Instructor')" />
