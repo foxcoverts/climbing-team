@@ -7,6 +7,7 @@ use App\Http\Controllers\BookingCommentController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
+use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RespondController;
@@ -47,7 +48,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('booking/{booking}/comment', [BookingCommentController::class, 'store'])->name('booking.comment.create');
 
-    Route::get('booking/invite', BookingInviteController::class)->name('booking.invite');
+    Route::get('invite', BookingInviteController::class)->name('booking.invite');
+
+    Route::get('rota', BookingRotaController::class)->name('booking.rota');
 
     Route::controller(BookingIcsController::class)->group(function () {
         Route::get('booking.ics', 'index')->name('booking.ics');
