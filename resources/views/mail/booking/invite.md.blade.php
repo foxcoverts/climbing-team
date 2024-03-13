@@ -13,6 +13,7 @@
 **@lang('Status')**{{ $status_changed }}<br>
 @lang("app.booking.status.{$booking->status->value}")
 @endif
+{{-- new line --}}
 
 **@lang('When')**{{ $when_changed }}<br>
 {{ $when }}
@@ -27,6 +28,7 @@
 **@lang('Lead Instructor')**{{ $lead_instructor_changed }}<br>
 {{ $booking->lead_instructor->name }}
 @endif
+{{-- new line --}}
 
 **@lang('Group')**{{ $group_changed }}<br>
 {{ $booking->group_name }}
