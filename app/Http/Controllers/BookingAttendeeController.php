@@ -103,7 +103,7 @@ class BookingAttendeeController extends Controller
         $respondToBooking(
             $attendee,
             $request->validated('status'),
-            $request->validated('comment'),
+            $request->has('comment') ? ($request->validated('comment') ?? '') : null,
         );
 
         return redirect()->route('booking.show', $booking)

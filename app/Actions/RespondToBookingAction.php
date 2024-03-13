@@ -57,11 +57,11 @@ class RespondToBookingAction
             $change_attendee = new Change\Attendee;
             $change_attendee->attendee_id = $attendee_id;
             $change_attendee->attendee_status = $status;
-            if ($attendance?->comment != $comment) {
+            if (!empty($comment) && ($attendance?->comment != $comment)) {
                 $change_attendee->attendee_comment = $comment;
             }
             $change->attendees()->save($change_attendee);
-        } else if (!is_null($comment) && ($attendance?->comment != $comment)) {
+        } else if (!empty($comment) && ($attendance?->comment != $comment)) {
             $change = new Change();
             $change->author_id = $author_id;
             $this->booking->changes()->save($change);
