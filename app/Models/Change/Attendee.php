@@ -23,6 +23,7 @@ class Attendee extends Model
     public $fillable = [
         'attendee_id',
         'attendee_status',
+        'attendee_comment',
     ];
 
     public $with = [

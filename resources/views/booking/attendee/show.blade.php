@@ -38,17 +38,35 @@
                                 </x-select-input>
                                 <x-input-error class="mt-2" :messages="$errors->get('status')" />
                             </div>
+
+                            @if ($attendee->attendance->comment)
+                                <div>
+                                    <x-input-label for="comment" :value="__('Comment')" />
+                                    <x-text-input id="comment" name="comment" class="w-full mt-1" :value="old('comment', $attendee->attendance->comment)"
+                                        x-model.fill="form.comment" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('comment')" />
+                                </div>
+                            @endif
                         </form>
-                    @elseif ($booking->lead_instructor->is($attendee))
-                        <div>
-                            <x-fake-label :value="__('Status')" />
-                            <x-fake-input class="mt-1" :value="__('Lead Instructor')" />
-                        </div>
                     @else
-                        <div>
-                            <x-fake-label :value="__('Status')" />
-                            <x-fake-input class="mt-1" :value='__("app.attendee.status.{$attendee->attendance->status->value}")' />
-                        </div>
+                        @if ($booking->lead_instructor->is($attendee))
+                            <div>
+                                <x-fake-label :value="__('Status')" />
+                                <x-fake-input class="mt-1" :value="__('Lead Instructor')" />
+                            </div>
+                        @else
+                            <div>
+                                <x-fake-label :value="__('Status')" />
+                                <x-fake-input class="mt-1" :value='__("app.attendee.status.{$attendee->attendance->status->value}")' />
+                            </div>
+                        @endif
+
+                        @if ($attendee->attendance->comment)
+                            <div>
+                                <x-fake-label :value="__('Comment')" />
+                                <x-fake-input :value="$attendee->attendance->comment" />
+                            </div>
+                        @endif
                     @endif
                 </div>
 

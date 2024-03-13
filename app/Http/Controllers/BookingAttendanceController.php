@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Actions\RespondToBookingAction;
-use App\Events\AttendanceChanged;
 use App\Http\Requests\UpdateBookingAttendanceRequest;
 use App\Models\Attendance;
 use App\Models\Booking;
@@ -67,8 +66,8 @@ class BookingAttendanceController extends Controller
         }
 
         $respondToBooking(
-            attendee: $request->user(),
-            status: $request->validated('status')
+            $request->user(),
+            $request->validated('status'),
         );
 
         return redirect($request->session()->get('url.referer', url()->previous()))

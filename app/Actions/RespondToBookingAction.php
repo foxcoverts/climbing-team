@@ -35,27 +35,37 @@ class RespondToBookingAction
         $author_id = is_string($author) ? $author : $author->id;
 
         // Validate
-        $attendance = $this->booking->attendees()->find($attendee_id);
-        if ($attendance?->attendance?->status == $status) {
+        $attendance = $this->booking->attendees()->find($attendee_id)?->attendance;
+        if (($attendance?->status == $status) && ($attendance?->comment == $comment)) {
             return null;
         }
 
         // Perform action
         $this->booking->attendees()->syncWithoutDetaching([
-            $attendee_id => ['status' => $status->value],
+            $attendee_id => [
+                'status' => $status->value,
+                'comment' => $comment ?? $attendance?->comment,
+            ],
         ]);
 
         // Record change
-        $change = new Change();
-        $change->author_id = $author_id;
-        $this->booking->changes()->save($change);
+        if ($attendance?->status != $status) {
+            $change = new Change();
+            $change->author_id = $author_id;
+            $this->booking->changes()->save($change);
 
-        $change_attendee = new Change\Attendee;
-        $change_attendee->attendee_id = $attendee_id;
-        $change_attendee->attendee_status = $status;
-        $change->attendees()->save($change_attendee);
+            $change_attendee = new Change\Attendee;
+            $change_attendee->attendee_id = $attendee_id;
+            $change_attendee->attendee_status = $status;
+            if ($attendance?->comment != $comment) {
+                $change_attendee->attendee_comment = $comment;
+            }
+            $change->attendees()->save($change_attendee);
+        } else if (!is_null($comment) && ($attendance?->comment != $comment)) {
+            $change = new Change();
+            $change->author_id = $author_id;
+            $this->booking->changes()->save($change);
 
-        if (!is_null($comment)) {
             $change_comment = new Change\Comment;
             $change_comment->body = $comment;
             $change->comments()->save($change_comment);

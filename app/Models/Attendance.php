@@ -32,6 +32,7 @@ class Attendance extends Pivot
      */
     protected $fillable = [
         'status',
+        'comment',
     ];
 
 
@@ -42,6 +43,7 @@ class Attendance extends Pivot
      */
     protected $attributes = [
         'status' => AttendeeStatus::NeedsAction,
+        'comment' => null,
     ];
 
 

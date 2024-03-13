@@ -17,6 +17,7 @@ class UpdateBookingAttendeeRequest extends FormRequest
     {
         return [
             'status' => ['required', Rule::enum(AttendeeStatus::class)->except(AttendeeStatus::NeedsAction)],
+            'comment' => ['nullable', 'string'],
         ];
     }
 
