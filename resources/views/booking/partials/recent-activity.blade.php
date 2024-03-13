@@ -1,3 +1,4 @@
+@use('App\Enums\AttendeeStatus')
 <h3 class="text-xl font-medium">@lang('Recent Activity')</h3>
 
 <div class="space-y-2">
@@ -15,22 +16,22 @@
                 </span></p>
             @foreach ($change->attendees as $attendee)
                 <div class="border-l-2 ml-2 pl-2" id="{{ $attendee->id }}">
-                    <div><a href="{{ route('user.show', $attendee->attendee) }}"
+                    <p><a href="{{ route('user.show', $attendee->attendee) }}"
                             class="font-medium">{{ $attendee->attendee->name }}</a>
                         @switch ($attendee->attendee_status)
-                            @case('accepted')
-                                will be going to this booking.
+                            @case(AttendeeStatus::Accepted)
+                                @lang('will be going to this booking.')
                             @break
 
-                            @case('tentative')
-                                may be able to attend this booking.
+                            @case(AttendeeStatus::Tentative)
+                                @lang('may be able to attend this booking.')
                             @break
 
-                            @case('declined')
-                                cannot attend this booking.
+                            @case(AttendeeStatus::Declined)
+                                @lang('cannot attend this booking.')
                             @break
                         @endswitch
-                    </div>
+                    </p>
                 </div>
             @endforeach
             @foreach ($change->comments as $comment)

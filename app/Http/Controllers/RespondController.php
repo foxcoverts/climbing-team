@@ -45,7 +45,7 @@ class RespondController extends Controller
 
         $respondToBooking(
             $attendee,
-            $request->validated()['status']
+            $request->validated('status')
         );
 
         $request->session()->put('alert.info', __('Thank-you. Your response has been recorded.'));

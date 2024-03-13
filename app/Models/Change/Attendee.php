@@ -21,7 +21,8 @@ class Attendee extends Model
     public $timestamps = false;
 
     public $fillable = [
-        'body',
+        'attendee_id',
+        'attendee_status',
     ];
 
     public $with = [
@@ -29,7 +30,7 @@ class Attendee extends Model
     ];
 
     public $casts = [
-        'status' => AttendeeStatus::class,
+        'attendee_status' => AttendeeStatus::class,
     ];
 
     public function change(): BelongsTo

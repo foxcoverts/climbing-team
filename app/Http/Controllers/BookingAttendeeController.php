@@ -102,7 +102,7 @@ class BookingAttendeeController extends Controller
 
         $respondToBooking(
             $attendee,
-            $request->validated()['status']
+            $request->validated('status'),
         );
 
         return redirect()->route('booking.show', $booking)

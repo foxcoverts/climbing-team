@@ -68,7 +68,7 @@ class BookingAttendanceController extends Controller
 
         $respondToBooking(
             attendee: $request->user(),
-            status: $request->validated()['status']
+            status: $request->validated('status')
         );
 
         return redirect($request->session()->get('url.referer', url()->previous()))
