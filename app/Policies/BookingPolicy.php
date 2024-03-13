@@ -69,7 +69,7 @@ class BookingPolicy
      */
     public function comment(User $user, Booking $booking): bool
     {
-        return $user->can('view', $booking);
+        return $user->can('view', $booking) && !$booking->isPast() && !$booking->isCancelled();
     }
 
     /**
