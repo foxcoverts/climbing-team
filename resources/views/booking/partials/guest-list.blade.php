@@ -7,7 +7,7 @@
     </h2>
 
     @if ($attendee = $booking->attendees()->find($booking->lead_instructor))
-        <h3 class="text-lg">@lang('Lead Instructor')</h3>
+        <h3 class="text-lg mt-2">@lang('Lead Instructor')</h3>
         <ul class="mb-3 space-y-1">
             <li class="flex gap-1 items-center">
                 @include('booking.partials.guest-list.item')
@@ -16,7 +16,7 @@
     @endif
 
     @foreach ($attendees->groupBy('attendance.status') as $status => $attendees)
-        <h3 class="text-lg">@lang("app.attendee.status.$status")
+        <h3 class="text-lg mt-2">@lang("app.attendee.status.$status")
             <span class="bg-gray-200 dark:bg-gray-600 dark:text-white px-2 rounded-xl">{{ count($attendees) }}</span>
         </h3>
         <ul class="mb-3 space-y-1">
