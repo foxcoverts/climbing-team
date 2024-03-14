@@ -6,6 +6,7 @@
             cancelled: {{ $booking->isCancelled() ? 'true' : 'false' }},
             confirmed: {{ $booking->isConfirmed() ? 'true' : 'false' }},
         },
+        submitted: false,
         updateCancelled(ev) {
             this.booking.cancelled = !ev.target.checked;
             if (this.booking.cancelled) $refs.form.reset();
@@ -33,8 +34,8 @@
                     <x-badge.booking-status :status="$booking->status" class="text-sm" />
                 </p>
 
-                <form method="post" action="{{ route('booking.update', $booking) }}" id="update-booking" x-ref="form"
-                    class="space-y-6 max-w-xl mb-6">
+                <form method="post" action="{{ route('booking.update', $booking) }}" id="update-booking"
+                    class="space-y-6 max-w-xl mb-6" x-on:submit="setTimeout(() => submitted = true, 0)">
                     @csrf
                     @method('PATCH')
 
@@ -218,10 +219,11 @@
         </div>
 
         <footer class="flex items-start gap-4 mt-6">
-            <x-button.primary form="update-booking" x-bind:disabled="booking.cancelled">
-                @lang('Update')
-            </x-button.primary>
+            <x-button.primary form="update-booking" x-bind:disabled="submitted || booking.cancelled"
+                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
+
             @include('booking.partials.delete-button')
+
             <x-button.secondary :href="route('booking.show', $booking)">
                 @lang('Back')
             </x-button.secondary>

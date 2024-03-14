@@ -12,6 +12,7 @@
         </header>
 
         <form method="post" action="{{ route('user.update', $user) }}" class="mt-6 space-y-6" x-data="{
+            submitted: false,
             user: {
                 name: '{{ old('name', $user->name) }}',
                 email: '{{ old('email', $user->email) }}',
@@ -26,7 +27,8 @@
                     }
                 });
             },
-        }">
+        }"
+            x-on:submit="setTimeout(() => submitted = true, 0)">
             @method('PATCH')
             @csrf
 
@@ -89,9 +91,8 @@
             @endcan
 
             <footer class="flex items-center gap-4 mt-6">
-                <x-button.primary>
-                    @lang('Update')
-                </x-button.primary>
+                <x-button.primary x-bind:disabled="submitted"
+                    x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
 
                 <x-button.secondary :href="route('user.show', $user)">
                     @lang('Back')

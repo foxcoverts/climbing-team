@@ -1,5 +1,6 @@
 <x-layout.guest :title="__('Account Setup')">
     <form method="POST" action="{{ url()->full() }}" x-data="{
+        submitted: false,
         user: {},
         originalEmail: '{{ $user->email }}',
         init() {
@@ -9,7 +10,8 @@
                 }
             });
         },
-    }">
+    }"
+        x-on:submit="setTimeout(() => submitted = true, 0)">
         @csrf
 
         <div>
@@ -66,9 +68,8 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <x-button.primary class="ml-4">
-                @lang('Setup')
-            </x-button.primary>
+            <x-button.primary class="ml-4" x-bind:disabled="submitted"
+                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Setup') }}'" />
         </div>
     </form>
 </x-layout.guest>

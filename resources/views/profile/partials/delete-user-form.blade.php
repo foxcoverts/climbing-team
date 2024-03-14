@@ -29,7 +29,7 @@
                 <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
 
                 <x-password-input id="password" name="password" class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}" />
+                    placeholder="{{ __('Password') }}" required />
 
                 <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>

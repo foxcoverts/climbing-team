@@ -149,12 +149,12 @@
 
         <footer class="flex items-center gap-4">
             @can('delete', $mail)
-                <form method="post" action="{{ route('mail.destroy', $mail) }}">
+                <form method="post" action="{{ route('mail.destroy', $mail) }}" x-data="{ submitted: false }"
+                    x-on:submit="setTimeout(() => submitted = true, 0)">
                     @method('DELETE')
                     @csrf
-                    <x-button.danger>
-                        @lang('Delete')
-                    </x-button.danger>
+                    <x-button.danger x-bind:disabled="submitted"
+                        x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Delete') }}'" />
                 </form>
             @endcan
             <x-button.secondary href="{{ route('mail.index') }}">

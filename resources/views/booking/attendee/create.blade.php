@@ -8,7 +8,8 @@
 
             <div class="my-2 flex-grow flex-shrink basis-80 max-w-xl">
                 @if ($users->isNotEmpty())
-                    <form method="post" action="{{ route('booking.attendee.store', $booking) }}" x-data="{ form: {} }">
+                    <form method="post" action="{{ route('booking.attendee.store', $booking) }}" x-data="{ form: {}, submitted: false, }"
+                        x-on:submit="setTimeout(() => submitted = true, 0)">
                         @csrf
                         <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                             @lang('Attendance')</h3>
@@ -38,14 +39,12 @@
                                         href="{{ route('booking.attendee.invite', $booking) }}">@lang('invite them')</a>
                                     @lang(' instead.')
                                 </p>
-
                             </div>
                         </div>
 
                         <footer class="flex items-start gap-4 mt-4">
-                            <x-button.primary x-bind:disabled="!form.user_id">
-                                @lang('Add Attendee')
-                            </x-button.primary>
+                            <x-button.primary x-bind:disabled="submitted || !form.user_id"
+                                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Add Attendee') }}'" />
 
                             <x-button.secondary :href="route('booking.show', $booking)">
                                 @lang('Back')

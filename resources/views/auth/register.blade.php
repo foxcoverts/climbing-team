@@ -1,5 +1,6 @@
 <x-layout.guest :title="__('Register')">
     <form method="POST" action="{{ route('register') }}" x-data="{
+        submitted: false,
         user: {},
         init() {
             $nextTick(() => {
@@ -8,7 +9,8 @@
                 }
             });
         },
-    }">
+    }"
+        x-on:submit="setTimeout(() => submitted = true, 0)">
         @csrf
 
         <!-- Name -->
@@ -63,9 +65,8 @@
                 @lang('Already registered?')
             </a>
 
-            <x-button.primary class="ml-4">
-                @lang('Register')
-            </x-button.primary>
+            <x-button.primary class="ml-4" x-bind:disabled="submitted"
+                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Register') }}'" />
         </div>
     </form>
 </x-layout.guest>

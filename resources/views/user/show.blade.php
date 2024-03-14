@@ -50,11 +50,11 @@
             @include('user.partials.delete-button')
             @if (!$user->isActive())
                 @can('update', $user)
-                    <form method="post" action="{{ route('user.invite', $user) }}">
+                    <form method="post" action="{{ route('user.invite', $user) }}" x-data="{ submitted: false }"
+                        x-on:submit="setTimeout(() => submitted = true, 0)">
                         @csrf
-                        <x-button.secondary type="submit">
-                            @lang('Re-Send Invite')
-                        </x-button.secondary>
+                        <x-button.secondary type="submit" x-bind:disabled="submitted"
+                            x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Re-send Invite') }}'" />
                     </form>
                 @endcan
             @endif

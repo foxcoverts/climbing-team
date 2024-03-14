@@ -2,6 +2,7 @@
 <x-layout.app :title="__('Create Booking')">
     <section class="p-4 sm:p-8" x-data='{
         booking: {},
+        submitted: false,
     }'>
         <header>
             <h2 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100 flex flex-wrap gap-2">
@@ -20,7 +21,8 @@
             <x-badge.booking-status :status="$booking->status" class="text-sm" />
         </p>
 
-        <form method="post" action="{{ route('booking.store') }}" class="space-y-6 max-w-xl">
+        <form method="post" action="{{ route('booking.store') }}" class="space-y-6 max-w-xl"
+            x-on:submit="setTimeout(() => submitted = true, 0)">
             @csrf
 
             <div class="flex flex-wrap gap-6" x-data="{
@@ -118,9 +120,8 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <x-button.primary>
-                    @lang('Create')
-                </x-button.primary>
+                <x-button.primary x-bind:disabled="submitted"
+                    x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Create') }}'" />
 
                 <x-button.secondary :href="route('booking.index')">
                     @lang('Back')

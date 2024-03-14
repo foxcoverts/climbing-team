@@ -6,7 +6,8 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('password.email') }}" x-data="{ submitted: false }"
+        x-on:submit="setTimeout(() => submitted = true, 0)">
         @csrf
 
         <!-- Email Address -->
@@ -18,9 +19,8 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <x-button.primary>
-                @lang('Email Password Reset Link')
-            </x-button.primary>
+            <x-button.primary x-bind:disabled="submitted"
+                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Email Password Reset Link') }}'" />
         </div>
     </form>
 </x-layout.guest>

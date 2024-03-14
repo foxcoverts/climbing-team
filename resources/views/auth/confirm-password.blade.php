@@ -3,7 +3,8 @@
         @lang('This is a secure area of the application. Please confirm your password before continuing.')
     </div>
 
-    <form method="POST" action="{{ route('password.confirm') }}">
+    <form method="POST" action="{{ route('password.confirm') }}" x-data="{ submitted: false }"
+        x-on:submit="setTimeout(() => submitted = true, 0)">
         @csrf
 
         <!-- Password -->
@@ -17,9 +18,8 @@
         </div>
 
         <div class="flex justify-end mt-4">
-            <x-button.primary>
-                @lang('Confirm')
-            </x-button.primary>
+            <x-button.primary x-bind:disabled="submitted"
+                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Confirm') }}'" />
         </div>
     </form>
 </x-layout.guest>

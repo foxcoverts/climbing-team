@@ -14,6 +14,7 @@
     </form>
 
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" x-data="{
+        submitted: false,
         user: {},
         init() {
             $nextTick(() => {
@@ -22,7 +23,8 @@
                 }
             });
         },
-    }">
+    }"
+        x-on:submit="setTimeout(() => submitted = true, 0)">
         @csrf
         @method('patch')
 
@@ -69,7 +71,8 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <x-button.primary>@lang('Save')</x-button.primary>
+            <x-button.primary x-bind:disabled="submitted"
+                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Save') }}'" />
 
             @if (session('status') === 'profile-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"

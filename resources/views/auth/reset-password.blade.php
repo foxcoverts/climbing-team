@@ -1,5 +1,6 @@
 <x-layout.guest :title="__('Reset Password')">
-    <form method="POST" action="{{ route('password.store') }}">
+    <form method="POST" action="{{ route('password.store') }}" x-data="{ submitted: false }"
+        x-on:submit="setTimeout(() => submitted = true, 0)">
         @csrf
 
         <!-- Password Reset Token -->
@@ -8,8 +9,8 @@
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required
-                autofocus autocomplete="username" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)"
+                required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -32,9 +33,8 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <x-button.primary>
-                @lang('Reset Password')
-            </x-button.primary>
+            <x-button.primary x-bind:disabled="submitted"
+                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Reset Password') }}'" />
         </div>
     </form>
 </x-layout.guest>

@@ -9,6 +9,7 @@
         </header>
 
         <form method="post" action="{{ route('user.store') }}" class="mt-6 space-y-6" x-data="{
+            submitted: false,
             user: {
                 name: '{{ old('name', $user->name) }}',
                 email: '{{ old('email', $user->email) }}',
@@ -23,7 +24,8 @@
                     }
                 });
             },
-        }">
+        }"
+            x-on:submit="setTimeout(() => submitted = true, 0)">
             @csrf
 
             <div>
@@ -86,9 +88,8 @@
             @endcan
 
             <div class="flex items-center gap-4">
-                <x-button.primary>
-                    @lang('Create')
-                </x-button.primary>
+                <x-button.primary x-bind:disabled="submitted"
+                    x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Create') }}'" />
 
                 <x-button.secondary :href="route('user.index')">
                     @lang('Back')
