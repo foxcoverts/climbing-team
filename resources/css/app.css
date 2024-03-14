@@ -66,8 +66,8 @@ body::-webkit-scrollbar {
     .fc-event-tentative {
         background-image: repeating-linear-gradient(
             -55deg,
-            rgba(255, 255, 255, 0.25),
-            rgba(255, 255, 255, 0.25) 6px,
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0.1) 6px,
             transparent 6px,
             transparent 15px
         );
