@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\BookingStatus;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingAttendeeInviteController;
@@ -37,6 +38,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::singleton('profile', ProfileController::class)->destroyable()->except(['edit']);
 
+    Route::get('booking', [BookingController::class, 'calendar'])->name('booking.calendar');
+    foreach (BookingStatus::cases() as $status) {
+        Route::get('booking/' . $status->value, [BookingController::class, $status->value])
+            ->name('booking.' . $status->value);
+    }
+
     Route::singleton('booking.attendance', BookingAttendanceController::class)->except(['edit']);
 
     Route::controller(BookingAttendeeInviteController::class)->group(function () {
@@ -48,17 +55,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('booking/{booking}/comment', [BookingCommentController::class, 'store'])->name('booking.comment.create');
 
-    Route::get('invite', BookingInviteController::class)->name('booking.invite');
-
-    Route::get('rota', BookingRotaController::class)->name('booking.rota');
-
     Route::controller(BookingIcsController::class)->group(function () {
         Route::get('booking.ics', 'index')->name('booking.ics');
         Route::get('booking/{booking}.ics', 'show')->name('booking.show.ics');
     });
 
-    Route::get('booking', [BookingController::class, 'calendar'])->name('booking.calendar');
     Route::resource('booking', BookingController::class)->except('index');
+
+    Route::get('invite', BookingInviteController::class)->name('booking.invite');
+
+    Route::get('rota', BookingRotaController::class)->name('booking.rota');
 
     Route::prefix('trash')->name('trash.')->group(function () {
         Route::resource('booking', TrashedBookingController::class)

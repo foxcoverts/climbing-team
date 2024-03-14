@@ -40,6 +40,44 @@ class BookingController extends Controller
         return view('booking.calendar');
     }
 
+    public function confirmed(): View
+    {
+        return $this->index(BookingStatus::Confirmed);
+    }
+
+    public function tentative(): View
+    {
+        return $this->index(BookingStatus::Tentative);
+    }
+
+    public function cancelled(): View
+    {
+        return $this->index(BookingStatus::Cancelled);
+    }
+
+    /**
+     * Display list of Bookings for the given status.
+     *
+     * @param BookingStatus $status
+     * @return View
+     */
+    protected function index(BookingStatus $status): View
+    {
+        $bookings = Booking::query()
+            ->orderBy('start_at')->orderBy('end_at')
+            ->where('status', $status)
+            ->whereDate('start_at', '>=', Carbon::now())
+            ->get()
+            ->groupBy(function (Booking $booking) {
+                return $booking->start_at->startOfDay();
+            });
+
+        return view('booking.index', [
+            'bookings' => $bookings,
+            'status' => $status,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
