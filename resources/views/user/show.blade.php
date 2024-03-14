@@ -4,7 +4,7 @@
             <h2 class="text-2xl sm:text-3xl font-medium">{{ $user->name }}</h2>
         </header>
 
-        <div class="space-y-2 max-w-xl flex-grow">
+        <div class="space-y-4 max-w-xl flex-grow">
             <p class="flex flex-wrap gap-2 items-center mb-4">
                 @unless ($user->isActive())
                     <x-badge.active :active="false" class="text-sm" />
@@ -15,31 +15,33 @@
                 @endforeach
             </p>
 
-            <p>
-                <dfn class="not-italic font-bold after:content-[':']">@lang('Email')</dfn>
-                @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
-                    @if ($user->hasVerifiedEmail())
-                        <a href="mailto:{{ $user->email }}"
-                            class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">{{ $user->email }}</a>
-                        <x-badge color="lime" class="text-xs">
-                            @lang('Verified')
-                        </x-badge>
-                    @else
-                        <span>{{ $user->email }}</span>
-                        <x-badge color="pink" class="text-xs">
-                            @lang('Unverified')
-                        </x-badge>
+            <div>
+                <x-fake-label :value="__('Email')" />
+                <p class="mt-1">
+                    @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
+                        @if ($user->hasVerifiedEmail())
+                            <a href="mailto:{{ $user->email }}"
+                                class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">{{ $user->email }}</a>
+                            <x-badge color="lime" class="text-xs">
+                                @lang('Verified')
+                            </x-badge>
+                        @else
+                            <span>{{ $user->email }}</span>
+                            <x-badge color="pink" class="text-xs">
+                                @lang('Unverified')
+                            </x-badge>
+                        @endif
                     @endif
-                @endif
-            </p>
+                </p>
+            </div>
 
-            <p>
-                <dfn class="not-italic font-bold after:content-[':']">@lang('Timezone')</dfn>
-                {{ $user->timezone }}
-            </p>
+            <div>
+                <x-fake-label :value="__('Timezone')" />
+                <p class="mt-1">{{ $user->timezone }}</p>
+            </div>
         </div>
 
-        <footer class="flex items-start gap-4">
+        <footer class="flex items-start gap-4 mt-6">
             @can('update', $user)
                 <x-button.primary href="{{ route('user.edit', $user) }}">
                     @lang('Edit')

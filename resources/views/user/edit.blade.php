@@ -88,7 +88,7 @@
                 </fieldset>
             @endcan
 
-            <div class="flex items-center gap-4">
+            <footer class="flex items-center gap-4 mt-6">
                 <x-button.primary>
                     @lang('Update')
                 </x-button.primary>
@@ -96,7 +96,7 @@
                 <x-button.secondary :href="route('user.show', $user)">
                     @lang('Back')
                 </x-button.secondary>
-            </div>
+            </footer>
         </form>
     </section>
 </x-layout.app>
