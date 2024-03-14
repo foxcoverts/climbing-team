@@ -1,7 +1,7 @@
 @use('App\Enums\Accreditation')
 @use('App\Enums\Role')
 <x-layout.app :header="$user->name" :title="__('Update - :name', $user->only('name'))">
-    <section class="p-4 sm:p-8 max-w-xl">
+    <section class="p-4 sm:px-8 max-w-xl">
         <header>
             <h2 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
                 @lang('Profile Information')

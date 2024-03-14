@@ -1,7 +1,7 @@
 @use('App\Enums\AttendeeStatus')
 @use('Illuminate\Contracts\Auth\Access\Gate')
 <x-layout.app :title="__('Edit Attendance')">
-    <section class="p-4 sm:p-8">
+    <section class="p-4 sm:px-8">
         @include('booking.partials.header')
         <div class="md:flex md:space-x-4">
             <div class="w-full max-w-xl">

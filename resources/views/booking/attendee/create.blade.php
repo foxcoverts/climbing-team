@@ -1,6 +1,6 @@
 @use('App\Enums\AttendeeStatus')
 <x-layout.app :title="__('Add Attendee')">
-    <section class="p-4 sm:p-8">
+    <section class="p-4 sm:px-8">
         @include('booking.partials.header')
 
         <div class="flex flex-wrap gap-4">

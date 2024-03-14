@@ -1,5 +1,5 @@
 <x-layout.app :title="__('Booking')">
-    <section class="p-4 sm:p-8">
+    <section class="p-4 sm:px-8">
         @include('booking.partials.header')
         @include('booking.partials.details')
 

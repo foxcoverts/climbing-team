@@ -1,6 +1,6 @@
 @use('App\Enums\BookingStatus')
 <x-layout.app :title="__('Edit Booking')">
-    <section class="p-4 sm:p-8"
+    <section class="p-4 sm:px-8"
         x-data='{
         booking: {
             cancelled: {{ $booking->isCancelled() ? 'true' : 'false' }},

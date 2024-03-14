@@ -1,6 +1,6 @@
 @use('App\Enums\BookingStatus')
 <x-layout.app :title="__('Create Booking')">
-    <section class="p-4 sm:p-8" x-data='{
+    <section class="p-4 sm:px-8" x-data='{
         booking: {},
         submitted: false,
     }'>
