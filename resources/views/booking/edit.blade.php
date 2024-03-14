@@ -208,7 +208,7 @@
                     <div class="space-y-1">
                         <x-input-label for="notes" :value="__('Notes')" />
                         <x-textarea id="notes" name="notes" class="block w-full" :value="old('notes', $booking->notes)"
-                            x-bind:disabled="booking.cancelled" />
+                            x-bind:disabled="booking.cancelled" x-meta-enter.prevent="$el.form.requestSubmit()" />
                         <x-input-error :messages="$errors->get('notes')" />
                     </div>
                 </form>

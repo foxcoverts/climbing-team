@@ -1,7 +1,8 @@
 import "./bootstrap";
 
 import Alpine from "alpinejs";
-import checkboxes from "./alpine/checkboxes.js";
+import checkboxesData from "./alpine/data/checkboxes.js";
+import metaEnterDirective from "./alpine/directive/meta-enter.js";
 
 window.dateString = function (date) {
     var time = Date.parse(date);
@@ -18,5 +19,6 @@ window.dateString = function (date) {
 
 window.Alpine = Alpine;
 
-Alpine.data("checkboxes", checkboxes);
+Alpine.data("checkboxes", checkboxesData);
+Alpine.directive("meta-enter", metaEnterDirective);
 Alpine.start();
