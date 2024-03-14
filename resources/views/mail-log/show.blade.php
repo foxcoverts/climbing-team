@@ -10,20 +10,20 @@
                     <h3 class="text-xl font-medium">@lang('Calendar')</h3>
 
                     <div>
-                        <x-input-label for="method">@lang('Method')</x-input-label>
-                        <x-text-input id="method" name="method" :value="$mail->calendar->getMethod()" class="w-full mt-1" />
+                        <x-input-label for="method" :value="__('Method')" />
+                        <x-text-input id="method" name="method" class="w-full mt-1" :value="$mail->calendar->getMethod()" />
                     </div>
 
                     @foreach ($mail->calendar->getEvents() as $event)
                         <div>
-                            <x-input-label for="sent_at">@lang('Sent')</x-input-label>
-                            <x-text-input id="sent_at" name="sent_at" :value="localDate($event->getSentAt())" type="datetime-local"
-                                class="mt-1" readonly />
+                            <x-input-label for="sent_at" :value="__('Sent')" />
+                            <x-text-input id="sent_at" name="sent_at" class="mt-1" readonly type="datetime-local"
+                                :value="localDate($event->getSentAt())" />
                         </div>
 
                         <div>
                             @if ($booking = $event->getBooking())
-                                <dfn class="block not-italic font-medium">@lang('Booking')</dfn>
+                                <x-fake-label :value="__('Booking')" />
                                 <x-fake-input class="w-full mt-1">
                                     <a class="flex-grow flex gap-1 items-center text-black hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
                                         href="{{ route('booking.show', $booking) }}">
@@ -34,7 +34,7 @@
                                 </x-fake-input>
                             @else
                                 <x-input-label for="to">@lang('Booking')</x-input-label>
-                                <x-text-input id="to" name="to" :value="$event->getUid()" class="w-full mt-1"
+                                <x-text-input id="to" name="to" class="w-full mt-1" :value="$event->getUid()"
                                     readonly />
                             @endif
                         </div>
@@ -42,7 +42,7 @@
                         @foreach ($event->getAttendees() as $attendee)
                             <div x-id="['attendee']">
                                 @if ($user = $attendee->getUser())
-                                    <dfn class="block not-italic font-medium">@lang('Attendee')</dfn>
+                                    <x-fake-label :value="__('Attendee')" />
                                     <x-fake-input class="w-full mt-1">
                                         <a class="flex-grow flex gap-1 items-center text-black hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
                                             href="{{ route('user.show', $user) }}">
@@ -52,38 +52,43 @@
                                     </x-fake-input>
                                 @else
                                     <x-input-label :for="$id('attendee')">@lang('Attendee')</x-input-label>
-                                    <x-text-input :id="$id('attendee')" name="attendee[]" :value="$attendee->getEmail()"
-                                        class="w-full mt-1" readonly />
+                                    <x-text-input :id="$id('attendee')" name="attendee[]" class="w-full mt-1" readonly
+                                        :value="$attendee->getEmail()" />
                                 @endif
                             </div>
 
                             <div x-id="['attendee_status']">
                                 <x-input-label ::for="$id('attendee_status')">@lang('Status')</x-input-label>
-                                <x-text-input ::id="$id('attendee_status')" name="attendee[][status]" :value="__('app.attendee.status.' . $attendee->getStatus()->value)"
-                                    class="w-full mt-1" readonly />
+                                <x-text-input ::id="$id('attendee_status')" name="attendee[][status]" class="w-full mt-1" readonly
+                                    :value="__('app.attendee.status.' . $attendee->getStatus()->value)" />
                             </div>
 
                             @if ($attendee->getComment())
                                 <div x-id="['attendee_comment']">
                                     <x-input-label ::for="$id('attendee_comment')">@lang('Comment')</x-input-label>
-                                    <x-text-input ::id="$id('attendee_comment')" name="attendee[][comment]" :value="$attendee->getComment()"
-                                        class="w-full mt-1" readonly />
+                                    <x-text-input ::id="$id('attendee_comment')" name="attendee[][comment]" class="w-full mt-1"
+                                        readonly :value="$attendee->getComment()" />
                                 </div>
                             @endif
                         @endforeach
                     @endforeach
 
-                    <div><dfn class="block not-italic font-medium">@lang('Raw')</dfn>
-                        <x-textarea name="ics" class="w-full mt-1">{{ $mail->calendar->getRaw() }}</x-textarea>
+                    <div>
+                        <x-input-label for="ics" :value="__('Raw')" />
+                        <x-textarea id="ics" name="ics" class="w-full mt-1"
+                            readonly>{{ $mail->calendar->getRaw() }}</x-textarea>
                     </div>
                 @else
-                    <div><dfn class="block not-italic font-medium">@lang('Sent')</dfn>
-                        <x-text-input name="sent_at" :value="localDate($mail->sent_at)" type="datetime-local" class="mt-1" readonly />
+                    <div>
+                        <x-input-label for="sent_at" :value="__('Sent')" />
+                        <x-text-input id="sent_at" name="sent_at" class="mt-1" readonly type="datetime-local"
+                            :value="localDate($mail->sent_at)" />
                     </div>
 
-                    <div><dfn class="block not-italic font-medium">@lang('To')</dfn>
+                    <div>
                         @if ($mail->toBooking)
-                            <x-fake-input class="w-full">
+                            <x-fake-label :value="__('To')" />
+                            <x-fake-input class="w-full mt-1">
                                 <a class="flex-grow flex gap-1 items-center text-black hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
                                     href="{{ route('booking.show', $mail->toBooking) }}">
                                     <x-icon.calendar class="w-5 h-5 fill-current" />
@@ -92,13 +97,16 @@
                                 </a>
                             </x-fake-input>
                         @else
-                            <x-text-input name="to" :value="$mail->to" class="w-full mt-1" readonly />
+                            <x-input-label for="to" :value="__('To')" />
+                            <x-text-input id="to" name="to" :value="$mail->to" class="w-full mt-1"
+                                readonly />
                         @endif
                     </div>
 
-                    <div><dfn class="block not-italic font-medium">@lang('From')</dfn>
+                    <div>
                         @if ($mail->fromUser)
-                            <x-fake-input class="w-full">
+                            <x-fake-label :value="__('From')" />
+                            <x-fake-input class="w-full mt-1">
                                 <a class="flex-grow flex gap-1 items-center text-black hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
                                     href="{{ route('user.show', $mail->fromUser) }}">
                                     <x-icon.user-solid-square class="w-5 h-5 fill-current" />
@@ -106,12 +114,15 @@
                                 </a>
                             </x-fake-input>
                         @else
-                            <x-text-input name="from" :value="$mail->from" class="w-full mt-1" readonly />
+                            <x-input-label for="from" :value="__('From')" />
+                            <x-text-input id="from" name="from" class="w-full mt-1" readonly
+                                :value="$mail->from" />
                         @endif
                     </div>
 
-                    <div><dfn class="block not-italic font-medium">@lang('Subject')</dfn>
-                        <x-text-input name='subject' :value="$mail->subject" class="w-full mt-1" readonly />
+                    <div>
+                        <x-input-label for="subject" :value="__('Subject')" />
+                        <x-text-input id="subject" name="subject" class="w-full mt-1" readonly :value="$mail->subject" />
                     </div>
 
                     <div x-data="{
@@ -122,9 +133,9 @@
                             this.$refs.body.contentWindow.document.close();
                         },
                     }">
-                        <dfn class="block not-italic font-medium">@lang('Message')</dfn>
+                        <x-fake-label :value="__('Message')" />
                         <iframe
-                            class="w-full h-dvh border border-gray-300 dark:border-gray-700 bg-white rounded-md shadow-sm"
+                            class="w-full mt-1 h-dvh border border-gray-300 dark:border-gray-700 bg-white rounded-md shadow-sm"
                             x-ref="body" src="about:blank"></iframe>
                     </div>
                 @endif
