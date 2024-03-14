@@ -4,7 +4,7 @@
             <h2 class="text-2xl sm:text-3xl font-medium">{{ $user->name }}</h2>
         </header>
 
-        <div class="space-y-4 max-w-xl flex-grow">
+        <div class="space-y-2 max-w-xl flex-grow">
             <p class="flex flex-wrap gap-2 items-center mb-4">
                 @unless ($user->isActive())
                     <x-badge.active :active="false" class="text-sm" />
@@ -17,7 +17,7 @@
 
             <div>
                 <x-fake-label :value="__('Email')" />
-                <p class="mt-1">
+                <p>
                     @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
                         @if ($user->hasVerifiedEmail())
                             <a href="mailto:{{ $user->email }}"
@@ -37,7 +37,7 @@
 
             <div>
                 <x-fake-label :value="__('Timezone')" />
-                <p class="mt-1">{{ $user->timezone }}</p>
+                <p>{{ $user->timezone }}</p>
             </div>
         </div>
 

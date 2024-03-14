@@ -1,36 +1,51 @@
 @props(['booking'])
 <div class="space-y-2 my-2 w-full max-w-xl flex-grow">
-    <p
+    <div
         class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between">
-        <span class="flex items-center">
+        <p class="flex items-center">
             <x-icon.location class="h-5 w-5 fill-current mr-1" />
             {{ $booking->location }}
-        </span>
+        </p>
         <x-badge.booking-status :status="$booking->status" class="text-sm" />
-    </p>
-    <p><dfn class="not-italic font-medium block">@lang('When')</dfn>
-        @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
-            {{ __(':start_date from :start_time to :end_time', [
-                'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
-                'start_time' => localDate($booking->start_at)->format('H:i'),
-                'end_time' => localDate($booking->end_at)->format('H:i'),
-            ]) }}
-        @else
-            {{ __(':start to :end', [
-                'start' => localDate($booking->start_at)->toDayDateTimeString(),
-                'end' => localDate($booking->end_at)->toDayDateTimeString(),
-            ]) }}
-        @endif
-        ({{ $booking->start_at->diffAsCarbonInterval($booking->end_at) }})
-    </p>
-    <p><dfn class="not-italic font-medium block">@lang('Location')</dfn>
-        {{ $booking->location }}</p>
-    <p><dfn class="not-italic font-medium block">@lang('Activity')</dfn>
-        {{ $booking->activity }}</p>
-    <p><dfn class="not-italic font-medium block">@lang('Group Name')</dfn>
-        {{ $booking->group_name }}</p>
+    </div>
+
+    <div>
+        <x-fake-label :value="__('When')" />
+        <p>
+            @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
+                {{ __(':start_date from :start_time to :end_time', [
+                    'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
+                    'start_time' => localDate($booking->start_at)->format('H:i'),
+                    'end_time' => localDate($booking->end_at)->format('H:i'),
+                ]) }}
+            @else
+                {{ __(':start to :end', [
+                    'start' => localDate($booking->start_at)->toDayDateTimeString(),
+                    'end' => localDate($booking->end_at)->toDayDateTimeString(),
+                ]) }}
+            @endif
+            ({{ $booking->start_at->diffAsCarbonInterval($booking->end_at) }})
+        </p>
+    </div>
+
+    <div>
+        <x-fake-label :value="__('Location')" />
+        <p>{{ $booking->location }}</p>
+    </div>
+
+    <div>
+        <x-fake-label :value="__('Activity')" />
+        <p>{{ $booking->activity }}</p>
+    </div>
+
+    <div>
+        <x-fake-label :value="__('Group')" />
+        <p>{{ $booking->group_name }}</p>
+    </div>
+
     @if (!empty($booking->notes))
-        <div><dfn class="not-italic font-medium block">@lang('Notes')</dfn>
+        <div>
+            <x-fake-label :value="__('Notes')" />
             <x-markdown :text="$booking->notes" />
         </div>
     @endif
