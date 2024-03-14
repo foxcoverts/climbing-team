@@ -57,7 +57,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('booking/{booking}.ics', 'show')->name('booking.show.ics');
     });
 
-    Route::resource('booking', BookingController::class);
+    Route::get('booking', [BookingController::class, 'calendar'])->name('booking.calendar');
+    Route::resource('booking', BookingController::class)->except('index');
 
     Route::prefix('trash')->name('trash.')->group(function () {
         Route::resource('booking', TrashedBookingController::class)

@@ -33,11 +33,11 @@ class BookingController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a calendar of the Bookings.
      */
-    public function index(): View
+    public function calendar(): View
     {
-        return view('booking.index');
+        return view('booking.calendar');
     }
 
     /**
@@ -163,7 +163,7 @@ class BookingController extends Controller
 
         $booking->delete();
 
-        return redirect()->route('booking.index')
+        return redirect()->route('booking.calendar')
             ->with('alert.info', __('Booking deleted.'))
             ->with('restore', route('trash.booking.update', $booking));
     }
