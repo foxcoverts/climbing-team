@@ -5,6 +5,7 @@ namespace App\Forms;
 use App\Enums\Accreditation;
 use App\Enums\AttendeeStatus;
 use App\Models\Booking;
+use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -22,13 +23,38 @@ class BookingForm
         return route($name, [$this->booking, ...$arguments]);
     }
 
-    public function getActivitySuggestions(): Collection
+    protected function getStartAtAttribute(): Carbon
+    {
+        return localDate($this->booking->start_at);
+    }
+
+    protected function getStartDateAttribute(): string
+    {
+        return $this->start_at->toDateString();
+    }
+
+    protected function getStartTimeAttribute(): string
+    {
+        return $this->start_at->format('H:i');
+    }
+
+    protected function getEndAtAttribute(): Carbon
+    {
+        return localDate($this->booking->end_at);
+    }
+
+    protected function getEndTimeAttribute(): string
+    {
+        return $this->end_at->format('H:i');
+    }
+
+    protected function getActivitySuggestionsAttribute(): Collection
     {
         return Booking::distinct()
             ->orderBy('activity')->get(['activity'])->pluck('activity');
     }
 
-    protected function getInstructorsAttending(): Collection
+    protected function getInstructorsAttendingAttribute(): Collection
     {
         return $this->booking->attendees()
             ->wherePivot('status', AttendeeStatus::Accepted)
@@ -45,7 +71,7 @@ class BookingForm
 
     public function __get(string $name): mixed
     {
-        $getName = Str::camel('get_' . $name);
+        $getName = Str::camel('get_' . $name . '_attribute');
         if (method_exists($this, $getName)) {
             return call_user_func([$this, $getName]);
         }

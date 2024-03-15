@@ -18,8 +18,8 @@ class UpdateBookingRequest extends FormRequest
     {
         return [
             'start_date' => ['sometimes', 'required', 'date'],
-            'start_time' => ['sometimes', 'required', 'date_format:H:i'],
-            'end_time' => ['sometimes', 'required', 'date_format:H:i', 'after:start_time'],
+            'start_time' => ['required_with:start_date', 'date_format:H:i'],
+            'end_time' => ['required_with_all:start_date,start_time', 'date_format:H:i', 'after:start_time'],
             'location' => ['sometimes', 'required', 'string', 'max:255'],
             'activity' => ['sometimes', 'required', 'string', 'max:255'],
             'group_name' => ['sometimes', 'required', 'string', 'max:255'],

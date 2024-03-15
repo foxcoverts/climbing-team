@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Accreditation;
 use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
 use App\Events\BookingCancelled;
@@ -17,10 +16,8 @@ use App\Models\Booking;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class BookingController extends Controller
@@ -86,13 +83,12 @@ class BookingController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
         return view('booking.create', [
             'form' => new BookingForm(new Booking([
-                'start_date' => Carbon::now(),
-                'start_time' => '09:30',
-                'end_time' => '11:30',
+                'start_at' => Carbon::parse('Saturday 09:30', $request->user()->timezone)->utc(),
+                'end_at' => Carbon::parse('Saturday 11:30', $request->user()->timezone)->utc(),
                 'status' => BookingStatus::Tentative,
             ])),
         ]);
@@ -103,7 +99,17 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request): RedirectResponse
     {
-        $booking = Booking::create($request->validated());
+        $attributes = $request->safe()->except('start_date', 'start_time', 'end_time');
+        $attributes['start_at'] = Carbon::parse(
+            $request->safe()->start_date . 'T' . $request->safe()->start_time,
+            $request->user()->timezone
+        )->utc();
+        $attributes['end_at'] = Carbon::parse(
+            $request->safe()->start_date . 'T' . $request->safe()->end_time,
+            $request->user()->timezone
+        )->utc();
+
+        $booking = Booking::create($attributes);
 
         return redirect()->route('booking.show', $booking)
             ->with('alert.info', __('Booking created successfully'));
@@ -142,7 +148,19 @@ class BookingController extends Controller
     public function update(UpdateBookingRequest $request, Booking $booking): RedirectResponse
     {
         $originalStatus = $booking->status;
-        $booking->fill($request->validated());
+        $booking->fill($request->safe()->except('start_date', 'start_time', 'end_time'));
+        if ($request->safe()->has('start_time')) {
+            $booking->start_at = Carbon::parse(
+                $request->safe()->start_date . 'T' . $request->safe()->start_time,
+                $request->user()->timezone
+            )->utc();
+        }
+        if ($request->safe()->has('end_time')) {
+            $booking->end_at = Carbon::parse(
+                $request->safe()->start_date . 'T' . $request->safe()->end_time,
+                $request->user()->timezone
+            )->utc();
+        }
         if (($originalStatus == BookingStatus::Cancelled) && ($booking->status != BookingStatus::Cancelled)) {
             $booking->lead_instructor_id = null;
         }
