@@ -8,6 +8,7 @@ use App\Events\BookingCancelled;
 use App\Events\BookingChanged;
 use App\Events\BookingConfirmed;
 use App\Events\BookingInvite;
+use App\Events\BookingRestored;
 use App\Forms\BookingForm;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
@@ -188,18 +189,19 @@ class BookingController extends Controller
                 foreach (User::find($invites) as $user) {
                     event(new BookingInvite($booking, $user));
                 }
+                event(new BookingRestored($booking, $booking->getChanges(), $request->user()));
             } else if ($booking->isConfirmed()) {
-                event(new BookingConfirmed($booking, $booking->getChanges()));
+                event(new BookingConfirmed($booking, $booking->getChanges(), $request->user()));
             } else if ($booking->isCancelled()) {
                 // Remove attendees with outstanding invites.
                 Attendance::where('booking_id', $booking->id)
                     ->where('status', AttendeeStatus::NeedsAction)
                     ->delete();
                 $booking->refresh();
-                event(new BookingCancelled($booking));
+                event(new BookingCancelled($booking, $booking->getChanges(), $request->user()));
             }
-        } else if ($booking->wasChanged(['start_at', 'end_at'])) {
-            event(new BookingChanged($booking, $booking->getChanges()));
+        } else if ($booking->wasChanged(['sequence'])) {
+            event(new BookingChanged($booking, $booking->getChanges(), $request->user()));
         }
 
         return redirect()->route('booking.show', $booking)

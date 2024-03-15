@@ -6,7 +6,9 @@ use App\Events\BookingCancelled;
 use App\Events\BookingChanged;
 use App\Events\BookingConfirmed;
 use App\Events\BookingInvite;
+use App\Events\BookingRestored;
 use App\Events\Registered;
+use App\Listeners\RecordBookingChanges;
 use App\Listeners\SendBookingCancelledEmail;
 use App\Listeners\SendBookingChangedEmail;
 use App\Listeners\SendBookingConfirmedEmail;
@@ -29,13 +31,19 @@ class EventServiceProvider extends ServiceProvider
             SendBookingInviteEmail::class,
         ],
         BookingChanged::class => [
+            RecordBookingChanges::class,
             SendBookingChangedEmail::class,
         ],
         BookingConfirmed::class => [
+            RecordBookingChanges::class,
             SendBookingConfirmedEmail::class,
         ],
         BookingCancelled::class => [
+            RecordBookingChanges::class,
             SendBookingCancelledEmail::class,
+        ],
+        BookingRestored::class => [
+            RecordBookingChanges::class,
         ],
     ];
 

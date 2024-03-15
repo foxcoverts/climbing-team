@@ -5,8 +5,6 @@ namespace App\Listeners;
 use App\Enums\AttendeeStatus;
 use App\Events\BookingChanged;
 use App\Mail\BookingChanged as MailBookingChanged;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
 class SendBookingChangedEmail

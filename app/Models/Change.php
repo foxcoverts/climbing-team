@@ -17,6 +17,7 @@ class Change extends Model
         'attendees',
         'attendees.attendee',
         'comments',
+        'fields',
     ];
 
     public function booking(): BelongsTo
@@ -37,5 +38,10 @@ class Change extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Change\Comment::class);
+    }
+
+    public function fields(): HasMany
+    {
+        return $this->hasMany(Change\Field::class);
     }
 }

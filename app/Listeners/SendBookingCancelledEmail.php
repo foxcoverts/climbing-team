@@ -5,8 +5,6 @@ namespace App\Listeners;
 use App\Enums\AttendeeStatus;
 use App\Events\BookingCancelled;
 use App\Mail\BookingCancelled as MailBookingCancelled;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
 class SendBookingCancelledEmail
