@@ -7,25 +7,47 @@
     </h2>
 
     @if ($attendee = $booking->attendees()->find($booking->lead_instructor))
-        <h3 class="text-lg mt-2">@lang('Lead Instructor')</h3>
-        <ul class="mb-3 space-y-1">
-            <li class="flex gap-1 items-center">
-                @include('booking.partials.guest-list.item')
-            </li>
-        </ul>
+        <div x-data="{ open: true }">
+            <h3 class="text-lg my-2 flex items-center space-x-1">
+                <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
+                    <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                        ::class="open ? '' : '-rotate-90'" />
+                    <span>@lang('Lead Instructor')</span>
+                </button>
+                <hr class="grow" role="presentation" />
+            </h3>
+            <ul class="mb-3 space-y-1 list-disc ml-5" x-show="open" x-transition>
+                <li>
+                    <div class="flex gap-1 items-center">
+                        @include('booking.partials.guest-list.item')
+                    </div>
+                </li>
+            </ul>
+        </div>
     @endif
 
     @foreach ($attendees->groupBy('attendance.status') as $status => $attendees)
-        <h3 class="text-lg mt-2">@lang("app.attendee.status.$status")
-            <span class="bg-gray-200 dark:bg-gray-600 dark:text-white px-2 rounded-xl">{{ count($attendees) }}</span>
-        </h3>
-        <ul class="mb-3 space-y-1">
-            @foreach ($attendees as $attendee)
-                <li class="flex gap-1 items-center">
-                    @include('booking.partials.guest-list.item')
-                </li>
-            @endforeach
-        </ul>
+        <div x-data="{ open: {{ $status == 'accepted' ? 'true' : 'false' }} }">
+            <h3 class="text-lg my-2 flex items-center space-x-1">
+                <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
+                    <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                        ::class="open ? '' : '-rotate-90'" />
+                    <span>@lang("app.attendee.status.$status")</span>
+                    <span x-show="!open" x-transition
+                        class="bg-gray-200 dark:bg-gray-600 dark:text-white px-2 rounded-xl">{{ count($attendees) }}</span>
+                </button>
+                <hr class="grow" role="presentation" />
+            </h3>
+            <ul class="mb-3 space-y-1" x-show="open" x-transition>
+                @foreach ($attendees as $attendee)
+                    <li class='list-disc ml-5'>
+                        <div class="flex gap-1 items-center">
+                            @include('booking.partials.guest-list.item')
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
     @endforeach
 
     @if (!$attendee)
