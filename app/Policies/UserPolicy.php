@@ -68,9 +68,9 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        if ($model->isTeamLeader() && !$user->isTeamLeader()) {
-            // Only team leaders can delete other team leaders.
-            return false;
+        if ($model->isTeamLeader()) {
+            // Team Leaders can only be deleted by another Team Leader.
+            return $user->isTeamLeader() && !$user->is($model);
         }
 
         return $user->is($model) || $this->manage($user);
