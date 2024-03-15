@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Casts\Timezone;
 use App\Enums\Accreditation;
 use App\Enums\Role;
+use App\Enums\Section;
 use App\Notifications\SetupAccount;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -30,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'timezone',
+        'section',
         'role',
     ];
 
@@ -58,6 +60,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $attributes = [
         'timezone' => 'UTC',
         'role' => Role::Guest->value,
+        'section' => Section::Adult->value,
     ];
 
     /**
@@ -69,6 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'timezone' => Timezone::class,
         'role' => Role::class,
+        'section' => Section::class,
     ];
 
     public function bookings(): BelongsToMany
@@ -130,6 +134,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isTeamLeader(): bool
     {
         return $this->role == Role::TeamLeader;
+    }
+
+    public function isUnder18(): bool
+    {
+        return !in_array($this->section, [Section::Parent, Section::Adult, Section::Network]);
+    }
+
+    public function isParent(): bool
+    {
+        return $this->section == Section::Parent;
     }
 
     public function isGuest(): bool

@@ -17,6 +17,10 @@
         <x-badge.role :role="Role::Guest" class="text-xs" />
     @endif
 
+    @if ($attendee->isUnder18())
+        <x-badge.under-18 class="text-xs" />
+    @endif
+
     @if ($attendee->is(auth()->user()))
         <x-badge color="lime" class="text-xs">@lang('You')</x-badge>
     @endif

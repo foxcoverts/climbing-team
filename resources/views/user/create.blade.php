@@ -1,5 +1,6 @@
 @use('App\Enums\Accreditation')
 @use('App\Enums\Role')
+@use('App\Enums\Section')
 <x-layout.app :title="__('Add User')">
     <section class="p-4 sm:px-8 max-w-xl">
         <header>
@@ -14,6 +15,7 @@
                 name: '{{ old('name', $user->name) }}',
                 email: '{{ old('email', $user->email) }}',
                 timezone: '{{ old('timezone', $user->timezone) }}',
+                section: '{{ old('section', $user->section) }}',
                 role: '{{ old('role', $user->role) }}',
                 accreditations: {{ old('accreditations', $user->accreditations) }},
             },
@@ -55,6 +57,14 @@
                     <x-select-input.timezones />
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
+            </div>
+
+            <div>
+                <x-input-label for="section" :value="__('Section')" />
+                <x-select-input id="section" name="section" class="mt-1 block" required x-model="user.section">
+                    <x-select-input.enum :options="Section::class" lang="app.user.section.:value" />
+                </x-select-input>
+                <x-input-error class="mt-2" :messages="$errors->get('section')" />
             </div>
 
             <div>

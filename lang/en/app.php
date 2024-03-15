@@ -26,5 +26,15 @@ return [
             'team-member' => 'Team Member',
             'team-leader' => 'Team Leader',
         ],
+        'section' => [
+            'squirrel' => 'Squirrel',
+            'beaver' => 'Beaver',
+            'cub' => 'Cub',
+            'scout' => 'Scout',
+            'explorer' => 'Explorer',
+            'network' => 'Network',
+            'adult' => 'Adult Member',
+            'parent' => 'Parent',
+        ],
     ]
 ];

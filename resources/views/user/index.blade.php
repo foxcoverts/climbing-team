@@ -17,13 +17,16 @@
                     <th class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell"
                         width="1">
                         @lang('Active')</th>
+                    <th class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell"
+                        width="1">
+                        @lang('Section')
                     <th class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300"
                         width="1">Role</th>
                     @foreach (Accreditation::cases() as $accreditation)
                         <th @class([
                             'px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden',
                             'sm:table-cell' => in_array($accreditation, [Accreditation::PermitHolder]),
-                            'md:table-cell' => in_array($accreditation, [
+                            'xl:table-cell' => in_array($accreditation, [
                                 Accreditation::ManageBookings,
                                 Accreditation::ManageUsers,
                             ]),
@@ -42,6 +45,11 @@
                         <td class="px-1 text-center hidden sm:table-cell">
                             <x-badge.active :active="$user->isActive()" class="text-sm text-nowrap" />
                         </td>
+                        <td class="px-1 text-center hidden sm:table-cell">
+                            @if ($user->isUnder18() || $user->isParent())
+                                <x-badge.section :section="$user->section" class="text-sm text-nowrap" />
+                            @endif
+                        </td>
                         <td class="px-1 text-center">
                             <x-badge.role :role="$user->role" class="text-sm text-nowrap" />
                         </td>
@@ -49,7 +57,7 @@
                             <td @class([
                                 'px-1 hidden text-center',
                                 'sm:table-cell' => in_array($accreditation, [Accreditation::PermitHolder]),
-                                'md:table-cell' => in_array($accreditation, [
+                                'xl:table-cell' => in_array($accreditation, [
                                     Accreditation::ManageBookings,
                                     Accreditation::ManageUsers,
                                 ]),

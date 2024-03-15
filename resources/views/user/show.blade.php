@@ -10,6 +10,9 @@
                     <x-badge.active :active="false" class="text-sm" />
                 @endunless
                 <x-badge.role :role="$user->role" class="text-sm" />
+                @if ($user->isUnder18())
+                    <x-badge color="pink" class="text-sm" :label="__('Under 18')" />
+                @endif
                 @foreach ($user->accreditations as $accreditation)
                     <x-badge.accreditation :accreditation="$accreditation" class="text-sm" />
                 @endforeach
@@ -33,6 +36,11 @@
                         @endif
                     @endif
                 </p>
+            </div>
+
+            <div>
+                <x-fake-label :value="__('Section')" />
+                <p>@lang('app.user.section.' . $user->section->value)</p>
             </div>
 
             <div>
