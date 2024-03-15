@@ -57,16 +57,18 @@
                 <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
             </div>
 
-            @can('manage', $user)
-                <div>
-                    <x-input-label for="role" :value="__('Role')" />
-                    <x-select-input id="role" name="role" class="mt-1 block" required x-model="user.role">
-                        <x-select-input.enum :options="Role::class" lang="app.user.role.:value" />
-                    </x-select-input>
-                </div>
-            @endcan
+            <div>
+                <x-input-label for="role" :value="__('Role')" />
+                <x-select-input id="role" name="role" class="mt-1 block" required x-model="user.role">
+                    @foreach (Role::cases() as $option)
+                        <option value="{{ $option->value }}" @selected($option == Role::Guest) @disabled(auth()->user()->role->compare($option) < 0)>
+                            @lang('app.user.role.' . $option->value)
+                        </option>
+                    @endforeach
+                </x-select-input>
+            </div>
 
-            @can('manage', $user)
+            @can('accredit', $user)
                 <fieldset x-data="checkboxes({{ json_encode(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations" class="space-y-1">
                     <legend class="font-bold after:content-[':'] text-gray-900 dark:text-gray-100">
                         @lang('Accreditations')</legend>

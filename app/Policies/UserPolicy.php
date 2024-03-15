@@ -7,11 +7,19 @@ use App\Models\User;
 class UserPolicy
 {
     /**
+     * Determine whether this user can manage any users.
+     */
+    public function manage(User $user): bool
+    {
+        return $user->isTeamLeader() || $user->isUserManager();
+    }
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->isUserManager();
+        return $this->manage($user);
     }
 
     /**
@@ -19,7 +27,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $user->is($model) || $user->isUserManager();
+        return $user->is($model) || $this->manage($user);
     }
 
     /**
@@ -27,7 +35,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isUserManager();
+        return $this->manage($user);
     }
 
     /**
@@ -39,7 +47,7 @@ class UserPolicy
             // Only team leaders can update other team leaders.
             return false;
         }
-        return $user->is($model) || $user->isUserManager();
+        return $user->is($model) || $this->manage($user);
     }
 
     /**
@@ -49,10 +57,10 @@ class UserPolicy
      * @param User $model
      * @return boolean
      */
-    public function manage(User $user, User $model): bool
+    public function accredit(User $user, User $model): bool
     {
-        // Only team leaders can manage roles and accreditations
-        return $user->isTeamLeader() && $user->isUserManager();
+        // Only team leaders can manage accreditations
+        return $user->isTeamLeader() && $this->manage($user);
     }
 
     /**
@@ -65,7 +73,7 @@ class UserPolicy
             return false;
         }
 
-        return $user->is($model) || $user->isUserManager();
+        return $user->is($model) || $this->manage($user);
     }
 
     /**
@@ -74,7 +82,7 @@ class UserPolicy
     public function restore(User $user, User $model): bool
     {
         // Only team leaders can restore deleted users.
-        return $user->isTeamLeader() && $user->isUserManager();
+        return $user->isTeamLeader() && $this->manage($user);
     }
 
     /**
@@ -83,6 +91,6 @@ class UserPolicy
     public function forceDelete(User $user, User $model): bool
     {
         // Only team leaders can permanently delete users.
-        return $user->isTeamLeader() && $user->isUserManager();
+        return $user->isTeamLeader() && $this->manage($user);
     }
 }
