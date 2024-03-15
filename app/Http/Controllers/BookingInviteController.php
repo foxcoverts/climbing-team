@@ -17,7 +17,7 @@ class BookingInviteController extends Controller
      */
     public function __invoke(Request $request): View
     {
-        $this->authorize('viewAny', Booking::class);
+        $this->authorize('viewOwn', Booking::class);
 
         $user = $request->user();
         $bookings = Booking::query()

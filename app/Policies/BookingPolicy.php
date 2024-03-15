@@ -39,6 +39,14 @@ class BookingPolicy
     }
 
     /**
+     * Determine whether the user can view the Bookings they have been invited to.
+     */
+    public function viewOwn(User $user): bool
+    {
+        return $user->exists;
+    }
+
+    /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, Booking $booking): bool

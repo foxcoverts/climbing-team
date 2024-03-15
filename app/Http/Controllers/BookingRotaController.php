@@ -16,7 +16,7 @@ class BookingRotaController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $this->authorize('viewAny', Booking::class);
+        $this->authorize('viewOwn', Booking::class);
 
         $user = $request->user();
         $bookings = Booking::query()

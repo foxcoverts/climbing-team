@@ -9,18 +9,20 @@
                 <path d="M8 20H3V10H0L10 0l10 10h-3v10h-5v-6H8v6z" />
             </x-slot:icon>
         </x-sidebar.link>
-        <x-sidebar.link route='booking.rota' :label="__('My Rota')">
-            <x-slot:icon>
-                <path
-                    d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2zM5 9l2-2 2 2 4-4 2 2-6 6-4-4z" />
-            </x-slot:icon>
-        </x-sidebar.link>
-        <x-sidebar.link route='booking.invite' :match-routes="['booking.invite', 'booking.attendance.*']" :label="__('Invites')">
-            <x-slot:icon>
-                <path
-                    d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2z" />
-            </x-slot:icon>
-        </x-sidebar.link>
+        @can('viewOwn', App\Models\Booking::class)
+            <x-sidebar.link route='booking.rota' :label="__('My Rota')">
+                <x-slot:icon>
+                    <path
+                        d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2zM5 9l2-2 2 2 4-4 2 2-6 6-4-4z" />
+                </x-slot:icon>
+            </x-sidebar.link>
+            <x-sidebar.link route='booking.invite' :match-routes="['booking.invite', 'booking.attendance.*']" :label="__('Invites')">
+                <x-slot:icon>
+                    <path
+                        d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2z" />
+                </x-slot:icon>
+            </x-sidebar.link>
+        @endcan
     </div>
 
     @canany(['viewAny', 'viewTrashed', 'create'], App\Models\Booking::class)
