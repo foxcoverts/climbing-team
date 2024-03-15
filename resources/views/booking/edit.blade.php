@@ -3,8 +3,8 @@
     <section class="p-4 sm:px-8"
         x-data='{
         booking: {
-            cancelled: {{ $booking->isCancelled() ? 'true' : 'false' }},
-            confirmed: {{ $booking->isConfirmed() ? 'true' : 'false' }},
+            cancelled: {{ $form->isCancelled() ? 'true' : 'false' }},
+            confirmed: {{ $form->isConfirmed() ? 'true' : 'false' }},
         },
         submitted: false,
         updateCancelled(ev) {
@@ -31,15 +31,15 @@
                         <x-icon.location class="h-5 w-5 fill-current mr-1" />
                         <span x-text="booking.location"></span>
                     </span>
-                    <x-badge.booking-status :status="$booking->status" class="text-sm" />
+                    <x-badge.booking-status :status="$form->status" class="text-sm" />
                 </p>
 
-                <form method="post" action="{{ route('booking.update', $booking) }}" id="update-booking"
+                <form method="post" action="{{ $form->route('booking.update') }}" id="update-booking"
                     class="space-y-6 max-w-xl mb-6" x-on:submit="setTimeout(() => submitted = true, 0)">
                     @csrf
                     @method('PATCH')
 
-                    @if ($booking->isCancelled())
+                    @if ($form->isCancelled())
                         <div class="space-y-1">
                             <x-fake-label :value="__('Restore Booking')" />
                             <p>
@@ -53,10 +53,10 @@
                             </label>
                             <x-input-error :messages="$errors->get('status')" />
                         </div>
-                    @elseif ($booking->isTentative())
+                    @elseif ($form->isTentative())
                         <div class="space-y-1">
                             <x-fake-label :value="__('Confirm Booking')" />
-                            @if ($instructors_attending->isEmpty() && !auth()->user()->isTeamLeader())
+                            @if ($form->instructors_attending->isEmpty() && !auth()->user()->isTeamLeader())
                                 <p>@lang('You can only confirm a booking when there is an instructor attending.')</p>
                             @else
                                 <p>@lang('Before you confirm this booking you should ensure that there are enough instructors attending and that you have chosen a ')
@@ -119,7 +119,7 @@
                     }">
                         <div class="space-y-1">
                             <x-input-label for="start_date" :value="__('Date')" />
-                            <x-text-input id="start_date" name="start_date" type="date" :value="old('start_date', $booking->start_date)"
+                            <x-text-input id="start_date" name="start_date" type="date" :value="old('start_date', $form->start_date)"
                                 placeholder="yyyy-mm-dd" required x-model.fill="booking.start_date"
                                 x-bind:disabled="booking.cancelled" />
                             <x-input-error :messages="$errors->get('start_date')" />
@@ -129,7 +129,7 @@
                             <div class="space-y-1">
                                 <x-input-label for="start_time" :value="__('Start')" />
                                 <x-text-input id="start_time" name="start_time" type="time" step="60"
-                                    :value="old('start_time', $booking->start_time)" placeholder="hh:mm" required x-model.fill="start_time"
+                                    :value="old('start_time', $form->start_time)" placeholder="hh:mm" required x-model.fill="start_time"
                                     @change="syncEndTime" x-bind:disabled="booking.cancelled" />
                                 <x-input-error :messages="$errors->get('start_time')" />
                             </div>
@@ -137,7 +137,7 @@
                             <div class="space-y-1">
                                 <x-input-label for="end_time" :value="__('End')" />
                                 <x-text-input id="end_time" name="end_time" type="time" step="60"
-                                    :value="old('end_time', $booking->end_time)" placeholder="hh:mm" required x-model.fill="end_time"
+                                    :value="old('end_time', $form->end_time)" placeholder="hh:mm" required x-model.fill="end_time"
                                     @blur="syncDuration" x-bind:disabled="booking.cancelled" />
                                 <x-input-error :messages="$errors->get('end_time')" />
                             </div>
@@ -147,20 +147,20 @@
                     <div class="space-y-1">
                         <x-input-label for="location" :value="__('Location')" />
                         <x-text-input id="location" name="location" type="text" class="block w-full"
-                            :value="old('location', $booking->location)" maxlength="255" required x-model.fill='booking.location'
+                            :value="old('location', $form->location)" maxlength="255" required x-model.fill='booking.location'
                             x-bind:disabled="booking.cancelled" />
                         <x-input-error :messages="$errors->get('location')" />
                     </div>
 
                     <div class="space-y-1">
-                        @if ($instructors_attending->isEmpty())
+                        @if ($form->instructors_attending->isEmpty())
                             <x-fake-label :value="__('Lead Instructor')" />
                             <p>@lang('No instructors are going to this booking yet.')</p>
-                        @elseif ($booking->isCancelled())
+                        @elseif ($form->isCancelled())
                             <x-fake-label :value="__('Lead Instructor')" />
                             <x-fake-input class="mt-1" x-bind:aria-disabled="booking.cancelled ? 'true' : ''">
-                                @if ($booking->lead_instructor)
-                                    {{ $booking->lead_instructor->name }}
+                                @if ($form->lead_instructor)
+                                    {{ $form->lead_instructor->name }}
                                 @else
                                     @lang('No lead instructor.')
                                 @endif
@@ -168,15 +168,15 @@
                         @else
                             <x-input-label for="lead_instructor_id" :value="__('Lead Instructor')" />
                             <x-select-input id="lead_instructor_id" name="lead_instructor_id" class="mt-1 block"
-                                :value="$booking->lead_instructor_id" x-model.fill="booking.lead_instructor_id"
-                                x-bind:required="booking.confirmed" :required="$booking->isConfirmed()">
-                                @if (is_null($booking->lead_instructor) || $booking->isTentative())
-                                    <option value="" @selected(is_null($booking->lead_instructor)) @disabled($booking->isConfirmed())
+                                :value="$form->lead_instructor_id" x-model.fill="booking.lead_instructor_id"
+                                x-bind:required="booking.confirmed" :required="$form->isConfirmed()">
+                                @if (is_null($form->lead_instructor) || $form->isTentative())
+                                    <option value="" @selected(is_null($form->lead_instructor)) @disabled($form->isConfirmed())
                                         x-bind:disabled="booking.confirmed">@lang('No lead instructor')
                                     </option>
                                 @endif
                                 <optgroup label="{{ __('Permit Holders') }}">
-                                    <x-select-input.collection :options="$instructors_attending" label_key="name" />
+                                    <x-select-input.collection :options="$form->instructors_attending" label_key="name" />
                                 </optgroup>
                             </x-select-input>
                             <p class="text-sm">
@@ -188,13 +188,13 @@
 
                     <div class="space-y-1">
                         <datalist id="activity-suggestions">
-                            @foreach ($activity_suggestions as $activity)
+                            @foreach ($form->activity_suggestions as $activity)
                                 <option>{{ $activity }}</option>
                             @endforeach
                         </datalist>
                         <x-input-label for="activity" :value="__('Activity')" />
                         <x-text-input id="activity" name="activity" type="text" class="block w-full"
-                            :value="old('activity', $booking->activity)" maxlength="255" required autocomplete="on" list="activity-suggestions"
+                            :value="old('activity', $form->activity)" maxlength="255" required autocomplete="on" list="activity-suggestions"
                             x-model.fill="booking.activity" x-bind:disabled="booking.cancelled" />
                         <x-input-error :messages="$errors->get('activity')" />
                     </div>
@@ -202,29 +202,33 @@
                     <div class="space-y-1">
                         <x-input-label for="group_name" :value="__('Group Name')" />
                         <x-text-input id="group_name" name="group_name" type="text" class="block w-full"
-                            :value="old('group_name', $booking->group_name)" maxlength="255" required x-bind:disabled="booking.cancelled" />
+                            :value="old('group_name', $form->group_name)" maxlength="255" required x-bind:disabled="booking.cancelled" />
                         <x-input-error :messages="$errors->get('group_name')" />
                     </div>
 
                     <div class="space-y-1">
                         <x-input-label for="notes" :value="__('Notes')" />
-                        <x-textarea id="notes" name="notes" class="block w-full" :value="old('notes', $booking->notes)"
+                        <x-textarea id="notes" name="notes" class="block w-full" :value="old('notes', $form->notes)"
                             x-bind:disabled="booking.cancelled" x-meta-enter.prevent="$el.form.requestSubmit()" />
                         <x-input-error :messages="$errors->get('notes')" />
                     </div>
                 </form>
             </div>
 
-            @include('booking.partials.guest-list', ['showTools' => false])
+            @include('booking.partials.guest-list', [
+                'attendees' => $guest_list,
+                'booking' => $form->booking,
+                'showTools' => false,
+            ])
         </div>
 
         <footer class="flex items-start gap-4 mt-6">
             <x-button.primary form="update-booking" x-bind:disabled="submitted || booking.cancelled"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
 
-            @include('booking.partials.delete-button')
+            @include('booking.partials.delete-button', ['booking' => $form->booking])
 
-            <x-button.secondary :href="route('booking.show', $booking)">
+            <x-button.secondary :href="$form->route('booking.show')">
                 @lang('Back')
             </x-button.secondary>
         </footer>

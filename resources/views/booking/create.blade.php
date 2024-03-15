@@ -18,7 +18,7 @@
                 <x-icon.location class="h-5 w-5 fill-current mr-1" />
                 <span x-text="booking.location"></span>
             </span>
-            <x-badge.booking-status :status="$booking->status" class="text-sm" />
+            <x-badge.booking-status :status="$form->status" class="text-sm" />
         </p>
 
         <form method="post" action="{{ route('booking.store') }}" class="space-y-6 max-w-xl"
@@ -63,7 +63,7 @@
             }">
                 <div class="space-y-1">
                     <x-input-label for="start_date" :value="__('Date')" />
-                    <x-text-input id="start_date" name="start_date" type="date" :value="old('start_date', $booking->start_date)"
+                    <x-text-input id="start_date" name="start_date" type="date" :value="old('start_date', $form->start_date)"
                         placeholder="yyyy-mm-dd" required autofocus x-model.fill="booking.start_date" />
                     <x-input-error :messages="$errors->get('start_date')" />
                 </div>
@@ -71,14 +71,14 @@
                 <div class="flex gap-6">
                     <div class="space-y-1">
                         <x-input-label for="start_time" :value="__('Start')" />
-                        <x-text-input id="start_time" name="start_time" type="time" step="60" :value="old('start_time', $booking->start_time)"
+                        <x-text-input id="start_time" name="start_time" type="time" step="60" :value="old('start_time', $form->start_time)"
                             placeholder="hh:mm" required x-model.fill="start_time" @change="syncEndTime" />
                         <x-input-error :messages="$errors->get('start_time')" />
                     </div>
 
                     <div class="space-y-1">
                         <x-input-label for="end_time" :value="__('End')" />
-                        <x-text-input id="end_time" name="end_time" type="time" step="60" :value="old('end_time', $booking->end_time)"
+                        <x-text-input id="end_time" name="end_time" type="time" step="60" :value="old('end_time', $form->end_time)"
                             placeholder="hh:mm" required x-model.fill="end_time" @blur="syncDuration" />
                         <x-input-error :messages="$errors->get('end_time')" />
                     </div>
@@ -87,19 +87,19 @@
 
             <div class="space-y-1">
                 <x-input-label for="location" :value="__('Location')" />
-                <x-text-input id="location" name="location" type="text" class="block w-full" :value="old('location', $booking->location)"
+                <x-text-input id="location" name="location" type="text" class="block w-full" :value="old('location', $form->location)"
                     maxlength="255" required x-model.fill="booking.location" />
                 <x-input-error :messages="$errors->get('location')" />
             </div>
 
             <div class="space-y-1">
                 <datalist id="activity-suggestions">
-                    @foreach ($activity_suggestions as $activity)
+                    @foreach ($form->activity_suggestions as $activity)
                         <option>{{ $activity }}</option>
                     @endforeach
                 </datalist>
                 <x-input-label for="activity" :value="__('Activity')" />
-                <x-text-input id="activity" name="activity" type="text" class="block w-full" :value="old('activity', $booking->activity)"
+                <x-text-input id="activity" name="activity" type="text" class="block w-full" :value="old('activity', $form->activity)"
                     maxlength="255" required autocomplete="on" list="activity-suggestions"
                     x-model.fill="booking.activity" />
                 <x-input-error :messages="$errors->get('activity')" />
@@ -107,14 +107,14 @@
 
             <div class="space-y-1">
                 <x-input-label for="group_name" :value="__('Group Name')" />
-                <x-text-input id="group_name" name="group_name" type="text" class="block w-full" :value="old('group_name', $booking->group_name)"
+                <x-text-input id="group_name" name="group_name" type="text" class="block w-full" :value="old('group_name', $form->group_name)"
                     maxlength="255" required />
                 <x-input-error :messages="$errors->get('group_name')" />
             </div>
 
             <div class="space-y-1">
                 <x-input-label for="notes" :value="__('Notes')" />
-                <x-textarea id="notes" name="notes" class="block w-full" :value="old('notes', $booking->notes)"
+                <x-textarea id="notes" name="notes" class="block w-full" :value="old('notes', $form->notes)"
                     x-meta-enter.prevent="$el.form.requestSubmit()" />
                 <x-input-error :messages="$errors->get('notes')" />
             </div>

@@ -17,7 +17,7 @@
                     </footer>
                 @endcan
             </div>
-            @include('booking.partials.guest-list')
+            @include('booking.partials.guest-list', ['attendees' => $guest_list])
         </div>
     </section>
 </x-layout.app>

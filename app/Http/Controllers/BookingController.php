@@ -9,6 +9,7 @@ use App\Events\BookingCancelled;
 use App\Events\BookingChanged;
 use App\Events\BookingConfirmed;
 use App\Events\BookingInvite;
+use App\Forms\BookingForm;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Attendance;
@@ -88,13 +89,12 @@ class BookingController extends Controller
     public function create(): View
     {
         return view('booking.create', [
-            'booking' => new Booking([
+            'form' => new BookingForm(new Booking([
                 'start_date' => Carbon::now(),
                 'start_time' => '09:30',
                 'end_time' => '11:30',
                 'status' => BookingStatus::Tentative,
-            ]),
-            'activity_suggestions' => Booking::distinct()->orderBy('activity')->get(['activity'])->pluck('activity'),
+            ])),
         ]);
     }
 
@@ -120,7 +120,7 @@ class BookingController extends Controller
 
         return view('booking.show', [
             'booking' => $booking,
-            'attendees' => $this->getGuestListAttendees($booking),
+            'guest_list' => $this->getGuestListAttendees($booking),
             'attendance' => $attendee?->attendance,
         ]);
     }
@@ -130,14 +130,9 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking): View
     {
-        $activity_suggestions = Booking::distinct()
-            ->orderBy('activity')->get(['activity'])->pluck('activity');
-
         return view('booking.edit', [
-            'booking' => $booking,
-            'activity_suggestions' => $activity_suggestions,
-            'attendees' => $this->getGuestListAttendees($booking),
-            'instructors_attending' => $this->getPossibleLeadInstructors(($booking)),
+            'form' => new BookingForm($booking),
+            'guest_list' => $this->getGuestListAttendees($booking),
         ]);
     }
 
@@ -219,21 +214,6 @@ class BookingController extends Controller
         }
         return $attendees
             ->orderBy('booking_user.status')
-            ->orderBy('users.name')
-            ->get();
-    }
-
-    protected function getPossibleLeadInstructors(Booking $booking): Collection
-    {
-        return $booking->attendees()
-            ->wherePivot('status', AttendeeStatus::Accepted)
-            ->whereExists(function (Builder $query) {
-                $query->select(DB::raw(1))
-                    ->from('user_accreditations')
-                    ->whereColumn('user_accreditations.user_id', 'users.id')
-                    ->where('user_accreditations.accreditation', Accreditation::PermitHolder)
-                    ->limit(1);
-            })
             ->orderBy('users.name')
             ->get();
     }
