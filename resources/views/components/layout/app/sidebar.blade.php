@@ -33,6 +33,8 @@
                             d="M1 4c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4zm2 2v12h14V6H3zm2-6h2v2H5V0zm8 0h2v2h-2V0zM5 9h2v2H5V9zm0 4h2v2H5v-2zm4-4h2v2H9V9zm0 4h2v2H9v-2zm4-4h2v2h-2V9zm0 4h2v2h-2v-2z" />
                     </x-slot:icon>
                 </x-sidebar.link>
+            @endcan
+            @can('viewAny', [App\Models\Booking::class, BookingStatus::Confirmed])
                 <x-sidebar.link route='booking.confirmed' :label="__('Confirmed')">
                     <x-slot:icon>
                         <path
@@ -40,6 +42,8 @@
                         <path d="M5 12l2-2 2 2 4-4 2 2-6 6-4-4z" />
                     </x-slot:icon>
                 </x-sidebar.link>
+            @endcan
+            @can('viewAny', [App\Models\Booking::class, BookingStatus::Tentative])
                 <x-sidebar.link route='booking.tentative' :label="__('Tentative')">
                     <x-slot:icon>
                         <path
@@ -47,6 +51,8 @@
                         <path d="M7 9h6v2h-6v-2zm2 2h2v4h-2v-4z" />
                     </x-slot:icon>
                 </x-sidebar.link>
+            @endcan
+            @can('viewAny', [App\Models\Booking::class, BookingStatus::Cancelled])
                 <x-sidebar.link route='booking.cancelled' :label="__('Cancelled')">
                     <x-slot:icon>
                         <path
@@ -56,19 +62,19 @@
                     </x-slot:icon>
                 </x-sidebar.link>
             @endcan
-            @can('viewTrashed', App\Models\Booking::class)
-                <x-sidebar.link route='trash.booking.index' match-routes='trash.booking.*' :label="__('Deleted')">
-                    <x-slot:icon>
-                        <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z" />
-                    </x-slot:icon>
-                </x-sidebar.link>
-            @endcan
             @can('create', App\Models\Booking::class)
                 <x-sidebar.link route='booking.create' :label="__('Add Booking')">
                     <x-slot:icon>
                         <path
                             d="M15 2h2a2 2 0 012 2v14a2 2 0 01-2 2H3a2 2 0 01-2-2V4c0-1.1.9-2 2-2h2V0h2v2h6V0h2v2zM3 6v12h14V6H3z" />
                         <path d="M9 11V9h2v2h2v2h-2v2H9v-2H7v-2h2z" />
+                    </x-slot:icon>
+                </x-sidebar.link>
+            @endcan
+            @can('viewTrashed', App\Models\Booking::class)
+                <x-sidebar.link route='trash.booking.index' match-routes='trash.booking.*' :label="__('Deleted')">
+                    <x-slot:icon>
+                        <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z" />
                     </x-slot:icon>
                 </x-sidebar.link>
             @endcan

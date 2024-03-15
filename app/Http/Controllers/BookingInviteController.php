@@ -23,11 +23,9 @@ class BookingInviteController extends Controller
         $bookings = Booking::query()
             ->whereNot('bookings.status', BookingStatus::Cancelled)
             ->whereDate('start_at', '>=', Carbon::now())
-            ->where(function (Builder $query) use ($user) {
-                $query->whereHas('attendees', function (Builder $query) use ($user) {
-                    $query->where('user_id', $user->id)
-                        ->whereIn('status', [AttendeeStatus::NeedsAction, AttendeeStatus::Tentative]);
-                });
+            ->whereHas('attendees', function (Builder $query) use ($user) {
+                $query->where('user_id', $user->id)
+                    ->whereIn('status', [AttendeeStatus::NeedsAction, AttendeeStatus::Tentative]);
             })
             ->get()
             ->groupBy(function (Booking $booking) {

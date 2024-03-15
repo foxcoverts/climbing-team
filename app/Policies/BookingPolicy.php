@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\Accreditation;
+use App\Enums\BookingStatus;
 use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
@@ -10,12 +10,32 @@ use App\Models\User;
 class BookingPolicy
 {
     /**
+     * Shortcut to check if the user should be able to manage any booking.
+     *
+     * @param User $user
+     * @return boolean
+     */
+    public function manage(User $user): bool
+    {
+        return $user->isTeamLeader() || $user->isBookingManager();
+    }
+
+    /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, ?BookingStatus $status = null): bool
     {
-        return (!$user->isGuest()) ||
-            $user->isBookingManager();
+        switch ($status) {
+            case BookingStatus::Confirmed:
+                return $this->manage($user) || !$user->isGuest();
+
+            case BookingStatus::Tentative:
+            case BookingStatus::Cancelled:
+                return $this->manage($user);
+
+            default:
+                return $this->manage($user) || !$user->isGuest();
+        }
     }
 
     /**
@@ -24,13 +44,11 @@ class BookingPolicy
     public function view(User $user, Booking $booking): bool
     {
         if ($booking->trashed()) {
-            return $user->isBookingManager();
-        } else if (!$user->isGuest()) {
-            return true;
+            return $this->manage($user);
         } else if ($booking->attendees()->find($user)) {
             return true;
         } else {
-            return $user->isBookingManager();
+            return $this->viewAny($user, $booking->status);
         }
     }
 
@@ -39,7 +57,7 @@ class BookingPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isBookingManager();
+        return $this->manage($user);
     }
 
     /**
@@ -47,7 +65,7 @@ class BookingPolicy
      */
     public function update(User $user, Booking $booking): bool
     {
-        return $user->isBookingManager();
+        return $this->manage($user);
     }
 
     /**
@@ -69,7 +87,16 @@ class BookingPolicy
      */
     public function comment(User $user, Booking $booking): bool
     {
-        return $user->can('view', $booking) && !$booking->isPast() && !$booking->isCancelled();
+        if ($booking->isPast() || $booking->isCancelled()) {
+            return false;
+        }
+        if ($this->manage($user)) {
+            return true;
+        }
+        if ($booking->attendees()->find($user)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -77,7 +104,7 @@ class BookingPolicy
      */
     public function delete(User $user, Booking $booking): bool
     {
-        return $user->isBookingManager();
+        return $this->manage($user);
     }
 
     /**
@@ -85,7 +112,7 @@ class BookingPolicy
      */
     public function viewTrashed(User $user): bool
     {
-        return $user->isBookingManager();
+        return $this->manage($user);
     }
 
     /**
@@ -93,7 +120,7 @@ class BookingPolicy
      */
     public function restore(User $user, Booking $booking): bool
     {
-        return $user->isBookingManager();
+        return $this->manage($user);
     }
 
     /**
@@ -101,7 +128,7 @@ class BookingPolicy
      */
     public function forceDelete(User $user, Booking $booking): bool
     {
-        return ($user->isTeamLeader()) &&
-            $user->isBookingManager();
+        return $user->isTeamLeader() &&
+            $this->manage($user);
     }
 }

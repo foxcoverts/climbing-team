@@ -21,7 +21,7 @@ class AttendancePolicy
      */
     public function create(User $user, Booking $booking): bool
     {
-        return $user->isBookingManager();
+        return $user->can('manage', Booking::class);
     }
 
     /**
@@ -29,7 +29,9 @@ class AttendancePolicy
      */
     public function view(User $user, Attendance $attendance): bool
     {
-        return $user->is($attendance->user) || $user->is($attendance->booking->lead_instructor) || $user->isBookingManager();
+        return $user->is($attendance->user) ||
+            $user->is($attendance->booking->lead_instructor) ||
+            $user->can('manage', Booking::class);
     }
 
     /**
@@ -40,7 +42,7 @@ class AttendancePolicy
         if ($attendance->isLeadInstructor() && $attendance->isAccepted()) {
             // The Lead Instructor cannot resign from a Booking.
             return false;
-        } else if ($user->isBookingManager()) {
+        } else if ($user->can('manage', Booking::class)) {
             return true;
         } else if ($attendance->user->is($user)) {
             if ($attendance->exists) {
@@ -68,6 +70,6 @@ class AttendancePolicy
             // The Lead Instructor cannot resign from a Booking.
             return false;
         }
-        return $user->isBookingManager();
+        return $user->can('manage', Booking::class);
     }
 }

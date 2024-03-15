@@ -37,6 +37,8 @@ class BookingController extends Controller
      */
     public function calendar(): View
     {
+        $this->authorize('viewAny', Booking::class);
+
         return view('booking.calendar');
     }
 
@@ -63,6 +65,8 @@ class BookingController extends Controller
      */
     protected function index(BookingStatus $status): View
     {
+        $this->authorize('viewAny', [Booking::class, $status]);
+
         $bookings = Booking::query()
             ->orderBy('start_at')->orderBy('end_at')
             ->where('status', $status)
