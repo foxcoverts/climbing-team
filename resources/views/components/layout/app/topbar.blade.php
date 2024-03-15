@@ -16,7 +16,7 @@
 
             <div class="w-full">
                 <p class="font-semibold text-2xl text-blue-400 uppercase">
-                    <a href="/" class="block truncate" title="{{ config('app.name') }}">
+                    <a href="{{ route('dashboard') }}" class="block truncate" title="{{ config('app.name') }}">
                         {{ config('app.name') }}
                     </a>
                 </p>
