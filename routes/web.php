@@ -27,11 +27,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/', function () {
-        return redirect('/dashboard');
-    });
+Route::get('/', function () {
+    return redirect()->away('https://foxcoverts.org.uk/activities/climbing/');
+});
 
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
