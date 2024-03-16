@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AttendeeStatus;
+use App\Enums\BookingStatus;
 use App\Models\Booking;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -22,8 +25,31 @@ class BookingIcsController extends Controller
      */
     public function index(Request $request): Response
     {
+        $bookings = Booking::query();
+
+        $user = $request->user();
+        if ($user->can('manage', Booking::class)) {
+            // no filter needed
+        } else if ($user->isGuest()) {
+            $bookings->whereHas('attendees', function (Builder $query) use ($user) {
+                $query
+                    ->where('user_id', $user->id)
+                    ->whereNot('status', AttendeeStatus::Declined);
+            });
+        } else {
+            $bookings->where(function (Builder $query) use ($user) {
+                $query
+                    ->whereHas('attendees', function (Builder $query) use ($user) {
+                        $query
+                            ->where('user_id', $user->id)
+                            ->whereNot('status', AttendeeStatus::Declined);
+                    })
+                    ->orWhereIn('status', [BookingStatus::Confirmed]);
+            });
+        }
+
         $ics = $this->ics(
-            Booking::all()->load('attendees', 'lead_instructor'),
+            $bookings->with('attendees', 'lead_instructor')->get(),
             $request->user()
         );
 
