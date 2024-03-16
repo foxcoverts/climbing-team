@@ -22,7 +22,7 @@ window.Calendar = new Calendar(calendarEl, {
             allDaySlot: false,
             scrollTime: "09:00",
             slotMinTime: "08:00",
-            slotMaxTime: "20:00",
+            slotMaxTime: "21:00",
             expandRows: true,
             dayHeaders: false,
         },
