@@ -1,10 +1,9 @@
 @use('App\Enums\BookingStatus')
 <x-layout.app :title="__('Edit Booking')">
-    <section class="p-4 sm:px-8"
-        x-data='{
+    <section class="p-4 sm:px-8" x-data="{
         booking: {
-            cancelled: {{ $form->isCancelled() ? 'true' : 'false' }},
-            confirmed: {{ $form->isConfirmed() ? 'true' : 'false' }},
+            cancelled: {{ Js::from($form->isCancelled()) }},
+            confirmed: {{ Js::from($form->isConfirmed()) }},
         },
         submitted: false,
         updateCancelled(ev) {
@@ -14,7 +13,7 @@
         updateConfirmed(ev) {
             this.booking.confirmed = ev.target.checked;
         }
-    }'>
+    }">
         <header>
             <h2 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100 flex flex-wrap gap-2">
                 <span x-text="booking.activity || 'Booking'"></span>

@@ -126,7 +126,7 @@
                     </div>
 
                     <div x-data="{
-                        body: {{ json_encode($mail->bodyHtml) }},
+                        body: {{ Js::from($mail->bodyHtml) }},
                         init() {
                             this.$refs.body.contentWindow.document.open('text/html', 'replace');
                             this.$refs.body.contentWindow.document.write(this.body);
