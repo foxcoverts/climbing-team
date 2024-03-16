@@ -22,7 +22,7 @@ class BookingInviteController extends Controller
         $user = $request->user();
         $bookings = Booking::query()
             ->whereNot('bookings.status', BookingStatus::Cancelled)
-            ->whereDate('start_at', '>=', Carbon::now())
+            ->whereDate('end_at', '>=', Carbon::now())
             ->whereHas('attendees', function (Builder $query) use ($user) {
                 $query->where('user_id', $user->id)
                     ->whereIn('status', [AttendeeStatus::NeedsAction, AttendeeStatus::Tentative]);

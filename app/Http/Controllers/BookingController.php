@@ -69,7 +69,7 @@ class BookingController extends Controller
         $bookings = Booking::query()
             ->orderBy('start_at')->orderBy('end_at')
             ->where('status', $status)
-            ->whereDate('start_at', '>=', Carbon::now())
+            ->whereDate('end_at', '>=', Carbon::now())
             ->get()
             ->groupBy(function (Booking $booking) {
                 return $booking->start_at->startOfDay();

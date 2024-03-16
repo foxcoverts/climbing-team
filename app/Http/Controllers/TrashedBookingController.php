@@ -19,7 +19,7 @@ class TrashedBookingController extends Controller
         $this->authorize('viewTrashed', Booking::class);
 
         $bookings = Booking::onlyTrashed()
-            ->whereDate('start_at', '>=', Carbon::now())
+            ->whereDate('end_at', '>=', Carbon::now())
             ->get()
             ->groupBy(function ($booking) {
                 return $booking->start_at->startOfDay();
