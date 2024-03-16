@@ -62,13 +62,43 @@
         </div>
 
         <div>
-            <x-input-label for="timezone" :value="__('Timezone')" />
-            <x-select-input id="timezone" name="timezone" class="mt-1 block" required :value="old('timezone', $user->timezone)"
-                x-model.fill="user.timezone">
-                <x-select-input.timezones />
-            </x-select-input>
-            <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
+            <x-input-label for="phone" :value="__('Phone')" />
+            <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40" :value="old('phone', $user->phone->formatForCountry('GB'))"
+                autocomplete="tel" x-model.fill="user.phone" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
         </div>
+
+        <fieldset>
+            <legend class="text-lg font-medium mb-1">@lang('Emergency Contact')</legend>
+            <p class="mb-2 text-md text-blue-800 dark:text-blue-200">@lang('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.')</p>
+            <div class="flex flex-wrap gap-6">
+                <div class="grow shrink">
+                    <x-input-label for="emergency_name" :value="__('Name')" />
+                    <x-text-input id="emergency_name" name="emergency_name" class="mt-1 block w-full min-w-48"
+                        :value="old('emergency_name', $user->emergency_name)" maxlength="100" x-model.fill="user.emergency_name"
+                        x-bind:required="!!user.emergency_phone" />
+                    <x-input-error class="mt-2" :messages="$errors->get('emergency_name')" />
+                </div>
+                <div>
+                    <x-input-label for="emergency_phone" :value="__('Phone')" />
+                    <x-text-input id="emergency_phone" name="emergency_phone" class="mt-1 block w-40" :value="old('emergency_phone', $user->emergency_phone->formatForCountry('GB'))"
+                        x-model.fill="user.emergency_phone" x-bind:required="!!user.emergency_name" />
+                    <x-input-error class="mt-2" :messages="$errors->get('emergency_phone')" />
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend class="text-lg font-medium mb-2">@lang('Settings')</legend>
+            <div>
+                <x-input-label for="timezone" :value="__('Timezone')" />
+                <x-select-input id="timezone" name="timezone" class="mt-1 block w-full overflow-ellipsis" required
+                    :value="old('timezone', $user->timezone)" x-model.fill="user.timezone">
+                    <x-select-input.timezones />
+                </x-select-input>
+                <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
+            </div>
+        </fieldset>
 
         <div class="flex items-center gap-4">
             <x-button.primary x-bind:disabled="submitted"

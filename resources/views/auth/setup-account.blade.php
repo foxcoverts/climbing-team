@@ -2,7 +2,7 @@
     <form method="POST" action="{{ url()->full() }}" x-data="{
         submitted: false,
         user: {},
-        originalEmail: '{{ $user->email }}',
+        originalEmail: {{ Js::from($user->email) }},
         init() {
             $nextTick(() => {
                 if (!this.user.timezone || this.user.timezone == 'UTC') {
@@ -37,6 +37,14 @@
             </p>
         </div>
 
+        <!-- Phone Number -->
+        <div class="mt-4">
+            <x-input-label for="phone" :value="__('Phone')" />
+            <x-text-input id="phone" class="block mt-1 w-40" type="tel" name="phone" :value="old('phone', $user->phone)"
+                autocomplete="tel" x-model.fill="user.phone" />
+            <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
@@ -56,6 +64,24 @@
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
+
+        <!-- Emergency Contact -->
+        <fieldset class="mt-4">
+            <legend class="text-lg font-medium">@lang('Emergency Contact')</legend>
+            <p class="mb-2 text-md text-blue-800 dark:text-blue-200">@lang('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.')</p>
+            <div class="mt-4">
+                <x-input-label for="emergency_name" :value="__('Name')" />
+                <x-text-input id="emergency_name" class="block mt-1 w-full" name="emergency_name" :value="old('emergency_name', $user->emergency_name)"
+                    x-bind:required="!!user.emergency_phone" x-model.fill="user.emergency_name" />
+                <x-input-error :messages="$errors->get('emergency_name')" class="mt-2" />
+            </div>
+            <div class="mt-4">
+                <x-input-label for="emergency_phone" :value="__('Phone')" />
+                <x-text-input id="emergency_phone" class="block mt-1 w-40" type="tel" name="emergency_phone"
+                    :value="old('emergency_phone', $user->emergency_phone)" x-bind:required="!!user.emergency_name" x-model.fill="user.emergency_phone" />
+                <x-input-error :messages="$errors->get('emergency_phone')" class="mt-2" />
+            </div>
+        </fieldset>
 
         <!-- Timezone -->
         <div class="mt-4 hidden">

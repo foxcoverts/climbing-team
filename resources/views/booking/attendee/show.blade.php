@@ -24,8 +24,7 @@
                             @method('PUT')
 
                             <div>
-                                <x-input-label for="status" :value="__('Availability')"
-                                    class="not-italic font-bold after:content-[':']" />
+                                <x-input-label for="status" :value="__('Availability')" />
                                 <x-select-input id="status" name="status" class="mt-1 block" required
                                     :value="old('status', $attendee->attendance->status)" x-model.fill="form.status">
                                     @if ($attendee->attendance->status == AttendeeStatus::NeedsAction)

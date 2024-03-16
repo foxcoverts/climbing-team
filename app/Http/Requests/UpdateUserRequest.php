@@ -20,7 +20,10 @@ class UpdateUserRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user->id)],
+            'email' => ['required', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user->id)],
+            'phone' => ['nullable', 'phone:INTERNATIONAL,GB'],
+            'emergency_name' => ['nullable', 'required_with:emergency_phone', 'string', 'max:100'],
+            'emergency_phone' => ['nullable', 'required_with:emergency_name', 'phone:INTERNATIONAL,GB'],
             'timezone' => ['required', 'string', 'max:100', 'timezone:all'],
             'section' => ['required', Rule::enum(Section::class)],
             'role' => ['required', Rule::enum(Role::class)],

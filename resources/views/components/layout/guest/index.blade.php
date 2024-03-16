@@ -23,7 +23,7 @@
 
 <body
     class="font-sans antialiased leading-normal tracking-normal bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:py-6">
         <div class="items-center">
             <a href="/"
                 class="font-semibold text-2xl text-blue-400 uppercase">{{ config('app.name', 'Climbing Team') }}</a>

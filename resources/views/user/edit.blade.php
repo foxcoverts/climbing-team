@@ -14,14 +14,17 @@
 
         <form method="post" action="{{ route('user.update', $user) }}" class="mt-6 space-y-6" x-data="{
             submitted: false,
-            user: {
-                name: '{{ old('name', $user->name) }}',
-                email: '{{ old('email', $user->email) }}',
-                timezone: '{{ old('timezone', $user->timezone) }}',
-                section: '{{ old('section', $user->section) }}',
-                role: '{{ old('role', $user->role) }}',
-                accreditations: {{ old('accreditations', $user->accreditations) }},
-            },
+            user: {{ Js::from([
+                'name' => old('name', $user->name),
+                'email' => old('email', $user->email),
+                'phone' => old('phone', $user->phone?->formatForCountry('GB')),
+                'emergency_name' => old('emergency_name', $user->emergency_name),
+                'emergency_phone' => old('emergency_phone', $user->emergency_phone?->formatForCountry('GB')),
+                'timezone' => old('timezone', (string) $user->timezone),
+                'section' => old('section', $user->section),
+                'role' => old('role', $user->role),
+                'accreditations' => old('accreditations', $user->accreditations->all()),
+            ]) }},
             init() {
                 $nextTick(() => {
                     if (!this.user.timezone) {
@@ -55,6 +58,32 @@
             </div>
 
             <div>
+                <x-input-label for="phone" :value="__('Phone')" />
+                <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40"
+                    x-model="user.phone" />
+                <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+            </div>
+
+            <fieldset>
+                <legend class="text-lg font-medium mb-1">@lang('Emergency Contact')</legend>
+                <p class="mb-2 text-md text-blue-800 dark:text-blue-200">@lang('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.')</p>
+                <div class="flex flex-wrap gap-6">
+                    <div class="grow shrink">
+                        <x-input-label for="emergency_name" :value="__('Name')" />
+                        <x-text-input id="emergency_name" name="emergency_name" class="mt-1 block w-full min-w-48"
+                            maxlength="100" x-bind:required="!!user.emergency_phone" x-model="user.emergency_name" />
+                        <x-input-error class="mt-2" :messages="$errors->get('emergency_name')" />
+                    </div>
+                    <div>
+                        <x-input-label for="emergency_phone" :value="__('Phone')" />
+                        <x-text-input id="emergency_phone" name="emergency_phone" class="mt-1 block w-40"
+                            x-bind:required="!!user.emergency_name" x-model="user.emergency_phone" />
+                        <x-input-error class="mt-2" :messages="$errors->get('emergency_phone')" />
+                    </div>
+                </div>
+            </fieldset>
+
+            <div>
                 <x-input-label for="timezone" :value="__('Timezone')" />
                 <x-select-input id="timezone" name="timezone" class="mt-1 block" required x-model="user.timezone">
                     <x-select-input.timezones />
@@ -82,8 +111,8 @@
             </div>
 
             @can('accredit', $user)
-                <fieldset x-data="checkboxes({{ json_encode(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations" class="space-y-1">
-                    <legend class="font-bold after:content-[':'] text-gray-900 dark:text-gray-100">
+                <fieldset x-data="checkboxes({{ Js::from(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations" class="space-y-1">
+                    <legend class="font-bold text-gray-900 dark:text-gray-100">
                         @lang('Accreditations')</legend>
 
                     <label class="flex w-full items-center gap-1">

@@ -16,6 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
+use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -29,6 +30,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
+        'phone',
+        'emergency_name',
+        'emergency_phone',
         'password',
         'timezone',
         'section',
@@ -69,6 +73,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
+        'phone' => E164PhoneNumberCast::class . ':GB',
+        'emergency_phone' => E164PhoneNumberCast::class . ':GB',
         'email_verified_at' => 'datetime',
         'timezone' => Timezone::class,
         'role' => Role::class,

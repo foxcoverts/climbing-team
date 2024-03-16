@@ -18,6 +18,9 @@ class UpdateProfileRequest extends FormRequest
         return [
             'name' => ['string', 'max:255'],
             'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'phone' => ['nullable', 'phone:INTERNATIONAL,GB'],
+            'emergency_name' => ['nullable', 'required_with:emergency_phone', 'string', 'max:100'],
+            'emergency_phone' => ['nullable', 'required_with:emergency_name', 'phone:INTERNATIONAL,GB'],
             'timezone' => ['required', 'string', 'max:100', 'timezone:all'],
         ];
     }

@@ -13,7 +13,7 @@
                     @csrf
 
                     <fieldset x-data="checkboxes({{ $users->pluck('id') }})" x-modelable="values" x-model="form.user_ids" class="m-0 p-0">
-                        <legend class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
+                        <legend class="text-lg font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                             @lang('Invite Attendees')</legend>
 
                         <label class="mt-1 w-full flex gap-1 items-center">

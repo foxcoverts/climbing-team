@@ -37,14 +37,20 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'phone' => ['nullable', 'phone:INTERNATIONAL,GB'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'emergency_name' => ['nullable', 'required_with:emergency_phone', 'string', 'max:100'],
+            'emergency_phone' => ['nullable', 'required_with:emergency_name', 'phone:INTERNATIONAL,GB'],
             'timezone' => ['required', 'string', 'max:100', 'timezone:all'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
+            'emergency_name' => $request->emergency_name,
+            'emergency_phone' => $request->emergency_phone,
             'timezone' => $request->timezone,
             'role' => Role::TeamLeader,
         ]);
@@ -80,14 +86,20 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'phone' => ['nullable', 'phone:INTERNATIONAL,GB'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'emergency_name' => ['nullable', 'required_with:emergency_phone', 'string', 'max:100'],
+            'emergency_phone' => ['nullable', 'required_with:emergency_name', 'phone:INTERNATIONAL,GB'],
             'timezone' => ['required', 'string', 'max:100', 'timezone:all'],
         ]);
 
         $user->forceFill([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
+            'emergency_name' => $request->emergency_name,
+            'emergency_phone' => $request->emergency_phone,
             'timezone' => $request->timezone,
             'email_verified_at' => $user->freshTimestamp(),
         ]);
