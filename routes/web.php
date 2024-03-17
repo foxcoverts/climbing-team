@@ -58,6 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::controller(BookingIcsController::class)->group(function () {
         Route::get('booking.ics', 'index')->name('booking.ics');
         Route::get('booking/{booking}.ics', 'show')->name('booking.show.ics');
+        Route::get('rota.ics', 'rota')->name('booking.rota.ics');
     });
 
     Route::resource('booking', BookingController::class)->except('index');

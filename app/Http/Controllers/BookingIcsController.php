@@ -49,7 +49,7 @@ class BookingIcsController extends Controller
         }
 
         $ics = $this->ics(
-            $bookings->with('attendees', 'lead_instructor')->get(),
+            $bookings->get(),
             $request->user()
         );
 
@@ -60,6 +60,39 @@ class BookingIcsController extends Controller
         }
         return $ics;
     }
+
+    /**
+     * Display an iCal listing for the user's rota.
+     *
+     * This only includes bookings that the current user has responded 'ACCEPTED' or 'TENTATIVE'
+     * and does not include any cancelled bookings. In contrast to `index` which includes all
+     * bookings the current user has permission to view.
+     */
+    public function rota(Request $request): Response
+    {
+        $user = $request->user();
+
+        $bookings = Booking::query()
+            ->whereNot('status', BookingStatus::Cancelled)
+            ->whereHas('attendees', function (Builder $query) use ($user) {
+                $query
+                    ->where('user_id', $user->id)
+                    ->whereIn('status', [AttendeeStatus::Accepted, AttendeeStatus::Tentative]);
+            });
+
+        $ics = $this->ics(
+            $bookings->get(),
+            $request->user()
+        );
+
+        if (config('app.debug') && $request->get('debug')) {
+            return $ics
+                ->header('Content-Type', 'text/plain; charset=utf-8')
+                ->header('Content-Disposition', 'inline');
+        }
+        return $ics;
+    }
+
 
     /**
      * Display an iCal listing for the specified resource.
