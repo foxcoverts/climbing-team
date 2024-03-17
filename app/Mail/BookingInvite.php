@@ -190,31 +190,16 @@ class BookingInvite extends Mailable
 
     protected function getCalendarMethodAsString(): string
     {
-        switch ($this->getCalendarMethod()) {
-            case CalendarMethod::Add:
-                return 'ADD';
-
-            case CalendarMethod::Cancel:
-                return 'CANCEL';
-
-            case CalendarMethod::Counter:
-                return 'COUNTER';
-
-            case CalendarMethod::DeclineCounter:
-                return 'DECLINECOUNTER';
-
-            case CalendarMethod::Publish:
-                return 'PUBLISH';
-
-            case CalendarMethod::Refresh:
-                return 'REFRESH';
-
-            case CalendarMethod::Reply:
-                return 'REPLY';
-
-            case CalendarMethod::Request:
-                return 'REQUEST';
-        }
+        return match ($this->getCalendarMethod()) {
+            CalendarMethod::Add => 'ADD',
+            CalendarMethod::Cancel => 'CANCEL',
+            CalendarMethod::Counter => 'COUNTER',
+            CalendarMethod::DeclineCounter => 'DECLINECOUNTER',
+            CalendarMethod::Publish => 'PUBLISH',
+            CalendarMethod::Refresh => 'REFRESH',
+            CalendarMethod::Reply => 'REPLY',
+            CalendarMethod::Request => 'REQUEST',
+        };
     }
 
     protected function attachCalendarData(Email $message): void

@@ -10,14 +10,11 @@ enum Role: string
 
     protected function rank(): int
     {
-        switch ($this) {
-            case static::Guest:
-                return 0;
-            case static::TeamMember:
-                return 1;
-            case static::TeamLeader:
-                return 2;
-        }
+        return match ($this) {
+            static::Guest => 0,
+            static::TeamMember => 1,
+            static::TeamLeader => 2,
+        };
     }
 
     public function compare(Role $other): int

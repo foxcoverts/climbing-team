@@ -26,23 +26,13 @@ class Attendee
 
     public function getStatus(): AttendeeStatus|null
     {
-        switch ($this->vattendee['PARTSTAT']) {
-            case 'ACCEPTED':
-                return AttendeeStatus::Accepted;
-
-            case 'DECLINED':
-                return AttendeeStatus::Declined;
-
-            case 'NEEDS-ACTION':
-                return AttendeeStatus::NeedsAction;
-
-            case 'TENTATIVE':
-                return AttendeeStatus::Tentative;
-
-            default:
-            case "DELEGATED":
-                return null; // Unsupported
-        }
+        return match ($this->vattendee['PARTSTAT']) {
+            'ACCEPTED' => AttendeeStatus::Accepted,
+            'DECLINED' => AttendeeStatus::Declined,
+            'NEEDS-ACTION' => AttendeeStatus::NeedsAction,
+            'TENTATIVE' => AttendeeStatus::Tentative,
+            default => null, // Unsupported: 'DELEGATED'
+        };
     }
 
     public function getComment(): string|null
