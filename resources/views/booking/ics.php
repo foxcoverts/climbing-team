@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\AttendeeStatus;
+use App\Enums\BookingStatus;
 use App\iCal\Domain\Entity\Calendar;
 use App\iCal\Domain\Entity\Event;
 use App\iCal\Domain\Enum\CalendarMethod;
@@ -20,8 +21,12 @@ use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Domain\ValueObject\Uri;
 
+if (!isset($method) || !$method instanceof CalendarMethod) {
+    $method = CalendarMethod::Publish;
+}
+
 $calendar = new Calendar();
-$calendar->setMethod($method ?? CalendarMethod::Publish);
+$calendar->setMethod($method);
 
 foreach ($bookings as $booking) {
     $description = $booking->group_name;
@@ -35,7 +40,8 @@ foreach ($bookings as $booking) {
     );
 
     $event = new Event(new UniqueIdentifier($booking->uid));
-    $event->setSequence(new Sequence($booking->sequence));
+    $event
+        ->setSequence(new Sequence($booking->sequence));
     $event
         ->setOccurrence(
             new TimeSpan(
@@ -56,19 +62,13 @@ foreach ($bookings as $booking) {
             new Timestamp($booking->updated_at)
         );
 
-    switch ($booking->status) {
-        case \App\Enums\BookingStatus::Tentative:
-            $event->setStatus(EventStatus::TENTATIVE());
-            break;
-        case \App\Enums\BookingStatus::Confirmed:
-            $event->setStatus(EventStatus::CONFIRMED());
-            break;
-        case \App\Enums\BookingStatus::Cancelled:
-            $event->setStatus(EventStatus::CANCELLED());
-            break;
-    }
+    $event->setStatus(match ($booking->status) {
+        BookingStatus::Tentative => EventStatus::TENTATIVE(),
+        BookingStatus::Confirmed => EventStatus::CONFIRMED(),
+        BookingStatus::Cancelled => EventStatus::CANCELLED(),
+    });
 
-    if ($attendee = $booking->attendees->find($user)) {
+    if (($method !== CalendarMethod::Publish) && ($attendee = $booking->attendees->find($user))) {
         $emailAddress = new EmailAddress($attendee->uid);
         if ($attendee->is($user)) {
             try {
@@ -83,7 +83,7 @@ foreach ($bookings as $booking) {
 
         if (
             $attendee->hasVerifiedEmail() &&
-            isset($method) && ($method === CalendarMethod::Request) &&
+            ($method === CalendarMethod::Request) &&
             $attendee->is($user)
         ) {
             $evAttendee->setResponseNeededFromAttendee(true);
@@ -95,20 +95,14 @@ foreach ($bookings as $booking) {
             $evAttendee->setRole(RoleType::REQ_PARTICIPANT());
         }
 
-        switch ($attendee->attendance->status) {
-            case AttendeeStatus::NeedsAction:
-                $evAttendee->setParticipationStatus(ParticipationStatus::NEEDS_ACTION());
-                break;
-            case AttendeeStatus::Accepted:
-                $evAttendee->setParticipationStatus(ParticipationStatus::ACCEPTED());
-                break;
-            case AttendeeStatus::Tentative:
-                $evAttendee->setParticipationStatus(ParticipationStatus::TENTATIVE());
-                break;
-            case AttendeeStatus::Declined:
-                $evAttendee->setParticipationStatus(ParticipationStatus::DECLINED());
-                break;
-        }
+        $evAttendee->setParticipationStatus(
+            match ($attendee->attendance->status) {
+                AttendeeStatus::NeedsAction => ParticipationStatus::NEEDS_ACTION(),
+                AttendeeStatus::Accepted => ParticipationStatus::ACCEPTED(),
+                AttendeeStatus::Tentative => ParticipationStatus::TENTATIVE(),
+                AttendeeStatus::Declined => ParticipationStatus::DECLINED(),
+            }
+        );
 
         $event->addAttendee($evAttendee);
     }
