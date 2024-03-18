@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->timestamp('start_at', 6);
-            $table->timestamp('end_at', 6);
+            $table->timestamp('start_at', 6)->nullable();
+            $table->timestamp('end_at', 6)->nullable();
             $table->string('location');
             $table->string('group_name');
             $table->text('notes')->nullable();
