@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,7 +29,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->away('https://foxcoverts.org.uk/activities/climbing/');
+    return redirect(match (true) {
+        Auth::check() => route('dashboard'),
+        default => 'https://foxcoverts.org.uk/activities/climbing/',
+    });
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
