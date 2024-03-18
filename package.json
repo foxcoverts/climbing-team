@@ -3,8 +3,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
-        "deploy": "fly deploy"
+        "build": "vite build"
     },
     "devDependencies": {
         "@fullcalendar/core": "^6.1",
