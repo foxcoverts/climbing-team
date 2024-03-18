@@ -14,4 +14,16 @@ class Authenticate extends Middleware
     {
         return $request->expectsJson() ? null : route('login');
     }
+
+    /**
+     * Set the current user based on the given param.
+     *
+     * @see App\Http\Middleware\AuthenticateFromParam
+     * @param string $param
+     * @return string
+     */
+    public static function fromParam(string $param): string
+    {
+        return AuthenticateFromParam::class . ':' . $param;
+    }
 }

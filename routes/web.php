@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -84,11 +85,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('user', UserController::class);
 });
 
-Route::middleware(['signed', 'auth.param:attendee'])->group(function () {
-    Route::controller(RespondController::class)->group(function () {
+Route::middleware(['signed', Authenticate::fromParam('attendee')])
+    ->controller(RespondController::class)
+    ->group(function () {
         Route::get('respond/{booking}/{attendee}', 'show')->scopeBindings()->name('respond');
         Route::post('respond/{booking}/{attendee}', 'store')->scopeBindings();
     });
-});
+
 
 require __DIR__ . '/auth.php';
