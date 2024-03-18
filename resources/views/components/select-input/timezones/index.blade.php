@@ -15,7 +15,7 @@
         CarbonTimeZone::PACIFIC => __('Pacific'),
     ];
     $utc = new CarbonTimeZone('UTC');
-    $value = new CarbonTimeZone($value);
+    $value = empty($value) ? $utc : new CarbonTimeZone($value);
 @endphp
 
 <x-select-input.timezones.option :timezone="$utc" />
