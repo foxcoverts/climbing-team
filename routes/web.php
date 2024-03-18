@@ -41,7 +41,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::singleton('profile', ProfileController::class)->destroyable()->except(['edit']);
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('profile', 'edit')->name('profile.edit');
+        Route::put('profile', 'update')->name('profile.update');
+        Route::delete('profile', 'destroy')->name('profile.destroy');
+    });
 
     Route::get('booking', [BookingController::class, 'calendar'])->name('booking.calendar');
     foreach (BookingStatus::cases() as $status) {

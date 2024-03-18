@@ -15,7 +15,7 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function show(Request $request): View
+    public function edit(Request $request): View
     {
         Gate::authorize('update', $request->user());
 
