@@ -13,18 +13,16 @@ deploy:
     # commands that are executed at the real webspace NOT at build servers AFTER copying new files
     post-deployment-remote-commands:
       - mkdir storage/logs
-      - php --version
-      - php8.2-cli --version
-      - php8.2-cli artisan about
-      - php8.2-cli artisan down
+      - php artisan about
+      - php artisan down
       - find $(pwd) -type f -not -path "$(pwd)/logs/*" -exec chmod 664 {} \;
       - find $(pwd) -type d -not -name "logs" -exec chmod 775 {} \;
       - chmod -R o+w storage bootstrap/cache
-      - php8.2-cli artisan optimize:clear
-      - php8.2-cli artisan migrate --force -n
-      - php8.2-cli artisan storage:link
-      - php8.2-cli artisan optimize
-      - php8.2-cli artisan up
+      - php artisan migrate --force -n
+      - php artisan optimize:clear
+      - php artisan storage:link
+      - php artisan optimize
+      - php artisan up
 
   # configuration part, which is taken at ALL FURTHER deployments of this branch
   recurring:
@@ -38,17 +36,17 @@ deploy:
       - storage
     # commands that are executed at the real webspace NOT at build servers BEFORE copying new files
     pre-deployment-remote-commands:
-      - php8.2-cli artisan down
+      - php artisan down
     # commands that are executed at the real webspace NOT at build servers AFTER copying new files
     post-deployment-remote-commands:
       - find $(pwd) -type f -not -path "$(pwd)/logs/*" -exec chmod 664 {} \;
       - find $(pwd) -type d -not -name "logs" -exec chmod 775 {} \;
       - chmod -R o+w storage bootstrap/cache
-      - php8.2-cli artisan optimize:clear
-      - php8.2-cli artisan migrate --force -n
-      - php8.2-cli artisan storage:link
-      - php8.2-cli artisan optimize
-      - php8.2-cli artisan up
+      - php artisan optimize:clear
+      - php artisan migrate --force -n
+      - php artisan storage:link
+      - php artisan optimize
+      - php artisan up
 
 # uncomment the following lines to configure cron jobs
 #runtime:
