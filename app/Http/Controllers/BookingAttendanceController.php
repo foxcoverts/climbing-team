@@ -9,21 +9,12 @@ use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use InvalidArgumentException;
 
 class BookingAttendanceController extends Controller
 {
-    protected function authorizeAttendance(string $action, Booking $booking, User $user)
-    {
-        if ($attendee = $booking->attendees()->find($user)) {
-            $attendance = $attendee->attendance;
-        } else {
-            $attendance = Attendance::build($booking, $user);
-        }
-        return $this->authorize($action, $attendance);
-    }
-
     /**
      * Display the resource.
      */
@@ -72,6 +63,16 @@ class BookingAttendanceController extends Controller
 
         return redirect($request->session()->get('url.referer', url()->previous()))
             ->with('alert.info', __('Updated your attendance successfully.'));
+    }
+
+    protected function authorizeAttendance(string $action, Booking $booking, User $user)
+    {
+        if ($attendee = $booking->attendees()->find($user)) {
+            $attendance = $attendee->attendance;
+        } else {
+            $attendance = Attendance::build($booking, $user);
+        }
+        Gate::authorize($action, $attendance);
     }
 
     protected function getGuestListAttendees(Booking $booking): Collection

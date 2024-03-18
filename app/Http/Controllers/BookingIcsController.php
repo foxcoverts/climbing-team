@@ -9,22 +9,17 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class BookingIcsController extends Controller
 {
-    /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(Booking::class, 'booking');
-    }
-
     /**
      * Display an iCal listing of the resource.
      */
     public function index(Request $request): Response
     {
+        Gate::authorize('viewAny', Booking::class);
+
         $bookings = Booking::query();
 
         $user = $request->user();
@@ -70,6 +65,8 @@ class BookingIcsController extends Controller
      */
     public function rota(Request $request): Response
     {
+        Gate::authorize('viewOwn', Booking::class);
+
         $user = $request->user();
 
         $bookings = Booking::query()
@@ -99,6 +96,8 @@ class BookingIcsController extends Controller
      */
     public function show(Request $request, Booking $booking): Response
     {
+        Gate::authorize('view', $booking);
+
         $ics = $this->ics(
             [$booking],
             $request->user(),

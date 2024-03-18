@@ -6,6 +6,7 @@ use App\Actions\RespondToBookingAction;
 use App\Http\Controllers\Controller;
 use App\Models\MailLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,6 +17,8 @@ class StoreMailLogController extends Controller
      */
     public function __invoke(Request $request)
     {
+        Gate::authorize('create', MailLog::class);
+
         try {
             $mail = new MailLog([
                 'body' => $request->getContent(),

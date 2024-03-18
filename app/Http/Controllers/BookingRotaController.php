@@ -8,6 +8,7 @@ use App\Models\Booking;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 class BookingRotaController extends Controller
 {
@@ -16,7 +17,7 @@ class BookingRotaController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $this->authorize('viewOwn', Booking::class);
+        Gate::authorize('viewOwn', Booking::class);
 
         $user = $request->user();
         $bookings = Booking::query()

@@ -8,23 +8,18 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class UserController extends Controller
 {
     /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(User::class, 'user');
-    }
-
-    /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
+        Gate::authorize('viewAny', User::class);
+
         return view('user.index', [
             'users' => User::orderBy('name')->get()
         ]);
@@ -35,6 +30,8 @@ class UserController extends Controller
      */
     public function create(): View
     {
+        Gate::authorize('create', User::class);
+
         return view('user.create', [
             'user' => new User,
         ]);
@@ -47,6 +44,8 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        Gate::authorize('create', User::class);
+
         $user = User::create(
             array_merge(
                 $request->safe()->except(['accreditations']),
@@ -71,6 +70,8 @@ class UserController extends Controller
      */
     public function show(User $user): View
     {
+        Gate::authorize('view', $user);
+
         return view('user.show', [
             'user' => $user
         ]);
@@ -78,7 +79,7 @@ class UserController extends Controller
 
     public function sendInvite(User $user): RedirectResponse
     {
-        $this->authorize('update', $user);
+        Gate::authorize('update', $user);
 
         if ($user->isActive()) {
             return redirect()->route('user.show', $user)
@@ -96,6 +97,8 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
+        Gate::authorize('update', $user);
+
         return view('user.edit', [
             'user' => $user
         ]);
@@ -108,6 +111,8 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
+        Gate::authorize('update', $user);
+
         $user->fill($request->safe()->except(['accreditations']));
 
         if ($user->isDirty('email')) {
@@ -136,6 +141,8 @@ class UserController extends Controller
      */
     public function destroy(DestroyUserRequest $request, User $user): RedirectResponse
     {
+        Gate::authorize('delete', $user);
+
         $user->delete();
 
         return redirect()->route('user.index')

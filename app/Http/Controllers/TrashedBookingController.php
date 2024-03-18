@@ -7,6 +7,7 @@ use App\Http\Requests\RestoreTrashedBookingRequest;
 use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class TrashedBookingController extends Controller
@@ -16,7 +17,7 @@ class TrashedBookingController extends Controller
      */
     public function index(): View
     {
-        $this->authorize('viewTrashed', Booking::class);
+        Gate::authorize('viewTrashed', Booking::class);
 
         $bookings = Booking::onlyTrashed()
             ->whereDate('end_at', '>=', Carbon::now())
@@ -35,7 +36,8 @@ class TrashedBookingController extends Controller
      */
     public function show(Booking $booking): View
     {
-        $this->authorize('view', $booking);
+        Gate::authorize('view', $booking);
+
         return view('booking.trashed.show', [
             'booking' => $booking,
         ]);
@@ -46,7 +48,8 @@ class TrashedBookingController extends Controller
      */
     public function update(RestoreTrashedBookingRequest $request, Booking $booking): RedirectResponse
     {
-        $this->authorize('restore', $booking);
+        Gate::authorize('restore', $booking);
+
         $booking->restore();
 
         return redirect()->route('booking.show', $booking)
@@ -58,7 +61,8 @@ class TrashedBookingController extends Controller
      */
     public function destroy(DestroyTrashedBookingRequest $request, Booking $booking): RedirectResponse
     {
-        $this->authorize('forceDelete', $booking);
+        Gate::authorize('forceDelete', $booking);
+
         $booking->forceDelete();
 
         return redirect()->route('trash.booking.trash')

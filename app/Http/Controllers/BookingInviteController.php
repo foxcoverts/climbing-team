@@ -8,6 +8,7 @@ use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class BookingInviteController extends Controller
@@ -17,7 +18,7 @@ class BookingInviteController extends Controller
      */
     public function __invoke(Request $request): View
     {
-        $this->authorize('viewOwn', Booking::class);
+        Gate::authorize('viewOwn', Booking::class);
 
         $user = $request->user();
         $bookings = Booking::query()

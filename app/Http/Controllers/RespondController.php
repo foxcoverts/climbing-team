@@ -6,6 +6,7 @@ use App\Actions\RespondToBookingAction;
 use App\Http\Requests\StoreRespondRequest;
 use App\Models\Booking;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,7 +17,7 @@ class RespondController extends Controller
      */
     public function show(Booking $booking, User $attendee)
     {
-        $this->authorize('update', $attendee->attendance);
+        Gate::authorize('update', $attendee->attendance);
 
         try {
             new RespondToBookingAction($booking);
@@ -35,7 +36,7 @@ class RespondController extends Controller
      */
     public function store(StoreRespondRequest $request, Booking $booking, User $attendee)
     {
-        $this->authorize('update', $attendee->attendance);
+        Gate::authorize('update', $attendee->attendance);
 
         try {
             $respondToBooking = new RespondToBookingAction($booking);

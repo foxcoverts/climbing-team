@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class BookingAttendeeInviteController extends Controller
@@ -20,7 +21,7 @@ class BookingAttendeeInviteController extends Controller
      */
     public function create(Booking $booking): View
     {
-        $this->authorize('create', [Attendance::class, $booking]);
+        Gate::authorize('create', [Attendance::class, $booking]);
 
         if ($booking->isPast() || $booking->isCancelled()) {
             abort(Response::HTTP_NOT_FOUND);
@@ -42,7 +43,7 @@ class BookingAttendeeInviteController extends Controller
      */
     public function store(InviteBookingAttendeeRequest $request, Booking $booking): RedirectResponse
     {
-        $this->authorize('create', [Attendance::class, $booking]);
+        Gate::authorize('create', [Attendance::class, $booking]);
 
         if ($booking->isPast()) {
             return redirect()->back()

@@ -6,6 +6,7 @@ use App\Models\Change;
 use App\Models\Change\Comment;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class BookingCommentController extends Controller
 {
@@ -14,7 +15,8 @@ class BookingCommentController extends Controller
      */
     public function store(Request $request, Booking $booking)
     {
-        $this->authorize('comment', $booking);
+        Gate::authorize('comment', $booking);
+
         $request->validate([
             'body' => ['required', 'string'],
         ]);

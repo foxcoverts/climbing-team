@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ListBookingRequest;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Gate;
 
 class BookingController extends Controller
 {
@@ -18,6 +18,8 @@ class BookingController extends Controller
      */
     public function index(ListBookingRequest $request)
     {
+        Gate::authorize('viewAny', Booking::class);
+
         $bookings = Booking::query()
             ->whereDate('start_at', '>=', $request->input('start'))
             ->whereDate('end_at', '<=', $request->input('end'));
@@ -44,37 +46,5 @@ class BookingController extends Controller
         }
 
         return BookingResource::collection($bookings->get());
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Booking $booking)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Booking $booking)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Booking $booking)
-    {
-        //
     }
 }

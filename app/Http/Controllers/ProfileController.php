@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateProfileRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -16,7 +17,8 @@ class ProfileController extends Controller
      */
     public function show(Request $request): View
     {
-        $this->authorize('update', $request->user());
+        Gate::authorize('update', $request->user());
+
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
@@ -27,7 +29,8 @@ class ProfileController extends Controller
      */
     public function update(UpdateProfileRequest $request): RedirectResponse
     {
-        $this->authorize('update', $request->user());
+        Gate::authorize('update', $request->user());
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
@@ -36,11 +39,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        if ($request->user()->wasChanged('email')) {
-            $request->user()->sendEmailVerificationNotification();
-        }
-
-        return Redirect::route('profile.show')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
@@ -48,7 +47,8 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $this->authorize('delete', $request->user());
+        Gate::authorize('delete', $request->user());
+
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);

@@ -19,24 +19,17 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class BookingController extends Controller
 {
     /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(Booking::class, 'booking');
-    }
-
-    /**
      * Display a calendar of the Bookings.
      */
     public function calendar(): View
     {
-        $this->authorize('viewAny', Booking::class);
+        Gate::authorize('viewAny', Booking::class);
 
         return view('booking.calendar');
     }
@@ -64,7 +57,7 @@ class BookingController extends Controller
      */
     protected function index(BookingStatus $status): View
     {
-        $this->authorize('viewAny', [Booking::class, $status]);
+        Gate::authorize('viewAny', [Booking::class, $status]);
 
         $bookings = Booking::query()
             ->orderBy('start_at')->orderBy('end_at')
@@ -86,6 +79,8 @@ class BookingController extends Controller
      */
     public function create(Request $request): View
     {
+        Gate::authorize('create', Booking::class);
+
         return view('booking.create', [
             'form' => new BookingForm(new Booking([
                 'start_at' => Carbon::parse('Saturday 09:30', $request->user()->timezone)->utc(),
@@ -100,6 +95,8 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request): RedirectResponse
     {
+        Gate::authorize('create', Booking::class);
+
         $attributes = $request->safe()->except('start_date', 'start_time', 'end_time');
         $attributes['start_at'] = Carbon::parse(
             $request->safe()->start_date . 'T' . $request->safe()->start_time,
@@ -121,6 +118,8 @@ class BookingController extends Controller
      */
     public function show(Request $request, Booking $booking): View
     {
+        Gate::authorize('view', $booking);
+
         $attendee = $booking->attendees()
             ->with('user_accreditations')
             ->find($request->user());
@@ -137,6 +136,8 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking): View
     {
+        Gate::authorize('update', $booking);
+
         return view('booking.edit', [
             'form' => new BookingForm($booking),
             'guest_list' => $this->getGuestListAttendees($booking),
@@ -148,6 +149,8 @@ class BookingController extends Controller
      */
     public function update(UpdateBookingRequest $request, Booking $booking): RedirectResponse
     {
+        Gate::authorize('update', $booking);
+
         $originalStatus = $booking->status;
         $booking->fill($request->safe()->except('start_date', 'start_time', 'end_time'));
         if ($request->safe()->has('start_time')) {
@@ -213,6 +216,8 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking): RedirectResponse
     {
+        Gate::authorize('delete', $booking);
+
         if ($booking->status != BookingStatus::Cancelled) {
             return redirect()->back()
                 ->with('alert.error', __('You must cancel this booking before you can delete it.'));

@@ -13,6 +13,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +24,7 @@ class BookingAttendeeController extends Controller
      */
     public function index(Booking $booking): RedirectResponse
     {
-        $this->authorize('viewAny', [Attendance::class, $booking]);
+        Gate::authorize('viewAny', [Attendance::class, $booking]);
 
         return redirect(status: Response::HTTP_SEE_OTHER)->route('booking.show', $booking);
     }
@@ -33,7 +34,7 @@ class BookingAttendeeController extends Controller
      */
     public function create(Booking $booking): View
     {
-        $this->authorize('create', [Attendance::class, $booking]);
+        Gate::authorize('create', [Attendance::class, $booking]);
 
         if ($booking->isPast() || $booking->isCancelled()) {
             abort(Response::HTTP_NOT_FOUND);
@@ -54,7 +55,7 @@ class BookingAttendeeController extends Controller
      */
     public function store(StoreBookingAttendeeRequest $request, Booking $booking): RedirectResponse
     {
-        $this->authorize('create', [Attendance::class, $booking]);
+        Gate::authorize('create', [Attendance::class, $booking]);
 
         $user_id = $request->safe()->user_id;
         $options = $request->safe()->except(['user_id']);
@@ -79,7 +80,7 @@ class BookingAttendeeController extends Controller
      */
     public function show(Booking $booking, User $attendee): View
     {
-        $this->authorize('view', $attendee->attendance);
+        Gate::authorize('view', $attendee->attendance);
 
         return view('booking.attendee.show', [
             'booking' => $booking,
@@ -92,7 +93,7 @@ class BookingAttendeeController extends Controller
      */
     public function update(UpdateBookingAttendeeRequest $request, Booking $booking, User $attendee): RedirectResponse
     {
-        $this->authorize('update', $attendee->attendance);
+        Gate::authorize('update', $attendee->attendance);
 
         try {
             $respondToBooking = new RespondToBookingAction($booking, $request->user());
@@ -115,7 +116,7 @@ class BookingAttendeeController extends Controller
      */
     public function destroy(Request $request, Booking $booking, User $attendee): RedirectResponse
     {
-        $this->authorize('delete', $attendee->attendance);
+        Gate::authorize('delete', $attendee->attendance);
 
         if ($attendee->attendance != AttendeeStatus::Declined) {
             try {
