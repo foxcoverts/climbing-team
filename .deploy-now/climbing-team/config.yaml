@@ -48,8 +48,8 @@ deploy:
       - php artisan optimize
       - php artisan up
 
-# uncomment the following lines to configure cron jobs
-#runtime:
-#  cron-jobs:
-#    - command: my-cron-job-command # the deployment is located at $HOME/htdocs/ to execute a deployed script just prefix it accordingly
-#      schedule: 0 5 * * * # run every day at 5:00
+runtime:
+ cron-jobs:
+   # the deployment is located at $HOME/htdocs/ to execute a deployed script just prefix it accordingly
+   - command: cd $HOME/htdocs/ && php artisan schedule:run >> /dev/null 2>&1
+     schedule: "* * * * *" # every minute
