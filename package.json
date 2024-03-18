@@ -1,5 +1,6 @@
 {
     "private": true,
+    "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
@@ -22,6 +23,5 @@
         "superagent": "^8.1",
         "tailwindcss": "^3.4",
         "vite": "^5.1"
-    },
-    "type": "module"
+    }
 }
