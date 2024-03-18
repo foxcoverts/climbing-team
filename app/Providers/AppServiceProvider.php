@@ -2,11 +2,9 @@
 
 namespace App\Providers;
 
-use App\Database\Query\Grammars\MySqlGrammar;
 use App\Models\PersonalAccessToken;
 use App\Rules\Password;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -30,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Model::shouldBeStrict();
-        DB::connection()->setQueryGrammar(new MySqlGrammar);
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
         View::addExtension('md.blade.php', 'blade');
 
