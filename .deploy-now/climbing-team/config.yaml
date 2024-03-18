@@ -14,6 +14,7 @@ deploy:
     post-deployment-remote-commands:
       - mkdir storage/logs
       - php --version
+      - ls /usr/bin # discover other php versions
       - php artisan about
       - php artisan down
       - find $(pwd) -type f -not -path "$(pwd)/logs/*" -exec chmod 664 {} \;
