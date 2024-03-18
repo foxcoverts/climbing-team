@@ -53,10 +53,6 @@ class RegisteredUserController extends Controller
             'timezone' => $request->timezone,
             'role' => Role::TeamLeader,
         ]);
-        $user->accreditations = [
-            Accreditation::ManageBookings,
-            Accreditation::ManageUsers,
-        ];
 
         event(new Registered($user));
 
