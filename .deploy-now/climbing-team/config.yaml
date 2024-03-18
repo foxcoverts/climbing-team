@@ -13,9 +13,9 @@ deploy:
     # commands that are executed at the real webspace NOT at build servers AFTER copying new files
     post-deployment-remote-commands:
       - mkdir storage/logs
-      - php artisan down
       - find $(pwd) -type f -not -path "$(pwd)/logs/*" -exec chmod 664 {} \;
       - find $(pwd) -type d -not -name "logs" -exec chmod 775 {} \;
+      - php artisan down
       - chmod -R o+w storage bootstrap/cache
       - php artisan optimize:clear
       - php artisan migrate --force -n
