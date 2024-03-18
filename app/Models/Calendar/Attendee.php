@@ -26,7 +26,7 @@ class Attendee
 
     public function getStatus(): AttendeeStatus|null
     {
-        return match ($this->vattendee['PARTSTAT']) {
+        return match ((string) $this->vattendee['PARTSTAT']) {
             'ACCEPTED' => AttendeeStatus::Accepted,
             'DECLINED' => AttendeeStatus::Declined,
             'NEEDS-ACTION' => AttendeeStatus::NeedsAction,
