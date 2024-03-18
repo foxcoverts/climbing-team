@@ -11,7 +11,7 @@ Route::middleware(Authenticate::using('sanctum'))->group(function () {
         return $request->user();
     });
 
-    Route::apiResource('/booking', BookingController::class);
+    Route::name('api')->apiResource('/booking', BookingController::class);
 });
 
 Route::post('mail', StoreMailLogController::class);
