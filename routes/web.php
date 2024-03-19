@@ -15,15 +15,9 @@ use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Authenticate;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect(match (true) {
-        Auth::check() => route('dashboard'),
-        default => 'https://foxcoverts.org.uk/activities/climbing/',
-    });
-});
+Route::view('/', 'welcome');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
