@@ -9,6 +9,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\BookingRotaController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RespondController;
@@ -21,9 +22,7 @@ Route::view('/', 'welcome')->name('home');
 Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::controller(ProfileController::class)->group(function () {
         Route::get('profile', 'edit')->name('profile.edit');
