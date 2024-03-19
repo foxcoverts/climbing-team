@@ -3,7 +3,6 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import momentPlugin from "@fullcalendar/moment";
-import superagent from "superagent";
 
 const calendarEl = document.getElementById("fullcalendar");
 window.Calendar = new Calendar(calendarEl, {
@@ -46,48 +45,17 @@ window.Calendar = new Calendar(calendarEl, {
     windowResize: onWindowResize,
     datesSet: onWindowResize,
     events: function (info, successCallback, failureCallback) {
-        superagent
-            .get("/api/booking")
-            .type("json")
-            .set("accept", "application/json")
-            .query({
-                start: info.start.toISOString(),
-                end: info.end.toISOString(),
+        window
+            .axios("/api/booking", {
+                params: {
+                    start: info.start.toISOString(),
+                    end: info.end.toISOString(),
+                },
             })
-            .end((err, res) => {
-                if (err) {
-                    failureCallback(err);
-                } else {
-                    successCallback(
-                        res.body.data.map((content) => {
-                            return {
-                                id: content.id,
-                                title:
-                                    content.activity +
-                                    " for " +
-                                    content.group_name +
-                                    " at " +
-                                    content.location +
-                                    " (" +
-                                    content.status +
-                                    ")",
-                                start: content.start_at,
-                                end: content.end_at,
-                                url: content.url,
-                                className: ["fc-event-" + content.status],
-                                color: bookingStatusToColor(content.status),
-                                extendedProps: {
-                                    activity: content.activity,
-                                    groupName: content.group_name,
-                                    location: content.location,
-                                    notes: content.notes,
-                                    status: content.status,
-                                },
-                            };
-                        })
-                    );
-                }
-            });
+            .then((res) => {
+                successCallback(res.data.data.map(transformEvent));
+            })
+            .catch(failureCallback);
     },
     eventDidMount(info) {
         if (info.view.type == "timeGridDay") {
@@ -104,6 +72,33 @@ window.Calendar = new Calendar(calendarEl, {
         }
     },
 });
+
+function transformEvent(content) {
+    return {
+        id: content.id,
+        title:
+            content.activity +
+            " for " +
+            content.group_name +
+            " at " +
+            content.location +
+            " (" +
+            content.status +
+            ")",
+        start: content.start_at,
+        end: content.end_at,
+        url: content.url,
+        className: ["fc-event-" + content.status],
+        color: bookingStatusToColor(content.status),
+        extendedProps: {
+            activity: content.activity,
+            groupName: content.group_name,
+            location: content.location,
+            notes: content.notes,
+            status: content.status,
+        },
+    };
+}
 
 function bookingStatusToColor(status) {
     switch (status) {
