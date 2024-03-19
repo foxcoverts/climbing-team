@@ -5,8 +5,9 @@
         <thead>
             <tr class="border border-gray-300">
                 <th
-                    class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
-                    {{ Carbon::parse($day)->toFormattedDayDateString() }}</th>
+                    class="px-3 py-2 font-medium text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
+                    <span x-data="{{ Js::from(['date' => localDate($day)]) }}" x-text="dateString(date)"></span>
+                </th>
             </tr>
         </thead>
         <tbody>
