@@ -12,16 +12,17 @@
             <thead>
                 <tr>
                     <th
-                        class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
+                        class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 w-full">
                         @lang('Name')</th>
-                    <th class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell"
-                        width="1">
+                    <th
+                        class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell">
                         @lang('Active')</th>
-                    <th class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell"
-                        width="1">
+                    <th
+                        class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell">
                         @lang('Section')
-                    <th class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300"
-                        width="1">Role</th>
+                    <th
+                        class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
+                        Role</th>
                     @foreach (Accreditation::cases() as $accreditation)
                         <th @class([
                             'px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden',
@@ -30,7 +31,7 @@
                                 Accreditation::ManageBookings,
                                 Accreditation::ManageUsers,
                             ]),
-                        ]) width="1">
+                        ])>
                             @lang("app.user.accreditation.{$accreditation->value}")</th>
                     @endforeach
                 </tr>
