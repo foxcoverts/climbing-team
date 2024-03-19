@@ -44,15 +44,15 @@
                             <a href="{{ route('user.show', $user) }}">{{ $user->name }}</a>
                         </td>
                         <td class="px-1 text-center hidden sm:table-cell">
-                            <x-badge.active :active="$user->isActive()" class="text-sm text-nowrap" />
+                            <x-badge.active :active="$user->isActive()" class="text-sm text-nowrap whitespace-nowrap" />
                         </td>
                         <td class="px-1 text-center hidden sm:table-cell">
                             @if ($user->isUnder18() || $user->isParent())
-                                <x-badge.section :section="$user->section" class="text-sm text-nowrap" />
+                                <x-badge.section :section="$user->section" class="text-sm text-nowrap whitespace-nowrap" />
                             @endif
                         </td>
                         <td class="px-1 text-center">
-                            <x-badge.role :role="$user->role" class="text-sm text-nowrap" />
+                            <x-badge.role :role="$user->role" class="text-sm text-nowrap whitespace-nowrap" />
                         </td>
                         @foreach (Accreditation::cases() as $accreditation)
                             <td @class([
@@ -64,7 +64,8 @@
                                 ]),
                             ])>
                                 @if ($user->accreditations->contains($accreditation))
-                                    <x-badge.accreditation :accreditation="$accreditation" class="text-sm text-nowrap" />
+                                    <x-badge.accreditation :accreditation="$accreditation"
+                                        class="text-sm text-nowrap whitespace-nowrap" />
                                 @endif
                             </td>
                         @endforeach
