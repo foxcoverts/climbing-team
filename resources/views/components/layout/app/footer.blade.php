@@ -3,9 +3,9 @@
         <p>© Copyright {{ date('Y') }}</p>
 
         <ul class="flex flex-col gap-2 sm:flex-row sm:gap-6">
-            <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-50">Terms of Service</a></li>
-            <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-50">Privacy Policy</a></li>
-            <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-50">About Us</a></li>
+            <li><a href="{{ route('privacy-policy') }}"
+                    class="hover:text-gray-900 dark:hover:text-gray-50">@lang('Privacy Policy')</a></li>
+            <li><a href="/" class="hover:text-gray-900 dark:hover:text-gray-50">@lang('About Us')</a></li>
         </ul>
     </div>
 </footer>
