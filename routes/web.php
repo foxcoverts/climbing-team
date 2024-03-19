@@ -17,7 +17,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+Route::view('/', 'welcome')->name('home');
 Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
 
 Route::middleware(['auth', 'verified'])->group(function () {
