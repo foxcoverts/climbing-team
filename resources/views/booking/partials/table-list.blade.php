@@ -1,3 +1,4 @@
+@use('App\Enums\BookingStatus')
 @use('Carbon\Carbon')
 @props(['showRoute' => 'booking.show'])
 <table class="w-full mt-6 text-gray-700 dark:text-gray-300 border border-gray-300">
@@ -12,10 +13,7 @@
         </thead>
         <tbody>
             @foreach ($list as $booking)
-                <tr @class([
-                    'border border-gray-300 group',
-                    'fc-event-tentative' => $booking->isTentative(),
-                ])>
+                <tr @class(['border border-gray-300 group'])>
                     <td class="text-left p-0">
                         <a href="{{ route($showRoute, $booking) }}"
                             class="block px-3 py-2 hover:bg-opacity-15 hover:bg-gray-900 hover:text-black dark:text-gray-100 dark:hover:bg-opacity-15 dark:hover:bg-white dark:hover:text-white">
@@ -26,6 +24,9 @@
                                 'group' => $booking->group_name,
                                 'location' => $booking->location,
                             ])</span>
+                            @unless ($booking->status == BookingStatus::Confirmed)
+                                <x-badge.booking-status :status="$booking->status" class="text-xs" />
+                            @endunless
                         </a>
                     </td>
                 </tr>
