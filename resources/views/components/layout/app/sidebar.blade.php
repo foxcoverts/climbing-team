@@ -40,49 +40,19 @@
                     'booking.edit',
                     'booking.attendee.*',
                     'booking.comment.*',
-                ]" :label="__('Calendar')">
-                    <x-slot:icon>
-                        <path
-                            d="M1 4c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4zm2 2v12h14V6H3zm2-6h2v2H5V0zm8 0h2v2h-2V0zM5 9h2v2H5V9zm0 4h2v2H5v-2zm4-4h2v2H9V9zm0 4h2v2H9v-2zm4-4h2v2h-2V9zm0 4h2v2h-2v-2z" />
-                    </x-slot:icon>
-                </x-sidebar.link>
+                ]" :label="__('Calendar')" icon="calendar" />
             @endcan
             @can('viewAny', [App\Models\Booking::class, BookingStatus::Confirmed])
-                <x-sidebar.link route='booking.confirmed' :label="__('Confirmed')">
-                    <x-slot:icon>
-                        <path
-                            d="M15 2h2a2 2 0 012 2v14a2 2 0 01-2 2H3a2 2 0 01-2-2V4c0-1.1.9-2 2-2h2V0h2v2h6V0h2v2zM3 6v12h14V6H3z" />
-                        <path d="M5 12l2-2 2 2 4-4 2 2-6 6-4-4z" />
-                    </x-slot:icon>
-                </x-sidebar.link>
+                <x-sidebar.link route='booking.confirmed' :label="__('Confirmed')" icon="calendar.check" />
             @endcan
             @can('viewAny', [App\Models\Booking::class, BookingStatus::Tentative])
-                <x-sidebar.link route='booking.tentative' :label="__('Tentative')">
-                    <x-slot:icon>
-                        <path
-                            d="M15 2h2a2 2 0 012 2v14a2 2 0 01-2 2H3a2 2 0 01-2-2V4c0-1.1.9-2 2-2h2V0h2v2h6V0h2v2zM3 6v12h14V6H3z" />
-                        <path d="M7 9h6v2h-6v-2zm2 2h2v4h-2v-4z" />
-                    </x-slot:icon>
-                </x-sidebar.link>
+                <x-sidebar.link route='booking.tentative' :label="__('Tentative')" icon="calendar.tee" />
             @endcan
             @can('viewAny', [App\Models\Booking::class, BookingStatus::Cancelled])
-                <x-sidebar.link route='booking.cancelled' :label="__('Cancelled')">
-                    <x-slot:icon>
-                        <path
-                            d="M15 2h2a2 2 0 012 2v14a2 2 0 01-2 2H3a2 2 0 01-2-2V4c0-1.1.9-2 2-2h2V0h2v2h6V0h2v2zM3 6v12h14V6H3z" />
-                        <path
-                            d="M14.24 9.17l-2.83 2.83 2.83 2.83-1.41 1.41-2.83-2.83-2.83 2.83-1.41-1.41 2.83-2.83-2.83-2.83 1.41-1.41 2.83 2.83 2.83-2.83 1.41 1.41z" />
-                    </x-slot:icon>
-                </x-sidebar.link>
+                <x-sidebar.link route='booking.cancelled' :label="__('Cancelled')" icon="calendar.cross" />
             @endcan
             @can('create', App\Models\Booking::class)
-                <x-sidebar.link route='booking.create' :label="__('Add Booking')">
-                    <x-slot:icon>
-                        <path
-                            d="M15 2h2a2 2 0 012 2v14a2 2 0 01-2 2H3a2 2 0 01-2-2V4c0-1.1.9-2 2-2h2V0h2v2h6V0h2v2zM3 6v12h14V6H3z" />
-                        <path d="M9 11V9h2v2h2v2h-2v2H9v-2H7v-2h2z" />
-                    </x-slot:icon>
-                </x-sidebar.link>
+                <x-sidebar.link route='booking.create' :label="__('Add Booking')" icon="calendar.plus" />
             @endcan
             @can('viewTrashed', App\Models\Booking::class)
                 <x-sidebar.link route='trash.booking.index' match-routes='trash.booking.*' :label="__('Deleted')">
@@ -131,12 +101,7 @@
     @auth
         <div>
             <x-sidebar.heading>@lang('Account')</x-sidebar.heading>
-            <x-sidebar.link route='profile.edit' :label="__('Profile')">
-                <x-slot:icon>
-                    <path
-                        d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm7 4v2a3 3 0 1 0 6 0V6a3 3 0 1 0-6 0zm11 9.14A15.93 15.93 0 0 0 10 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z" />
-                </x-slot:icon>
-            </x-sidebar.link>
+            <x-sidebar.link route='profile.edit' :label="__('Profile')" icon="user-solid-square" />
             <x-sidebar.button route='logout' method="POST" :label="__('Logout')">
                 <x-slot:icon>
                     <path
