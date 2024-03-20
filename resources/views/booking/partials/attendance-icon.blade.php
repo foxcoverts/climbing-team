@@ -8,6 +8,7 @@
         <x-icon.close-outline class="h-4 w-4 fill-current" />
     @break
 
+    @case(AttendeeStatus::NeedsAction)
     @case(null)
         <x-icon.question-outline class="h-4 w-4 fill-current" />
     @break
