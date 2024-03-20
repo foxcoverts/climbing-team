@@ -13,6 +13,7 @@
             $color == 'yellow',
     ]) }}>
     @if ($icon)
-        <x-dynamic-component :component="'icon.' . $icon" style="height: 1em; width: 1em" class="fill-current mr-1" />
+        <x-dynamic-component :component="'icon.' . $icon" style="height: .75lh; width: .75lh" class="fill-current mr-1"
+            aria-hidden="true" />
     @endif{{ $label }}
 </span>

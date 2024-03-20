@@ -25,11 +25,11 @@
                                 'location' => $booking->location,
                             ])</span>
                             @unless ($booking->status == BookingStatus::Confirmed)
-                                <x-badge.booking-status :status="$booking->status" class="text-xs" />
+                                <x-badge.booking-status :status="$booking->status" class="text-xs align-middle" />
                             @endunless
                             @php($attendee = $booking->attendees()->find(auth()->user()))
                             @if ($attendee?->attendance?->status)
-                                <x-badge.attendee-status :status="$attendee->attendance->status" class="align-middle text-xs" />
+                                <x-badge.attendee-status :status="$attendee->attendance->status" class="text-xs align-middle" />
                             @endif
                         </a>
                     </td>
