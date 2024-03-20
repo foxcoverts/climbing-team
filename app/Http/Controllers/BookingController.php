@@ -62,6 +62,7 @@ class BookingController extends Controller
         $bookings = Booking::future()
             ->forUser($request->user())
             ->where('bookings.status', $status)
+            ->with('attendees')
             ->ordered()->get()
             ->groupBy(function (Booking $booking) {
                 return $booking->start_at->startOfDay();

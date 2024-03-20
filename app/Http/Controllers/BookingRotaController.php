@@ -21,6 +21,7 @@ class BookingRotaController extends Controller
             ->attendeeStatus($request->user(), [
                 AttendeeStatus::Accepted, AttendeeStatus::Tentative
             ])
+            ->with('attendees')
             ->ordered()->get()
             ->groupBy(function (Booking $booking) {
                 return $booking->start_at->startOfDay();

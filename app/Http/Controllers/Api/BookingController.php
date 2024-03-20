@@ -18,7 +18,8 @@ class BookingController extends Controller
         Gate::authorize('viewAny', Booking::class);
 
         $bookings = Booking::forUser($request->user())
-            ->between($request->input('start'), $request->input('end'));
+            ->between($request->input('start'), $request->input('end'))
+            ->with('attendees');
 
         return BookingResource::collection($bookings->get());
     }

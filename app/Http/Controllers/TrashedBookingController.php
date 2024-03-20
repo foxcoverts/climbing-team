@@ -19,6 +19,7 @@ class TrashedBookingController extends Controller
         Gate::authorize('viewTrashed', Booking::class);
 
         $bookings = Booking::onlyTrashed()->future()
+            ->with('attendees')
             ->ordered()->get()
             ->groupBy(function ($booking) {
                 return $booking->start_at->startOfDay();

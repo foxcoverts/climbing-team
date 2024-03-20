@@ -6,7 +6,7 @@
         @lang('Guest list')
     </h2>
 
-    @if ($attendee = $booking->attendees()->find($booking->lead_instructor))
+    @if ($attendee = $booking->attendees->find($booking->lead_instructor))
         <div x-data="{ open: true }">
             <h3 class="text-lg my-2 flex items-center space-x-1">
                 <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
