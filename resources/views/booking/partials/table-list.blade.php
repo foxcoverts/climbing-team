@@ -27,6 +27,10 @@
                             @unless ($booking->status == BookingStatus::Confirmed)
                                 <x-badge.booking-status :status="$booking->status" class="text-xs" />
                             @endunless
+                            @php($attendee = $booking->attendees()->find(auth()->user()))
+                            @if ($attendee?->attendance?->status)
+                                <x-badge.attendee-status :status="$attendee->attendance->status" class="align-middle text-xs" />
+                            @endif
                         </a>
                     </td>
                 </tr>
