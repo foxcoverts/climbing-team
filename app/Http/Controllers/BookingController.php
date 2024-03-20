@@ -34,19 +34,19 @@ class BookingController extends Controller
         return view('booking.calendar');
     }
 
-    public function confirmed(): View
+    public function confirmed(Request $request): View
     {
-        return $this->index(BookingStatus::Confirmed);
+        return $this->index($request, BookingStatus::Confirmed);
     }
 
-    public function tentative(): View
+    public function tentative(Request $request): View
     {
-        return $this->index(BookingStatus::Tentative);
+        return $this->index($request, BookingStatus::Tentative);
     }
 
-    public function cancelled(): View
+    public function cancelled(Request $request): View
     {
-        return $this->index(BookingStatus::Cancelled);
+        return $this->index($request, BookingStatus::Cancelled);
     }
 
     /**
@@ -55,15 +55,14 @@ class BookingController extends Controller
      * @param BookingStatus $status
      * @return View
      */
-    protected function index(BookingStatus $status): View
+    protected function index(Request $request, BookingStatus $status): View
     {
         Gate::authorize('viewAny', [Booking::class, $status]);
 
-        $bookings = Booking::query()
-            ->orderBy('start_at')->orderBy('end_at')
-            ->where('status', $status)
-            ->whereDate('end_at', '>=', Carbon::now())
-            ->get()
+        $bookings = Booking::future()
+            ->forUser($request->user())
+            ->where('bookings.status', $status)
+            ->ordered()->get()
             ->groupBy(function (Booking $booking) {
                 return $booking->start_at->startOfDay();
             });

@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Casts\Sequence;
+use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -116,5 +118,92 @@ class Booking extends Model
     public function isTentative(): bool
     {
         return ($this->status == BookingStatus::Tentative);
+    }
+
+    /**
+     * Sort bookings by start & end.
+     *
+     * @param Builder $bookings
+     * @return void
+     */
+    public function scopeOrdered(Builder $bookings)
+    {
+        $bookings->orderBy('start_at')->orderBy('end_at');
+    }
+
+    /**
+     * Bookings that are not cancelled.
+     *
+     * @param Builder $bookings
+     * @return void
+     */
+    public function scopeNotCancelled(Builder $bookings)
+    {
+        $bookings->whereNot('status', BookingStatus::Cancelled);
+    }
+
+    /**
+     * Find all bookings within the given start & end dates.
+     *
+     * @param Builder $bookings
+     * @param string $start
+     * @param string $end
+     * @return void
+     */
+    public function scopeBetween(Builder $bookings, string $start, string $end): void
+    {
+        $bookings
+            ->whereDate('start_at', '>=', $start)
+            ->whereDate('end_at', '<=', $end);
+    }
+
+    /**
+     * Bookings that have not finished yet.
+     *
+     * @param Builder $bookings
+     * @return void
+     */
+    public function scopeFuture(Builder $bookings): void
+    {
+        $bookings->whereDate('end_at', '>=', Carbon::now());
+    }
+
+    /**
+     * Bookings having the given attendee.
+     *
+     * @param Builder $bookings
+     * @param User $attendee
+     * @param AttendeeStatus[] $status  (default excludes `Declined`)
+     * @return void
+     */
+    public function scopeAttendeeStatus(Builder $bookings, User $attendee, array $status = []): void
+    {
+        $bookings->whereHas('attendees', function (Builder $query) use ($attendee, $status) {
+            $query->where('user_id', $attendee->id);
+            if (empty($status)) {
+                $query->whereNot('status', AttendeeStatus::Declined);
+            } else {
+                $query->whereIn('status', $status);
+            }
+        });
+    }
+
+    /**
+     * Bookings that the given User should be able to view.
+     *
+     * @param Builder $bookings
+     * @param User $user
+     * @return void
+     */
+    public function scopeForUser(Builder $bookings, User $user): void
+    {
+        if ($user->isGuest()) {
+            $bookings->attendeeStatus($user);
+        } else if ($user->cannot('manage', Booking::class)) {
+            $bookings->where(function (Builder $query) use ($user) {
+                $query->attendeeStatus($user)
+                    ->orWhereIn('status', [BookingStatus::Confirmed]);
+            });
+        }
     }
 }

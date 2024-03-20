@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AttendeeStatus;
-use App\Enums\BookingStatus;
 use App\Models\Booking;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
@@ -20,28 +18,7 @@ class BookingIcsController extends Controller
     {
         Gate::authorize('viewAny', Booking::class);
 
-        $bookings = Booking::query();
-
-        $user = $request->user();
-        if ($user->can('manage', Booking::class)) {
-            // no filter needed
-        } else if ($user->isGuest()) {
-            $bookings->whereHas('attendees', function (Builder $query) use ($user) {
-                $query
-                    ->where('user_id', $user->id)
-                    ->whereNot('status', AttendeeStatus::Declined);
-            });
-        } else {
-            $bookings->where(function (Builder $query) use ($user) {
-                $query
-                    ->whereHas('attendees', function (Builder $query) use ($user) {
-                        $query
-                            ->where('user_id', $user->id)
-                            ->whereNot('status', AttendeeStatus::Declined);
-                    })
-                    ->orWhereIn('status', [BookingStatus::Confirmed]);
-            });
-        }
+        $bookings = Booking::forUser($request->user());
 
         $ics = $this->ics(
             $bookings->get(),
@@ -59,23 +36,17 @@ class BookingIcsController extends Controller
     /**
      * Display an iCal listing for the user's rota.
      *
-     * This only includes bookings that the current user has responded 'ACCEPTED' or 'TENTATIVE'
-     * and does not include any cancelled bookings. In contrast to `index` which includes all
+     * This only includes bookings that the current user has responded
+     * 'ACCEPTED' or 'TENTATIVE'. In contrast to `index` which includes all
      * bookings the current user has permission to view.
      */
     public function rota(Request $request): Response
     {
         Gate::authorize('viewOwn', Booking::class);
 
-        $user = $request->user();
-
-        $bookings = Booking::query()
-            ->whereNot('status', BookingStatus::Cancelled)
-            ->whereHas('attendees', function (Builder $query) use ($user) {
-                $query
-                    ->where('user_id', $user->id)
-                    ->whereIn('status', [AttendeeStatus::Accepted, AttendeeStatus::Tentative]);
-            });
+        $bookings = Booking::attendeeStatus($request->user(), [
+            AttendeeStatus::Accepted, AttendeeStatus::Tentative
+        ]);
 
         $ics = $this->ics(
             $bookings->get(),

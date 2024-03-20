@@ -3,32 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AttendeeStatus;
-use App\Enums\BookingStatus;
 use App\Models\Booking;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 
 class BookingRotaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): View
     {
         Gate::authorize('viewOwn', Booking::class);
 
-        $user = $request->user();
-        $bookings = Booking::query()
-            ->orderBy('start_at')->orderBy('end_at')
-            ->whereNot('bookings.status', BookingStatus::Cancelled)
-            ->whereDate('end_at', '>=', Carbon::now())
-            ->whereHas('attendees', function (Builder $query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->whereIn('status', [AttendeeStatus::Accepted, AttendeeStatus::Tentative]);
-            })
-            ->get()
+        $bookings = Booking::future()->notCancelled()
+            ->attendeeStatus($request->user(), [
+                AttendeeStatus::Accepted, AttendeeStatus::Tentative
+            ])
+            ->ordered()->get()
             ->groupBy(function (Booking $booking) {
                 return $booking->start_at->startOfDay();
             });

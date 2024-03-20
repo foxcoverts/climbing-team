@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AttendeeStatus;
-use App\Enums\BookingStatus;
 use App\Models\Booking;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
@@ -20,16 +17,11 @@ class BookingInviteController extends Controller
     {
         Gate::authorize('viewOwn', Booking::class);
 
-        $user = $request->user();
-        $bookings = Booking::query()
-            ->orderBy('start_at')->orderBy('end_at')
-            ->whereNot('bookings.status', BookingStatus::Cancelled)
-            ->whereDate('end_at', '>=', Carbon::now())
-            ->whereHas('attendees', function (Builder $query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->whereIn('status', [AttendeeStatus::NeedsAction, AttendeeStatus::Tentative]);
-            })
-            ->get()
+        $bookings = Booking::future()->notCancelled()
+            ->attendeeStatus($request->user(), [
+                AttendeeStatus::NeedsAction, AttendeeStatus::Tentative
+            ])
+            ->ordered()->get()
             ->groupBy(function (Booking $booking) {
                 return $booking->start_at->startOfDay();
             });
