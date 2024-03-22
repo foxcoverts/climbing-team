@@ -5,6 +5,7 @@
     'image' => null,
     'image_width' => 0,
     'image_height' => 0,
+    'updated' => null,
 ])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" prefix="og: https://ogp.me/ns#">
@@ -20,6 +21,7 @@
         <title>{{ $title }} - {{ config('app.name', 'Climbing Team') }}</title>
         <meta property="og:title" content="{{ $title }}" />
         <meta property="og:site_name" content="{{ config('app.name', 'Climbing Team') }}" />
+        <meta property="twitter:title" content="{{ $title }}" />
     @endif
     @isset($canonical)
         <link rel="canonical" href="{{ $canonical }}" />
@@ -28,16 +30,22 @@
         <meta property="og:url" content="{{ url()->current() }}" />
     @endisset
     @isset($description)
-        <meta name="description" property="og:description" content="{{ $description }}" />
+        <meta name="description" content="{{ $description }}" />
+        <meta property="og:description" content="{{ $description }}" />
+        <meta name="twitter:description" content="{{ $description }}" />
     @endisset
     @isset($image)
         <meta property="og:image" content="{{ $image }}" />
+        <meta name="twitter:image" content="{{ $image }}" />
         @if ($image_width)
             <meta property="og:image:width" content="{{ $image_width }}" />
         @endif
         @if ($image_height)
             <meta property="og:image:height" content="{{ $image_height }}" />
         @endif
+    @endisset
+    @isset($updated)
+        <meta property="og:updated_time" content="{{ $updated->toIso8601String() }}" />
     @endisset
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="{{ config('app.locale', 'en') }}" />
