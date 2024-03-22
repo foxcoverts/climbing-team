@@ -95,7 +95,7 @@ class BookingPolicy
      */
     public function comment(User $user, Booking $booking): bool
     {
-        if ($booking->isPast() || $booking->isCancelled()) {
+        if ($booking->isPast() || $booking->isCancelled() || $user->isGuest()) {
             return false;
         }
         if ($this->manage($user)) {
