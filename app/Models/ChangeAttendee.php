@@ -1,31 +1,42 @@
 <?php
 
-namespace App\Models\Change;
+namespace App\Models;
 
-use App\Models\Change;
-use App\Models\Booking;
-use App\Models\User;
+use App\Enums\AttendeeStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
-class Comment extends Model
+class ChangeAttendee extends Model
 {
     use HasUlids;
-
-    protected $table = 'change_comments';
 
     // Timestamps are stored on the change
     public $timestamps = false;
 
     public $fillable = [
-        'body',
+        'attendee_id',
+        'attendee_status',
+        'attendee_comment',
+    ];
+
+    public $with = [
+        'attendee',
+    ];
+
+    public $casts = [
+        'attendee_status' => AttendeeStatus::class,
     ];
 
     public function change(): BelongsTo
     {
         return $this->belongsTo(Change::class);
+    }
+
+    public function attendee(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'attendee_id');
     }
 
     public function author(): HasOneThrough
@@ -35,7 +46,7 @@ class Comment extends Model
             Change::class,
             'id', // changes.id
             'id', // users.id
-            'change_id', // change_comments.change_id
+            'change_id', // change_attendees.change_id
             'author_id' // changes.author_id
         );
     }
@@ -47,7 +58,7 @@ class Comment extends Model
             Change::class,
             'id', // changes.id
             'id', // bookings.id
-            'change_id', // change_comments.change_id
+            'change_id', // change_attendees.change_id
             'booking_id' // changes.booking_id
         );
     }

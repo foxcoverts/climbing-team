@@ -15,7 +15,7 @@
             'booking' => $invite,
             'icon' => 'inbox',
             'title' => __('My Invites'),
-            'route' => 'booking.attendance.show',
+            'route' => 'booking.attendance.edit',
             'more' => [
                 'route' => 'booking.invite',
                 'label' => __('View your invitations'),

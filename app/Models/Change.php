@@ -32,16 +32,16 @@ class Change extends Model
 
     public function attendees(): HasMany
     {
-        return $this->hasMany(Change\Attendee::class);
+        return $this->hasMany(ChangeAttendee::class);
     }
 
     public function comments(): HasMany
     {
-        return $this->hasMany(Change\Comment::class);
+        return $this->hasMany(ChangeComment::class);
     }
 
     public function fields(): HasMany
     {
-        return $this->hasMany(Change\Field::class);
+        return $this->hasMany(ChangeField::class);
     }
 }

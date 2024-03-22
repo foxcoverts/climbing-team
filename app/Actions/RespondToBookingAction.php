@@ -5,6 +5,8 @@ namespace App\Actions;
 use App\Enums\AttendeeStatus;
 use App\Models\Booking;
 use App\Models\Change;
+use App\Models\ChangeAttendee;
+use App\Models\ChangeComment;
 use App\Models\User;
 use InvalidArgumentException;
 
@@ -50,11 +52,11 @@ class RespondToBookingAction
 
         // Record change
         if ($attendance?->status != $status) {
-            $change = new Change();
+            $change = new Change;
             $change->author_id = $author_id;
             $this->booking->changes()->save($change);
 
-            $change_attendee = new Change\Attendee;
+            $change_attendee = new ChangeAttendee;
             $change_attendee->attendee_id = $attendee_id;
             $change_attendee->attendee_status = $status;
             if (!empty($comment) && ($attendance?->comment != $comment)) {
@@ -62,11 +64,11 @@ class RespondToBookingAction
             }
             $change->attendees()->save($change_attendee);
         } else if (!empty($comment) && ($attendance?->comment != $comment)) {
-            $change = new Change();
+            $change = new Change;
             $change->author_id = $author_id;
             $this->booking->changes()->save($change);
 
-            $change_comment = new Change\Comment;
+            $change_comment = new ChangeComment;
             $change_comment->body = $comment;
             $change->comments()->save($change_comment);
         }

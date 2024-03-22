@@ -7,7 +7,7 @@
             </h2>
         </header>
         @include('booking.partials.table-list', [
-            'showRoute' => 'booking.attendance.show',
+            'showRoute' => 'booking.attendance.edit',
         ])
     </section>
 </x-layout.app>

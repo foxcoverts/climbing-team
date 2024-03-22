@@ -30,7 +30,8 @@
                     </form>
                 @endif
             </div>
-            @include('booking.partials.guest-list', ['showTools' => false])
+
+            <x-guest-list :$booking :$currentUser :showTools="false" />
         </div>
     </section>
 </x-layout.app>

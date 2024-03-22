@@ -126,21 +126,20 @@ class BookingController extends Controller
 
         return view('booking.show', [
             'booking' => $booking,
-            'guest_list' => $this->getGuestListAttendees($booking),
-            'attendance' => $attendee?->attendance,
+            'currentUser' => $request->user(),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Booking $booking): View
+    public function edit(Request $request, Booking $booking): View
     {
         Gate::authorize('update', $booking);
 
         return view('booking.edit', [
             'form' => new BookingForm($booking),
-            'guest_list' => $this->getGuestListAttendees($booking),
+            'currentUser' => $request->user(),
         ]);
     }
 
@@ -228,18 +227,5 @@ class BookingController extends Controller
         return redirect()->route('booking.calendar')
             ->with('alert.info', __('Booking deleted.'))
             ->with('restore', route('trash.booking.update', $booking));
-    }
-
-    protected function getGuestListAttendees(Booking $booking): Collection
-    {
-        $attendees = $booking->attendees()
-            ->with('user_accreditations');
-        if ($booking->lead_instructor) {
-            $attendees->whereNot('users.id', $booking->lead_instructor_id);
-        }
-        return $attendees
-            ->orderBy('booking_user.status')
-            ->orderBy('users.name')
-            ->get();
     }
 }

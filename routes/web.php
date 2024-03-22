@@ -36,7 +36,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('booking.' . $status->value);
     }
 
-    Route::singleton('booking.attendance', BookingAttendanceController::class)->except(['edit']);
+    Route::controller(BookingAttendanceController::class)->group(function () {
+        Route::get('booking/{booking}/attendance', 'edit')->name('booking.attendance.edit');
+        Route::put('booking/{booking}/attendance', 'update')->name('booking.attendance.update');
+    });
 
     Route::controller(BookingAttendeeInviteController::class)->group(function () {
         Route::get('booking/{booking}/attendee/invite', 'create')->name('booking.attendee.invite');
