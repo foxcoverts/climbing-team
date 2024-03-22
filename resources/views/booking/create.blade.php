@@ -123,9 +123,11 @@
                 <x-button.primary x-bind:disabled="submitted"
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Create') }}'" />
 
-                <x-button.secondary :href="route('booking.calendar')">
-                    @lang('Back')
-                </x-button.secondary>
+                @can('viewAny', App\Models\Booking::class)
+                    <x-button.secondary :href="route('booking.calendar')">
+                        @lang('Back')
+                    </x-button.secondary>
+                @endcan
             </div>
         </form>
     </section>

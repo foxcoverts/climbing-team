@@ -141,9 +141,11 @@
                 <x-button.primary x-bind:disabled="submitted"
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Create') }}'" />
 
-                <x-button.secondary :href="route('user.index')">
-                    @lang('Back')
-                </x-button.secondary>
+                @can('viewAny', App\Models\User::class)
+                    <x-button.secondary :href="route('user.index')">
+                        @lang('Back')
+                    </x-button.secondary>
+                @endcan
             </div>
         </form>
     </section>

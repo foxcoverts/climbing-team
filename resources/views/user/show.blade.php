@@ -104,9 +104,11 @@
                     </form>
                 @endcan
             @endif
-            <x-button.secondary href="{{ route('user.index') }}">
-                @lang('Back')
-            </x-button.secondary>
+            @can('viewAny', App\Models\User::class)
+                <x-button.secondary href="{{ route('user.index') }}">
+                    @lang('Back')
+                </x-button.secondary>
+            @endcan
         </footer>
     </section>
 </x-layout.app>

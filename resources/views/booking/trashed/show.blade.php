@@ -15,9 +15,11 @@
                 </form>
             @endcan
             @include('booking.partials.force-delete-button')
-            <x-button.secondary :href="route('trash.booking.index')">
-                @lang('Back')
-            </x-button.secondary>
+            @can('viewTrashed', App\Models\Booking::class)
+                <x-button.secondary :href="route('trash.booking.index')">
+                    @lang('Back')
+                </x-button.secondary>
+            @endcan
         </footer>
     </section>
 </x-layout.app>
