@@ -83,53 +83,61 @@
                 </div>
             </fieldset>
 
-            <div>
-                <x-input-label for="timezone" :value="__('Timezone')" />
-                <x-select-input id="timezone" name="timezone" class="mt-1 block" required x-model="user.timezone">
-                    <x-select-input.timezones />
-                </x-select-input>
-                <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
-            </div>
+            <fieldset>
+                <legend class="text-lg font-medium mb-1">@lang('Settings')</legend>
+                <div class="space-y-6">
+                    <div>
+                        <x-input-label for="timezone" :value="__('Timezone')" />
+                        <x-select-input id="timezone" name="timezone" class="mt-1 block" required
+                            x-model="user.timezone">
+                            <x-select-input.timezones />
+                        </x-select-input>
+                        <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
+                    </div>
 
-            <div>
-                <x-input-label for="section" :value="__('Section')" />
-                <x-select-input id="section" name="section" class="mt-1 block" required x-model="user.section">
-                    <x-select-input.enum :options="Section::class" lang="app.user.section.:value" />
-                </x-select-input>
-                <x-input-error class="mt-2" :messages="$errors->get('section')" />
-            </div>
+                    <div>
+                        <x-input-label for="section" :value="__('Section')" />
+                        <x-select-input id="section" name="section" class="mt-1 block" required
+                            x-model="user.section">
+                            <x-select-input.enum :options="Section::class" lang="app.user.section.:value" />
+                        </x-select-input>
+                        <x-input-error class="mt-2" :messages="$errors->get('section')" />
+                    </div>
 
-            <div>
-                <x-input-label for="role" :value="__('Role')" />
-                <x-select-input id="role" name="role" class="mt-1 block" required x-model="user.role">
-                    @foreach (Role::cases() as $option)
-                        <option value="{{ $option->value }}" @disabled(auth()->user()->role->compare($option) < 0)>
-                            @lang('app.user.role.' . $option->value)
-                        </option>
-                    @endforeach
-                </x-select-input>
-            </div>
+                    <div>
+                        <x-input-label for="role" :value="__('Role')" />
+                        <x-select-input id="role" name="role" class="mt-1 block" required x-model="user.role">
+                            @foreach (Role::cases() as $option)
+                                <option value="{{ $option->value }}" @disabled(auth()->user()->role->compare($option) < 0)>
+                                    @lang('app.user.role.' . $option->value)
+                                </option>
+                            @endforeach
+                        </x-select-input>
+                    </div>
 
-            @can('accredit', $user)
-                <fieldset x-data="checkboxes({{ Js::from(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations" class="space-y-1">
-                    <legend class="font-bold text-gray-900 dark:text-gray-100">
-                        @lang('Accreditations')</legend>
+                    @can('accredit', $user)
+                        <fieldset x-data="checkboxes({{ Js::from(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations"
+                            class="space-y-1">
+                            <legend class="font-bold text-gray-900 dark:text-gray-100">
+                                @lang('Accreditations')</legend>
 
-                    <label class="flex w-full items-center gap-1">
-                        <input type="checkbox" name="all" @change="selectAll" x-effect="indeterminate($el)" />
-                        <span>@lang('Select all')</span>
-                    </label>
+                            <label class="flex w-full items-center gap-1">
+                                <input type="checkbox" name="all" @change="selectAll" x-effect="indeterminate($el)" />
+                                <span>@lang('Select all')</span>
+                            </label>
 
-                    @foreach (Accreditation::cases() as $accreditation)
-                        <label class="flex w-full items-center gap-1">
-                            <input type="checkbox" value="{{ $accreditation->value }}" name="accreditations[]"
-                                x-model="values" />
-                            <span>@lang("app.user.accreditation.$accreditation->value")</span>
-                        </label>
-                    @endforeach
-                    <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
-                </fieldset>
-            @endcan
+                            @foreach (Accreditation::cases() as $accreditation)
+                                <label class="flex w-full items-center gap-1">
+                                    <input type="checkbox" value="{{ $accreditation->value }}" name="accreditations[]"
+                                        x-model="values" />
+                                    <span>@lang("app.user.accreditation.$accreditation->value")</span>
+                                </label>
+                            @endforeach
+                            <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
+                        </fieldset>
+                    @endcan
+                </div>
+            </fieldset>
 
             <footer class="flex items-center gap-4 mt-6">
                 <x-button.primary x-bind:disabled="submitted"
