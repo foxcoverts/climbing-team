@@ -214,11 +214,7 @@
                 </form>
             </div>
 
-            @include('booking.partials.guest-list', [
-                'attendees' => $guest_list,
-                'booking' => $form->booking,
-                'showTools' => false,
-            ])
+            <x-guest-list :booking="$form->booking" :$currentUser :showTools="false" />
         </div>
 
         <footer class="flex items-start gap-4 mt-6">

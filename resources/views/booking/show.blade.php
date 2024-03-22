@@ -1,4 +1,3 @@
-@props(['booking', 'attendance'])
 <x-layout.app :title="$booking->activity . ' - ' . localDate($booking->start_at)->toFormattedDayDateString()">
     <section class="p-4 sm:px-8">
         @include('booking.partials.header')
@@ -17,7 +16,8 @@
                     </footer>
                 @endcan
             </div>
-            @include('booking.partials.guest-list', ['attendees' => $guest_list])
+
+            <x-guest-list :$booking :$currentUser />
         </div>
     </section>
 </x-layout.app>

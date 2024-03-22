@@ -34,12 +34,9 @@ class BookingAttendanceController extends Controller
             $request->session()->flash('url.referer', route('booking.invite'));
         }
 
-        $attendee = $booking->attendees()->find($request->user());
-
         return view('booking.attendance', [
             'booking' => $booking,
-            'attendance' => $attendee?->attendance,
-            'attendees' => $this->getGuestListAttendees($booking),
+            'currentUser' => $request->user(),
         ]);
     }
 
@@ -73,18 +70,5 @@ class BookingAttendanceController extends Controller
             $attendance = Attendance::build($booking, $user);
         }
         Gate::authorize($action, $attendance);
-    }
-
-    protected function getGuestListAttendees(Booking $booking): Collection
-    {
-        $attendees = $booking->attendees()
-            ->with('user_accreditations');
-        if ($booking->lead_instructor) {
-            $attendees->whereNot('users.id', $booking->lead_instructor_id);
-        }
-        return $attendees
-            ->orderBy('booking_user.status')
-            ->orderBy('users.name')
-            ->get();
     }
 }
