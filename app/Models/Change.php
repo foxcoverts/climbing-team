@@ -37,7 +37,7 @@ class Change extends Model
 
     public function comments(): HasMany
     {
-        return $this->hasMany(Change\Comment::class);
+        return $this->hasMany(ChangeComment::class);
     }
 
     public function fields(): HasMany

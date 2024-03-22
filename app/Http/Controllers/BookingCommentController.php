@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Change;
-use App\Models\Change\Comment;
+use App\Models\ChangeComment;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -26,7 +26,7 @@ class BookingCommentController extends Controller
         $change->booking()->associate($booking);
         $change->push();
 
-        $comment = new Comment;
+        $comment = new ChangeComment;
         $comment->body = $request->body;
         $change->comments()->save($comment);
 

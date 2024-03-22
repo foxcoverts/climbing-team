@@ -1,20 +1,15 @@
 <?php
 
-namespace App\Models\Change;
+namespace App\Models;
 
-use App\Models\Change;
-use App\Models\Booking;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
-class Comment extends Model
+class ChangeComment extends Model
 {
     use HasUlids;
-
-    protected $table = 'change_comments';
 
     // Timestamps are stored on the change
     public $timestamps = false;
