@@ -18,7 +18,7 @@ class BookingAttendanceController extends Controller
     /**
      * Display the resource.
      */
-    public function show(Request $request, Booking $booking): View
+    public function edit(Request $request, Booking $booking): View
     {
         $this->authorizeAttendance('view', $booking, $request->user());
 
@@ -36,7 +36,7 @@ class BookingAttendanceController extends Controller
 
         $attendee = $booking->attendees()->find($request->user());
 
-        return view('booking.attendance.show', [
+        return view('booking.attendance', [
             'booking' => $booking,
             'attendance' => $attendee?->attendance,
             'attendees' => $this->getGuestListAttendees($booking),
