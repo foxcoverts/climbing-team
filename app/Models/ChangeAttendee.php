@@ -1,21 +1,16 @@
 <?php
 
-namespace App\Models\Change;
+namespace App\Models;
 
 use App\Enums\AttendeeStatus;
-use App\Models\Booking;
-use App\Models\Change;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
-class Attendee extends Model
+class ChangeAttendee extends Model
 {
     use HasUlids;
-
-    protected $table = 'change_attendees';
 
     // Timestamps are stored on the change
     public $timestamps = false;
@@ -51,7 +46,7 @@ class Attendee extends Model
             Change::class,
             'id', // changes.id
             'id', // users.id
-            'change_id', // change_comments.change_id
+            'change_id', // change_attendees.change_id
             'author_id' // changes.author_id
         );
     }
@@ -63,7 +58,7 @@ class Attendee extends Model
             Change::class,
             'id', // changes.id
             'id', // bookings.id
-            'change_id', // change_comments.change_id
+            'change_id', // change_attendees.change_id
             'booking_id' // changes.booking_id
         );
     }
