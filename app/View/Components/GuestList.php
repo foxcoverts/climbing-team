@@ -39,7 +39,7 @@ class GuestList extends Component
         return view('components.guest-list.index');
     }
 
-    public function attendance(): Attendance
+    public function attendance(): ?Attendance
     {
         return $this->booking->attendees()->find($this->currentUser)?->attendance;
     }
