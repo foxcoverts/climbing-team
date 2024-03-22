@@ -50,6 +50,9 @@ class GuestList extends Component
         if ($this->booking->lead_instructor_id) {
             $attendees->whereNot('users.id', $this->booking->lead_instructor_id);
         }
+        if ($this->currentUser->isGuest()) {
+            $attendees->where('users.id', $this->currentUser->id);
+        }
         return $attendees
             ->orderBy('booking_user.status')
             ->orderBy('users.name')
