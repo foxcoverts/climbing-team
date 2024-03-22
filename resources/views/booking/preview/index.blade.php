@@ -1,8 +1,26 @@
-<x-layout.guest title="Booking" :description="$booking->activity .
-    ' on ' .
-    localDate($booking->start_at)->toFormattedDayDateString() .
-    ' at ' .
-    $booking->location" :image="route('booking.svg', $booking)" image_width="512" image_height="512">
+<x-layout.guest :image="route('booking.svg', $booking)" image_width="512" image_height="512" :updated="$booking->updated_at">
+    <x-slot:title>
+        {{ $booking->activity }} on {{ localDate($booking->start_at)->toFormattedDayDateString() }}
+    </x-slot:title>
+    <x-slot:description>
+        @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
+            {{ __(':activity on :start_date from :start_time to :end_time at :location.', [
+                'activity' => $booking->activity,
+                'start_time' => localDate($booking->start_at)->format('H:i'),
+                'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
+                'end_time' => localDate($booking->end_at)->format('H:i'),
+                'location' => $booking->location,
+            ]) }}
+        @else
+            {{ __(':activity on :start to :end at :location.', [
+                'activity' => $booking->activity,
+                'start' => localDate($booking->start_at)->toDayDateTimeString(),
+                'end' => localDate($booking->end_at)->toDayDateTimeString(),
+                'location' => $booking->location,
+            ]) }}
+        @endif
+    </x-slot:description>
+
     <div class="space-y-2">
         <div>
             <x-fake-label :value="__('When')" />
