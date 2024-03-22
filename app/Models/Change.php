@@ -42,6 +42,6 @@ class Change extends Model
 
     public function fields(): HasMany
     {
-        return $this->hasMany(Change\Field::class);
+        return $this->hasMany(ChangeField::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\BookingChanged;
 use App\Models\Change;
+use App\Models\ChangeField;
 
 class RecordBookingChanges
 {
@@ -20,7 +21,7 @@ class RecordBookingChanges
                 continue;
             }
 
-            $change_fields[] = new Change\Field([
+            $change_fields[] = new ChangeField([
                 'name' => $name,
                 'value' => (string)$value,
             ]);
