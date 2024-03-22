@@ -2,7 +2,7 @@
     ' on ' .
     localDate($booking->start_at)->toFormattedDayDateString() .
     ' at ' .
-    $booking->location" :canonical="route('booking.show', $booking)" :image="route('booking.svg', $booking)" image_width="512" image_height="512">
+    $booking->location" :image="route('booking.svg', $booking)" image_width="512" image_height="512">
     <div class="space-y-2">
         <div>
             <x-fake-label :value="__('When')" />

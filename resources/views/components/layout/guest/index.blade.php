@@ -41,6 +41,8 @@
     @endisset
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="{{ config('app.locale', 'en') }}" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@FoxCoverts" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net" />
