@@ -125,4 +125,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Facebook Group
+    |--------------------------------------------------------------------------
+    |
+    | Provides a link to open the Facebook group on the share booking screen.
+    |
+    */
+
+    'facebook' => [
+        'group' => env('APP_FACEBOOK_GROUP', 'https://www.facebook.com/groups/125557758285/'),
+    ],
+
 ];
