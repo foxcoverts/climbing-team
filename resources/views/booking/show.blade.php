@@ -13,6 +13,9 @@
                         <x-button.primary :href="route('booking.edit', $booking)">
                             @lang('Edit')
                         </x-button.primary>
+                        <x-button.secondary :href="route('booking.share', $booking)">
+                            @lang('Share')
+                        </x-button.secondary>
                     </footer>
                 @endcan
             </div>

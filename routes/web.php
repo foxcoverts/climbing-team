@@ -10,6 +10,7 @@ use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\BookingPreviewController;
 use App\Http\Controllers\BookingRotaController;
+use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\ProfileController;
@@ -52,6 +53,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except(['edit']);
 
     Route::post('booking/{booking}/comment', [BookingCommentController::class, 'store'])->name('booking.comment.create');
+
+    Route::get('booking/{booking}/share', BookingShareController::class)->name('booking.share');
 
     Route::controller(BookingIcsController::class)->group(function () {
         Route::get('booking.ics', 'index')->name('booking.ics');
