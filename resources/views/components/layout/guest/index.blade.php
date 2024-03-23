@@ -37,11 +37,11 @@
     @isset($image)
         <meta property="og:image" content="{{ $image }}" />
         <meta name="twitter:image" content="{{ $image }}" />
-        @if ($image_width)
-            <meta property="og:image:width" content="{{ $image_width }}" />
+        @if ($image->attributes->has('width'))
+            <meta property="og:image:width" content="{{ $image->attributes->get('width') }}" />
         @endif
-        @if ($image_height)
-            <meta property="og:image:height" content="{{ $image_height }}" />
+        @if ($image->attributes->has('height'))
+            <meta property="og:image:height" content="{{ $image->attributes->get('height') }}" />
         @endif
     @endisset
     @isset($updated)

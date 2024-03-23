@@ -1,4 +1,4 @@
-<x-layout.guest :image="route('booking.svg', $booking)" image_width="512" image_height="512" :updated="$booking->updated_at">
+<x-layout.guest :updated="$booking->updated_at">
     <x-slot:title>
         {{ $booking->activity }} on {{ localDate($booking->start_at)->toFormattedDayDateString() }}
     </x-slot:title>
@@ -20,6 +20,9 @@
             ]) }}
         @endif
     </x-slot:description>
+    <x-slot:image width="512" height="512">
+        {{ asset('images/dates/' . $booking->start_at->format('n/j/n-j-N') . '.png') }}
+    </x-slot:image>
 
     <div class="space-y-2">
         <div>
