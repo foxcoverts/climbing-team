@@ -7,23 +7,61 @@
                 @include('booking.partials.details')
 
                 <div class="space-y-2">
-                    <div>
+                    <div x-data="{
+                        copied: false,
+                        text: '',
+                        timeout: null,
+                        copy() {
+                            $clipboard(this.text);
+                            this.copied = true;
+                            clearTimeout(this.timeout);
+                            this.timeout = setTimeout(() => {
+                                this.copied = false;
+                            }, 3000);
+                        },
+                    }">
                         <x-input-label for="link">@lang('Share link')</x-input-label>
-                        <x-text-input readonly id="link" name="link" class="w-full" :value="route('booking.preview', $booking)" />
+                        <div class="flex items-stretch mt-1">
+                            <x-text-input readonly id="link" name="link" x-model.fill="text"
+                                class="flex-grow flex-shrink rounded-r-none" :value="route('booking.preview', $booking)" />
+                            <x-button.primary class="rounded-l-none" @click="copy" title="Copy link" x-cloak>
+                                <x-icon.clipboard class="w-4 h-4 fill-current" x-show="!copied" />
+                                <x-icon.clipboard.check class="w-4 h-4 fill-gray-400 dark:fill-gray-600"
+                                    x-show="copied" />
+                            </x-button.primary>
+                        </div>
                     </div>
 
-                    <div>
+                    <div x-data="{
+                        copied: false,
+                        text: '',
+                        timeout: null,
+                        copy() {
+                            $clipboard(this.text);
+                            this.copied = true;
+                            clearTimeout(this.timeout);
+                            this.timeout = setTimeout(() => {
+                                this.copied = false;
+                            }, 3000);
+                        },
+                    }">
                         <x-input-label for="post">@lang('Share post')</x-input-label>
-                        <x-textarea readonly id="post" name="post" class="w-full">
-                            {{ $post }}
-                        </x-textarea>
+                        <div class="flex items-stretch mt-1">
+                            <x-text-input readonly id="post" name="post" class="w-full" :value="$post"
+                                x-model.fill="text" />
+                            <x-button.primary class="rounded-l-none" @click="copy" title="Copy post" x-cloak>
+                                <x-icon.clipboard class="w-4 h-4 fill-current" x-show="!copied" />
+                                <x-icon.clipboard.check class="w-4 h-4 fill-gray-400 dark:fill-gray-600"
+                                    x-show="copied" />
+                            </x-button.primary>
+                        </div>
                     </div>
                 </div>
 
                 <footer class="flex items-start gap-4 mt-4">
                     @if (config('app.facebook.group'))
                         <x-button.secondary href="{{ config('app.facebook.group') . '?should_open_composer=true' }}"
-                            target="_blank">
+                            target="_blank" class="order-last ml-auto">
                             @lang('Open Facebook Group')
                             <x-icon.external-link class="ml-1 w-4 h-4 stroke-current"
                                 aria-label="(opens in new window)" />

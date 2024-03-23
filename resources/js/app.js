@@ -2,6 +2,7 @@ import "./bootstrap";
 
 import Alpine from "alpinejs";
 import checkboxesData from "./alpine/data/checkboxes.js";
+import Clipboard from "@ryangjchandler/alpine-clipboard";
 import metaEnterDirective from "./alpine/directive/meta-enter.js";
 
 window.dateString = function (date) {
@@ -19,6 +20,7 @@ window.dateString = function (date) {
 
 window.Alpine = Alpine;
 
+Alpine.plugin(Clipboard);
 Alpine.data("checkboxes", checkboxesData);
 Alpine.directive("meta-enter", metaEnterDirective);
 Alpine.start();
