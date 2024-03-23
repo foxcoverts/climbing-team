@@ -4,10 +4,9 @@
     </x-slot:title>
     <x-slot:description>
         @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
-            {{ __(':activity on :start_date from :start_time to :end_time at :location.', [
+            {{ __(':activity from :start_time to :end_time at :location.', [
                 'activity' => $booking->activity,
                 'start_time' => localDate($booking->start_at)->format('H:i'),
-                'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
                 'end_time' => localDate($booking->end_at)->format('H:i'),
                 'location' => $booking->location,
             ]) }}
