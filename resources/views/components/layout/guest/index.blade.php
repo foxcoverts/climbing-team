@@ -3,8 +3,6 @@
     'description' => null,
     'canonical' => null,
     'image' => null,
-    'image_width' => 0,
-    'image_height' => 0,
     'updated' => null,
 ])
 <!DOCTYPE html>
