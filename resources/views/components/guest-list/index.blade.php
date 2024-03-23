@@ -66,7 +66,10 @@
                     @lang('Add')
                 </x-button.primary>
             @endif
-            @include('booking.partials.respond-button')
+            @include('booking.partials.respond-button', [
+                'booking' => $booking,
+                'attendance' => $attendance(),
+            ])
         </footer>
     @endif
 </aside>

@@ -120,10 +120,6 @@ class BookingController extends Controller
     {
         Gate::authorize('view', $booking);
 
-        $attendee = $booking->attendees()
-            ->with('user_accreditations')
-            ->find($request->user());
-
         return view('booking.show', [
             'booking' => $booking,
             'currentUser' => $request->user(),
