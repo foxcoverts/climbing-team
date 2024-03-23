@@ -25,7 +25,7 @@ class BuildCalendarImages extends Command
      */
     public function handle()
     {
-        $progress = $this->output->createProgressBar(366 * 7);
+        $progress = $this->output->createProgressBar(366);
         $progress->start();
 
         if (!is_dir('public/images')) {
@@ -34,23 +34,21 @@ class BuildCalendarImages extends Command
 
         foreach ($this->months() as $month => $monthName) {
             foreach ($this->days($month) as $day) {
-                foreach ($this->weekdays() as $weekday => $weekdayName) {
-                    $svg = $this->svg($monthName, $day, $weekdayName);
+                $svg = $this->svg($monthName, $day);
 
-                    if (!is_dir('public/images/dates/' . $month . '/' . $day)) {
-                        mkdir('public/images/dates/' . $month . '/' . $day, 0777, true);
-                    }
-
-                    $im = new \Imagick();
-                    $im->setBackgroundColor(new \ImagickPixel('transparent'));
-                    $im->readImageBlob($svg);
-                    $im->setImageFormat('png24');
-                    $im->despeckleimage();
-                    $im->writeImage('public/images/dates/' . $month . '/' . $day . '/' . $month . '-' . $day . '-' . $weekday . '.png');
-                    $im->destroy();
-
-                    $progress->advance();
+                if (!is_dir('public/images/dates/' . $month . '/' . $day)) {
+                    mkdir('public/images/dates/' . $month . '/' . $day, 0777, true);
                 }
+
+                $im = new \Imagick();
+                $im->setBackgroundColor(new \ImagickPixel('transparent'));
+                $im->readImageBlob($svg);
+                $im->setImageFormat('png24');
+                $im->despeckleimage();
+                $im->writeImage('public/images/dates/' . $month . '/' . $month . '-' . $day . '.png');
+                $im->destroy();
+
+                $progress->advance();
             }
         }
 
@@ -65,18 +63,18 @@ class BuildCalendarImages extends Command
     protected function months(): array
     {
         return [
-            1 => 'Jan',
-            2 => 'Feb',
-            3 => 'Mar',
-            4 => 'Apr',
+            1 => 'January',
+            2 => 'February',
+            3 => 'March',
+            4 => 'April',
             5 => 'May',
-            6 => 'Jun',
-            7 => 'Jul',
-            8 => 'Aug',
-            9 => 'Sep',
-            10 => 'Oct',
-            11 => 'Nov',
-            12 => 'Dec',
+            6 => 'June',
+            7 => 'July',
+            8 => 'August',
+            9 => 'September',
+            10 => 'October',
+            11 => 'November',
+            12 => 'December',
         ];
     }
 
@@ -96,24 +94,6 @@ class BuildCalendarImages extends Command
     }
 
     /**
-     * Returns a list of day names, keyed by day number, where 1 = Monday.
-     *
-     * @return array<int,string>
-     */
-    protected function weekdays(): array
-    {
-        return [
-            1 => 'Monday',
-            2 => 'Tuesday',
-            3 => 'Wednesday',
-            4 => 'Thursday',
-            5 => 'Friday',
-            6 => 'Saturday',
-            7 => 'Sunday',
-        ];
-    }
-
-    /**
      * Generate SVG for the given month, day and weekday.
      *
      * @param string $month
@@ -121,16 +101,17 @@ class BuildCalendarImages extends Command
      * @param string $weekday
      * @return string
      */
-    protected function svg(string $month, int $day, string $weekday = ''): string
+    protected function svg(string $month, int $day): string
     {
         return
             '<?xml version="1.0" encoding="UTF-8"?>' .
-            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">' .
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 700">' .
+            '<g transform="translate(94,94)">' .
             '<path d="M512 455c0 32-25 57-57 57H57c-32 0-57-25-57-57V128c0-31 25-57 57-57h398c32 0 57 26 57 57z" fill="#e0e7ec" />' .
             '<path d="M484 0h-47c2 4 4 9 4 14a28 28 0 1 1-53-14H124c3 4 4 9 4 14A28 28 0 1 1 75 0H28C13 0 0 13 0 28v157h512V28c0-15-13-28-28-28z" fill="#dd2f45" />' .
-            '<text id="month" x="256" y="150" fill="#fff" font-family="monospace" font-size="130px" style="text-anchor: middle">' . $month . '</text>' .
+            '<text id="month" x="256" y="165" fill="#fff" font-family="monospace" font-size="90px" style="text-anchor: middle">' . $month . '</text>' .
             '<text id="day" x="256" y="400" fill="#66757f" font-family="monospace" font-size="256px" style="text-anchor: middle">' . $day . '</text>' .
-            '<text id="weekday" x="256" y="480" fill="#66757f" font-family="monospace" font-size="64px" style="text-anchor: middle">' . $weekday . '</text>' .
+            '</g>' .
             '</svg>';
     }
 }

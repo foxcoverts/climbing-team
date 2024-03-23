@@ -19,8 +19,8 @@
             ]) }}
         @endif
     </x-slot:description>
-    <x-slot:image width="512" height="512">
-        {{ asset('images/dates/' . $booking->start_at->format('n/j/n-j-N') . '.png') }}
+    <x-slot:image width="700" height="700">
+        {{ asset('images/dates/' . $booking->start_at->format('n/n-j') . '.png') }}
     </x-slot:image>
 
     <div class="space-y-2">
