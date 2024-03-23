@@ -10,7 +10,6 @@ use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\BookingPreviewController;
 use App\Http\Controllers\BookingRotaController;
-use App\Http\Controllers\BookingSvgController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\ProfileController;
@@ -22,7 +21,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
 Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
-Route::get('booking/{booking}.svg', BookingSvgController::class)->name('booking.svg');
 
 Route::get('booking/{booking}/preview', BookingPreviewController::class)->name('booking.preview');
 
