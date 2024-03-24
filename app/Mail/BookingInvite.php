@@ -6,7 +6,6 @@ use App\iCal\Domain\Enum\CalendarMethod;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
@@ -28,6 +27,7 @@ class BookingInvite extends Mailable
         public User $attendee,
         public array $changes = [],
     ) {
+        $this->attendee = $booking->attendees()->find($attendee);
     }
 
     /**
@@ -87,7 +87,10 @@ class BookingInvite extends Mailable
      */
     public function getButtonUrl(): string
     {
-        return URL::signedRoute('respond', [$this->booking, $this->attendee]);
+        return URL::route('respond', [
+            $this->booking, $this->attendee,
+            'invite' => $this->attendee->attendance->token,
+        ]);
     }
 
     /**

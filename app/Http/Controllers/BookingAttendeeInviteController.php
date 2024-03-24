@@ -55,21 +55,22 @@ class BookingAttendeeInviteController extends Controller
         }
 
         $attendees = $booking->attendees;
-        $user_ids = collect($request->safe()->user_ids);
+        $invites = collect($request->safe()->user_ids)
+            ->reject(
+                fn (string $id) => $attendees->contains('id', $id)
+            )->flatMap(
+                fn ($id) => [
+                    $id => [
+                        'status' => AttendeeStatus::NeedsAction,
+                        'token' => Attendance::generateToken(),
+                    ],
+                ]
+            );
 
-        $user_ids->reject(function (string $id) use ($attendees): bool {
-            return $attendees->contains('id', $id);
-        });
-
-        $booking->attendees()->syncWithPivotValues(
-            $user_ids,
-            ['status' => AttendeeStatus::NeedsAction],
-            false
-        );
-
+        $booking->attendees()->syncWithoutDetaching($invites);
         $booking->refresh();
 
-        foreach (User::find($user_ids) as $user) {
+        foreach (User::findMany($invites->keys()) as $user) {
             event(new BookingInvite($booking, $user));
         }
 

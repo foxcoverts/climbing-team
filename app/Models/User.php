@@ -85,7 +85,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Booking::class)
             ->withTimestamps()
-            ->withPivot('status')->as('attendance')
+            ->withPivot('comment', 'status', 'token')->as('attendance')
             ->using(Attendance::class);
     }
 

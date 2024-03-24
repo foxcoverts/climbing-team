@@ -81,7 +81,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('user', UserController::class);
 });
 
-Route::middleware(['signed', Authenticate::fromParam('attendee')])
+Route::middleware(Authenticate::fromParam('attendee'))
     ->controller(RespondController::class)
     ->group(function () {
         Route::get('respond/{booking}/{attendee}', 'show')->scopeBindings()->name('respond');

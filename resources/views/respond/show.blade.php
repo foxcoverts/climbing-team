@@ -49,9 +49,10 @@
         @endif
     </div>
 
-    <form method="post" action="{{ url()->full() }}" x-data="{ submitted: false }"
+    <form method="post" action="{{ route('respond', [$booking, $user]) }}" x-data="{ submitted: false }"
         x-on:submit="setTimeout(() => submitted = true, 0)">
         @csrf
+        <input type="hidden" name="invite" value="{{ $user->attendance->token }}" autocomplete="off" />
         <div
             class="my-4 space-y-4 p-4 border text-black bg-slate-100 border-slate-400 dark:text-white dark:bg-slate-900 dark:border-slate-600">
             <p class="text-lg text-center">@lang('Can you attend this event?')</p>

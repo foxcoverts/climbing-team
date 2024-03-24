@@ -6,6 +6,7 @@ use App\Actions\RespondToBookingAction;
 use App\Http\Requests\StoreRespondRequest;
 use App\Models\Booking;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +16,13 @@ class RespondController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking, User $attendee)
+    public function show(Request $request, Booking $booking, User $attendee)
     {
         Gate::authorize('update', $attendee->attendance);
+
+        if ($request->input('invite') != $attendee->attendance->token) {
+            return redirect()->route('booking.attendance.edit', $booking);
+        }
 
         try {
             new RespondToBookingAction($booking);
@@ -37,6 +42,10 @@ class RespondController extends Controller
     public function store(StoreRespondRequest $request, Booking $booking, User $attendee)
     {
         Gate::authorize('update', $attendee->attendance);
+
+        if ($request->input('invite') != $attendee->attendance->token) {
+            abort(Response::HTTP_FORBIDDEN, __('Invitation invalid'));
+        }
 
         try {
             $respondToBooking = new RespondToBookingAction($booking);

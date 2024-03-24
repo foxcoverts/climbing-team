@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\AttendeeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Str;
 
 class Attendance extends Pivot
 {
@@ -33,8 +34,8 @@ class Attendance extends Pivot
     protected $fillable = [
         'status',
         'comment',
+        'token',
     ];
-
 
     /**
      * The model's default values for attributes.
@@ -46,6 +47,20 @@ class Attendance extends Pivot
         'comment' => null,
     ];
 
+    /**
+     * Make a new token for an Attendance.
+     *
+     * @return string
+     */
+    public static function generateToken(): string
+    {
+        return hash('sha256', sprintf(
+            '%s%s%s',
+            config('app.token_prefix', ''),
+            $tokenEntropy = Str::random(40),
+            hash('crc32b', $tokenEntropy)
+        ));
+    }
 
     /**
      * The attributes that should be cast.
