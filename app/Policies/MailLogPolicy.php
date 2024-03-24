@@ -27,7 +27,7 @@ class MailLogPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(?User $user): bool
     {
         return true;
     }
