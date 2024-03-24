@@ -1,5 +1,5 @@
 @can('comment', $booking)
-    <form method="POST" action="{{ route('booking.comment.create', $booking) }}" class="mt-2" x-data="{ submitted: false }"
+    <form method="POST" action="{{ route('booking.comment.store', $booking) }}" class="mt-2" x-data="{ submitted: false }"
         x-on:submit="setTimeout(() => submitted = true, 0)">
         @csrf
 

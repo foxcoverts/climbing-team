@@ -52,7 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except(['edit']);
 
-    Route::post('booking/{booking}/comment', [BookingCommentController::class, 'store'])->name('booking.comment.create');
+    Route::resource('booking.comment', BookingCommentController::class)->shallow()->only('store', 'update', 'destroy');
 
     Route::get('booking/{booking}/share', BookingShareController::class)->name('booking.share');
 
