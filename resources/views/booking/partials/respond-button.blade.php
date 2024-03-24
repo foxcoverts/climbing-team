@@ -6,7 +6,7 @@
             <button
                 class="relative focus:z-30 flex gap-2 px-4 py-2 border rounded-t-md font-semibold text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25"
                 :class="{ 'rounded-b-md': !open }" x-on:click="open = true">
-                @include('booking.partials.attendance-icon')
+                <x-icon.attendance :$attendance class="w-4 h-4 fill-current" />
                 @if (is_null($attendance))
                     @lang('Respond')
                 @else
@@ -48,7 +48,7 @@
 @elseif (!is_null($attendance))
     <div
         class="flex gap-2 px-4 py-2 border rounded-md font-semibold text-xs uppercase tracking-widest bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm disabled:opacity-25">
-        @include('booking.partials.attendance-icon')
+        <x-icon.attendance :$attendance class="w-4 h-4 fill-current" />
         @lang("app.attendee.status.{$attendance->status->value}")
     </div>
 @endif

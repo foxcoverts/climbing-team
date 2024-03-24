@@ -59,8 +59,11 @@
 
                             <div x-id="['attendee_status']">
                                 <x-input-label ::for="$id('attendee_status')">@lang('Status')</x-input-label>
-                                <x-text-input ::id="$id('attendee_status')" name="attendee[][status]" class="w-full mt-1" readonly
-                                    :value="__('app.attendee.status.' . $attendee->getStatus()->value)" />
+                                <x-fake-input
+                                    class="w-full mt-1 flex-grow flex gap-1 items-center text-black dark:text-white">
+                                    <x-icon.attendance :attendance="$attendee->getStatus()" class="w-5 h-5 fill-current" />
+                                    <span>@lang('app.attendee.status.' . $attendee->getStatus()->value)</span>
+                                </x-fake-input>
                             </div>
 
                             @if ($attendee->getComment())
