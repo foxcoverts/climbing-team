@@ -3,6 +3,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import momentPlugin from "@fullcalendar/moment";
+import moment from "moment";
 
 const calendarEl = document.getElementById("fullcalendar");
 window.Calendar = new Calendar(calendarEl, {
@@ -26,7 +27,14 @@ window.Calendar = new Calendar(calendarEl, {
             dayHeaders: false,
         },
     },
-    initialView: window.innerWidth < 600 ? "listMonth" : "dayGridMonth",
+    initialView:
+        history.state && history.state.view
+            ? history.state.view
+            : window.innerWidth < 600
+            ? "listMonth"
+            : "dayGridMonth",
+    initialDate:
+        history.state && history.state.date ? history.state.date : new Date(),
     listDayFormat: "ddd, D MMM, YYYY",
     listDaySideFormat: false,
     eventTimeFormat: "HH:mm",
@@ -70,6 +78,18 @@ window.Calendar = new Calendar(calendarEl, {
         if (info.isPast || info.event.extendedProps.status == "cancelled") {
             info.el.style.opacity = "0.5";
         }
+    },
+    datesSet(info) {
+        var start = moment(info.start);
+        var state = {
+            view: info.view.type,
+            date: start.format("YYYY-MM-DD"),
+        };
+        if (info.view.type != "timeGridDay") {
+            start.add(7, "days");
+            state.date = start.format("YYYY-MM-01");
+        }
+        history.replaceState(state, null);
     },
 });
 
