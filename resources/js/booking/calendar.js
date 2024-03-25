@@ -71,9 +71,19 @@ window.Calendar = new Calendar(calendarEl, {
                 "fc-event-title-container"
             )[0];
 
-            var notesEl = document.createElement("div");
-            notesEl.innerHTML = info.event.extendedProps.notes;
-            container.appendChild(notesEl);
+            if (info.event.extendedProps.notes) {
+                var notesEl = document.createElement("div");
+                notesEl.innerHTML = info.event.extendedProps.notes;
+                container.appendChild(notesEl);
+            }
+
+            if (info.event.extendedProps.attendance) {
+                var attendanceEl = document.createElement("div");
+                attendanceEl.innerHTML = attendanceToLabel(
+                    info.event.extendedProps.attendance
+                );
+                container.appendChild(attendanceEl);
+            }
         }
         if (info.isPast || info.event.extendedProps.status == "cancelled") {
             info.el.style.opacity = "0.5";
@@ -108,25 +118,49 @@ function transformEvent(content) {
         start: content.start_at,
         end: content.end_at,
         url: content.url,
-        color: bookingStatusToColor(content.status),
+        color: attendanceToColor(content.attendance, content.status),
         extendedProps: {
             activity: content.activity,
             groupName: content.group_name,
             location: content.location,
             notes: content.notes,
             status: content.status,
+            attendance: content.attendance,
         },
     };
 }
 
-function bookingStatusToColor(status) {
+function attendanceToLabel(attendance) {
+    switch (attendance) {
+        case "needs-action":
+            return "You have been invited.";
+        case "tentative":
+            return "You maybe attending.";
+        case "accepted":
+            return "You are going.";
+        case "declined":
+            return "You can't go.";
+        default:
+            return "";
+    }
+}
+
+function attendanceToColor(attendance, status) {
     switch (status) {
         case "cancelled":
             return "silver";
+    }
+    switch (attendance) {
+        case "needs-action":
+            return "deepSkyBlue";
         case "tentative":
-        case "confirmed":
-        default:
+            return "gold";
+        case "accepted":
             return "limeGreen";
+        case "declined":
+            return "fireBrick";
+        default:
+            return "silver";
     }
 }
 

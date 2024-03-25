@@ -3,6 +3,10 @@
 
 @switch($status)
     @case(AttendeeStatus::NeedsAction)
+        @php($icon = 'inbox')
+        @php($color = 'sky')
+    @break
+
     @case(AttendeeStatus::Tentative)
         @php($icon = 'inbox')
         @php($color = 'yellow')
