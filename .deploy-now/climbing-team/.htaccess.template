@@ -17,9 +17,24 @@
 
 RewriteEngine on
 
-# serve existing files in the /public folder as if they were in /
+# Handle Authorization Header
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Remove /public/ from genuine requests
+RewriteCond %{THE_REQUEST} "^GET /public/"
+RewriteRule ^public(\/.*) $1 [R=permanent,L]
+
+# Redirect Trailing Slashes If Not A Folder...
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [L,R=301]
+
+# Serve existing files in the /public folder as if they were in /
 RewriteCond %{REQUEST_URI} !public/
 RewriteRule (.*) /public/$1 [L]
 
-# route everything else to /public/index.php
+# Send remaining requests to front controller...
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ /public/index.php [L]
