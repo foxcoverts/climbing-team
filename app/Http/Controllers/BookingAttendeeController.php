@@ -8,6 +8,7 @@ use App\Http\Requests\StoreBookingAttendeeRequest;
 use App\Http\Requests\UpdateBookingAttendeeRequest;
 use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\ChangeAttendee;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
@@ -114,19 +115,17 @@ class BookingAttendeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, Booking $booking, User $attendee): RedirectResponse
+    public function destroy(Booking $booking, User $attendee): RedirectResponse
     {
         Gate::authorize('delete', $attendee->attendance);
 
-        if ($attendee->attendance != AttendeeStatus::Declined) {
-            try {
-                $respondToBooking = new RespondToBookingAction($booking, $request->user());
-            } catch (InvalidArgumentException $e) {
-                return redirect()->back()->with('alert.error', $e->getMessage());
-            }
-            $respondToBooking($attendee, AttendeeStatus::Declined);
-        }
         $booking->attendees()->detach($attendee);
+
+        // Remove any attendance changes connected with this attendee.
+        ChangeAttendee::where('attendee_id', $attendee->id)
+            ->whereHas('change', function (Builder $query) use ($booking) {
+                $query->where('booking_id', $booking->id);
+            })->delete();
 
         return redirect()->route('booking.show', $booking)
             ->with('alert.info', __('Removed attendee successfully.'));
