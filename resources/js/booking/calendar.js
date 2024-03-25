@@ -88,7 +88,6 @@ function transformEvent(content) {
         start: content.start_at,
         end: content.end_at,
         url: content.url,
-        className: ["fc-event-" + content.status],
         color: bookingStatusToColor(content.status),
         extendedProps: {
             activity: content.activity,

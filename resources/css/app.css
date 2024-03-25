@@ -52,35 +52,3 @@ body::-webkit-scrollbar {
 .fc-event:hover {
     opacity: 1 !important;
 }
-.fc-event-tentative {
-    background-image: repeating-linear-gradient(
-        -55deg,
-        rgba(0, 0, 0, 0.1),
-        rgba(0, 0, 0, 0.1) 6px,
-        transparent 6px,
-        transparent 15px
-    );
-    background-position: left;
-}
-@media (prefers-color-scheme: dark) {
-    .fc-event-tentative {
-        background-image: repeating-linear-gradient(
-            -55deg,
-            rgba(255, 255, 255, 0.1),
-            rgba(255, 255, 255, 0.1) 6px,
-            transparent 6px,
-            transparent 15px
-        );
-        background-position: left;
-    }
-}
-.fc-event-tentative:hover {
-    background-image: repeating-linear-gradient(
-        -55deg,
-        var(--fc-list-event-hover-bg-color),
-        var(--fc-list-event-hover-bg-color) 6px,
-        transparent 6px,
-        transparent 15px
-    );
-    background-position: left;
-}
