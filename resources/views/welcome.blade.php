@@ -27,8 +27,8 @@
 
 <body
     class="font-sans antialiased leading-normal tracking-normal bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-    <div class="flex flex-col sm:justify-center items-center mt-6 sm:m-6 gap-6">
-        <h1 class="items-center font-semibold text-2xl text-blue-400 uppercase">
+    <div class="flex flex-col sm:justify-center items-center sm:mx-6">
+        <h1 class="text-center font-semibold text-2xl text-blue-400 uppercase py-6">
             {{ config('app.name', 'Climbing Team') }}
         </h1>
 
@@ -73,12 +73,10 @@
             </div>
         </div>
 
-        @auth
-            <div class="w-full max-w-xl text-center">
-                <a class="text-gray-500 hover:text-zinc-800 dark:hover:text-zinc-200 hover:underline"
-                    href="{{ route('dashboard') }}">@lang('Go to Team Dashboard')</a>
-            </div>
-        @endauth
+        <div class="w-full max-w-xl">
+            <a class="block w-full text-center py-6 text-gray-500 hover:text-zinc-800 dark:hover:text-zinc-200 hover:underline"
+                href="{{ route('dashboard') }}">@lang('Go to Team Dashboard')</a>
+        </div>
     </div>
 </body>
 
