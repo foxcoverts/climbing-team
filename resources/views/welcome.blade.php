@@ -45,15 +45,15 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <dfn class="not-italic font-medium block">Climbing Suitable for</dfn>
+                        <dfn class="not-italic font-medium block">Climbing suitable for</dfn>
                         All age groups
                     </div>
                     <div>
-                        <dfn class="not-italic font-medium block">Abseiling Suitable for</dfn>
+                        <dfn class="not-italic font-medium block">Abseiling suitable for</dfn>
                         Ages 8 and above
                     </div>
                     <div>
-                        <dfn class="not-italic font-medium block">Minimum Booking</dfn>
+                        <dfn class="not-italic font-medium block">Minimum booking</dfn>
                         2 hours
                     </div>
                     <div>
@@ -61,15 +61,24 @@
                         April to October
                     </div>
                     <div class="col-span-2">
-                        <dfn class="not-italic font-medium block">Number of hourly participants</dfn>
-                        12 Cubs or older<br>
-                        Contact the Climbing Manager for advice about younger groups.
+                        <dfn class="not-italic font-medium block">Number of participants per hour</dfn>
+                        12 aged 8 or older.
+                        <em class="not-italic text-gray-500">Please ask for advice about younger groups.</em>
                     </div>
                 </div>
 
-                <p>Please visit <a href="https://foxcoverts.org.uk/activities/climbing/"
-                        class="text-blue-400 dark:text-blue-600 underline hover:text-sky-400 dark:hover:text-sky-600">foxcoverts.org.uk</a>
-                    for prices and to book.</p>
+                <div class="flex justify-center">
+                    <x-button.primary href="https://foxcoverts.org.uk/activities/climbing/">
+                        <span>Prices and Booking</span>
+                        <x-icon.external-link class="ml-1 h-4 w-4 stroke-current"
+                            aria-label="({{ __('external link') }})" />
+                    </x-button.primary>
+                </div>
+
+                <p class="text-center group"><a href="https://foxcoverts.org.uk/activities/climbing/">Please visit
+                        <em
+                            class="not-italic text-blue-400 dark:text-blue-600 underline group-hover:text-sky-400 dark:group-hover:text-sky-600">foxcoverts.org.uk</em>
+                        for prices and to book.</a></p>
             </div>
         </div>
 
