@@ -64,7 +64,7 @@
         <div>
             <x-input-label for="phone" :value="__('Phone')" />
             <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40" :value="old('phone', $user->phone?->formatForCountry('GB'))"
-                autocomplete="tel" x-model.fill="user.phone" />
+                autocomplete="tel" x-model.fill="user.phone" x-mask:dynamic="$phone($input)" maxlength="15" />
             <x-input-error class="mt-2" :messages="$errors->get('phone')" />
         </div>
 
@@ -81,8 +81,9 @@
                 </div>
                 <div>
                     <x-input-label for="emergency_phone" :value="__('Phone')" />
-                    <x-text-input id="emergency_phone" name="emergency_phone" class="mt-1 block w-40" :value="old('emergency_phone', $user->emergency_phone?->formatForCountry('GB'))"
-                        x-model.fill="user.emergency_phone" x-bind:required="!!user.emergency_name" />
+                    <x-text-input id="emergency_phone" name="emergency_phone" type="tel" class="mt-1 block w-40"
+                        :value="old('emergency_phone', $user->emergency_phone?->formatForCountry('GB'))" x-model.fill="user.emergency_phone" x-bind:required="!!user.emergency_name"
+                        x-mask:dynamic="$phone($input)" maxlength="15" />
                     <x-input-error class="mt-2" :messages="$errors->get('emergency_phone')" />
                 </div>
             </div>

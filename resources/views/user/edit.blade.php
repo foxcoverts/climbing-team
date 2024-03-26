@@ -59,8 +59,8 @@
 
             <div>
                 <x-input-label for="phone" :value="__('Phone')" />
-                <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40"
-                    x-model="user.phone" />
+                <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40" x-model="user.phone"
+                    x-mask:dynamic="$phone($input)" maxlength="15" />
                 <x-input-error class="mt-2" :messages="$errors->get('phone')" />
             </div>
 
@@ -77,7 +77,8 @@
                     <div>
                         <x-input-label for="emergency_phone" :value="__('Phone')" />
                         <x-text-input id="emergency_phone" name="emergency_phone" class="mt-1 block w-40"
-                            x-bind:required="!!user.emergency_name" x-model="user.emergency_phone" />
+                            x-bind:required="!!user.emergency_name" x-model="user.emergency_phone"
+                            x-mask:dynamic="$phone($input)" maxlength="15" />
                         <x-input-error class="mt-2" :messages="$errors->get('emergency_phone')" />
                     </div>
                 </div>

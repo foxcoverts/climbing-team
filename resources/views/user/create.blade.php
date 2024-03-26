@@ -49,8 +49,8 @@
 
             <div>
                 <x-input-label for="phone" :value="__('Phone')" />
-                <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40"
-                    x-model="user.phone" />
+                <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40" x-model="user.phone"
+                    x-mask:dynamic="$phone($input)" maxlength="15" />
                 <x-input-error class="mt-2" :messages="$errors->get('phone')" />
             </div>
 
@@ -67,8 +67,9 @@
                 <div class="flex flex-wrap gap-6">
                     <div class="grow shrink">
                         <x-input-label for="emergency_name" :value="__('Name')" />
-                        <x-text-input id="emergency_name" name="emergency_name" class="mt-1 block w-full min-w-48"
-                            maxlength="100" x-bind:required="!!user.emergency_phone" x-model="user.emergency_name" />
+                        <x-text-input id="emergency_name" name="emergency_name" type="tel"
+                            class="mt-1 block w-full min-w-48" maxlength="100" x-bind:required="!!user.emergency_phone"
+                            x-model="user.emergency_name" x-mask:dynamic="$phone($input)" maxlength="15" />
                         <x-input-error class="mt-2" :messages="$errors->get('emergency_name')" />
                     </div>
                     <div>
