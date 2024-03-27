@@ -1,6 +1,6 @@
 @use('App\Enums\AttendeeStatus')
 @use('Illuminate\Contracts\Auth\Access\Gate')
-<x-layout.app :title="__('Update Attendance')">
+<x-layout.app :title="__(':name - Edit Attendance', ['name' => $attendee->name])">
     <section class="p-4 sm:px-8">
         @include('booking.partials.header')
 
@@ -10,12 +10,7 @@
             <div class="my-2 flex-grow flex-shrink basis-80 max-w-xl" x-data="{ form: {}, submitted: false }">
                 <div class="space-y-1">
                     <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
-                        @lang('Attendance')</h3>
-
-                    <div>
-                        <x-fake-label :value="__('Attendee')" />
-                        <x-fake-input :value="$attendee->name" class="mt-1" />
-                    </div>
+                        @lang(':name - Edit Attendance', ['name' => $attendee->name])</h3>
 
                     <form method="post" action="{{ route('booking.attendee.update', [$booking, $attendee]) }}"
                         id="update-attendance" x-on:submit="setTimeout(() => submitted = true, 0)">
