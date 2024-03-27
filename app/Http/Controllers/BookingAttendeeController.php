@@ -77,11 +77,24 @@ class BookingAttendeeController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Booking $booking, User $attendee): View
+    {
+        Gate::authorize('view', $attendee->attendance);
+
+        return view('booking.attendee.show', [
+            'booking' => $booking,
+            'attendee' => $attendee,
+        ]);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Booking $booking, User $attendee): View
     {
-        Gate::authorize('view', $attendee->attendance);
+        Gate::authorize('update', $attendee->attendance);
 
         return view('booking.attendee.edit', [
             'booking' => $booking,
