@@ -27,7 +27,7 @@ jobs:
       # if you add permissions here this needs to be done in the climbing-team-orchestration.yaml as well
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
