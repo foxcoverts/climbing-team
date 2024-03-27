@@ -35,6 +35,6 @@
             </p>
         </div>
 
-        <p><a href="{{ route($more['route']) }}">{{ $more['label'] }}</a></p>
+        <p><a href="{{ route($more['route']) }}" class="hover:underline">{{ $more['label'] }}</a></p>
     </section>
 @endif

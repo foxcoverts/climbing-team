@@ -21,7 +21,7 @@ class NewsPostController extends Controller
     {
         Gate::authorize('viewAny', NewsPost::class);
 
-        $posts = $this->posts->all()->reverse();
+        $posts = $this->posts->all();
 
         return view('news.index', [
             'posts' => $posts,

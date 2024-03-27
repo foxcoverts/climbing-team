@@ -1,7 +1,10 @@
 <x-layout.app :title="__('News')">
     <section class="p-4 sm:px-8 space-y-6 max-w-3xl">
         <header>
-            <h1 class="text-2xl sm:text-3xl font-medium">@lang('News')</h1>
+            <h1 class="text-2xl sm:text-3xl font-medium flex items-center gap-2">
+                <x-icon.news style="height: .75lh" class="fill-current" aria-hidden="true" />
+                <span>@lang('News')</span>
+            </h1>
         </header>
         @foreach ($posts as $post)
             <article class='space-y-2'>

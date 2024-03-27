@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Enums\AttendeeStatus;
 use App\Models\Booking;
+use App\Repositories\NewsPostRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        public NewsPostRepository $news,
+    ) {
+    }
+
     /**
      * Handle the incoming request.
      */
@@ -32,6 +38,7 @@ class DashboardController extends Controller
         return view('dashboard', [
             'next' => $nextBooking,
             'invite' => $invite,
+            'post' => $this->news->first(),
         ]);
     }
 }

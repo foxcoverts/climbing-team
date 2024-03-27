@@ -29,8 +29,20 @@ class NewsPostRepository
     public function all(): Collection
     {
         return collect($this->filesystem->files())
+            ->reverse()
             ->map(fn ($filepath) => $this->load($filepath))
             ->filter();
+    }
+
+    public function first(): ?NewsPost
+    {
+        return
+            collect($this->filesystem->files())
+            ->reverse()
+            ->filter(fn ($filepath) => $this->filesystem->mimeType($filepath) == 'text/markdown')
+            ->take(1)
+            ->map(fn ($filepath) => $this->load($filepath))
+            ->first();
     }
 
     /**

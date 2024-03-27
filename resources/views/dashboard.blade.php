@@ -21,5 +21,16 @@
                 'label' => __('View your invitations'),
             ],
         ])
+
+        @include('dashboard.partials.news-widget', [
+            'post' => $post,
+            'icon' => 'news',
+            'title' => __('Recent News'),
+            'route' => 'news.show',
+            'more' => [
+                'route' => 'news.index',
+                'label' => __('View all news'),
+            ],
+        ])
     </div>
 </x-layout.app>
