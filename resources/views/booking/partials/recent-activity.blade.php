@@ -23,7 +23,7 @@
                     @can('view', $attendee)
                         @unless ($changed_attendees[$attendee->attendee_id] ?? false)
                             <div class="border-l-2 ml-2 pl-2" id="{{ $attendee->id }}">
-                                <p><a href="{{ route('booking.attendee.show', [$booking, $attendee->attendee]) }}"
+                                <p><a href="{{ route('booking.attendee.edit', [$booking, $attendee->attendee]) }}"
                                         class="font-medium">{{ $attendee->attendee->name }}</a>
                                     @switch ($attendee->attendee_status)
                                         @case(AttendeeStatus::Accepted)
@@ -40,7 +40,7 @@
                                     @endswitch
                                 </p>
                                 @if ($attendee->attendee_comment)
-                                    <div><a href="{{ route('booking.attendee.show', [$booking, $change->author]) }}"
+                                    <div><a href="{{ route('booking.attendee.edit', [$booking, $change->author]) }}"
                                             class="font-medium">{{ $change->author->name }}</a> @lang('commented')</div>
                                     <p class="border-l-2 ml-2 pl-2">{{ $attendee->attendee_comment }}</p>
                                 @endif
@@ -54,7 +54,7 @@
                     @php($comment->author = $change->author)
                     @can('view', $comment)
                         <div class="border-l-2 ml-2 pl-2" id="{{ $comment->id }}" x-data="{ menu: false, editing: false, deleting: false, submitted: false }">
-                            <div><a href="{{ route('booking.attendee.show', [$booking, $change->author]) }}"
+                            <div><a href="{{ route('booking.attendee.edit', [$booking, $change->author]) }}"
                                     class="font-medium">{{ $change->author->name }}</a> @lang('commented')</div>
                             <div class="border-l-2 ml-2 pl-2 flex gap-2" x-show="!editing">
                                 <p>{{ $comment->body }}

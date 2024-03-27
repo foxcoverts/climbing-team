@@ -4,7 +4,7 @@
 
 <div x-data @click="if ($refs.link) window.location = $refs.link.href;" :class="{ 'cursor-pointer': $refs.link }">
     @can('view', $attendee->attendance)
-        <a href="{{ route('booking.attendee.show', [$booking, $attendee]) }}" x-ref="link">{{ $attendee->name }}</a>
+        <a href="{{ route('booking.attendee.edit', [$booking, $attendee]) }}" x-ref="link">{{ $attendee->name }}</a>
     @else
         <span>{{ $attendee->name }}</span>
     @endcan
