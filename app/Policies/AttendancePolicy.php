@@ -39,7 +39,9 @@ class AttendancePolicy
      */
     public function update(User $user, Attendance $attendance): bool
     {
-        if ($attendance->isLeadInstructor() && $attendance->isAccepted()) {
+        if ($attendance->booking->isPast() || $attendance->booking->isCancelled()) {
+            return false;
+        } else if ($attendance->isLeadInstructor() && $attendance->isAccepted()) {
             // The Lead Instructor cannot resign from a Booking.
             return false;
         } else if ($user->can('manage', Booking::class)) {

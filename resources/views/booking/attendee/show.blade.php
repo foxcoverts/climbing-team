@@ -7,7 +7,7 @@
         <div class="flex flex-wrap gap-4">
             @include('booking.partials.details')
 
-            <div class="my-2 flex-grow flex-shrink basis-80 max-w-xl" x-data="{ form: {}, submitted: false }">
+            <div class="my-2 flex-grow flex-shrink basis-80 max-w-xl">
                 <div class="space-y-1">
                     <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                         @lang('Attendance')</h3>
@@ -44,6 +44,7 @@
                                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Remove') }}'" />
                         </form>
                     @endcan
+
                     <x-button.secondary :href="route('booking.show', $booking)">
                         @lang('Back')
                     </x-button.secondary>
