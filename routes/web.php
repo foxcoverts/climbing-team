@@ -13,6 +13,7 @@ use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MailLogController;
+use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TrashedBookingController;
@@ -76,6 +77,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
+
+    Route::resource('news', NewsPostController::class)
+        ->parameters(['news' => 'post'])
+        ->only('index', 'show');
 
     Route::post('user/{user}/invite', [UserController::class, 'sendInvite'])->name('user.invite');
     Route::resource('user', UserController::class);
