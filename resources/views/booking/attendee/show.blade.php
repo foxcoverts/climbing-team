@@ -13,15 +13,9 @@
                         {{ $attendee->name }}</h3>
 
                     @if ($attendee->is($booking->lead_instructor))
-                        <div>
-                            <x-fake-label :value="__('Status')" />
-                            <x-fake-input class="mt-1" :value="__('Lead Instructor')" />
-                        </div>
+                        <x-badge.lead-instructor />
                     @else
-                        <div>
-                            <x-fake-label :value="__('Status')" />
-                            <x-fake-input class="mt-1" :value='__("app.attendee.status.{$attendee->attendance->status->value}")' />
-                        </div>
+                        <x-badge.attendee-status :status="$attendee->attendance->status" />
                     @endif
                 </div>
 
