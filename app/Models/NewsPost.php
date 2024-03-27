@@ -47,6 +47,14 @@ class NewsPost implements UrlRoutable
             return $this->markdown->getContent();
         }
 
+        if ($key === 'summary') {
+            if (empty($this->markdown->getContent())) return '';
+
+            $doc = new \DOMDocument();
+            $doc->loadHTML($this->markdown->getContent());
+            return $doc->saveHTML($doc->getElementsByTagName('p')->item(0));
+        }
+
         throw new \DomainException("Cannot get unknown property '$key' on " . get_class($this));
     }
 
