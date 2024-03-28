@@ -18,6 +18,8 @@ class ProfileTest extends TestCase
             ->actingAs($user)
             ->get('/profile');
 
+        // dd($response);
+
         $response->assertOk();
     }
 
@@ -30,6 +32,7 @@ class ProfileTest extends TestCase
             ->patch('/profile', [
                 'name' => 'Test User',
                 'email' => 'test@example.com',
+                'timezone' => 'UTC',
             ]);
 
         $response
@@ -52,6 +55,7 @@ class ProfileTest extends TestCase
             ->patch('/profile', [
                 'name' => 'Test User',
                 'email' => $user->email,
+                'timezone' => 'UTC',
             ]);
 
         $response
