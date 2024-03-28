@@ -20,6 +20,11 @@
   resolved "https://registry.yarnpkg.com/@alpinejs/mask/-/mask-3.13.7.tgz#61488dbee35b7fb1597c3b26c2d099e67d49092e"
   integrity sha512-OBRIkUq0JFkaedY9TOL7s83K8/bdIpXpf6nJdeCVW5zC6hYGOy10cm1qCaSABqgoGWKyR08Oa+jH1TwIcEF8Nw==
 
+"@alpinejs/persist@^3.13":
+  version "3.13.7"
+  resolved "https://registry.yarnpkg.com/@alpinejs/persist/-/persist-3.13.7.tgz#ac7a8c9ce511a061b51f00fe45b29723bffbed6a"
+  integrity sha512-H+Hv0gZbMimLSOq6P7w+fJEha6/tvKLlfqg7lHvcZQZ/u6T1d9bfdEDFetDoO1hmQjDnbk3cZwTRmFSW+On/4g==
+
 "@esbuild/aix-ppc64@0.19.12":
   version "0.19.12"
   resolved "https://registry.yarnpkg.com/@esbuild/aix-ppc64/-/aix-ppc64-0.19.12.tgz#d1bc06aedb6936b3b6d313bf809a5a40387d2b7f"

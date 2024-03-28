@@ -100,4 +100,9 @@ class Attendance extends Pivot
     {
         return $this->user->is($this->booking->lead_instructor);
     }
+
+    public function isTeamLeader(): bool
+    {
+        return $this->user->isTeamLeader();
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\PersonalAccessToken;
 use App\Rules\Password;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -31,9 +32,11 @@ class AppServiceProvider extends ServiceProvider
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
         View::addExtension('md.blade.php', 'blade');
 
-        Password::defaults(
-            Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised()
-        );
+        if (App::isProduction()) {
+            Password::defaults(
+                Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised()
+            );
+        }
 
         Mail::extend('sendgrid', function () {
             return (new SendgridTransportFactory)->create(

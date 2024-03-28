@@ -97,6 +97,26 @@ class Booking extends Model
         return $this->end_at->isPast();
     }
 
+    /**
+     * Check if the booking **day** is in the past.
+     */
+    public function isBeforeToday(): bool
+    {
+        if (is_null($this->end_at)) {
+            return false;
+        }
+        return $this->end_at->endOfDay()->isPast();
+    }
+
+    public function isToday(): bool
+    {
+        if (is_null($this->start_at) || is_null($this->end_at)) {
+            return false;
+        }
+        return $this->start_at->startOfDay()->isPast()
+            && $this->end_at->endOfDay()->isFuture();
+    }
+
     public function isFuture(): bool
     {
         if (is_null($this->end_at)) {
