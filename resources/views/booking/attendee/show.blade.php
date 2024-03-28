@@ -1,4 +1,5 @@
-@use('App\Enums\AttendeeStatus')
+@use('App\Enums\Accreditation')
+@use('App\Enums\Role')
 @use('Illuminate\Contracts\Auth\Access\Gate')
 <x-layout.app :title="__(':name - Attendance', ['name' => $attendee->name])">
     <section class="p-4 sm:px-8">
@@ -12,11 +13,25 @@
                     <h2 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                         {{ $attendee->name }}</h2>
 
-                    @if ($attendee->is($booking->lead_instructor))
-                        <x-badge.lead-instructor />
-                    @else
-                        <x-badge.attendee-status :status="$attendee->attendance->status" />
-                    @endif
+                    <div class="flex flex-wrap items-center gap-1">
+                        @if ($attendee->is($booking->lead_instructor))
+                            <x-badge.lead-instructor class="text-sm" />
+                        @else
+                            <x-badge.attendee-status :status="$attendee->attendance->status" class="text-sm" />
+                        @endif
+
+                        @if ($attendee->isPermitHolder())
+                            <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-sm" />
+                        @endif
+
+                        @if ($attendee->isGuest())
+                            <x-badge.role :role="Role::Guest" class="text-sm" />
+                        @endif
+
+                        @if ($attendee->isUnder18())
+                            <x-badge.under-18 class="text-sm" />
+                        @endif
+                    </div>
 
                     @can('contact', $attendee->attendance)
                         <div x-data="{
