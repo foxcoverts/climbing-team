@@ -9,8 +9,8 @@
 
             <div class="my-2 flex-grow flex-shrink basis-80 max-w-xl">
                 <div class="space-y-1">
-                    <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
-                        {{ $attendee->name }}</h3>
+                    <h2 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
+                        {{ $attendee->name }}</h2>
 
                     @if ($attendee->is($booking->lead_instructor))
                         <x-badge.lead-instructor />
@@ -19,7 +19,28 @@
                     @endif
 
                     @can('contact', $attendee->attendance)
-                        <p>Contact me</p>
+                        <div x-data="{ open: false }">
+                            <h3 class="text-lg my-2 flex items-center space-x-1">
+                                <button @click="open = !open" x-bind:aria-pressed="open"
+                                    class="flex items-center space-x-1">
+                                    <x-icon.cheveron-down aria-hidden="true"
+                                        class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
+                                    <span>@lang('Contact me')</span>
+                                </button>
+                                <hr class="grow" role="presentation" />
+                            </h3>
+                            <div class="mb-3 space-y-2" x-show="open" x-transition>
+                                <p>@lang('Email'): <a
+                                        class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                                        href="mailto:{{ $attendee->email }}">{{ $attendee->email }}</a></p>
+                                @if ($attendee->phone)
+                                    <p>@lang('Phone'): <a
+                                            class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                                            href="tel:{{ $attendee->phone?->formatForMobileDialingInCountry('GB') }}">{{ $attendee->phone?->formatForCountry('GB') }}</a>
+                                    </p>
+                                @endif
+                            </div>
+                        </div>
                     @endcan
                 </div>
 
