@@ -32,7 +32,8 @@ class AttendancePolicy
     {
         return
             $user->can('contact', $attendance) ||
-            $user->can('update', $attendance);
+            $user->can('update', $attendance) ||
+            $user->can('delete', $attendance);
     }
 
     /**
