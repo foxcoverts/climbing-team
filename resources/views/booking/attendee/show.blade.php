@@ -87,7 +87,9 @@
                                 <hr class="grow" role="presentation" />
                             </h3>
                             <div class="mb-3 space-y-4" x-show="open" x-transition>
-                                @empty($attendee->emergency_phone)
+                                @if (!$booking->isToday())
+                                    <p>@lang('You may only access emergency contact details on the day of the booking. If you need these details now please contact the Team Leader or District Lead Volunteer who will look them up for you.')</p>
+                                @elseif (empty($attendee->emergency_phone))
                                     <p>@lang('No emergency contact has been provided by this member. If you need these details please contact the Team Leader or District Lead Volunteer who will look them up from the Scouts records.')</p>
                                 @else
                                     <div class="space-y-2" :class="gdprContact && 'text-gray-600 dark:text-gray-400'">
@@ -95,7 +97,8 @@
                                             @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
                                         </p>
                                         <p>
-                                            <button class="flex items-center pl-1 gap-1" @click="gdprContact = !gdprContact">
+                                            <button class="flex items-center pl-1 gap-1"
+                                                @click="gdprContact = !gdprContact">
                                                 <x-icon.empty-outline class="w-4 h-4 fill-current" x-show="!gdprContact" />
                                                 <x-icon.checkmark-outline class="w-4 h-4 fill-current" x-cloak
                                                     x-show="gdprContact" />
@@ -110,7 +113,7 @@
                                                 href="tel:{{ $attendee->emergency_phone?->formatForMobileDialingInCountry('GB') }}">{{ $attendee->emergency_phone?->formatForCountry('GB') }}</a>
                                         </p>
                                     </div>
-                                @endempty
+                                @endif
                             </div>
                         </div>
                     @endcan
