@@ -24,7 +24,7 @@
         "moment": "^2.30",
         "postcss": "^8.4",
         "tailwindcss": "^3.4",
-        "vite": "^5.1"
+        "vite": "^5.2"
     },
     "dependencies": {
         "@ryangjchandler/alpine-clipboard": "^2.3.0"
