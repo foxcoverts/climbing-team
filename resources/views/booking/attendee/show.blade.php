@@ -17,6 +17,10 @@
                     @else
                         <x-badge.attendee-status :status="$attendee->attendance->status" />
                     @endif
+
+                    @can('contact', $attendee->attendance)
+                        <p>Contact me</p>
+                    @endcan
                 </div>
 
                 <footer class="flex items-start gap-4 mt-4">
