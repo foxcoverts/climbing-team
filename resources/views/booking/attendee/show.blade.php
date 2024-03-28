@@ -19,26 +19,44 @@
                     @endif
 
                     @can('contact', $attendee->attendance)
-                        <div x-data="{ open: false }">
+                        <div x-data="{
+                            open: false,
+                            gdprContact: $persist(false).using(sessionStorage).as('gdpr-contact-{{ $attendee->id }}')
+                        }">
                             <h3 class="text-lg my-2 flex items-center space-x-1">
                                 <button @click="open = !open" x-bind:aria-pressed="open"
                                     class="flex items-center space-x-1">
                                     <x-icon.cheveron-down aria-hidden="true"
                                         class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
-                                    <span>@lang('Contact me')</span>
+                                    <span>@lang('Contact details')</span>
                                 </button>
                                 <hr class="grow" role="presentation" />
                             </h3>
-                            <div class="mb-3 space-y-2" x-show="open" x-transition>
-                                <p>@lang('Email'): <a
-                                        class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                                        href="mailto:{{ $attendee->email }}">{{ $attendee->email }}</a></p>
-                                @if ($attendee->phone)
-                                    <p>@lang('Phone'): <a
-                                            class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                                            href="tel:{{ $attendee->phone?->formatForMobileDialingInCountry('GB') }}">{{ $attendee->phone?->formatForCountry('GB') }}</a>
+                            <div class="mb-3 space-y-4" x-show="open" x-transition>
+                                <div class="space-y-2" :class="gdprContact && 'text-gray-600 dark:text-gray-400'">
+                                    <p><strong>@lang('Notice'):</strong>
+                                        @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
                                     </p>
-                                @endif
+                                    <p>
+                                        <button class="flex items-center pl-1 gap-1" @click="gdprContact = !gdprContact">
+                                            <x-icon.empty-outline class="w-4 h-4 fill-current" x-show="!gdprContact" />
+                                            <x-icon.checkmark-outline class="w-4 h-4 fill-current" x-cloak
+                                                x-show="gdprContact" />
+                                            @lang('I have a legitimate reason to view these contact details')
+                                        </button>
+                                    </p>
+                                </div>
+                                <div x-cloak x-show="gdprContact" class="space-y-2">
+                                    <p>@lang('Email'): <a
+                                            class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                                            href="mailto:{{ $attendee->email }}">{{ $attendee->email }}</a></p>
+                                    @if ($attendee->phone)
+                                        <p>@lang('Phone'): <a
+                                                class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                                                href="tel:{{ $attendee->phone?->formatForMobileDialingInCountry('GB') }}">{{ $attendee->phone?->formatForCountry('GB') }}</a>
+                                        </p>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     @endcan
