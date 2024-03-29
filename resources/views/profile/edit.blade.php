@@ -6,7 +6,7 @@
         <div class="p-4 sm:px-8">
             @include('profile.partials.update-password-form')
         </div>
-        @can('delete', auth()->user())
+        @can('delete', $user)
             <div class="p-4 sm:px-8">
                 @include('profile.partials.delete-user-form')
             </div>
