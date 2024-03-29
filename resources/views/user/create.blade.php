@@ -138,7 +138,7 @@
                 </div>
             </fieldset>
 
-            <div class="flex items-center gap-4">
+            <footer class="flex items-center gap-4">
                 <x-button.primary x-bind:disabled="submitted"
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Create') }}'" />
 
@@ -147,7 +147,7 @@
                         @lang('Back')
                     </x-button.secondary>
                 @endcan
-            </div>
+            </footer>
         </form>
     </section>
 </x-layout.app>

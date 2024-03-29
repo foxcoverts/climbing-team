@@ -31,9 +31,7 @@ class BookingAttendeeInviteController extends Controller
             'booking' => $booking,
             'users' => User::query()
                 ->whereNotNull('email_verified_at')
-                ->whereDoesntHave('bookings', function (Builder $query) use ($booking) {
-                    $query->where('booking_id', $booking->id);
-                })
+                ->whereDoesntHave('bookings', fn (Builder $query) => $query->where('booking_id', $booking->id))
                 ->orderBy('name')->get(),
         ]);
     }
@@ -75,6 +73,6 @@ class BookingAttendeeInviteController extends Controller
         }
 
         return redirect()->route('booking.show', $booking)
-            ->with('alert.info', __('Attendees invited successfully.'));
+            ->with('alert.info', __('Invitations sent.'));
     }
 }
