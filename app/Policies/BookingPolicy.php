@@ -53,7 +53,7 @@ class BookingPolicy
     {
         if ($booking->trashed()) {
             return $this->manage($user);
-        } else if ($booking->attendees()->find($user)) {
+        } else if ($booking->attendees->find($user)) {
             return true;
         } else {
             return $this->viewAny($user, $booking->status);
@@ -81,7 +81,7 @@ class BookingPolicy
      */
     public function respond(User $user, Booking $booking, User $model): bool
     {
-        if ($attendee = $booking->attendees()->find($model)) {
+        if ($attendee = $booking->attendees->find($model)) {
             $attendance = $attendee->attendance;
         } else {
             $attendance = Attendance::build($booking, $model);

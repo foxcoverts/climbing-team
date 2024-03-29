@@ -122,7 +122,7 @@ class BookingController extends Controller
         Gate::authorize('view', $booking);
 
         return view('booking.show', [
-            'booking' => $booking,
+            'booking' => $booking->load('changes'),
             'currentUser' => $request->user(),
         ]);
     }

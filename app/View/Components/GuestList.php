@@ -41,7 +41,7 @@ class GuestList extends Component
 
     public function attendance(): ?Attendance
     {
-        return $this->booking->attendees()->find($this->currentUser)?->attendance;
+        return $this->booking->attendees->find($this->currentUser)?->attendance;
     }
 
     public function attendees(): Collection

@@ -6,6 +6,7 @@
     </h2>
 
     @if ($attendee = $booking->attendees->find($booking->lead_instructor_id))
+        @php($attendee->attendance->booking = $booking)
         <div x-data="{ open: true }">
             <h3 class="text-lg my-2 flex items-center space-x-1">
                 <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
@@ -39,6 +40,7 @@
             </h3>
             <ul class="mb-3 space-y-1" x-show="open" x-transition>
                 @foreach ($list as $attendee)
+                    @php($attendee->attendance->booking = $booking)
                     <li class='list-disc ml-5'>
                         <div class="flex gap-1 items-center">
                             <x-guest-list.item :$booking :$attendee :$currentUser />
