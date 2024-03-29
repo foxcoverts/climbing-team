@@ -1,6 +1,6 @@
 @use('App\Enums\Accreditation')
 @use('App\Enums\Role')
-@props(['booking', 'attendee'])
+@props(['booking', 'attendee', 'currentUser'])
 
 <div x-data @click="if ($refs.link) window.location = $refs.link.href;" :class="{ 'cursor-pointer': $refs.link }">
     @can('view', $attendee->attendance)
@@ -21,7 +21,7 @@
         <x-badge.under-18 class="text-xs" />
     @endif
 
-    @if ($attendee->is(auth()->user()))
+    @if ($attendee->is($currentUser))
         <x-badge color="lime" class="text-xs">@lang('You')</x-badge>
     @endif
 </div>

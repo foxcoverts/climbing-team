@@ -7,7 +7,7 @@
             <div class="w-full max-w-xl">
                 @include('booking.partials.details')
 
-                @if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('respond', [$booking, auth()->user()]))
+                @if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('respond', [$booking, $currentUser]))
                     <form method="post" action="{{ route('booking.attendance.update', $booking) }}"
                         x-data="{ submitted: false }" x-on:submit="setTimeout(() => submitted = true, 0)">
                         @csrf
@@ -24,7 +24,7 @@
                                     :value="AttendeeStatus::Tentative->value">@lang('Maybe')</x-button.secondary>
                             </div>
                             <p class="text-sm text-center">
-                                @lang('Replying for :name.', ['name' => auth()->user()->name])
+                                @lang('Replying for :name.', ['name' => $currentUser->name])
                             </p>
                         </div>
                     </form>

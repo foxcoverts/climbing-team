@@ -1,6 +1,6 @@
 @use('Illuminate\Contracts\Auth\Access\Gate')
 @props(['booking', 'attendance'])
-@if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('respond', [$booking, auth()->user()]))
+@if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('respond', [$booking, $currentUser]))
     <div class="flex" x-data="{ open: false }">
         <div class="relative">
             <button

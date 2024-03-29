@@ -18,7 +18,7 @@
             <ul class="mb-3 space-y-1 list-disc ml-5" x-show="open" x-transition>
                 <li>
                     <div class="flex gap-1 items-center">
-                        <x-guest-list.item :$booking :$attendee />
+                        <x-guest-list.item :$booking :$attendee :$currentUser />
                     </div>
                 </li>
             </ul>
@@ -41,7 +41,7 @@
                 @foreach ($list as $attendee)
                     <li class='list-disc ml-5'>
                         <div class="flex gap-1 items-center">
-                            <x-guest-list.item :$booking :$attendee />
+                            <x-guest-list.item :$booking :$attendee :$currentUser />
                         </div>
                     </li>
                 @endforeach

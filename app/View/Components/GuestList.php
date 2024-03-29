@@ -17,7 +17,7 @@ class GuestList extends Component
      * Create a new component instance.
      */
     public function __construct(
-        protected User $currentUser,
+        public User $currentUser,
         public Booking $booking,
         public bool $showTools = true,
     ) {
