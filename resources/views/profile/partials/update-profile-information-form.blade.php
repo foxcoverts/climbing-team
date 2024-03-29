@@ -15,7 +15,14 @@
 
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" x-data="{
         submitted: false,
-        user: {},
+        user: {{ Js::from([
+            'name' => old('name', $user->name),
+            'email' => old('email', $user->email),
+            'phone' => old('phone', $user->phone?->formatForCountry('GB')),
+            'emergency_name' => old('emergency_name', $user->emergency_name),
+            'emergency_phone' => old('emergency_phone', $user->emergency_phone?->formatForCountry('GB')),
+            'timezone' => old('timezone', (string) $user->timezone),
+        ]) }},
         init() {
             $nextTick(() => {
                 if (!this.user.timezone) {
@@ -30,15 +37,15 @@
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
-                required autofocus autocomplete="name" x-model.fill="user.name" />
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" required autofocus
+                autocomplete="name" x-model="user.name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)"
-                required autocomplete="username" x-model.fill="user.email" />
+            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" required
+                autocomplete="username" x-model="user.email" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
@@ -63,8 +70,8 @@
 
         <div>
             <x-input-label for="phone" :value="__('Phone')" />
-            <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40" :value="old('phone', $user->phone?->formatForCountry('GB'))"
-                autocomplete="tel" x-model.fill="user.phone" x-mask:dynamic="$phone($input)" maxlength="15" />
+            <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40" autocomplete="tel"
+                x-model="user.phone" x-mask:dynamic="$phone($input)" maxlength="15" />
             <x-input-error class="mt-2" :messages="$errors->get('phone')" />
         </div>
 
@@ -75,14 +82,13 @@
                 <div class="grow shrink">
                     <x-input-label for="emergency_name" :value="__('Name')" />
                     <x-text-input id="emergency_name" name="emergency_name" class="mt-1 block w-full min-w-48"
-                        :value="old('emergency_name', $user->emergency_name)" maxlength="100" x-model.fill="user.emergency_name"
-                        x-bind:required="!!user.emergency_phone" />
+                        maxlength="100" x-model="user.emergency_name" x-bind:required="!!user.emergency_phone" />
                     <x-input-error class="mt-2" :messages="$errors->get('emergency_name')" />
                 </div>
                 <div>
                     <x-input-label for="emergency_phone" :value="__('Phone')" />
                     <x-text-input id="emergency_phone" name="emergency_phone" type="tel" class="mt-1 block w-40"
-                        :value="old('emergency_phone', $user->emergency_phone?->formatForCountry('GB'))" x-model.fill="user.emergency_phone" x-bind:required="!!user.emergency_name"
+                        x-model="user.emergency_phone" x-bind:required="!!user.emergency_name"
                         x-mask:dynamic="$phone($input)" maxlength="15" />
                     <x-input-error class="mt-2" :messages="$errors->get('emergency_phone')" />
                 </div>
@@ -94,7 +100,7 @@
             <div>
                 <x-input-label for="timezone" :value="__('Timezone')" />
                 <x-select-input id="timezone" name="timezone" class="mt-1 block w-full overflow-ellipsis" required
-                    :value="old('timezone', $user->timezone)" x-model.fill="user.timezone">
+                    x-model="user.timezone">
                     <x-select-input.timezones />
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
