@@ -28,6 +28,7 @@ class BookingInviteController extends Controller
             });
 
         return view('booking.invite.index', [
+            'user' => $request->user(),
             'bookings' => $bookings,
         ]);
     }

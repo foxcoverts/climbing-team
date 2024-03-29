@@ -69,6 +69,7 @@ class BookingController extends Controller
             });
 
         return view('booking.index', [
+            'user' => $request->user(),
             'bookings' => $bookings,
             'status' => $status,
         ]);

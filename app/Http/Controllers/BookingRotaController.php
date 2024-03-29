@@ -28,6 +28,7 @@ class BookingRotaController extends Controller
             });
 
         return view('booking.rota.index', [
+            'user' => $request->user(),
             'bookings' => $bookings,
         ]);
     }

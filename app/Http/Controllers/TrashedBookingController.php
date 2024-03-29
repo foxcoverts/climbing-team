@@ -6,6 +6,7 @@ use App\Http\Requests\DestroyTrashedBookingRequest;
 use App\Http\Requests\RestoreTrashedBookingRequest;
 use App\Models\Booking;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
@@ -14,7 +15,7 @@ class TrashedBookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         Gate::authorize('viewTrashed', Booking::class);
 
@@ -26,6 +27,7 @@ class TrashedBookingController extends Controller
             });
 
         return view('booking.trashed.index', [
+            'user' => $request->user(),
             'bookings' => $bookings,
         ]);
     }
