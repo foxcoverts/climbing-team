@@ -1,7 +1,7 @@
 @use('Carbon\Carbon')
-<p class="m-0">
+<p class="m-0 text-gray-700 dark:text-gray-300">
     @isset($post->author)
-        <strong>{{ $post->author }}</strong>
+        <strong class="text-black dark:text-white">{{ $post->author }}</strong>
         @isset($post->date)
             •
         @endisset

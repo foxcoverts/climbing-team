@@ -11,8 +11,9 @@
                 <h2 class="text-xl sm:text-2xl font-medium"><a
                         href="{{ route('news.show', $post) }}">{{ $post->title }}</a></h2>
                 @include('news.partials.meta')
-
-                {!! $post->summary !!}
+                <div class="text-gray-700 dark:text-gray-300">
+                    {!! $post->summary !!}
+                </div>
                 <p><a href="{{ route('news.show', $post) }}" class="underline font-medium">@lang('Read more...')</a></p>
             </article>
         @endforeach

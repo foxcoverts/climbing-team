@@ -23,7 +23,7 @@
                 <div class="space-y-2">
                     <div>
                         <x-fake-label :value="__('Email')" />
-                        <p>
+                        <p class="text-gray-700 dark:text-gray-300">
                             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
                                 @if ($user->hasVerifiedEmail())
                                     <a href="mailto:{{ $user->email }}"
@@ -44,7 +44,8 @@
                     @if ($user->phone)
                         <div>
                             <x-fake-label :value="__('Phone')" />
-                            <p><a class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                            <p class="text-gray-700 dark:text-gray-300"><a
+                                    class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                                     href="tel:{{ $user->phone?->formatForMobileDialingInCountry('GB') }}">{{ $user->phone?->formatForCountry('GB') }}</a>
                             </p>
                         </div>
@@ -58,12 +59,13 @@
                     <div class="space-y-2">
                         <div>
                             <x-fake-label :value="__('Name')" />
-                            <p>{{ $user->emergency_name }}</p>
+                            <p class="text-gray-700 dark:text-gray-300">{{ $user->emergency_name }}</p>
                         </div>
 
                         <div>
                             <x-fake-label :value="__('Phone')" />
-                            <p><a class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                            <p class="text-gray-700 dark:text-gray-300"><a
+                                    class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                                     href="tel:{{ $user->emergency_phone?->formatForMobileDialingInCountry('GB') }}">{{ $user->emergency_phone?->formatForCountry('GB') }}</a>
                             </p>
                         </div>
@@ -76,12 +78,12 @@
                 <div class="space-y-2">
                     <div>
                         <x-fake-label :value="__('Section')" />
-                        <p>@lang('app.user.section.' . $user->section->value)</p>
+                        <p class="text-gray-700 dark:text-gray-300">@lang('app.user.section.' . $user->section->value)</p>
                     </div>
 
                     <div>
                         <x-fake-label :value="__('Timezone')" />
-                        <p>{{ $user->timezone }}</p>
+                        <p class="text-gray-700 dark:text-gray-300">{{ $user->timezone }}</p>
                     </div>
                 </div>
             </div>
