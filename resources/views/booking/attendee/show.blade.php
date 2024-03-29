@@ -14,7 +14,7 @@
                         {{ $attendee->name }}</h2>
 
                     <div class="flex flex-wrap items-center gap-1">
-                        @if ($attendee->is($booking->lead_instructor))
+                        @if ($attendee->id === $booking->lead_instructor_id)
                             <x-badge.lead-instructor class="text-sm" />
                         @else
                             <x-badge.attendee-status :status="$attendee->attendance->status" class="text-sm" />

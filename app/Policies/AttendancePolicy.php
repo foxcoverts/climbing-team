@@ -65,7 +65,7 @@ class AttendancePolicy
             return true;
         }
 
-        if ($user->is($booking->lead_instructor)) {
+        if ($user->id === $booking->lead_instructor_id) {
             // The lead instructors can contact attendees
             return in_array($attendance->status, [AttendeeStatus::Accepted, AttendeeStatus::Tentative]);
         }

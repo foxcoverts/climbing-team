@@ -89,7 +89,7 @@ foreach ($bookings as $booking) {
             $evAttendee->setResponseNeededFromAttendee(true);
         }
 
-        if ($attendee->is($booking->lead_instructor)) {
+        if ($attendee->id === $booking->lead_instructor_id) {
             $evAttendee->setRole(RoleType::CHAIR());
         } else {
             $evAttendee->setRole(RoleType::REQ_PARTICIPANT());
