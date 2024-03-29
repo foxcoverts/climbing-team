@@ -143,7 +143,7 @@
             <footer class="flex items-center gap-4 mt-6">
                 <x-button.primary x-bind:disabled="submitted"
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
-
+                @include('user.partials.delete-button')
                 <x-button.secondary :href="route('user.show', $user)">
                     @lang('Back')
                 </x-button.secondary>

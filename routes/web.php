@@ -17,6 +17,7 @@ use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TrashedBookingController;
+use App\Http\Controllers\UserBookingController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->parameters(['news' => 'post'])
         ->only('index', 'show');
 
+    Route::get('user/{user}/booking', UserBookingController::class)->name('user.booking.index');
     Route::post('user/{user}/invite', [UserController::class, 'sendInvite'])->name('user.invite');
     Route::resource('user', UserController::class);
 });

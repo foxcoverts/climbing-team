@@ -89,11 +89,10 @@
 
         <footer class="flex items-start gap-4 mt-6">
             @can('update', $user)
-                <x-button.primary href="{{ route('user.edit', $user) }}">
+                <x-button.primary :href="route('user.edit', $user)">
                     @lang('Edit')
                 </x-button.primary>
             @endcan
-            @include('user.partials.delete-button')
             @if (!$user->isActive())
                 @can('update', $user)
                     <form method="post" action="{{ route('user.invite', $user) }}" x-data="{ submitted: false }"
@@ -104,9 +103,9 @@
                     </form>
                 @endcan
             @endif
-            @can('viewAny', App\Models\User::class)
-                <x-button.secondary href="{{ route('user.index') }}">
-                    @lang('Back')
+            @can('manage', App\Models\Booking::class)
+                <x-button.secondary :href="route('user.booking.index', $user)">
+                    @lang('Bookings')
                 </x-button.secondary>
             @endcan
         </footer>

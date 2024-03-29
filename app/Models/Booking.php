@@ -159,7 +159,7 @@ class Booking extends Model
      */
     public function scopeNotCancelled(Builder $bookings)
     {
-        $bookings->whereNot('status', BookingStatus::Cancelled);
+        $bookings->whereNot('bookings.status', BookingStatus::Cancelled);
     }
 
     /**
