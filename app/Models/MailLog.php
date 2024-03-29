@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,6 +22,7 @@ class MailLog extends Model
     ];
 
     protected $casts = [
+        'body' => 'object',
         'read_at' => 'datetime',
         'sent_at' => 'datetime',
     ];
@@ -38,9 +40,6 @@ class MailLog extends Model
         return $this;
     }
 
-
-    protected mixed $jsonCache = null;
-
     /**
      * @throws InvalidArgumentException
      */
@@ -53,107 +52,121 @@ class MailLog extends Model
         if (!property_exists($json, 'subject')) {
             throw new InvalidArgumentException('Body does not look like an encoded email object.');
         }
-        $this->jsonCache = $json;
         $this->attributes['body'] = $value;
-    }
-
-    protected function parseBody(): mixed
-    {
-        if ($this->jsonCache === null) {
-            try {
-                $this->body = $this->body;
-            } catch (InvalidArgumentException) {
-            }
-        }
-        return $this->jsonCache;
     }
 
     public function isValid(): bool
     {
-        return $this->parseBody() !== null;
+        return !is_null($this->body);
     }
 
-    public function getSentAtAttribute(): string|null
+    protected function sentAt(): Attribute
     {
-        return $this->parseBody()?->date;
+        return Attribute::make(
+            get: fn () => $this->body->date,
+        );
     }
 
-    public function getToAttribute(): string|null
+    protected function to(): Attribute
     {
-        return $this->parseBody()?->to?->text;
+        return Attribute::make(
+            get: fn () => $this->body->to?->text,
+        );
     }
 
-    public function getFromAttribute(): string|null
+    protected function from(): Attribute
     {
-        return $this->parseBody()?->from?->text;
+        return Attribute::make(
+            get: fn () => $this->body->from?->text,
+        );
     }
 
-    public function getSubjectAttribute(): string|null
+    protected function subject(): Attribute
     {
-        return $this->parseBody()?->subject;
+        return Attribute::make(
+            get: fn () => $this->body->subject,
+        );
     }
 
-    public function getCalendarAttribute(): Calendar\Calendar|null
+    protected function calendar(): Attribute
     {
-        $calendar = collect($this->parseBody()?->attachments)
-            ->where('contentType', 'text/calendar')
-            ->first();
-        if ($calendar?->content->type == 'Buffer') {
-            $data = '';
-            for ($i = 0; $i < count($calendar->content->data); $i++) {
-                $data .= chr($calendar->content->data[$i]);
+        return Attribute::make(
+            get: function () {
+                $calendar = collect($this->attachments)
+                    ->where('contentType', 'text/calendar')
+                    ->first();
+                if (is_object($calendar) && $calendar->content->type == 'Buffer') {
+                    $data = '';
+                    for ($i = 0; $i < count($calendar->content->data); $i++) {
+                        $data .= chr($calendar->content->data[$i]);
+                    }
+                    return Calendar\Calendar::loadData($data);
+                }
+                return null;
             }
-            return Calendar\Calendar::loadData($data);
-        }
-        return null;
+        );
     }
 
-    public function getAttachmentsAttribute(): array|null
+    protected function attachments(): Attribute
     {
-        return $this->parseBody()?->attachments;
+        return Attribute::make(
+            get: fn () => $this->body->attachments,
+        );
     }
 
-    public function getBodyHtmlAttribute(): string|null
+    protected function bodyHtml(): Attribute
     {
-        return $this->parseBody()?->html ?? $this->parseBody()?->textAsHtml;
+        return Attribute::make(
+            get: fn () => $this->body->html
+                ?? $this->body->textAsHtml,
+        );
     }
 
-    public function getFromUserAttribute(): User|null
+    protected function fromEmail(): Attribute
     {
-        $email = $this->parseBody()?->from->value[0]->address;
-
-        if (empty($email)) {
-            return null;
-        }
-
-        return User::where('email', $email)->first();
+        return Attribute::make(
+            get: fn () => $this->body->from->value[0]->address,
+        );
     }
 
-    public function getToBookingAttribute(): Booking|null
+    protected function fromUser(): Attribute
     {
-        $email = $this->parseBody()?->to->value[0]->address;
-        if (empty($email)) {
-            return null;
-        }
-
-        return Booking::findByUid($email);
+        return Attribute::make(
+            get: fn () => $this->fromEmail
+                ? User::where('email', $this->fromEmail)->first()
+                : null,
+        );
     }
 
-    public function getBookingAttribute(): Booking|null
+    protected function toEmail(): Attribute
     {
-        $booking = $this->calendar?->getEvents()->first()?->getBooking();
-        if (!$booking) {
-            return $this->toBooking;
-        }
-        return $booking;
+        return Attribute::make(
+            get: fn () => $this->body->to->value[0]->address,
+        );
     }
 
-    public function getUserAttribute(): User|null
+    protected function toBooking(): Attribute
     {
-        $attendee = $this->calendar?->getEvents()->first()?->getAttendees()->first();
-        if (!$attendee) {
-            return $this->fromUser;
-        }
-        return $attendee->getUser();
+        return Attribute::make(
+            get: fn () => $this->toEmail
+                ? Booking::findByUid($this->toEmail)
+                : null,
+        );
+    }
+
+    protected function booking(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->calendar?->getEvents()->first()?->getBooking()
+                ?? $this->toBooking,
+        );
+    }
+
+    protected function user(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->calendar?->getEvents()->first()?->getAttendees()->first()?->getUser()
+                ?? $this->fromUser,
+        );
     }
 }
