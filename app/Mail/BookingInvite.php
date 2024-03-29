@@ -27,7 +27,8 @@ class BookingInvite extends Mailable
         public User $attendee,
         public array $changes = [],
     ) {
-        $this->attendee = $booking->attendees()->find($attendee);
+        $booking->load('attendees');
+        $this->attendee = $booking->attendees->find($attendee);
     }
 
     /**

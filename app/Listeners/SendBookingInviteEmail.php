@@ -13,6 +13,10 @@ class SendBookingInviteEmail
      */
     public function handle(BookingInvite $event): void
     {
+        if ($event->booking->isCancelled() || $event->booking->isPast()) {
+            return;
+        }
+
         Mail::to($event->attendee->email)
             ->send(new MailBookingInvite(
                 $event->booking,
