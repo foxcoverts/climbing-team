@@ -11,7 +11,7 @@
 
     <div>
         <x-fake-label :value="__('When')" />
-        <p>
+        <p class="text-gray-700 dark:text-gray-300">
             @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
                 {{ __(':start_date from :start_time to :end_time', [
                     'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
@@ -30,21 +30,21 @@
 
     <div>
         <x-fake-label :value="__('Location')" />
-        <p>{{ $booking->location }}</p>
+        <p class="text-gray-700 dark:text-gray-300">{{ $booking->location }}</p>
     </div>
 
     <div>
         <x-fake-label :value="__('Activity')" />
-        <p>{{ $booking->activity }}</p>
+        <p class="text-gray-700 dark:text-gray-300">{{ $booking->activity }}</p>
     </div>
 
     <div>
         <x-fake-label :value="__('Group')" />
-        <p>{{ $booking->group_name }}</p>
+        <p class="text-gray-700 dark:text-gray-300">{{ $booking->group_name }}</p>
     </div>
 
     @if (!empty($booking->notes))
-        <div>
+        <div class="prose dark:prose-invert prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0">
             <x-fake-label :value="__('Notes')" />
             <x-markdown :text="$booking->notes" />
         </div>
