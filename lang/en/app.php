@@ -1,4 +1,5 @@
 <?php
+
 return [
     'attendee' => [
         'status' => [
@@ -18,6 +19,7 @@ return [
     'user' => [
         'accreditation' => [
             'manage-bookings' => 'Manage Bookings',
+            'manage-qualifications' => 'Manage Qualifications',
             'manage-users' => 'Manage Users',
             'permit-holder' => 'Permit Holder',
         ],
@@ -36,5 +38,5 @@ return [
             'adult' => 'Adult Member',
             'parent' => 'Parent',
         ],
-    ]
+    ],
 ];

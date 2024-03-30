@@ -7,6 +7,8 @@
     @break
 
     @case(Accreditation::ManageBookings)
+    @case(Accreditation::ManageQualifications)
+
     @case(Accreditation::ManageUsers)
         @php($color = 'yellow')
     @break

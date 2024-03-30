@@ -20,7 +20,7 @@ use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, HasUlids, Notifiable, Concerns\HasUid;
+    use Concerns\HasUid, HasApiTokens, HasFactory, HasUlids, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -73,8 +73,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
-        'phone' => E164PhoneNumberCast::class . ':GB',
-        'emergency_phone' => E164PhoneNumberCast::class . ':GB',
+        'phone' => E164PhoneNumberCast::class.':GB',
+        'emergency_phone' => E164PhoneNumberCast::class.':GB',
         'email_verified_at' => 'datetime',
         'timezone' => Timezone::class,
         'role' => Role::class,
@@ -103,7 +103,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Sync accreditations to the given list.
      *
-     * @param null|array<string|Accreditation> $newAccreditations
+     * @param  null|array<string|Accreditation>  $newAccreditations
      * @return void
      */
     public function setAccreditationsAttribute($newAccreditations)
@@ -129,12 +129,10 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * When an admin creates a User the password is empty so that no one can
      * log in. When the user has set a password, the account is considered 'active'.
-     *
-     * @return boolean
      */
     public function isActive(): bool
     {
-        return $this->password != "";
+        return $this->password != '';
     }
 
     public function isTeamLeader(): bool
@@ -144,7 +142,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isUnder18(): bool
     {
-        return !in_array($this->section, [Section::Parent, Section::Adult, Section::Network]);
+        return ! in_array($this->section, [Section::Parent, Section::Adult, Section::Network]);
     }
 
     public function isParent(): bool
@@ -165,6 +163,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isBookingManager(): bool
     {
         return $this->accreditations->contains(Accreditation::ManageBookings);
+    }
+
+    public function isQualificationManager(): bool
+    {
+        return $this->accreditations->contains(Accreditation::ManageQualifications);
     }
 
     public function isUserManager(): bool

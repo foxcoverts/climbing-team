@@ -22,18 +22,13 @@
                         @lang('Section')
                     <th
                         class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
-                        Role</th>
-                    @foreach (Accreditation::cases() as $accreditation)
-                        <th @class([
-                            'px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden',
-                            'sm:table-cell' => in_array($accreditation, [Accreditation::PermitHolder]),
-                            'xl:table-cell' => in_array($accreditation, [
-                                Accreditation::ManageBookings,
-                                Accreditation::ManageUsers,
-                            ]),
-                        ])>
-                            @lang("app.user.accreditation.{$accreditation->value}")</th>
-                    @endforeach
+                        @lang('Role')</th>
+                    <th
+                        class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell">
+                        @lang('Permits')</th>
+                    <th
+                        class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden xl:table-cell">
+                        @lang('Manages')</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 border-y border-gray-200">
@@ -54,21 +49,24 @@
                         <td class="px-1 text-center">
                             <x-badge.role :role="$user->role" class="text-sm text-nowrap whitespace-nowrap" />
                         </td>
-                        @foreach (Accreditation::cases() as $accreditation)
-                            <td @class([
-                                'px-1 hidden text-center',
-                                'sm:table-cell' => in_array($accreditation, [Accreditation::PermitHolder]),
-                                'xl:table-cell' => in_array($accreditation, [
-                                    Accreditation::ManageBookings,
-                                    Accreditation::ManageUsers,
-                                ]),
-                            ])>
-                                @if ($user->accreditations->contains($accreditation))
-                                    <x-badge.accreditation :accreditation="$accreditation"
-                                        class="text-sm text-nowrap whitespace-nowrap" />
-                                @endif
-                            </td>
-                        @endforeach
+                        <td class="px-1 text-center hidden sm:table-cell">
+                            @if ($user->isPermitHolder())
+                                <x-badge.accreditation :accreditation="Accreditation::PermitHolder"
+                                    class="text-sm text-nowrap whitespace-nowrap" />
+                            @endif
+                        </td>
+                        <td class="px-1 text-center hidden xl:table-cell">
+                            <div class="flex items-center justify-center gap-1">
+                                @foreach (Accreditation::cases() as $accreditation)
+                                    @unless ($accreditation == Accreditation::PermitHolder)
+                                        @if ($user->accreditations->contains($accreditation))
+                                            <x-badge.accreditation :accreditation="$accreditation"
+                                                class="text-sm text-nowrap whitespace-nowrap" />
+                                        @endif
+                                    @endunless
+                                @endforeach
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
