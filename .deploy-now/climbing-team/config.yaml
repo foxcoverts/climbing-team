@@ -36,7 +36,10 @@ deploy:
       - storage
     # commands that are executed at the real webspace NOT at build servers BEFORE copying new files
     pre-deployment-remote-commands:
-      - php artisan down --render=down.deploy --retry=60 --refresh=15
+      - >-
+        [ -f resources/views/down/deploy.blade.php ] \
+          && php artisan down --render=down.deploy --retry=60 --refresh=15 \
+          || php artisan down --retry=60 --refresh=15
     # commands that are executed at the real webspace NOT at build servers AFTER copying new files
     post-deployment-remote-commands:
       - find $(pwd) -type f -not -path "$(pwd)/logs/*" -exec chmod 664 {} \;
