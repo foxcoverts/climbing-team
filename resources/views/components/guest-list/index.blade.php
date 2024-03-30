@@ -56,22 +56,30 @@
     @endempty
 
     @if ($showTools)
-        <footer class="flex items-start gap-4 mt-4">
-            @if (
-                $booking->isFuture() &&
-                    !$booking->isCancelled() &&
-                    app(Gate::class)->check('create', [Attendance::class, $booking]))
-                <x-button.primary :href="route('booking.attendee.invite', $booking)">
-                    @lang('Invite')
-                </x-button.primary>
-                <x-button.primary :href="route('booking.attendee.create', $booking)">
-                    @lang('Add')
-                </x-button.primary>
-            @endif
-            @include('booking.partials.respond-button', [
-                'booking' => $booking,
-                'attendance' => $attendance(),
-            ])
+        <footer class="flex flex-wrap items-start gap-4 mt-4">
+            <div class="flex gap-4">{{-- flex-group --}}
+                @if (
+                    $booking->isFuture() &&
+                        !$booking->isCancelled() &&
+                        app(Gate::class)->check('create', [Attendance::class, $booking]))
+                    <x-button.primary :href="route('booking.attendee.invite', $booking)">
+                        @lang('Invite')
+                    </x-button.primary>
+                    <x-button.primary :href="route('booking.attendee.create', $booking)">
+                        @lang('Add')
+                    </x-button.primary>
+                @endif
+            </div>
+            <div class="flex flex-wrap gap-4">{{-- flex-group --}}
+                @include('booking.partials.respond-button', [
+                    'booking' => $booking,
+                    'attendance' => $attendance(),
+                ])
+                @include('booking.partials.download-button', [
+                    'booking' => $booking,
+                    'attendance' => $attendance(),
+                ])
+            </div>
         </footer>
     @endif
 </aside>

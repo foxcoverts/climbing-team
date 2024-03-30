@@ -37,7 +37,7 @@
                         <td class="px-3 py-3">
                             @if ($mail->booking)
                                 <div class="flex items-center space-x-1">
-                                    <x-icon.calendar class="w-5 h-5 fill-current" />
+                                    <x-icon.calendar.index class="w-5 h-5 fill-current" />
                                     <span>
                                         {{ $mail->booking->activity }}
                                         -
