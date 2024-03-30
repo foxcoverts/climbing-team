@@ -61,7 +61,7 @@ class UserController extends Controller
 
         event(new Registered($user));
 
-        return redirect()->route('user.show', $user)
+        return redirect()->route('user.booking.invite', $user)
             ->with('alert.info', __('User created successfully'));
     }
 
