@@ -14,7 +14,7 @@ deploy:
     post-deployment-remote-commands:
       - mkdir storage/logs
       - php artisan about
-      - php artisan down
+      - php artisan down --render=down.deploy --retry=60 --refresh=15
       - find $(pwd) -type f -not -path "$(pwd)/logs/*" -exec chmod 664 {} \;
       - find $(pwd) -type d -not -name "logs" -exec chmod 775 {} \;
       - chmod -R o+w storage bootstrap/cache
@@ -36,7 +36,7 @@ deploy:
       - storage
     # commands that are executed at the real webspace NOT at build servers BEFORE copying new files
     pre-deployment-remote-commands:
-      - php artisan down
+      - php artisan down --render=down.deploy --retry=60 --refresh=15
     # commands that are executed at the real webspace NOT at build servers AFTER copying new files
     post-deployment-remote-commands:
       - find $(pwd) -type f -not -path "$(pwd)/logs/*" -exec chmod 664 {} \;
