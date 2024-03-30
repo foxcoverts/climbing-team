@@ -75,12 +75,10 @@
                     'booking' => $booking,
                     'attendance' => $attendance(),
                 ])
-                @if ($booking->isFuture() && !$booking->isCancelled())
-                    <x-button.secondary :href="route('booking.show.ics', $booking)" class="flex items-center gap-2">
-                        <x-icon.download class="h-4 w-4 fill-current" />
-                        <span class="whitespace-nowrap">@lang('Add to Calendar')</span>
-                    </x-button.secondary>
-                @endif
+                @include('booking.partials.download-button', [
+                    'booking' => $booking,
+                    'attendance' => $attendance(),
+                ])
             </div>
         </footer>
     @endif
