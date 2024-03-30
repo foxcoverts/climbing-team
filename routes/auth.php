@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\SetupAccountLinkController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Middleware\FirstUser;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +19,12 @@ Route::middleware('guest')->group(function () {
         Route::post('register', 'store');
     });
 
-    Route::controller(RegisteredUserController::class)->middleware(['signed'])->group(function () {
+    Route::controller(SetupAccountLinkController::class)->group(function () {
+        Route::get('register/{user}/link', 'create')->name('setup-account-link');
+        Route::post('register/{user}/link', 'store');
+    });
+
+    Route::controller(RegisteredUserController::class)->group(function () {
         Route::get('register/{user}', 'edit')->name('setup-account');
         Route::post('register/{user}', 'update');
     });

@@ -61,10 +61,15 @@ class RegisteredUserController extends Controller
         return redirect(route('dashboard', absolute: false));
     }
 
-    public function edit(User $user): View
+    public function edit(Request $request, User $user): View|RedirectResponse|Response
     {
         if ($user->password != '') {
-            abort(Response::HTTP_FORBIDDEN, 'Invitation expired');
+            return redirect()->route('profile');
+        }
+        if (!$request->hasValidSignature()) {
+            return response()->view('auth.setup-account-expired', [
+                'user' => $user,
+            ], Response::HTTP_FORBIDDEN);
         }
 
         return view('auth.setup-account', [
@@ -75,6 +80,9 @@ class RegisteredUserController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         if ($user->password != '') {
+            abort(Response::HTTP_FORBIDDEN, 'Invitation expired');
+        }
+        if (!$request->hasValidSignature()) {
             abort(Response::HTTP_FORBIDDEN, 'Invitation expired');
         }
 
