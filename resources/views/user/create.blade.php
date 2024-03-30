@@ -14,9 +14,6 @@
             user: {{ Js::from([
                 'name' => old('name', $user->name),
                 'email' => old('email', $user->email),
-                'phone' => old('phone', $user->phone?->formatForCountry('GB')),
-                'emergency_name' => old('emergency_name', $user->emergency_name),
-                'emergency_phone' => old('emergency_phone', $user->emergency_phone?->formatForCountry('GB')),
                 'timezone' => old('timezone', (string) $user->timezone),
                 'section' => old('section', $user->section),
                 'role' => old('role', $user->role),
@@ -48,38 +45,11 @@
             </div>
 
             <div>
-                <x-input-label for="phone" :value="__('Phone')" />
-                <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40" x-model="user.phone"
-                    x-mask:dynamic="$phone($input)" maxlength="15" />
-                <x-input-error class="mt-2" :messages="$errors->get('phone')" />
-            </div>
-
-            <div>
                 <x-fake-label :value="__('Password')" />
                 <p class="mt-1 text-blue-800 dark:text-blue-200">
                     @lang('The user will be asked to set their own password.')
                 </p>
             </div>
-
-            <fieldset>
-                <legend class="text-lg font-medium mb-1">@lang('Emergency Contact')</legend>
-                <p class="mb-2 text-md text-blue-800 dark:text-blue-200">@lang('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.')</p>
-                <div class="flex flex-wrap gap-6">
-                    <div class="grow shrink">
-                        <x-input-label for="emergency_name" :value="__('Name')" />
-                        <x-text-input id="emergency_name" name="emergency_name" type="tel"
-                            class="mt-1 block w-full min-w-48" maxlength="100" x-bind:required="!!user.emergency_phone"
-                            x-model="user.emergency_name" x-mask:dynamic="$phone($input)" maxlength="15" />
-                        <x-input-error class="mt-2" :messages="$errors->get('emergency_name')" />
-                    </div>
-                    <div>
-                        <x-input-label for="emergency_phone" :value="__('Phone')" />
-                        <x-text-input id="emergency_phone" name="emergency_phone" class="mt-1 block w-40"
-                            x-bind:required="!!user.emergency_name" x-model="user.emergency_phone" />
-                        <x-input-error class="mt-2" :messages="$errors->get('emergency_phone')" />
-                    </div>
-                </div>
-            </fieldset>
 
             <fieldset>
                 <legend class="text-lg font-medium mb-2">@lang('Settings')</legend>
