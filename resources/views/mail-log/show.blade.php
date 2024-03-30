@@ -51,8 +51,8 @@
                                         </a>
                                     </x-fake-input>
                                 @else
-                                    <x-input-label :for="$id('attendee')">@lang('Attendee')</x-input-label>
-                                    <x-text-input :id="$id('attendee')" name="attendee[]" class="w-full mt-1" readonly
+                                    <x-input-label ::for="$id('attendee')">@lang('Attendee')</x-input-label>
+                                    <x-text-input ::id="$id('attendee')" name="attendee[]" class="w-full mt-1" readonly
                                         :value="$attendee->getEmail()" />
                                 @endif
                             </div>
