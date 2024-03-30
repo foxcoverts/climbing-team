@@ -55,15 +55,6 @@
                 <legend class="text-lg font-medium mb-2">@lang('Settings')</legend>
                 <div class="space-y-6">
                     <div>
-                        <x-input-label for="timezone" :value="__('Timezone')" />
-                        <x-select-input id="timezone" name="timezone" class="mt-1 block" required
-                            x-model="user.timezone">
-                            <x-select-input.timezones />
-                        </x-select-input>
-                        <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
-                    </div>
-
-                    <div>
                         <x-input-label for="section" :value="__('Section')" />
                         <x-select-input id="section" name="section" class="mt-1 block" required
                             x-model="user.section">
@@ -105,6 +96,15 @@
                             <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
                         </fieldset>
                     @endcan
+
+                    <div>
+                        <x-input-label for="timezone" :value="__('Timezone')" />
+                        <x-select-input id="timezone" name="timezone" class="mt-1 block" required
+                            x-model="user.timezone">
+                            <x-select-input.timezones />
+                        </x-select-input>
+                        <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
+                    </div>
                 </div>
             </fieldset>
 
