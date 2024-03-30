@@ -60,6 +60,13 @@ class MailLog extends Model
         return !is_null($this->body);
     }
 
+    protected function rawBody(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, array $attributes) => $attributes['body'],
+        );
+    }
+
     protected function sentAt(): Attribute
     {
         return Attribute::make(

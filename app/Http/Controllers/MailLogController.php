@@ -40,7 +40,7 @@ class MailLogController extends Controller
     {
         Gate::authorize('view', $mail);
 
-        return response($mail->body, headers: [
+        return response($mail->rawBody, headers: [
             'Content-Type' => 'text/plain; charset=utf-8',
         ]);
     }
