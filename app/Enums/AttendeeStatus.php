@@ -23,4 +23,22 @@ enum AttendeeStatus: string
      * Person has been invited to the booking but has not responded.
      */
     case NeedsAction = 'needs-action';
+
+    /**
+     * Compare with another AttendeeStatus.
+     */
+    public function compare(AttendeeStatus $other): int
+    {
+        return $this->rank() <=> $other->rank();
+    }
+
+    protected function rank(): int
+    {
+        return match ($this) {
+            self::Accepted => 0,
+            self::Tentative => 1,
+            self::Declined => 2,
+            self::NeedsAction => 3,
+        };
+    }
 }

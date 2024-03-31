@@ -11,8 +11,6 @@ use Illuminate\View\Component;
 
 class GuestList extends Component
 {
-    // @props(['booking', 'attendees' => collect([]), 'attendance' => null, 'showTools' => true])
-
     /**
      * Create a new component instance.
      */
@@ -21,6 +19,7 @@ class GuestList extends Component
         public Booking $booking,
         public bool $showTools = true,
     ) {
+        $booking->attendees->load('qualifications');
     }
 
     /**
@@ -46,18 +45,17 @@ class GuestList extends Component
 
     public function attendees(): Collection
     {
-        $attendees = $this->booking->attendees()->with('qualifications');
-        if ($this->booking->lead_instructor_id) {
-            $attendees->whereNot('users.id', $this->booking->lead_instructor_id);
-        }
+        $attendees = $this->booking->attendees;
         if ($this->currentUser->isGuest()) {
-            $attendees->where('users.id', $this->currentUser->id);
+            $attendees = $attendees->where('id', $this->currentUser->id);
         }
 
         return $attendees
-            ->orderBy('booking_user.status')
-            ->orderBy('users.name')
-            ->get()
+            ->where('id', '!=', $this->booking->lead_instructor_id)
+            ->sortBy([
+                fn ($a, $b) => $a->attendance->status->compare($b->attendance->status),
+                'name',
+            ])
             ->groupBy('attendance.status');
     }
 }
