@@ -159,7 +159,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isPermitHolder(): bool
     {
-        return $this->qualifications->count() > 0;
+        return $this->qualifications->where('detail_type', ScoutPermit::class)->count() > 0;
     }
 
     public function isBookingManager(): bool
