@@ -56,4 +56,9 @@ class Qualification extends Model
     {
         $qualifications->orderBy('expires_on');
     }
+
+    public function isExpired(): bool
+    {
+        return $this->expires_on->endOfDay()->isPast();
+    }
 }

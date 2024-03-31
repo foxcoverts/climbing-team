@@ -38,7 +38,11 @@
 
             <div>
                 <x-fake-label :value="$qualification->expires_on->endOfDay()->isPast() ? __('Expired') : __('Expires')" />
-                <p><span class="cursor-default" title="{{ $qualification->expires_on->toFormattedDayDateString() }}">
+                <p><span @class([
+                    'cursor-default',
+                    'text-red-500' => $qualification->isExpired(),
+                ])
+                        title="{{ $qualification->expires_on->toFormattedDayDateString() }}">
                         @if ($qualification->expires_on->isToday())
                             @lang('today')
                         @else
