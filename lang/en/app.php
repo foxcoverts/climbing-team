@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\GirlguidingScheme;
 use App\Enums\MountainTrainingAward;
 use App\Enums\ScoutPermitActivity;
 use App\Enums\ScoutPermitCategory;
@@ -21,6 +22,11 @@ return [
             'cancelled' => 'Cancelled',
         ],
     ],
+    'girlguiding' => [
+        'scheme' => [
+            GirlguidingScheme::Climbing->value => 'Climbing',
+        ],
+    ],
     'mountain-training' => [
         'award' => [
             MountainTrainingAward::IndoorClimbingAssistant->value => 'Indoor Climbing Assistant',
@@ -33,6 +39,7 @@ return [
     ],
     'qualification' => [
         'type' => [
+            App\Models\GirlguidingQualification::class => 'Girlguiding',
             App\Models\MountainTrainingQualification::class => 'Mountain Training',
             App\Models\ScoutPermit::class => 'Scout Permit',
         ],

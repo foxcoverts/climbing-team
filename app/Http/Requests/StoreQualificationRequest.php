@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GirlguidingScheme;
 use App\Enums\MountainTrainingAward;
 use App\Enums\ScoutPermitActivity;
 use App\Enums\ScoutPermitCategory;
 use App\Enums\ScoutPermitType;
+use App\Models\GirlguidingQualification;
 use App\Models\MountainTrainingQualification;
 use App\Models\ScoutPermit;
 use Illuminate\Database\Query\Builder;
@@ -24,14 +26,25 @@ class StoreQualificationRequest extends FormRequest
     {
         return [
             'detail_type' => ['required', Rule::in([
+                GirlguidingQualification::class,
                 MountainTrainingQualification::class,
                 ScoutPermit::class,
             ])],
             ...match ($this->detail_type) {
+                GirlguidingQualification::class => $this->girlguidingRules(),
                 MountainTrainingQualification::class => $this->mountainTrainingRules(),
                 ScoutPermit::class => $this->scoutPermitRules(),
                 default => [],
             },
+        ];
+    }
+
+    protected function girlguidingRules(): array
+    {
+        return [
+            'expires_on' => ['required', 'date'],
+            'scheme' => ['required', Rule::enum(GirlguidingScheme::class)],
+            'level' => ['required', 'integer', 'between:1,2'],
         ];
     }
 
@@ -40,7 +53,6 @@ class StoreQualificationRequest extends FormRequest
         return [
             'award' => [
                 'required',
-                'string',
                 Rule::enum(MountainTrainingAward::class),
                 Rule::unique('mountain_training_qualifications')
                     ->where(fn (Builder $query) => $query
@@ -59,8 +71,8 @@ class StoreQualificationRequest extends FormRequest
     {
         return [
             'expires_on' => ['required', 'date'],
-            'activity' => ['required', 'string', Rule::enum(ScoutPermitActivity::class)],
-            'category' => ['required', 'string', Rule::enum(ScoutPermitCategory::class)],
+            'activity' => ['required', Rule::enum(ScoutPermitActivity::class)],
+            'category' => ['required', Rule::enum(ScoutPermitCategory::class)],
             'permit_type' => ['required', Rule::enum(ScoutPermitType::class)],
             'restrictions' => ['nullable', 'string'],
         ];

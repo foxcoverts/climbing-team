@@ -10,7 +10,17 @@
         <article class="space-y-2">
             <h2 class="text-lg sm:text-xl font-medium text-gray-900 dark:text-gray-100">@lang('app.qualification.type.' . $qualification->detail_type)</h2>
 
-            @if ($qualification->detail instanceof \App\Models\MountainTrainingQualification)
+            @if ($qualification->detail instanceof \App\Models\GirlguidingQualification)
+                <div>
+                    <x-fake-label :value="__('Scheme')" />
+                    <p class="text-gray-700 dark:text-gray-300">
+                        @lang(':scheme - Level :level', [
+                            'scheme' => __('app.girlguiding.scheme.' . $qualification->detail->scheme->value),
+                            'level' => $qualification->detail->level,
+                        ])
+                    </p>
+                </div>
+            @elseif ($qualification->detail instanceof \App\Models\MountainTrainingQualification)
                 <div>
                     <x-fake-label :value="__('Award')" />
                     <p class="text-gray-700 dark:text-gray-300">@lang('app.mountain-training.award.' . $qualification->detail->award->value)</p>

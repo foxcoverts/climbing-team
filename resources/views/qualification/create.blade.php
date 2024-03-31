@@ -1,3 +1,4 @@
+@use('App\Enums\GirlguidingScheme')
 @use('App\Enums\MountainTrainingAward')
 @use('App\Enums\ScoutPermitActivity')
 @use('App\Enums\ScoutPermitCategory')
@@ -17,6 +18,9 @@
                     'detail_type' => old('detail_type', $qualification->detail_type),
                     'expires_on' => old('expires_on', $qualification->expires_on?->format('Y-m-d')),
                 ]) }},
+                isGirlguiding() {
+                    return this.qualification.detail_type == 'App\\Models\\GirlguidingQualification';
+                },
                 isMountainTraining() {
                     return this.qualification.detail_type == 'App\\Models\\MountainTrainingQualification';
                 },
@@ -24,7 +28,22 @@
                     return this.qualification.detail_type == 'App\\Models\\ScoutPermit';
                 },
                 freshDetail() {
-                    if (this.isScoutPermit()) {
+                    if (this.isGirlguiding()) {
+                        this.qualification = {
+                            detail_type: this.qualification.detail_type,
+                            expires_on: this.qualification.expires_on,
+            
+                            scheme: 'climbing',
+                            level: 1,
+                        };
+                    } else if (this.isMountainTraining()) {
+                        this.qualification = {
+                            detail_type: this.qualification.detail_type,
+                            expires_on: this.qualification.expires_on,
+            
+                            award: 'CWI',
+                        };
+                    } else if (this.isScoutPermit()) {
                         this.qualification = {
                             detail_type: this.qualification.detail_type,
                             expires_on: this.qualification.expires_on,
@@ -33,13 +52,6 @@
                             category: 'Artificial Top Rope',
                             permit_type: 'leadership',
                             restrictions: '',
-                        };
-                    } else if (this.isMountainTraining()) {
-                        this.qualification = {
-                            detail_type: this.qualification.detail_type,
-                            expires_on: this.qualification.expires_on,
-            
-                            award: '',
                         };
                     } else {
                         this.qualification = {
@@ -58,12 +70,42 @@
                     <template x-if="!qualification.detail_type">
                         <option value="" selected></option>
                     </template>
-                    @foreach ([\App\Models\MountainTrainingQualification::class, \App\Models\ScoutPermit::class] as $qualification_type)
+                    @foreach ([\App\Models\GirlguidingQualification::class, \App\Models\MountainTrainingQualification::class, \App\Models\ScoutPermit::class] as $qualification_type)
                         <option value="{{ $qualification_type }}">@lang("app.qualification.type.$qualification_type")</option>
                     @endforeach
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('detail_type')" />
             </div>
+
+            <template x-if="isGirlguiding">
+                <div class="space-y-6">
+                    <div>
+                        <x-input-label for="scheme" :value="__('Scheme')" />
+                        <x-select-input id="scheme" name="scheme" class="mt-1 block" required
+                            x-model="qualification.scheme">
+                            <template x-if="!qualification.scheme">
+                                <option value="" selected></option>
+                            </template>
+                            <x-select-input.enum :options="GirlguidingScheme::class" lang="app.girlguiding.scheme.:value" />
+                        </x-select-input>
+                        <x-input-error class="mt-2" :messages="$errors->get('scheme')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="level" :value="__('Level')" />
+                        <x-text-input type="number" id="level" name="level" min="1" max="2"
+                            x-model="qualification.level" class="mt-1" />
+                        <x-input-error class="mt-2" :messages="$errors->get('level')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="expires_on" :value="__('Expires')" />
+                        <x-text-input type="date" id="expires_on" name="expires_on" class="mt-1" required
+                            x-model="qualification.expires_on" />
+                        <x-input-error class="mt-2" :messages="$errors->get('expires_on')" />
+                    </div>
+                </div>
+            </template>
 
             <template x-if="isMountainTraining">
                 <div class="space-y-6">
