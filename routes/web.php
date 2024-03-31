@@ -15,6 +15,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\UserBookingController;
@@ -39,8 +40,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('booking', [BookingController::class, 'calendar'])->name('booking.calendar');
     foreach (BookingStatus::cases() as $status) {
-        Route::get('booking/' . $status->value, [BookingController::class, $status->value])
-            ->name('booking.' . $status->value);
+        Route::get('booking/'.$status->value, [BookingController::class, $status->value])
+            ->name('booking.'.$status->value);
     }
 
     Route::controller(BookingAttendanceController::class)->group(function () {
@@ -90,6 +91,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
     Route::get('user/{user}/booking', UserBookingController::class)->name('user.booking.index');
     Route::post('user/{user}/invite', [UserController::class, 'sendInvite'])->name('user.invite');
+    Route::resource('user.qualification', QualificationController::class);
     Route::resource('user', UserController::class);
 });
 
@@ -100,4 +102,4 @@ Route::middleware(Authenticate::fromParam('attendee'))
         Route::post('respond/{booking}/{attendee}', 'store')->scopeBindings();
     });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

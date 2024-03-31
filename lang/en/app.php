@@ -1,5 +1,9 @@
 <?php
 
+use App\Enums\ScoutPermitActivity;
+use App\Enums\ScoutPermitCategory;
+use App\Enums\ScoutPermitType;
+
 return [
     'attendee' => [
         'status' => [
@@ -14,6 +18,27 @@ return [
             'confirmed' => 'Confirmed',
             'tentative' => 'Tentative',
             'cancelled' => 'Cancelled',
+        ],
+    ],
+    'qualification' => [
+        'type' => [
+            App\Models\ScoutPermit::class => 'Scout Permit',
+        ],
+    ],
+    'scout-permit' => [
+        'activity' => [
+            ScoutPermitActivity::ClimbingAndAbseiling->value => 'Climbing and Abseiling',
+        ],
+        'category' => [
+            ScoutPermitCategory::ArtificialTopRope->value => 'Artificial Top Rope',
+            ScoutPermitCategory::NaturalTopRope->value => 'Natural Top Rope',
+            ScoutPermitCategory::ArtificialLeadClimbing->value => 'Artificial Lead Climbing',
+            ScoutPermitCategory::NaturalLeadClimbing->value => 'Natural Lead Climbing',
+        ],
+        'permit-type' => [
+            ScoutPermitType::Personal->value => 'Personal',
+            ScoutPermitType::Leadership->value => 'Leadership',
+            ScoutPermitType::Supervisory->value => 'Supervisory',
         ],
     ],
     'user' => [

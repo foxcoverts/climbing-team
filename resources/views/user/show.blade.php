@@ -164,6 +164,11 @@
                     @lang('Bookings')
                 </x-button.secondary>
             @endcan
+            @can('viewAny', [App\Models\Qualification::class, $user])
+                <x-button.secondary :href="route('user.qualification.index', $user)">
+                    @lang('Qualifications')
+                </x-button.secondary>
+            @endcan
         </footer>
     </section>
 </x-layout.app>
