@@ -1,5 +1,6 @@
 @use('App\Enums\Accreditation')
 @use('App\Enums\Role')
+@use('Carbon\Carbon')
 @use('Illuminate\Contracts\Auth\Access\Gate')
 <x-layout.app :title="__(':name - Attendance', ['name' => $attendee->name])">
     <section class="p-4 sm:px-8">
@@ -32,6 +33,55 @@
                             <x-badge.under-18 class="text-sm" />
                         @endif
                     </div>
+
+                    @if ($attendee->isPermitHolder())
+                        @can('viewAny', [App\Models\Qualification::class, $attendee])
+                            <div x-data="{ open: false }">
+                                <h3 class="text-lg my-2 flex items-center gap-1">
+                                    <button @click="open = !open" x-bind:aria-pressed="open"
+                                        class="flex items-center space-x-1">
+                                        <x-icon.cheveron-down aria-hidden="true"
+                                            class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
+                                        <span>@lang('Qualifications')</span>
+                                    </button>
+                                    <hr class="grow" role="presentation" />
+                                </h3>
+                                <div class="mb-3" x-cloak x-show="open" x-transition>
+                                    <div class="text-gray-700 dark:text-gray-300 divide-y">
+                                        @forelse ($attendee->qualifications as $qualification)
+                                            <div class="pl-5 py-2 first:pt-0 last:pb-0">
+                                                <div class="list-item list-disc">
+                                                    <h4 class="font-medium text-gray-900 dark:text-gray-100">
+                                                        {{ $qualification->detail->summary }}</h4>
+                                                    @if ($qualification->detail instanceof \App\Models\ScoutPermit)
+                                                        <p><dfn
+                                                                class="not-italic font-medium text-gray-900 dark:text-gray-100">@lang('Restrictions'):</dfn>
+                                                            {{ $qualification->detail->restrictions }}
+                                                        </p>
+                                                    @endif
+                                                    @if ($qualification->expires_on)
+                                                        <p><dfn
+                                                                class="not-italic font-medium text-gray-900 dark:text-gray-100">@lang('Expires')</dfn>
+                                                            <span class="cursor-default"
+                                                                title="{{ $qualification->expires_on->toFormattedDayDateString() }}">
+                                                                @if ($qualification->expires_on->isToday())
+                                                                    @lang('today')
+                                                                @else
+                                                                    {{ $qualification->expires_on->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}
+                                                                @endif
+                                                            </span>
+                                                        </p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <p class="px-3 py-2">@lang('This user has no qualifications.')</p>
+                                        @endforelse
+                                    </div>
+                                </div>
+                            </div>
+                        @endcan
+                    @endif
 
                     @can('contact', $attendee->attendance)
                         @if ($attendee->phone)

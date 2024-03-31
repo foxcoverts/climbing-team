@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Actions\RespondToBookingAction;
-use App\Enums\AttendeeStatus;
 use App\Http\Requests\StoreBookingAttendeeRequest;
 use App\Http\Requests\UpdateBookingAttendeeRequest;
 use App\Models\Attendance;
@@ -13,7 +12,6 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,7 +83,7 @@ class BookingAttendeeController extends Controller
 
         return view('booking.attendee.show', [
             'booking' => $booking,
-            'attendee' => $attendee,
+            'attendee' => $attendee->load('qualifications', 'qualifications.detail'),
         ]);
     }
 

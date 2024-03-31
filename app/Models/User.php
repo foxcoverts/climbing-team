@@ -84,7 +84,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function qualifications(): HasMany
     {
-        return $this->hasMany(Qualification::class)->notExpired();
+        return $this->hasMany(Qualification::class)->notExpired()->ordered();
     }
 
     public function allQualifications(): HasMany
