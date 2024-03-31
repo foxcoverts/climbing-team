@@ -33,12 +33,12 @@
                     <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                         ::class="open ? '' : '-rotate-90'" />
                     <span>@lang("app.attendee.status.$status")</span>
-                    <span x-show="!open" x-transition
+                    <span {{ $status != 'accepted' ? '' : 'x-cloak' }} x-show="!open" x-transition
                         class="bg-gray-200 dark:bg-gray-600 dark:text-white px-2 rounded-xl">{{ count($list) }}</span>
                 </button>
                 <hr class="grow" role="presentation" />
             </h3>
-            <ul class="mb-3 space-y-1" x-show="open" x-transition>
+            <ul class="mb-3 space-y-1" {{ $status == 'accepted' ? '' : 'x-cloak' }} x-show="open" x-transition>
                 @foreach ($list as $attendee)
                     @php($attendee->attendance->booking = $booking)
                     <li class='list-disc ml-5'>
