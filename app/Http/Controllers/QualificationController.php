@@ -22,7 +22,7 @@ class QualificationController extends Controller
 
         return view('qualification.index', [
             'user' => $user,
-            'qualifications' => $user->qualifications()->with('detail')->get(),
+            'qualifications' => $user->qualifications()->with('detail')->ordered()->get(),
         ]);
     }
 

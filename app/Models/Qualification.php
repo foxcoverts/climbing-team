@@ -51,4 +51,9 @@ class Qualification extends Model
                 });
         });
     }
+
+    public function scopeOrdered(Builder $qualifications): void
+    {
+        $qualifications->orderBy('expires_on');
+    }
 }
