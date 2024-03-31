@@ -5,7 +5,7 @@
     <section class="p-4 sm:px-8 max-w-xl">
         <header>
             <h1 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
-                @lang('Add Qualification')
+                {{ $user->name }} - @lang('Add Qualification')
             </h1>
         </header>
 
@@ -39,13 +39,6 @@
                 },
             }" x-on:submit="setTimeout(() => submitted = true, 0)">
             @csrf
-
-            <div>
-                <x-fake-label for="user" :value="__('User')" />
-                <x-fake-input class="mt-1 block w-full">
-                    {{ $user->name }}
-                </x-fake-input>
-            </div>
 
             <div>
                 <x-input-label for="detail_type" :value="__('Qualification Type')" />

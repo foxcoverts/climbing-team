@@ -50,13 +50,6 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * Relationships that should always be eager loaded.
-     */
-    protected $with = [
-        'user_accreditations',
-    ];
-
-    /**
      * The model's default values for attributes.
      *
      * @var array
@@ -91,7 +84,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function qualifications(): HasMany
     {
-        return $this->hasMany(Qualification::class);
+        return $this->hasMany(Qualification::class)->notExpired();
     }
 
     public function user_accreditations(): HasMany
@@ -101,8 +94,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAccreditationsAttribute(): Collection
     {
-        return $this->user_accreditations
-            ->pluck('accreditation');
+        return $this->user_accreditations->pluck('accreditation');
     }
 
     /**
@@ -162,7 +154,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isPermitHolder(): bool
     {
-        return $this->accreditations->contains(Accreditation::PermitHolder);
+        return $this->qualifications->count() > 0;
     }
 
     public function isBookingManager(): bool

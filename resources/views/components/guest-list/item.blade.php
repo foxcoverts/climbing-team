@@ -10,7 +10,7 @@
     @endcan
 
     @if ($attendee->isPermitHolder())
-        <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-xs" />
+        <x-badge.permit-holder class="text-xs" />
     @endif
 
     @if ($attendee->isGuest())

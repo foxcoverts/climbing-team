@@ -46,13 +46,14 @@ class GuestList extends Component
 
     public function attendees(): Collection
     {
-        $attendees = $this->booking->attendees()->with('user_accreditations');
+        $attendees = $this->booking->attendees()->with('qualifications');
         if ($this->booking->lead_instructor_id) {
             $attendees->whereNot('users.id', $this->booking->lead_instructor_id);
         }
         if ($this->currentUser->isGuest()) {
             $attendees->where('users.id', $this->currentUser->id);
         }
+
         return $attendees
             ->orderBy('booking_user.status')
             ->orderBy('users.name')

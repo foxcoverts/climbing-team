@@ -46,7 +46,6 @@ return [
             'manage-bookings' => 'Manage Bookings',
             'manage-qualifications' => 'Manage Qualifications',
             'manage-users' => 'Manage Users',
-            'permit-holder' => 'Permit Holder',
         ],
         'role' => [
             'guest' => 'Guest',

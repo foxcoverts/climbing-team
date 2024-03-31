@@ -21,7 +21,7 @@ class UserController extends Controller
         Gate::authorize('viewAny', User::class);
 
         return view('user.index', [
-            'users' => User::orderBy('name')->get()
+            'users' => User::orderBy('name')->with('qualifications', 'user_accreditations')->get(),
         ]);
     }
 
@@ -73,7 +73,7 @@ class UserController extends Controller
         Gate::authorize('view', $user);
 
         return view('user.show', [
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -100,7 +100,7 @@ class UserController extends Controller
         Gate::authorize('update', $user);
 
         return view('user.edit', [
-            'user' => $user
+            'user' => $user,
         ]);
     }
 

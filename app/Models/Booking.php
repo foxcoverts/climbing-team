@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
 {
-    use HasFactory, HasUlids, SoftDeletes, Concerns\HasSequence, Concerns\HasUid;
+    use Concerns\HasSequence, Concerns\HasUid, HasFactory, HasUlids, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -66,7 +66,7 @@ class Booking extends Model
         return [
             'start_at',
             'end_at',
-            'status'
+            'status',
         ];
     }
 
@@ -94,6 +94,7 @@ class Booking extends Model
         if (is_null($this->end_at)) {
             return false;
         }
+
         return $this->end_at->isPast();
     }
 
@@ -105,6 +106,7 @@ class Booking extends Model
         if (is_null($this->end_at)) {
             return false;
         }
+
         return $this->end_at->endOfDay()->isPast();
     }
 
@@ -113,6 +115,7 @@ class Booking extends Model
         if (is_null($this->start_at) || is_null($this->end_at)) {
             return false;
         }
+
         return $this->start_at->startOfDay()->isPast()
             && $this->end_at->endOfDay()->isFuture();
     }
@@ -122,28 +125,28 @@ class Booking extends Model
         if (is_null($this->end_at)) {
             return false;
         }
+
         return $this->end_at->isFuture();
     }
 
     public function isCancelled(): bool
     {
-        return ($this->status == BookingStatus::Cancelled);
+        return $this->status == BookingStatus::Cancelled;
     }
 
     public function isConfirmed(): bool
     {
-        return ($this->status == BookingStatus::Confirmed);
+        return $this->status == BookingStatus::Confirmed;
     }
 
     public function isTentative(): bool
     {
-        return ($this->status == BookingStatus::Tentative);
+        return $this->status == BookingStatus::Tentative;
     }
 
     /**
      * Sort bookings by start & end.
      *
-     * @param Builder $bookings
      * @return void
      */
     public function scopeOrdered(Builder $bookings)
@@ -154,7 +157,6 @@ class Booking extends Model
     /**
      * Bookings that are not cancelled.
      *
-     * @param Builder $bookings
      * @return void
      */
     public function scopeNotCancelled(Builder $bookings)
@@ -164,11 +166,6 @@ class Booking extends Model
 
     /**
      * Find all bookings within the given start & end dates.
-     *
-     * @param Builder $bookings
-     * @param string $start
-     * @param string $end
-     * @return void
      */
     public function scopeBetween(Builder $bookings, string $start, string $end): void
     {
@@ -179,9 +176,6 @@ class Booking extends Model
 
     /**
      * Bookings that have not finished yet.
-     *
-     * @param Builder $bookings
-     * @return void
      */
     public function scopeFuture(Builder $bookings): void
     {
@@ -191,10 +185,7 @@ class Booking extends Model
     /**
      * Bookings having the given attendee.
      *
-     * @param Builder $bookings
-     * @param User $attendee
-     * @param AttendeeStatus[] $status  (default excludes `Declined`)
-     * @return void
+     * @param  AttendeeStatus[]  $status  (default excludes `Declined`)
      */
     public function scopeAttendeeStatus(Builder $bookings, User $attendee, array $status = []): void
     {
@@ -210,16 +201,12 @@ class Booking extends Model
 
     /**
      * Bookings that the given User should be able to view.
-     *
-     * @param Builder $bookings
-     * @param User $user
-     * @return void
      */
     public function scopeForUser(Builder $bookings, User $user): void
     {
         if ($user->isGuest()) {
             $bookings->attendeeStatus($user);
-        } else if ($user->cannot('manage', Booking::class)) {
+        } elseif ($user->cannot('manage', Booking::class)) {
             $bookings->where(function (Builder $query) use ($user) {
                 $query->attendeeStatus($user)
                     ->orWhereIn('status', [BookingStatus::Confirmed]);

@@ -13,6 +13,9 @@
                 @if ($user->isUnder18())
                     <x-badge color="pink" class="text-sm" :label="__('Under 18')" />
                 @endif
+                @if ($user->isPermitHolder())
+                    <x-badge.permit-holder class="text-sm" />
+                @endif
                 @foreach ($user->accreditations as $accreditation)
                     <x-badge.accreditation :accreditation="$accreditation" class="text-sm" />
                 @endforeach

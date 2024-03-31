@@ -20,7 +20,7 @@
     }">
         <header>
             <h1 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
-                @lang('Edit Qualification')
+                {{ $user->name }} - @lang('Edit Qualification')
             </h1>
         </header>
 
@@ -28,13 +28,6 @@
             class="mt-6 space-y-6" x-on:submit="setTimeout(() => submitted = true, 0)">
             @csrf
             @method('PATCH')
-
-            <div>
-                <x-fake-label for="user" :value="__('User')" />
-                <x-fake-input class="mt-1 block w-full">
-                    {{ $user->name }}
-                </x-fake-input>
-            </div>
 
             <div>
                 <x-fake-label :value="__('Qualification Type')" />

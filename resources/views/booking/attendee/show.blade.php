@@ -21,7 +21,7 @@
                         @endif
 
                         @if ($attendee->isPermitHolder())
-                            <x-badge.accreditation :accreditation="Accreditation::PermitHolder" class="text-sm" />
+                            <x-badge.permit-holder class="text-sm" />
                         @endif
 
                         @if ($attendee->isGuest())

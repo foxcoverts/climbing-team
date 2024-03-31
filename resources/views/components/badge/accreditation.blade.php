@@ -2,10 +2,6 @@
 @props(['accreditation'])
 
 @switch($accreditation)
-    @case(Accreditation::PermitHolder)
-        @php($color = 'sky')
-    @break
-
     @case(Accreditation::ManageBookings)
     @case(Accreditation::ManageQualifications)
 

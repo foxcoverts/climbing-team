@@ -51,19 +51,16 @@
                         </td>
                         <td class="px-1 text-center hidden sm:table-cell">
                             @if ($user->isPermitHolder())
-                                <x-badge.accreditation :accreditation="Accreditation::PermitHolder"
-                                    class="text-sm text-nowrap whitespace-nowrap" />
+                                <x-badge.permit-holder class="text-sm text-nowrap whitespace-nowrap" />
                             @endif
                         </td>
                         <td class="px-1 text-center hidden xl:table-cell">
                             <div class="flex items-center justify-center gap-1">
                                 @foreach (Accreditation::cases() as $accreditation)
-                                    @unless ($accreditation == Accreditation::PermitHolder)
-                                        @if ($user->accreditations->contains($accreditation))
-                                            <x-badge.accreditation :accreditation="$accreditation"
-                                                class="text-sm text-nowrap whitespace-nowrap" />
-                                        @endif
-                                    @endunless
+                                    @if ($user->accreditations->contains($accreditation))
+                                        <x-badge.accreditation :accreditation="$accreditation"
+                                            class="text-sm text-nowrap whitespace-nowrap" />
+                                    @endif
                                 @endforeach
                             </div>
                         </td>
