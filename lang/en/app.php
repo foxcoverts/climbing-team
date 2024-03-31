@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\MountainTrainingAward;
 use App\Enums\ScoutPermitActivity;
 use App\Enums\ScoutPermitCategory;
 use App\Enums\ScoutPermitType;
@@ -20,8 +21,19 @@ return [
             'cancelled' => 'Cancelled',
         ],
     ],
+    'mountain-training' => [
+        'award' => [
+            MountainTrainingAward::IndoorClimbingAssistant->value => 'Indoor Climbing Assistant',
+            MountainTrainingAward::ClimbingWallInstructor->value => 'Climbing Wall Instructor',
+            MountainTrainingAward::ClimbingWallInstructorAbseil->value => 'Climbing Wall Instructor Abseil',
+            MountainTrainingAward::ClimbingWallDevelopmentInstructor->value => 'Climbing Wall Development Instructor',
+            MountainTrainingAward::RockClimbingInstructor->value => 'Rock Climbing Instructor',
+            MountainTrainingAward::RockClimbingDevelopmentInstructor->value => 'Rock Climbing Development Instructor',
+        ],
+    ],
     'qualification' => [
         'type' => [
+            App\Models\MountainTrainingQualification::class => 'Mountain Training',
             App\Models\ScoutPermit::class => 'Scout Permit',
         ],
     ],

@@ -59,6 +59,10 @@ class Qualification extends Model
 
     public function isExpired(): bool
     {
+        if (is_null($this->expires_on)) {
+            return false;
+        }
+
         return $this->expires_on->endOfDay()->isPast();
     }
 }

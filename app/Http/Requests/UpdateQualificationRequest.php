@@ -2,11 +2,15 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\MountainTrainingAward;
 use App\Enums\ScoutPermitActivity;
 use App\Enums\ScoutPermitCategory;
 use App\Enums\ScoutPermitType;
+use App\Models\MountainTrainingQualification;
 use App\Models\ScoutPermit;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class UpdateQualificationRequest extends FormRequest
@@ -19,9 +23,31 @@ class UpdateQualificationRequest extends FormRequest
     public function rules(): array
     {
         return match ($this->qualification->detail_type) {
+            MountainTrainingQualification::class => $this->mountainTrainingRules(),
             ScoutPermit::class => $this->scoutPermitRules(),
             default => [],
         };
+    }
+
+    protected function mountainTrainingRules(): array
+    {
+        return [
+            'award' => [
+                'required',
+                'string',
+                Rule::enum(MountainTrainingAward::class),
+                Rule::unique('mountain_training_qualifications')
+                    ->ignore($this->qualification)
+                    ->where(fn (Builder $query) => $query
+                        ->whereExists(fn (Builder $where) => $where->select(DB::raw(1))
+                            ->from('qualifications')
+                            ->where('qualifications.detail_type', MountainTrainingQualification::class)
+                            ->whereColumn('mountain_training_qualifications.id', 'qualifications.detail_id')
+                            ->where('qualifications.user_id', $this->user->id)
+                        )
+                    ),
+            ],
+        ];
     }
 
     protected function scoutPermitRules(): array

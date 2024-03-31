@@ -17,14 +17,15 @@
                             href="{{ route('user.qualification.show', [$user, $qualification]) }}">{{ $qualification->detail->summary }}</a>
                     </h3>
                     <p><dfn class="not-italic font-medium">@lang('Type'):</dfn> @lang('app.qualification.type.' . $qualification->detail_type)</p>
-                    <p><dfn class="not-italic font-medium">
-                            @if ($qualification->isExpired())
-                                @lang('Expired')
-                            @else
-                                @lang('Expires')
-                            @endif
-                        </dfn>
-                        @if ($qualification->expires_on)
+                    @if ($qualification->expires_on)
+                        <p><dfn class="not-italic font-medium">
+                                @if ($qualification->isExpired())
+                                    @lang('Expired')
+                                @else
+                                    @lang('Expires')
+                                @endif
+                            </dfn>
+
                             <span @class([
                                 'cursor-default',
                                 'text-red-500' => $qualification->isExpired(),
@@ -36,10 +37,8 @@
                                     {{ $qualification->expires_on->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}
                                 @endif
                             </span>
-                        @else
-                            <em>@lang('Unlimited')</em>
-                        @endif
-                    </p>
+                        </p>
+                    @endif
                 </div>
             @empty
                 <p class="px-3 py-2">@lang('This user has no qualifications.')</p>
@@ -87,7 +86,7 @@
                                         @endif
                                     </span>
                                 @else
-                                    <em>@lang('Unlimited')</em>
+                                    <em>@lang('unlimited')</em>
                                 @endif
                             </td>
                         </tr>

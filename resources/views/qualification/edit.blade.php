@@ -1,3 +1,4 @@
+@use('App\Enums\MountainTrainingAward')
 @use('App\Enums\ScoutPermitActivity')
 @use('App\Enums\ScoutPermitCategory')
 @use('App\Enums\ScoutPermitType')
@@ -11,6 +12,9 @@
         ]) }},
         isScoutPermit() {
             return this.qualification.detail_type == 'App\\Models\\ScoutPermit';
+        },
+        isMountainTraining() {
+            return this.qualification.detail_type == 'App\\Models\\MountainTrainingQualification';
         },
         init() {
             if (this.qualification.detail_type == 'App\\Models\\ScoutPermit') {
@@ -35,6 +39,22 @@
                     @lang('app.qualification.type.' . $qualification->detail_type)
                 </x-fake-input>
             </div>
+
+            <template x-if="isMountainTraining">
+                <div class="space-y-6">
+                    <div>
+                        <x-input-label for="award" :value="__('Award')" />
+                        <x-select-input id="award" name="award" class="mt-1 block" required
+                            x-model="qualification.award">
+                            <template x-if="!qualification.award">
+                                <option value="" selected></option>
+                            </template>
+                            <x-select-input.enum :options="MountainTrainingAward::class" lang="app.mountain-training.award.:value" />
+                        </x-select-input>
+                        <x-input-error class="mt-2" :messages="$errors->get('award')" />
+                    </div>
+                </div>
+            </template>
 
             <template x-if="isScoutPermit" x-data="{
                 activities: {{ Js::from([

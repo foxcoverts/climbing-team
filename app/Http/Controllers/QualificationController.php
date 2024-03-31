@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreQualificationRequest;
 use App\Http\Requests\UpdateQualificationRequest;
 use App\Models\Qualification;
-use App\Models\ScoutPermit;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
@@ -49,12 +48,15 @@ class QualificationController extends Controller
     {
         Gate::authorize('create', [Qualification::class, $user]);
 
-        $permit = ScoutPermit::create($request->safe()->except(['detail_type', 'expires_on']));
+        $detail_type = $request->safe()->detail_type;
+
+        $detail = new $detail_type($request->safe()->except(['detail_type', 'expires_on']));
+        $detail->save();
 
         $qualification = new Qualification;
         $qualification->fill($request->safe()->only('expires_on'));
         $qualification->user()->associate($user);
-        $qualification->detail()->associate($permit);
+        $qualification->detail()->associate($detail);
         $qualification->save();
 
         return redirect()->route('user.qualification.show', [$user, $qualification])
@@ -94,12 +96,9 @@ class QualificationController extends Controller
     {
         Gate::authorize('update', $qualification);
 
-        dd($request->safe());
+        $qualification->detail->update($request->safe()->except(['detail_type', 'expires_on']));
 
-        $qualification->detail->update($request->safe()->detail);
-
-        $qualification->expires_on = $request->safe()->expires_on;
-        $qualification->save();
+        $qualification->update($request->safe()->only('expires_on'));
 
         return redirect()->route('user.qualification.show', [$user, $qualification])
             ->with('alert.info', __('Qualification updated.'));

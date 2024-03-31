@@ -1,3 +1,4 @@
+@use('App\Enums\MountainTrainingAward')
 @use('App\Enums\ScoutPermitActivity')
 @use('App\Enums\ScoutPermitCategory')
 @use('App\Enums\ScoutPermitType')
@@ -16,11 +17,14 @@
                     'detail_type' => old('detail_type', $qualification->detail_type),
                     'expires_on' => old('expires_on', $qualification->expires_on?->format('Y-m-d')),
                 ]) }},
+                isMountainTraining() {
+                    return this.qualification.detail_type == 'App\\Models\\MountainTrainingQualification';
+                },
                 isScoutPermit() {
                     return this.qualification.detail_type == 'App\\Models\\ScoutPermit';
                 },
                 freshDetail() {
-                    if (this.qualification.detail_type == 'App\\Models\\ScoutPermit') {
+                    if (this.isScoutPermit()) {
                         this.qualification = {
                             detail_type: this.qualification.detail_type,
                             expires_on: this.qualification.expires_on,
@@ -29,6 +33,13 @@
                             category: 'Artificial Top Rope',
                             permit_type: 'leadership',
                             restrictions: '',
+                        };
+                    } else if (this.isMountainTraining()) {
+                        this.qualification = {
+                            detail_type: this.qualification.detail_type,
+                            expires_on: this.qualification.expires_on,
+            
+                            award: '',
                         };
                     } else {
                         this.qualification = {
@@ -47,12 +58,28 @@
                     <template x-if="!qualification.detail_type">
                         <option value="" selected></option>
                     </template>
-                    @foreach ([\App\Models\ScoutPermit::class] as $qualification_type)
+                    @foreach ([\App\Models\MountainTrainingQualification::class, \App\Models\ScoutPermit::class] as $qualification_type)
                         <option value="{{ $qualification_type }}">@lang("app.qualification.type.$qualification_type")</option>
                     @endforeach
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('detail_type')" />
             </div>
+
+            <template x-if="isMountainTraining">
+                <div class="space-y-6">
+                    <div>
+                        <x-input-label for="award" :value="__('Award')" />
+                        <x-select-input id="award" name="award" class="mt-1 block" required
+                            x-model="qualification.award">
+                            <template x-if="!qualification.award">
+                                <option value="" selected></option>
+                            </template>
+                            <x-select-input.enum :options="MountainTrainingAward::class" lang="app.mountain-training.award.:value" />
+                        </x-select-input>
+                        <x-input-error class="mt-2" :messages="$errors->get('award')" />
+                    </div>
+                </div>
+            </template>
 
             <template x-if="isScoutPermit" x-data="{
                 activities: {{ Js::from([
