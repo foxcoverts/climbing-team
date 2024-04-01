@@ -102,7 +102,7 @@
         </div>
 
         <footer class="flex items-start gap-4 mt-6 px-4 sm:px-8">
-            @can('create', [$user, App\Models\Qualification::class])
+            @can('create', [App\Models\Qualification::class, $user])
                 <x-button.primary :href="route('user.qualification.create', $user)">
                     @lang('Add')
                 </x-button.primary>

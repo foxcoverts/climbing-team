@@ -152,6 +152,17 @@
                     @lang('Edit')
                 </x-button.primary>
             @endcan
+            @can('manage', \App\Models\Booking::class)
+                <x-button.secondary :href="route('user.booking.index', $user)">
+                    @lang('Bookings')
+                </x-button.secondary>
+            @endcan
+            @can('viewAny', [\App\Models\Qualification::class, $user])
+                <x-button.secondary :href="route('user.qualification.index', $user)">
+                    @lang('Qualifications')
+                </x-button.secondary>
+            @endcan
+
             @if (!$user->isActive())
                 @can('update', $user)
                     <form method="post" action="{{ route('user.invite', $user) }}" x-data="{ submitted: false }"
@@ -162,16 +173,6 @@
                     </form>
                 @endcan
             @endif
-            @can('manage', App\Models\Booking::class)
-                <x-button.secondary :href="route('user.booking.index', $user)">
-                    @lang('Bookings')
-                </x-button.secondary>
-            @endcan
-            @can('viewAny', [App\Models\Qualification::class, $user])
-                <x-button.secondary :href="route('user.qualification.index', $user)">
-                    @lang('Qualifications')
-                </x-button.secondary>
-            @endcan
         </footer>
     </section>
 </x-layout.app>

@@ -72,12 +72,12 @@
         </article>
 
         <footer class="flex items-start gap-4 mt-6">
-            @can('update', [$user, $qualification])
+            @can('update', $qualification)
                 <x-button.primary :href="route('user.qualification.edit', [$user, $qualification])">
                     @lang('Edit')
                 </x-button.primary>
             @endcan
-            @can('manage', App\Models\Qualification::class)
+            @can('viewAny', [App\Models\Qualification::class, $user])
                 <x-button.secondary :href="route('user.qualification.index', $user)">
                     @lang('Back')
                 </x-button.secondary>

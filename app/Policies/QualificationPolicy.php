@@ -20,9 +20,10 @@ class QualificationPolicy
      */
     public function viewAny(User $user, User $model): bool
     {
-        return $user->can('view', $user) && (
-            $user->can('manage', Qualification::class) || ($user->id == $model->id)
-        );
+        return ($user->id == $model->id) ||
+            (isset($model->attendance) && $user->can('view', $model->attendance)) ||
+            $user->can('manage', Qualification::class) ||
+            $user->can('view', $model);
     }
 
     /**
@@ -30,17 +31,17 @@ class QualificationPolicy
      */
     public function view(User $user, Qualification $qualification): bool
     {
-        return $user->can('view', $user) && (
-            $user->can('manage', Qualification::class) || ($user->id == $qualification->user_id)
-        );
+        return ($user->id == $qualification->user_id) ||
+            $user->can('manage', Qualification::class) ||
+            $user->can('view', $qualification->user);
     }
 
     /**
      * Determine whether the user can create qualifications.
      */
-    public function create(User $user): bool
+    public function create(User $user, User $model): bool
     {
-        return $user->can('view', $user) && $user->can('manage', Qualification::class);
+        return $user->can('view', $model) && $user->can('manage', Qualification::class);
     }
 
     /**
@@ -48,7 +49,7 @@ class QualificationPolicy
      */
     public function update(User $user, Qualification $qualification): bool
     {
-        return $user->can('view', $user) && $user->can('manage', Qualification::class);
+        return $user->can('view', $qualification->user) && $user->can('manage', Qualification::class);
     }
 
     /**
@@ -56,6 +57,6 @@ class QualificationPolicy
      */
     public function delete(User $user, Qualification $qualification): bool
     {
-        return $user->can('view', $user) && $user->can('manage', Qualification::class);
+        return $user->can('view', $qualification->user) && $user->can('manage', Qualification::class);
     }
 }
