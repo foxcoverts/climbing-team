@@ -43,24 +43,21 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        if ($model->isTeamLeader() && !$user->isTeamLeader()) {
+        if ($model->isTeamLeader() && ! $user->isTeamLeader()) {
             // Only team leaders can update other team leaders.
             return false;
         }
+
         return $user->is($model) || $this->manage($user);
     }
 
     /**
      * Determine whether the user can manage the model's role and accreditations.
-     *
-     * @param User $user
-     * @param User $model
-     * @return boolean
      */
     public function accredit(User $user, User $model): bool
     {
         // Only team leaders can manage accreditations
-        return $user->isTeamLeader() && $this->manage($user);
+        return $user->isTeamLeader();
     }
 
     /**
@@ -70,7 +67,7 @@ class UserPolicy
     {
         if ($model->isTeamLeader()) {
             // Team Leaders can only be deleted by another Team Leader.
-            return $user->isTeamLeader() && !$user->is($model);
+            return $user->isTeamLeader() && ! $user->is($model);
         }
 
         return $user->is($model) || $this->manage($user);

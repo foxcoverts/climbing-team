@@ -89,26 +89,28 @@
                 <fieldset>
                     <legend class="text-lg font-medium mb-1">@lang('Settings')</legend>
                     <div class="space-y-6">
-                        <div>
-                            <x-input-label for="section" :value="__('Section')" />
-                            <x-select-input id="section" name="section" class="mt-1 block" required
-                                x-model="user.section">
-                                <x-select-input.enum :options="Section::class" lang="app.user.section.:value" />
-                            </x-select-input>
-                            <x-input-error class="mt-2" :messages="$errors->get('section')" />
-                        </div>
+                        @can('manage', $user)
+                            <div>
+                                <x-input-label for="section" :value="__('Section')" />
+                                <x-select-input id="section" name="section" class="mt-1 block" required
+                                    x-model="user.section">
+                                    <x-select-input.enum :options="Section::class" lang="app.user.section.:value" />
+                                </x-select-input>
+                                <x-input-error class="mt-2" :messages="$errors->get('section')" />
+                            </div>
 
-                        <div>
-                            <x-input-label for="role" :value="__('Role')" />
-                            <x-select-input id="role" name="role" class="mt-1 block" required
-                                x-model="user.role">
-                                @foreach (Role::cases() as $option)
-                                    <option value="{{ $option->value }}" @disabled(auth()->user()->role->compare($option) < 0)>
-                                        @lang('app.user.role.' . $option->value)
-                                    </option>
-                                @endforeach
-                            </x-select-input>
-                        </div>
+                            <div>
+                                <x-input-label for="role" :value="__('Role')" />
+                                <x-select-input id="role" name="role" class="mt-1 block" required
+                                    x-model="user.role">
+                                    @foreach (Role::cases() as $option)
+                                        <option value="{{ $option->value }}" @disabled(auth()->user()->role->compare($option) < 0)>
+                                            @lang('app.user.role.' . $option->value)
+                                        </option>
+                                    @endforeach
+                                </x-select-input>
+                            </div>
+                        @endcan
 
                         @can('accredit', $user)
                             <fieldset x-data="checkboxes({{ Js::from(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations"

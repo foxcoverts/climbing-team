@@ -25,9 +25,12 @@ class UpdateUserRequest extends FormRequest
             'emergency_name' => ['nullable', 'required_with:emergency_phone', 'string', 'max:100'],
             'emergency_phone' => ['nullable', 'required_with:emergency_name', 'phone:INTERNATIONAL,GB'],
             'timezone' => ['required', 'string', 'max:100', 'timezone:all'],
-            'section' => ['required', Rule::enum(Section::class)],
-            'role' => ['required', Rule::enum(Role::class)],
         ];
+
+        if ($this->user()->can('manage', $this->user)) {
+            $rules['section'] = ['required', Rule::enum(Section::class)];
+            $rules['role'] = ['required', Rule::enum(Role::class)];
+        }
 
         if ($this->user()->can('accredit', $this->user)) {
             $rules['accreditations.*'] = [Rule::enum(Accreditation::class)];
