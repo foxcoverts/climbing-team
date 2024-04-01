@@ -11,7 +11,7 @@
 
         <div class="border divide-y max-w-xl">
             <h3><a href="{{ route($route, $post) }}"
-                    class="flex group justify-between px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
+                    class="flex flex-wrap gap-1 group justify-between px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
                     <span class="font-medium group-hover:underline">{{ $post->title }}</span>
                     @isset($post->date)
                         <span>@lang('Posted :ago', [
