@@ -23,8 +23,6 @@ class NewsPostRepository
 
     /**
      * List all new posts.
-     *
-     * @return Collection
      */
     public function all(): Collection
     {
@@ -38,34 +36,34 @@ class NewsPostRepository
     {
         return
             collect($this->filesystem->files())
-            ->reverse()
-            ->filter(fn ($filepath) => $this->filesystem->mimeType($filepath) == 'text/markdown')
-            ->take(1)
-            ->map(fn ($filepath) => $this->load($filepath))
-            ->first();
+                ->reverse()
+                ->filter(fn ($filepath) => $this->filesystem->mimeType($filepath) == 'text/markdown')
+                ->take(1)
+                ->map(fn ($filepath) => $this->load($filepath))
+                ->first();
     }
 
     /**
      * Attempt to find the named NewsPost.
      *
-     * @param string $filename
      * @throws ModelNotFoundException
-     * @return NewsPost
      */
     public function find(string $filename): NewsPost
     {
-        $post = $this->load($filename . '.md');
+        $post = $this->load($filename.'.md');
 
         if (is_null($post)) {
-            dd("$filename.md");
             throw new ModelNotFoundException;
         }
+
         return $post;
     }
 
     protected function load(string $filepath): ?NewsPost
     {
-        if ($this->filesystem->mimeType($filepath) != 'text/markdown') return null;
+        if ($this->filesystem->mimeType($filepath) != 'text/markdown') {
+            return null;
+        }
 
         $markdown = $this->filesystem->get($filepath);
 
