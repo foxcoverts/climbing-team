@@ -37,38 +37,61 @@
             @method('PATCH')
             @csrf
 
-            <div class="mt-6 space-y-6">
-                <div>
+            <div class="mt-6">
+                <div class="mb-6">
                     <x-input-label for="name" :value="__('Name')" />
                     <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" required
                         autofocus autocomplete="off" x-model="user.name" />
                     <x-input-error class="mt-2" :messages="$errors->get('name')" />
                 </div>
 
-                <div>
-                    <x-input-label for="email" :value="__('Email')" />
-                    <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" required
-                        autocomplete="off" x-model="user.email" />
-                    <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                <fieldset x-data="{ open: false }">
+                    <legend class="text-lg sm:text-xl font-medium my-2 flex items-center space-x-1">
+                        <button @click="open = !open" type="button" x-bind:aria-pressed="open"
+                            class="flex items-center space-x-1">
+                            <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                                ::class="open ? '' : '-rotate-90'" />
+                            <span>@lang('Contact Details')</span>
+                        </button>
+                    </legend>
 
-                    @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
-                        <div class="text-sm mt-2 text-orange-800 dark:text-orange-200">
-                            @lang('This email address is unverified.')
+                    <div class="space-y-6 mb-6" x-cloak x-show="open" x-transition>
+                        <div>
+                            <x-input-label for="email" :value="__('Email')" />
+                            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full"
+                                required autocomplete="off" x-model="user.email" />
+                            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+
+                            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
+                                <div class="text-sm mt-2 text-orange-800 dark:text-orange-200">
+                                    @lang('This email address is unverified.')
+                                </div>
+                            @endif
                         </div>
-                    @endif
-                </div>
 
-                <div>
-                    <x-input-label for="phone" :value="__('Phone')" />
-                    <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40"
-                        x-model="user.phone" x-mask:dynamic="$phone($input)" maxlength="15" />
-                    <x-input-error class="mt-2" :messages="$errors->get('phone')" />
-                </div>
+                        <div>
+                            <x-input-label for="phone" :value="__('Phone')" />
+                            <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-40"
+                                x-model="user.phone" x-mask:dynamic="$phone($input)" maxlength="15" />
+                            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                        </div>
+                    </div>
+                </fieldset>
 
-                <fieldset>
-                    <legend class="text-lg font-medium mb-1">@lang('Emergency Contact')</legend>
-                    <p class="mb-2 text-md text-blue-800 dark:text-blue-200">@lang('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.')</p>
-                    <div class="flex flex-wrap gap-6">
+                <fieldset x-data="{ open: false }">
+                    <legend class="text-lg sm:text-xl font-medium my-2 flex items-center space-x-1">
+                        <button @click="open = !open" type="button" x-bind:aria-pressed="open"
+                            class="flex items-center space-x-1">
+                            <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                                ::class="open ? '' : '-rotate-90'" />
+                            <span>@lang('Emergency Contact')</span>
+                        </button>
+                    </legend>
+
+                    <p class="text-md mb-2 text-blue-800 dark:text-blue-200" x-cloak x-show="open" x-transition>
+                        @lang('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.')</p>
+
+                    <div class="flex flex-wrap gap-6 mb-6" x-cloak x-show="open" x-transition>
                         <div class="grow shrink">
                             <x-input-label for="emergency_name" :value="__('Name')" />
                             <x-text-input id="emergency_name" name="emergency_name" class="mt-1 block w-full min-w-48"
@@ -86,9 +109,17 @@
                     </div>
                 </fieldset>
 
-                <fieldset>
-                    <legend class="text-lg font-medium mb-1">@lang('Settings')</legend>
-                    <div class="space-y-6">
+                <fieldset x-data="{ open: true }">
+                    <legend class="text-lg sm:text-xl font-medium my-2 flex items-center space-x-1">
+                        <button @click="open = !open" type="button" x-bind:aria-pressed="open"
+                            class="flex items-center space-x-1">
+                            <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                                ::class="open ? '' : '-rotate-90'" />
+                            <span>@lang('Settings')</span>
+                        </button>
+                    </legend>
+
+                    <div class="space-y-6 mb-6" x-show="open" x-transition>
                         @can('manage', $user)
                             <div>
                                 <x-input-label for="section" :value="__('Section')" />
@@ -126,8 +157,8 @@
 
                                 @foreach (Accreditation::cases() as $accreditation)
                                     <label class="flex w-full items-center gap-1">
-                                        <input type="checkbox" value="{{ $accreditation->value }}" name="accreditations[]"
-                                            x-model="values" />
+                                        <input type="checkbox" value="{{ $accreditation->value }}"
+                                            name="accreditations[]" x-model="values" />
                                         <span>@lang("app.user.accreditation.$accreditation->value")</span>
                                     </label>
                                 @endforeach
