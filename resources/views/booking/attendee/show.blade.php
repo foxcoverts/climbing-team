@@ -54,12 +54,12 @@
                                             @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
                                         </p>
                                         <p>
-                                            <button class="flex items-center pl-1 gap-1"
-                                                @click="gdprContact = !gdprContact">
-                                                <x-icon.empty-outline class="w-4 h-4 fill-current" x-show="!gdprContact" />
-                                                <x-icon.checkmark-outline class="w-4 h-4 fill-current" x-cloak
+                                            <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
+                                                <x-icon.empty-outline class="mt-1 w-4 h-4 fill-current"
+                                                    x-show="!gdprContact" />
+                                                <x-icon.checkmark-outline class="mt-1 w-4 h-4 fill-current" x-cloak
                                                     x-show="gdprContact" />
-                                                @lang('I have a legitimate reason to view these contact details')
+                                                <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
                                             </button>
                                         </p>
                                     </div>
@@ -97,12 +97,12 @@
                                             @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
                                         </p>
                                         <p>
-                                            <button class="flex items-center pl-1 gap-1"
-                                                @click="gdprContact = !gdprContact">
-                                                <x-icon.empty-outline class="w-4 h-4 fill-current" x-show="!gdprContact" />
-                                                <x-icon.checkmark-outline class="w-4 h-4 fill-current" x-cloak
+                                            <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
+                                                <x-icon.empty-outline class="my-1 w-4 h-4 fill-current"
+                                                    x-show="!gdprContact" />
+                                                <x-icon.checkmark-outline class="my-1 w-4 h-4 fill-current" x-cloak
                                                     x-show="gdprContact" />
-                                                @lang('I have a legitimate reason to view these contact details')
+                                                <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
                                             </button>
                                         </p>
                                     </div>
