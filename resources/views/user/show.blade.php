@@ -4,7 +4,7 @@
             <h2 class="text-2xl sm:text-3xl font-medium">{{ $user->name }}</h2>
         </header>
 
-        <div class="space-y-4 max-w-xl flex-grow">
+        <div class="max-w-xl flex-grow">
             <p class="flex flex-wrap gap-2 items-center mb-4">
                 @unless ($user->isActive())
                     <x-badge.active :active="false" class="text-sm" />
@@ -30,35 +30,50 @@
                     </button>
                 </h3>
                 <div class="space-y-2 sm:pl-5" x-show="open" x-cloak x-transition>
-                    <div>
-                        <x-fake-label :value="__('Email')" />
-                        <p class="text-gray-700 dark:text-gray-300">
-                            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
-                                @if ($user->hasVerifiedEmail())
-                                    <a href="mailto:{{ $user->email }}"
-                                        class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">{{ $user->email }}</a>
-                                    <x-badge color="lime" class="text-xs">
-                                        @lang('Verified')
-                                    </x-badge>
-                                @else
-                                    <span>{{ $user->email }}</span>
-                                    <x-badge color="pink" class="text-xs">
-                                        @lang('Unverified')
-                                    </x-badge>
-                                @endif
-                            @endif
+                    <div class="space-y-2" :class="gdprContact && 'text-gray-600 dark:text-gray-400'">
+                        <p><strong>@lang('Notice'):</strong>
+                            @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
+                        </p>
+                        <p>
+                            <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
+                                <x-icon.empty-outline class="mt-1 w-4 h-4 fill-current" x-show="!gdprContact" />
+                                <x-icon.checkmark-outline class="mt-1 w-4 h-4 fill-current" x-cloak
+                                    x-show="gdprContact" />
+                                <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
+                            </button>
                         </p>
                     </div>
-
-                    @if ($user->phone)
+                    <div class="space-y-2" x-cloak x-show="gdprContact" x-transition>
                         <div>
-                            <x-fake-label :value="__('Phone')" />
-                            <p class="text-gray-700 dark:text-gray-300"><a
-                                    class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                                    href="tel:{{ $user->phone?->formatForMobileDialingInCountry('GB') }}">{{ $user->phone?->formatForCountry('GB') }}</a>
+                            <x-fake-label :value="__('Email')" />
+                            <p class="text-gray-700 dark:text-gray-300">
+                                @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
+                                    @if ($user->hasVerifiedEmail())
+                                        <a href="mailto:{{ $user->email }}"
+                                            class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">{{ $user->email }}</a>
+                                        <x-badge color="lime" class="text-xs">
+                                            @lang('Verified')
+                                        </x-badge>
+                                    @else
+                                        <span>{{ $user->email }}</span>
+                                        <x-badge color="pink" class="text-xs">
+                                            @lang('Unverified')
+                                        </x-badge>
+                                    @endif
+                                @endif
                             </p>
                         </div>
-                    @endif
+
+                        @if ($user->phone)
+                            <div>
+                                <x-fake-label :value="__('Phone')" />
+                                <p class="text-gray-700 dark:text-gray-300"><a
+                                        class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                                        href="tel:{{ $user->phone?->formatForMobileDialingInCountry('GB') }}">{{ $user->phone?->formatForCountry('GB') }}</a>
+                                </p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
 
@@ -74,18 +89,33 @@
                             <span>@lang('Emergency Contact')</span>
                         </button>
                     </h3>
-                    <div class="space-y-2 sm:pl-5" x-cloak x-show="open" x-transition>
-                        <div>
-                            <x-fake-label :value="__('Name')" />
-                            <p class="text-gray-700 dark:text-gray-300">{{ $user->emergency_name }}</p>
-                        </div>
-
-                        <div>
-                            <x-fake-label :value="__('Phone')" />
-                            <p class="text-gray-700 dark:text-gray-300"><a
-                                    class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                                    href="tel:{{ $user->emergency_phone?->formatForMobileDialingInCountry('GB') }}">{{ $user->emergency_phone?->formatForCountry('GB') }}</a>
+                    <div class="space-y-4 sm:pl-5" x-cloak x-show="open" x-transition>
+                        <div class="space-y-2" :class="gdprContact && 'text-gray-600 dark:text-gray-400'">
+                            <p><strong>@lang('Notice'):</strong>
+                                @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
                             </p>
+                            <p>
+                                <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
+                                    <x-icon.empty-outline class="mt-1 w-4 h-4 fill-current" x-show="!gdprContact" />
+                                    <x-icon.checkmark-outline class="mt-1 w-4 h-4 fill-current" x-cloak
+                                        x-show="gdprContact" />
+                                    <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
+                                </button>
+                            </p>
+                        </div>
+                        <div class="space-y-2" x-cloak x-show="gdprContact" x-transition>
+                            <div>
+                                <x-fake-label :value="__('Name')" />
+                                <p class="text-gray-700 dark:text-gray-300">{{ $user->emergency_name }}</p>
+                            </div>
+
+                            <div>
+                                <x-fake-label :value="__('Phone')" />
+                                <p class="text-gray-700 dark:text-gray-300"><a
+                                        class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                                        href="tel:{{ $user->emergency_phone?->formatForMobileDialingInCountry('GB') }}">{{ $user->emergency_phone?->formatForCountry('GB') }}</a>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
