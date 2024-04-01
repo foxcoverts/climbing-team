@@ -48,7 +48,7 @@
                                     </button>
                                     <hr class="grow" role="presentation" />
                                 </h3>
-                                <div class="mb-3 space-y-4" x-show="open" x-transition>
+                                <div class="mb-3 space-y-4" x-cloak x-show="open" x-transition>
                                     <div class="space-y-2" :class="gdprContact && 'text-gray-600 dark:text-gray-400'">
                                         <p><strong>@lang('Notice'):</strong>
                                             @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
@@ -86,7 +86,7 @@
                                 </button>
                                 <hr class="grow" role="presentation" />
                             </h3>
-                            <div class="mb-3 space-y-4" x-show="open" x-transition>
+                            <div class="mb-3 space-y-4" x-cloak x-show="open" x-transition>
                                 @if (!$booking->isToday())
                                     <p>@lang('You may only access emergency contact details on the day of the booking. If you need these details now please contact the Team Leader or District Lead Volunteer who will look them up for you.')</p>
                                 @elseif (empty($attendee->emergency_phone))

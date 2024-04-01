@@ -18,9 +18,18 @@
                 @endforeach
             </p>
 
-            <div>
-                <h3 class="text-xl font-medium mb-2">@lang('Contact')</h3>
-                <div class="space-y-2">
+            <div x-data="{
+                open: false,
+                gdprContact: $persist(false).using(sessionStorage).as('gdpr-contact-{{ $user->id }}')
+            }">
+                <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
+                    <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
+                        <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                            ::class="open ? '' : '-rotate-90'" />
+                        <span>@lang('Contact Details')</span>
+                    </button>
+                </h3>
+                <div class="space-y-2 sm:pl-5" x-show="open" x-cloak x-transition>
                     <div>
                         <x-fake-label :value="__('Email')" />
                         <p class="text-gray-700 dark:text-gray-300">
@@ -54,9 +63,18 @@
             </div>
 
             @if ($user->emergency_name && $user->emergency_phone)
-                <div>
-                    <h3 class="text-xl font-medium mb-2">@lang('Emergency Contact')</h3>
-                    <div class="space-y-2">
+                <div x-data="{
+                    open: false,
+                    gdprContact: $persist(false).using(sessionStorage).as('gdpr-emergency-contact-{{ $user->id }}')
+                }">
+                    <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
+                        <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
+                            <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                                ::class="open ? '' : '-rotate-90'" />
+                            <span>@lang('Emergency Contact')</span>
+                        </button>
+                    </h3>
+                    <div class="space-y-2 sm:pl-5" x-cloak x-show="open" x-transition>
                         <div>
                             <x-fake-label :value="__('Name')" />
                             <p class="text-gray-700 dark:text-gray-300">{{ $user->emergency_name }}</p>
@@ -73,9 +91,15 @@
                 </div>
             @endif
 
-            <div>
-                <h3 class="text-xl font-medium mb-2">@lang('Settings')</h3>
-                <div class="space-y-2">
+            <div x-data="{ open: true }">
+                <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
+                    <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
+                        <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                            ::class="open ? '' : '-rotate-90'" />
+                        <span>@lang('Settings')</span>
+                    </button>
+                </h3>
+                <div class="space-y-2 sm:pl-5" x-show="open" x-transition>
                     <div>
                         <x-fake-label :value="__('Section')" />
                         <p class="text-gray-700 dark:text-gray-300">@lang('app.user.section.' . $user->section->value)</p>
