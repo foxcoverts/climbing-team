@@ -1,6 +1,10 @@
 @use('App\Enums\AttendeeStatus')
 @props(['status'])
 
+@if (is_string($status))
+    @php($status = AttendeeStatus::tryFrom($status))
+@endif
+
 @switch($status)
     @case(AttendeeStatus::NeedsAction)
         @php($icon = 'inbox')

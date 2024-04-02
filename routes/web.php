@@ -54,6 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('booking/{booking}/attendee/invite', 'store')->name('booking.attendee.invite.store');
     });
 
+    Route::patch('booking/{booking}/attendee', [BookingAttendeeController::class, 'updateMany'])->name('booking.attendee.updateMany');
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except('edit');
 
     Route::resource('booking.comment', BookingCommentController::class)->shallow()->only('store', 'update', 'destroy');

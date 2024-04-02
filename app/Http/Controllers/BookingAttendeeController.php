@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\RespondToBookingAction;
+use App\Enums\AttendeeStatus;
 use App\Http\Requests\StoreBookingAttendeeRequest;
 use App\Http\Requests\UpdateBookingAttendeeRequest;
 use App\Models\Attendance;
@@ -12,6 +13,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,11 +23,46 @@ class BookingAttendeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Booking $booking): RedirectResponse
+    public function index(Booking $booking): View
     {
-        Gate::authorize('viewAny', [Attendance::class, $booking]);
+        Gate::authorize('rollcall', [Attendance::class, $booking]);
 
-        return redirect(status: Response::HTTP_SEE_OTHER)->route('booking.show', $booking);
+        $attendees = $booking->attendees
+            ->where('id', '!=', $booking->lead_instructor_id)
+            ->whereIn('attendance.status', [AttendeeStatus::Accepted, AttendeeStatus::Tentative])
+            ->sortBy([
+                fn ($a, $b) => $a->attendance->status->compare($b->attendance->status),
+                'name',
+            ])
+            ->groupBy('attendance.status');
+        $nonAttendees = User::whereNotIn('id', $booking->attendees->pluck('id'))
+            ->orderBy('name')
+            ->get();
+
+        return view('booking.attendee.index', [
+            'booking' => $booking,
+            'lead_instructor' => $booking->lead_instructor,
+            'attendees' => $attendees,
+            'nonAttendees' => $nonAttendees,
+        ]);
+    }
+
+    public function updateMany(Request $request, Booking $booking): RedirectResponse
+    {
+        Gate::authorize('rollcall', [Attendance::class, $booking]);
+
+        $validated = $request->validate([
+            'attendee_ids' => ['required', 'list'],
+            'attendee_ids.*' => ['string', 'exists:App\\Models\\User,id'],
+        ]);
+
+        $respondToBooking = new RespondToBookingAction($booking, $request->user());
+        foreach ($validated['attendee_ids'] as $id) {
+            $respondToBooking($id, AttendeeStatus::Accepted);
+        }
+
+        return redirect()->route('booking.show', $booking)
+            ->with('alert.info', __('Attendance recorded.'));
     }
 
     /**

@@ -26,6 +26,18 @@ class AttendancePolicy
     }
 
     /**
+     * Determine whether the user can do a roll call for this booking.
+     */
+    public function rollcall(User $user, Booking $booking): bool
+    {
+        if ($booking->isCancelled() || ! $booking->isToday()) {
+            return false;
+        }
+
+        return ($user->id == $booking->lead_instructor_id) || $user->can('manage', Booking::class);
+    }
+
+    /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, Attendance $attendance): bool

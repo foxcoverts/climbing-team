@@ -1,5 +1,4 @@
 @use('App\Models\Attendance')
-@use('Illuminate\Contracts\Auth\Access\Gate')
 <aside class="my-2 flex-grow flex-shrink basis-80 max-w-xl">
     <h2 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200">
         @lang('Guest list')
@@ -58,28 +57,33 @@
 
     @if ($showTools)
         <footer class="flex flex-wrap items-start gap-4 mt-4">
-            <div class="flex gap-4">{{-- flex-group --}}
-                @if (
-                    $booking->isFuture() &&
-                        !$booking->isCancelled() &&
-                        app(Gate::class)->check('create', [Attendance::class, $booking]))
-                    <x-button.primary :href="route('booking.attendee.invite', $booking)">
-                        @lang('Invite')
-                    </x-button.primary>
-                    <x-button.primary :href="route('booking.attendee.create', $booking)">
-                        @lang('Add')
-                    </x-button.primary>
-                @endif
-            </div>
             <div class="flex flex-wrap gap-4">{{-- flex-group --}}
                 @include('booking.partials.respond-button', [
                     'booking' => $booking,
                     'attendance' => $attendance(),
                 ])
+
                 @include('booking.partials.download-button', [
                     'booking' => $booking,
                     'attendance' => $attendance(),
                 ])
+            </div>
+            <div class="flex flex-wrap gap-4">{{-- flex-group --}}
+                @if ($booking->isFuture() && !$booking->isCancelled())
+                    @can('create', [Attendance::class, $booking])
+                        <x-button.primary :href="route('booking.attendee.invite', $booking)">
+                            @lang('Invite')
+                        </x-button.primary>
+
+                        <x-button.primary :href="route('booking.attendee.create', $booking)">
+                            @lang('Add')
+                        </x-button.primary>
+                    @endcan
+                @endif
+
+                @can('rollcall', [Attendance::class, $booking])
+                    <x-button.primary :href="route('booking.attendee.index', $booking)">@lang('Roll call')</x-button.primary>
+                @endcan
             </div>
         </footer>
     @endif
