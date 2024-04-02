@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateBookingAttendanceRequest;
 use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
@@ -24,18 +23,24 @@ class BookingAttendanceController extends Controller
 
         if ($request->session()->has('url.referer')) {
             $request->session()->reflash('url.referer');
-        } else if ($request->headers->get('referer')) {
+        } elseif ($request->headers->get('referer')) {
             $referer_host = parse_url($request->headers->get('referer'), PHP_URL_HOST);
             if ($request->getHttpHost() == $referer_host) {
                 $request->session()->flash('url.referer', $request->headers->get('referer'));
             }
         }
-        if (!$request->session()->has('url.referer')) {
+        if (! $request->session()->has('url.referer')) {
             $request->session()->flash('url.referer', route('booking.invite'));
         }
 
+        $attendance = Attendance::where([
+            'booking_id' => $booking->id,
+            'user_id' => $request->user()->id,
+        ])->first();
+
         return view('booking.attendance', [
             'booking' => $booking,
+            'attendance' => $attendance,
             'currentUser' => $request->user(),
         ]);
     }
