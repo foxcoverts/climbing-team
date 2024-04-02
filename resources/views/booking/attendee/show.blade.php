@@ -163,7 +163,12 @@
 
                 <footer class="flex flex-wrap items-start gap-4 mt-4">
                     @include('booking.attendee.edit-button')
-                    @include('booking.attendee.delete-button')
+
+                    @can('update', $attendee->attendance)
+                        {{-- don't show delete button if we can update attendance --}}
+                    @elsecan('delete', $attendee->attendance)
+                        @include('booking.attendee.delete-button')
+                    @endcan
 
                     <x-button.secondary :href="route('booking.show', $booking)">
                         @lang('Back')
