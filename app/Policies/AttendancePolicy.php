@@ -48,14 +48,15 @@ class AttendancePolicy
             return false;
         }
 
-        if ($user->can('manage', Booking::class)) {
+        if ($user->can('manage', User::class)) {
+            // User managers will have access to all contact details anyway.
             return true;
         }
 
-        if (!$booking->attendees()
-            ->where('user_id', $user->id)
-            ->whereIn('status', [AttendeeStatus::Accepted, AttendeeStatus::Tentative])
-            ->exists()) {
+        $user_attendance = $booking->attendees->where('id', $user->id)->first();
+        if (! in_array($user_attendance?->attendance?->status,
+            [AttendeeStatus::Accepted, AttendeeStatus::NeedsAction]
+        )) {
             // Only people attending the event can get contact details
             return false;
         }
@@ -98,10 +99,12 @@ class AttendancePolicy
                 // Guests cannot invite themselves to any bookings.
                 return false;
             }
+
             // Permit holders can invite themselves to bookings which have not yet been confirmed,
             // Any team member or team leader can invite themselves to confirmed bookings.
             return $booking->isConfirmed() || $user->isPermitHolder();
         }
+
         return false;
     }
 
@@ -114,6 +117,7 @@ class AttendancePolicy
             // The Lead Instructor cannot resign from a Booking.
             return false;
         }
+
         return $user->can('manage', Booking::class);
     }
 }

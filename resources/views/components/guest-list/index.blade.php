@@ -41,6 +41,7 @@
             <ul class="mb-3 space-y-1" {{ $status == 'accepted' ? '' : 'x-cloak' }} x-show="open" x-transition>
                 @foreach ($list as $attendee)
                     @php($attendee->attendance->booking = $booking)
+                    @php($attendee->attendance->user = $attendee)
                     <li class='list-disc ml-5'>
                         <div class="flex gap-1 items-center">
                             <x-guest-list.item :$booking :$attendee :$currentUser />
