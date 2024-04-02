@@ -38,10 +38,10 @@
                                             class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
                                         <span>@lang('Qualifications')</span>
                                     </button>
-                                    <hr class="grow" role="presentation" />
                                 </h3>
                                 <div class="mb-3" x-cloak x-show="open" x-transition>
-                                    <div class="text-gray-700 dark:text-gray-300 divide-y">
+                                    <div
+                                        class="text-gray-700 dark:text-gray-300 divide-y divide-gray-600 dark:divide-gray-400">
                                         @forelse ($attendee->qualifications as $qualification)
                                             <div class="pl-5 py-2 first:pt-0 last:pb-0">
                                                 <div class="list-item list-disc">
@@ -90,7 +90,6 @@
                                             class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
                                         <span>@lang('Contact Details')</span>
                                     </button>
-                                    <hr class="grow" role="presentation" />
                                 </h3>
                                 <div class="mb-3 space-y-4" x-cloak x-show="open" x-transition>
                                     <div class="space-y-2" :class="gdprContact && 'text-gray-600 dark:text-gray-400'">
@@ -128,7 +127,6 @@
                                         class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
                                     <span>@lang('Emergency Contact')</span>
                                 </button>
-                                <hr class="grow" role="presentation" />
                             </h3>
                             <div class="mb-3 space-y-4" x-cloak x-show="open" x-transition>
                                 @if (!$booking->isToday())
