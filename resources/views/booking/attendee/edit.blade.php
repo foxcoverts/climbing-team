@@ -4,7 +4,7 @@
     <section class="p-4 sm:px-8">
         @include('booking.partials.header')
 
-        <div class="flex flex-wrap gap-4">
+        <div class="flex flex-wrap-reverse gap-4">
             @include('booking.partials.details')
 
             <div class="my-2 flex-grow flex-shrink basis-80 max-w-xl" x-data="{ form: {}, submitted: false }">
