@@ -23,7 +23,7 @@
         </header>
 
         <div class="flex flex-wrap gap-4">
-            <div class="space-y-1 max-w-xl flex-grow">
+            <div class="max-w-xl flex-grow">
                 <p
                     class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 my-2 flex items-center justify-between max-w-xl">
                     <span class="flex items-center">
@@ -34,7 +34,7 @@
                 </p>
 
                 <form method="post" action="{{ $form->route('booking.update') }}" id="update-booking"
-                    class="space-y-6 max-w-xl mb-6" x-on:submit="setTimeout(() => submitted = true, 0)">
+                    class="space-y-6 max-w-xl" x-on:submit="setTimeout(() => submitted = true, 0)">
                     @csrf
                     @method('PATCH')
 
@@ -80,6 +80,7 @@
                             <x-input-error :messages="$errors->get('status')" />
                         </div>
                     @endif
+
                     <div class="flex flex-wrap gap-6" x-data="{
                         start_time: '',
                         end_time: '',
@@ -212,21 +213,21 @@
                         <x-input-error :messages="$errors->get('notes')" />
                     </div>
                 </form>
+
+                <footer class="flex flex-wrap items-start gap-4 mt-6">
+                    <x-button.primary form="update-booking" class="whitespace-nowrap"
+                        x-bind:disabled="submitted || booking.cancelled"
+                        x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
+
+                    @include('booking.partials.delete-button', ['booking' => $form->booking])
+
+                    <x-button.secondary :href="$form->route('booking.show')">
+                        @lang('Back')
+                    </x-button.secondary>
+                </footer>
             </div>
 
             <x-guest-list :booking="$form->booking" :$currentUser :showTools="false" />
         </div>
-
-        <footer class="flex flex-wrap items-start gap-4 mt-6">
-            <x-button.primary form="update-booking" class="whitespace-nowrap"
-                x-bind:disabled="submitted || booking.cancelled"
-                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
-
-            @include('booking.partials.delete-button', ['booking' => $form->booking])
-
-            <x-button.secondary :href="$form->route('booking.show')">
-                @lang('Back')
-            </x-button.secondary>
-        </footer>
     </section>
 </x-layout.app>
