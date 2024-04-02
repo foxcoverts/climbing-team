@@ -88,19 +88,6 @@ class BookingAttendeeController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Booking $booking, User $attendee): View
-    {
-        Gate::authorize('update', $attendee->attendance);
-
-        return view('booking.attendee.edit', [
-            'booking' => $booking,
-            'attendee' => $attendee,
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateBookingAttendeeRequest $request, Booking $booking, User $attendee): RedirectResponse

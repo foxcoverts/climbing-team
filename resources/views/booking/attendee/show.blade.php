@@ -15,12 +15,6 @@
                         {{ $attendee->name }}</h2>
 
                     <div class="flex flex-wrap items-center gap-1">
-                        @if ($attendee->id === $booking->lead_instructor_id)
-                            <x-badge.lead-instructor class="text-sm" />
-                        @else
-                            <x-badge.attendee-status :status="$attendee->attendance->status" class="text-sm" />
-                        @endif
-
                         @if ($attendee->isPermitHolder())
                             <x-badge.permit-holder class="text-sm" />
                         @endif
@@ -170,19 +164,9 @@
                 </div>
 
                 <footer class="flex flex-wrap items-start gap-4 mt-4">
-                    @can('update', $attendee->attendance)
-                        <x-button.primary :href="route('booking.attendee.edit', [$booking, $attendee])">
-                            @lang('Edit')
-                        </x-button.primary>
-                    @elsecan('delete', $attendee->attendance)
-                        <form method="post" action="{{ route('booking.attendee.destroy', [$booking, $attendee]) }}"
-                            x-data="{ submitted: false }" x-on:submit="setTimeout(() => submitted = true, 0)">
-                            @csrf
-                            @method('delete')
-                            <x-button.danger class="whitespace-nowrap" x-bind:disabled="submitted"
-                                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Remove') }}'" />
-                        </form>
-                    @endcan
+                    @include('booking.attendee.edit-button')
+                    @include('booking.attendee.delete-button')
+
                     <x-button.secondary :href="route('booking.show', $booking)">
                         @lang('Back')
                     </x-button.secondary>

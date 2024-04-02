@@ -54,7 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('booking/{booking}/attendee/invite', 'store')->name('booking.attendee.invite.store');
     });
 
-    Route::resource('booking.attendee', BookingAttendeeController::class)->scoped();
+    Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except('edit');
 
     Route::resource('booking.comment', BookingCommentController::class)->shallow()->only('store', 'update', 'destroy');
 
