@@ -9,7 +9,7 @@
                 @include('booking.partials.recent-activity')
 
                 @can('update', $booking)
-                    <footer class="flex items-start gap-4 mt-4">
+                    <footer class="flex flex-wrap items-start gap-4 mt-4">
                         <x-button.primary :href="route('booking.edit', $booking)">
                             @lang('Edit')
                         </x-button.primary>

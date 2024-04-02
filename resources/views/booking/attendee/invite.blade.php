@@ -45,8 +45,9 @@
                         </p>
                     </fieldset>
 
-                    <footer class="flex items-start gap-4 pt-4">
-                        <x-button.primary disabled x-bind:disabled="submitted || form.user_ids.length == 0"
+                    <footer class="flex flex-wrap items-start gap-4 pt-4">
+                        <x-button.primary class="whitespace-nowrap" disabled
+                            x-bind:disabled="submitted || form.user_ids.length == 0"
                             x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Send Invitations') }}'" />
 
                         <x-button.secondary :href="route('booking.show', $booking)">
@@ -65,7 +66,7 @@
                         <a class="hover:underline"
                             href="{{ route('booking.attendee.create', $booking) }}">@lang('add them directly')</a>.
                     </p>
-                    <footer class="flex items-start gap-4 pt-4">
+                    <footer class="flex flex-wrap items-start gap-4 pt-4">
                         <x-button.secondary :href="route('booking.show', $booking)">
                             @lang('Back')
                         </x-button.secondary>

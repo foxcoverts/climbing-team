@@ -42,8 +42,8 @@
                             </div>
                         </div>
 
-                        <footer class="flex items-start gap-4 mt-4">
-                            <x-button.primary x-bind:disabled="submitted || !form.user_id"
+                        <footer class="flex flex-wrap items-start gap-4 mt-4">
+                            <x-button.primary x-bind:disabled="submitted || !form.user_id" class="whitespace-nowrap"
                                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Add Attendee') }}'" />
 
                             <x-button.secondary :href="route('booking.show', $booking)">
@@ -57,7 +57,7 @@
                     <p class="my-1">
                         @lang('All users have already been invited to this booking. You may change their response on the guest list.')
                     </p>
-                    <footer class="flex items-start gap-4 pt-2">
+                    <footer class="flex flex-wrap items-start gap-4 pt-2">
                         <x-button.secondary :href="route('booking.show', $booking)">
                             @lang('Back')
                         </x-button.secondary>

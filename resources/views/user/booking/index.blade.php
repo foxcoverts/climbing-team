@@ -10,7 +10,7 @@
             'showRoute' => 'booking.show',
         ])
 
-        <footer class="flex items-center gap-4">
+        <footer class="flex flex-wrap items-center gap-4">
             @can('manage', App\Models\Booking::class)
                 <x-button.primary :href="route('user.booking.invite', $user)">
                     @lang('Invite to Bookings')

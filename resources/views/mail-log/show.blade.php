@@ -150,13 +150,13 @@
             </div>
         @endif
 
-        <footer class="flex items-center gap-4">
+        <footer class="flex flex-wrap items-center gap-4">
             @can('delete', $mail)
                 <form method="post" action="{{ route('mail.destroy', $mail) }}" x-data="{ submitted: false }"
                     x-on:submit="setTimeout(() => submitted = true, 0)">
                     @method('DELETE')
                     @csrf
-                    <x-button.danger x-bind:disabled="submitted"
+                    <x-button.danger x-bind:disabled="submitted" class="whitespace-nowrap"
                         x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Delete') }}'" />
                 </form>
             @endcan

@@ -54,8 +54,8 @@
                         <x-input-error class="mt-2" :messages="$errors->get('booking_ids')" />
                     </fieldset>
 
-                    <footer class="flex items-start gap-4">
-                        <x-button.primary disabled
+                    <footer class="flex flex-wrap items-start gap-4">
+                        <x-button.primary disabled class="whitespace-nowrap"
                             x-bind:disabled="submitted || !emailVerified || form.booking_ids.length == 0"
                             x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Send Invitations') }}'" />
 
@@ -70,7 +70,7 @@
                 <h2 class="text-lg font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                     @lang('Invite to Bookings')</h2>
                 <p class="mt-2">@lang('There are no bookings available to invite this user to.')</p>
-                <footer class="flex items-start gap-4 pt-4">
+                <footer class="flex flex-wrap items-start gap-4 pt-4">
                     <x-button.secondary :href="route('user.show', $user)">
                         @lang('Back')
                     </x-button.secondary>

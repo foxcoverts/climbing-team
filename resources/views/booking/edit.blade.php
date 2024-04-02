@@ -217,8 +217,9 @@
             <x-guest-list :booking="$form->booking" :$currentUser :showTools="false" />
         </div>
 
-        <footer class="flex items-start gap-4 mt-6">
-            <x-button.primary form="update-booking" x-bind:disabled="submitted || booking.cancelled"
+        <footer class="flex flex-wrap items-start gap-4 mt-6">
+            <x-button.primary form="update-booking" class="whitespace-nowrap"
+                x-bind:disabled="submitted || booking.cancelled"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
 
             @include('booking.partials.delete-button', ['booking' => $form->booking])

@@ -146,7 +146,7 @@
             </div>
         </div>
 
-        <footer class="flex items-start gap-4 mt-6">
+        <footer class="flex flex-wrap items-start gap-4 mt-6">
             @can('update', $user)
                 <x-button.primary :href="route('user.edit', $user)">
                     @lang('Edit')
@@ -168,7 +168,7 @@
                     <form method="post" action="{{ route('user.invite', $user) }}" x-data="{ submitted: false }"
                         x-on:submit="setTimeout(() => submitted = true, 0)">
                         @csrf
-                        <x-button.secondary type="submit" x-bind:disabled="submitted"
+                        <x-button.secondary type="submit" x-bind:disabled="submitted" class="whitespace-nowrap"
                             x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Re-send Invite') }}'" />
                     </form>
                 @endcan

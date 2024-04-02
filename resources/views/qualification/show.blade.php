@@ -71,7 +71,7 @@
             @endif
         </article>
 
-        <footer class="flex items-start gap-4 mt-6">
+        <footer class="flex flex-wrap items-start gap-4 mt-6">
             @can('update', $qualification)
                 <x-button.primary :href="route('user.qualification.edit', [$user, $qualification])">
                     @lang('Edit')

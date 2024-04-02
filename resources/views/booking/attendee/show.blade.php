@@ -169,7 +169,7 @@
                     @endcan
                 </div>
 
-                <footer class="flex items-start gap-4 mt-4">
+                <footer class="flex flex-wrap items-start gap-4 mt-4">
                     @can('update', $attendee->attendance)
                         <x-button.primary :href="route('booking.attendee.edit', [$booking, $attendee])">
                             @lang('Edit')
@@ -179,7 +179,7 @@
                             x-data="{ submitted: false }" x-on:submit="setTimeout(() => submitted = true, 0)">
                             @csrf
                             @method('delete')
-                            <x-button.danger x-bind:disabled="submitted"
+                            <x-button.danger class="whitespace-nowrap" x-bind:disabled="submitted"
                                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Remove') }}'" />
                         </form>
                     @endcan

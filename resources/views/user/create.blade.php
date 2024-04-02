@@ -108,8 +108,8 @@
                 </div>
             </fieldset>
 
-            <footer class="flex items-center gap-4">
-                <x-button.primary x-bind:disabled="submitted"
+            <footer class="flex flex-wrap items-center gap-4">
+                <x-button.primary x-bind:disabled="submitted" class="whitespace-nowrap"
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Create') }}'" />
 
                 @can('viewAny', App\Models\User::class)

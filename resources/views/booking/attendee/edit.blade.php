@@ -43,15 +43,16 @@
                     </form>
                 </div>
 
-                <footer class="flex items-start gap-4 mt-4">
-                    <x-button.primary form="update-attendance" x-bind:disabled="submitted || form.status == ''"
+                <footer class="flex flex-wrap items-start gap-4 mt-4">
+                    <x-button.primary form="update-attendance" class="whitespace-nowrap"
+                        x-bind:disabled="submitted || form.status == ''"
                         x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
                     @can('delete', $attendee->attendance)
                         <form method="post" action="{{ route('booking.attendee.destroy', [$booking, $attendee]) }}"
                             x-data="{ submitted: false }" x-on:submit="setTimeout(() => submitted = true, 0)">
                             @csrf
                             @method('delete')
-                            <x-button.danger x-bind:disabled="submitted"
+                            <x-button.danger x-bind:disabled="submitted" class="whitespace-nowrap"
                                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Remove') }}'" />
                         </form>
                     @endcan

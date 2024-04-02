@@ -101,7 +101,7 @@
             </table>
         </div>
 
-        <footer class="flex items-start gap-4 mt-6 px-4 sm:px-8">
+        <footer class="flex flex-wrap items-start gap-4 mt-6 px-4 sm:px-8">
             @can('create', [App\Models\Qualification::class, $user])
                 <x-button.primary :href="route('user.qualification.create', $user)">
                     @lang('Add')

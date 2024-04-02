@@ -58,10 +58,10 @@
                     </div>
                 </div>
 
-                <footer class="flex items-start gap-4 mt-4">
+                <footer class="flex flex-wrap items-start gap-4 mt-4">
                     @if (config('app.facebook.group'))
                         <x-button.secondary href="{{ config('app.facebook.group') . '?should_open_composer=true' }}"
-                            target="_blank" class="order-last ml-auto">
+                            target="_blank" class="order-last ml-auto whitespace-nowrap">
                             @lang('Open Facebook Group')
                             <x-icon.external-link class="ml-1 w-4 h-4 stroke-current"
                                 aria-label="(opens in new window)" />
