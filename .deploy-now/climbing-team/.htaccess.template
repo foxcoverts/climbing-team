@@ -12,6 +12,10 @@
 	AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
 
+<IfModule mod_negotiation.c>
+    Options -MultiViews -Indexes
+</IfModule>
+
 ### IMPORTANT ###
 ### Because we can't change the webroot folder to a subfolder of the document root, we need this rewrite rules ###
 
@@ -24,11 +28,6 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 # Remove /public/ from genuine requests
 RewriteCond %{THE_REQUEST} "^GET /public/"
 RewriteRule ^public(\/.*) $1 [R=permanent,L]
-
-# Redirect Trailing Slashes If Not A Folder...
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} (.+)/$
-RewriteRule ^ %1 [L,R=301]
 
 # Serve existing files in the /public folder as if they were in /
 RewriteCond %{REQUEST_URI} !public/
