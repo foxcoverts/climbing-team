@@ -1,4 +1,8 @@
-<x-layout.app :title="$booking->activity . ' - ' . localDate($booking->start_at)->toFormattedDayDateString()">
+<x-layout.app>
+    <x-slot:title>
+        {{ $booking->activity }} on {{ localDate($booking->start_at)->toFormattedDayDateString() }}
+    </x-slot:title>
+
     <section class="p-4 sm:px-8">
         @include('booking.partials.header')
 

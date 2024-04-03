@@ -27,8 +27,6 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'welcome')->name('home');
 Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
 
-Route::get('booking/{booking}/preview', BookingPreviewController::class)->name('booking.preview');
-
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
@@ -67,8 +65,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('rota.ics', 'rota')->name('booking.rota.ics');
     });
 
-    Route::resource('booking', BookingController::class)->except('index');
+    Route::resource('booking', BookingController::class)->except('index', 'show');
+});
 
+Route::get('booking/{booking}/preview', BookingPreviewController::class);
+Route::get('booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
+
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('invite', BookingInviteController::class)->name('booking.invite');
 
     Route::get('rota', BookingRotaController::class)->name('booking.rota');

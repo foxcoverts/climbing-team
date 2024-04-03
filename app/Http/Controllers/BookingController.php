@@ -16,11 +16,11 @@ use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\View\View;
 
 class BookingController extends Controller
 {
@@ -51,9 +51,6 @@ class BookingController extends Controller
 
     /**
      * Display list of Bookings for the given status.
-     *
-     * @param BookingStatus $status
-     * @return View
      */
     protected function index(Request $request, BookingStatus $status): View
     {
@@ -100,11 +97,11 @@ class BookingController extends Controller
 
         $attributes = $request->safe()->except('start_date', 'start_time', 'end_time');
         $attributes['start_at'] = Carbon::parse(
-            $request->safe()->start_date . 'T' . $request->safe()->start_time,
+            $request->safe()->start_date.'T'.$request->safe()->start_time,
             $request->user()->timezone
         )->utc();
         $attributes['end_at'] = Carbon::parse(
-            $request->safe()->start_date . 'T' . $request->safe()->end_time,
+            $request->safe()->start_date.'T'.$request->safe()->end_time,
             $request->user()->timezone
         )->utc();
 
@@ -117,14 +114,22 @@ class BookingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, Booking $booking): View
+    public function show(Request $request, Booking $booking): Response|View
     {
-        Gate::authorize('view', $booking);
-
-        return view('booking.show', [
-            'booking' => $booking->load('changes'),
-            'currentUser' => $request->user(),
-        ]);
+        if (Gate::check('view', $booking)) {
+            return view('booking.show', [
+                'booking' => $booking->load('changes'),
+                'currentUser' => $request->user(),
+            ]);
+        } elseif (auth()->guest()) {
+            return response()->view('booking.preview', [
+                'booking' => $booking,
+            ]);
+        } else {
+            return response()->view('booking.forbidden', [
+                'booking' => $booking,
+            ], Response::HTTP_FORBIDDEN);
+        }
     }
 
     /**
@@ -151,13 +156,13 @@ class BookingController extends Controller
         $booking->fill($request->safe()->except('start_date', 'start_time', 'end_time'));
         if ($request->safe()->has('start_time')) {
             $booking->start_at = Carbon::parse(
-                $request->safe()->start_date . 'T' . $request->safe()->start_time,
+                $request->safe()->start_date.'T'.$request->safe()->start_time,
                 $request->user()->timezone
             )->utc();
         }
         if ($request->safe()->has('end_time')) {
             $booking->end_at = Carbon::parse(
-                $request->safe()->start_date . 'T' . $request->safe()->end_time,
+                $request->safe()->start_date.'T'.$request->safe()->end_time,
                 $request->user()->timezone
             )->utc();
         }
@@ -176,6 +181,7 @@ class BookingController extends Controller
                     if ($attendee->hasVerifiedEmail()) {
                         return [$attendee->id => ['status' => AttendeeStatus::NeedsAction]];
                     }
+
                     return [];
                 });
                 $booking->attendees()->sync(
@@ -189,9 +195,9 @@ class BookingController extends Controller
                     event(new BookingInvite($booking, $user));
                 }
                 event(new BookingRestored($booking, $booking->getChanges(), $request->user()));
-            } else if ($booking->isConfirmed()) {
+            } elseif ($booking->isConfirmed()) {
                 event(new BookingConfirmed($booking, $booking->getChanges(), $request->user()));
-            } else if ($booking->isCancelled()) {
+            } elseif ($booking->isCancelled()) {
                 // Remove attendees with outstanding invites.
                 Attendance::where('booking_id', $booking->id)
                     ->where('status', AttendeeStatus::NeedsAction)
@@ -199,7 +205,7 @@ class BookingController extends Controller
                 $booking->refresh();
                 event(new BookingCancelled($booking, $booking->getChanges(), $request->user()));
             }
-        } else if ($booking->wasChanged(['sequence'])) {
+        } elseif ($booking->wasChanged(['sequence'])) {
             event(new BookingChanged($booking, $booking->getChanges(), $request->user()));
         }
 

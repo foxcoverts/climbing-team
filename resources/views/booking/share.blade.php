@@ -9,7 +9,7 @@
                 <div class="space-y-2">
                     <div x-data="{
                         copied: false,
-                        text: {{ Js::from(route('booking.preview', $booking)) }},
+                        text: {{ Js::from($link) }},
                         timeout: null,
                         copy() {
                             $clipboard(this.text);
@@ -47,7 +47,7 @@
                     }">
                         <x-input-label for="post">@lang('Share post')</x-input-label>
                         <div class="flex items-stretch mt-1">
-                            <x-text-input readonly id="post" name="post" x-model.fill="text"
+                            <x-text-input id="post" name="post" x-model.fill="text"
                                 class="flex-grow flex-shrink rounded-r-none " />
                             <x-button.primary class="rounded-l-none" @click="copy" title="Copy post" x-cloak>
                                 <x-icon.clipboard class="w-4 h-4 fill-current" x-show="!copied" />

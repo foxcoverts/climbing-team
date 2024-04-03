@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\BookingStatus;
 use App\Models\Booking;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
@@ -13,12 +12,13 @@ class BookingShareController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request, Booking $booking): View
+    public function __invoke(Booking $booking): View
     {
         Gate::check('view', $booking);
 
         return view('booking.share', [
             'booking' => $booking,
+            'link' => $this->shareLink($booking),
             'post' => $this->shareText($booking),
         ]);
     }
@@ -48,9 +48,14 @@ class BookingShareController extends Controller
 
         return __($message, [
             'activity' => $booking->activity,
-            'link' => route('booking.preview', $booking),
+            'link' => $this->shareLink($booking),
             'start' => $start_at->toDayDateTimeString(),
             'when' => $when,
         ]);
+    }
+
+    protected function shareLink(Booking $booking): string
+    {
+        return route('booking.show', $booking);
     }
 }

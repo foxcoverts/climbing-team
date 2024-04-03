@@ -58,7 +58,7 @@
         <p class="text-lg text-center">@lang('Can you attend this event?')</p>
 
         <div class="flex justify-center gap-4">
-            <x-button.primary :href="route('booking.show', $booking)">
+            <x-button.primary :href="route('login')">
                 @lang('View full details')
             </x-button.primary>
         </div>
