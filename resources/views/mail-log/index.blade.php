@@ -25,7 +25,7 @@
 
                             @if ($mail->booking)
                                 <x-icon.calendar.index class="w-5 h-5 fill-current" />
-                                <span>
+                                <span class="block truncate">
                                     {{ $mail->booking->activity }}
                                     -
                                     {{ localDate($mail->booking->start_at)->toFormattedDayDateString() }}
@@ -40,7 +40,8 @@
 
                             @if ($mail->user)
                                 <x-icon.user-solid-square class="w-5 h-5 fill-current" />
-                                <span>{{ $mail->user->name }} &lt;{{ $mail->user->email }}&gt;</span>
+                                <span class="block truncate">{{ $mail->user->name }}
+                                    &lt;{{ $mail->user->email }}&gt;</span>
                             @else
                                 <span class="block truncate">{{ $mail->from }}</span>
                             @endif
