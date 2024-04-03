@@ -24,10 +24,10 @@
 **@lang('Activity')**{{ $activity_changed }}<br>
 {{ $booking->activity }}
 
-@if ($booking->lead_instructor)
+@isset($booking->lead_instructor)
 **@lang('Lead Instructor')**{{ $lead_instructor_changed }}<br>
 {{ $booking->lead_instructor->name }}
-@endif
+@endisset
 {{-- new line --}}
 
 **@lang('Group')**{{ $group_changed }}<br>

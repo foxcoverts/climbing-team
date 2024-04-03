@@ -27,7 +27,7 @@ class BookingInvite extends Mailable
         public User $attendee,
         public array $changes = [],
     ) {
-        $booking->load('attendees');
+        $booking->load('attendees', 'lead_instructor');
         $this->attendee = $booking->attendees->find($attendee);
     }
 
@@ -55,7 +55,7 @@ class BookingInvite extends Mailable
                 ]
             ),
             replyTo: [
-                new Address($this->booking->uid)
+                new Address($this->booking->uid),
             ],
             tags: ['invite'],
             metadata: [
@@ -113,7 +113,7 @@ class BookingInvite extends Mailable
 
     protected function buildChangedList(): array
     {
-        $label = ' (' . __('changed') . ')';
+        $label = ' ('.__('changed').')';
 
         $fields = [
             'status',
@@ -129,12 +129,12 @@ class BookingInvite extends Mailable
         $changed_list = [];
 
         foreach ($fields as $value) {
-            $changed_key = $value . '_changed';
+            $changed_key = $value.'_changed';
             $changed_list[$changed_key] = '';
         }
 
         foreach ($fields as $key => $value) {
-            $changed_key = $value . '_changed';
+            $changed_key = $value.'_changed';
             if (array_key_exists($key, $this->changes) || array_key_exists($value, $this->changes)) {
                 $changed_list[$changed_key] = $label;
             }
@@ -161,6 +161,7 @@ class BookingInvite extends Mailable
                 if (array_key_exists($key, $labels)) {
                     return $labels[$key];
                 }
+
                 return null;
             })
             ->filter()
