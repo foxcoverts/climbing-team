@@ -15,6 +15,11 @@
     focus-trap "^6.9.4"
     tabbable "^5.3.3"
 
+"@alpinejs/intersect@^3.13.8":
+  version "3.13.8"
+  resolved "https://registry.yarnpkg.com/@alpinejs/intersect/-/intersect-3.13.8.tgz#f0c905b904198c9c7dec90b78fbbbab048d005ee"
+  integrity sha512-f4z6owi/2+wIl2mgJzmwg6FXM4cY0Uhd4GVaDaCUJ14OsgXLGcdNeUWW17mAyspVPW7uhEXqLPNpK3a3UNwF/w==
+
 "@alpinejs/mask@^3.13":
   version "3.13.7"
   resolved "https://registry.yarnpkg.com/@alpinejs/mask/-/mask-3.13.7.tgz#61488dbee35b7fb1597c3b26c2d099e67d49092e"
@@ -168,6 +173,11 @@
   integrity sha512-0seUHK/ferH89IeuCvV4Bib0zWjgK0nsptNdmAc9wDBxD/d9hm5Mdti0URJX6bDoRtsSfRDu5XsRcrzwoc+AUQ==
   dependencies:
     "@fullcalendar/daygrid" "~6.1.11"
+
+"@imacrayon/alpine-ajax@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@imacrayon/alpine-ajax/-/alpine-ajax-0.5.1.tgz#5bec5dbd0a5394d17fae15867291e16a98170eff"
+  integrity sha512-XEqY5YxCOoNkr842ZrALgm5txis/roSg3pUsJQg65/ub1u5WbKiBmXge4gB13At9PZ7rpx/TfTegtgpxrxIKZA==
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
@@ -1071,7 +1081,16 @@ source-map-js@^1.2.0:
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.2.0.tgz#16b809c162517b5b8c3e7dcd315a2a5c2612b2af"
   integrity sha512-itJW8lvSA0TXEphiRoawsCksnlf8SyvmFzIhltqAHluXd88pkCd+cXJVHTDwdCr0IzwptSm035IHQktUu1QUMg==
 
-"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+"string-width-cjs@npm:string-width@^4.2.0":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
+  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
+  dependencies:
+    emoji-regex "^8.0.0"
+    is-fullwidth-code-point "^3.0.0"
+    strip-ansi "^6.0.1"
+
+string-width@^4.1.0:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -1089,7 +1108,14 @@ string-width@^5.0.1, string-width@^5.1.2:
     emoji-regex "^9.2.2"
     strip-ansi "^7.0.1"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==

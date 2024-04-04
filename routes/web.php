@@ -11,6 +11,7 @@ use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\BookingPreviewController;
 use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\BookingShareController;
+use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
@@ -81,6 +82,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->only(['index', 'show', 'update', 'destroy'])
             ->withTrashed(['show', 'update', 'destroy']);
     });
+
+    Route::get('change', ChangeController::class)->name('change.index');
 
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);

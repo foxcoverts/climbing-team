@@ -87,15 +87,25 @@
         </div>
     @endcanany
 
-    @can('viewAny', App\Models\MailLog::class)
+    @if (auth()->user()?->isTeamLeader() ?? false)
         <div>
             <x-sidebar.heading>@lang('Developer')</x-sidebar.heading>
-            <x-sidebar.link route='mail.index' :match-routes="['mail.*']" :label="__('Mail Log')">
-                <x-slot:icon>
-                    <path
-                        d="M18 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h16zm-4.37 9.1L20 16v-2l-5.12-3.9L20 6V4l-10 8L0 4v2l5.12 4.1L0 14v2l6.37-4.9L10 14l3.63-2.9z" />
-                </x-slot:icon>
-            </x-sidebar.link>
+            @can('viewAny', App\Models\Change::class)
+                <x-sidebar.link route='change.index' :match-routes="['change.*']" :label="__('Changes')">
+                    <x-slot:icon>
+                        <path
+                            d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
+                    </x-slot:icon>
+                </x-sidebar.link>
+            @endcan
+            @can('viewAny', App\Models\MailLog::class)
+                <x-sidebar.link route='mail.index' :match-routes="['mail.*']" :label="__('Mail Log')">
+                    <x-slot:icon>
+                        <path
+                            d="M18 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h16zm-4.37 9.1L20 16v-2l-5.12-3.9L20 6V4l-10 8L0 4v2l5.12 4.1L0 14v2l6.37-4.9L10 14l3.63-2.9z" />
+                    </x-slot:icon>
+                </x-sidebar.link>
+            @endcan
         </div>
     @endcan
 
