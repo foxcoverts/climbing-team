@@ -39,6 +39,6 @@
             @endforeach
         </div>
 
-        {{ $changes->links('change.partials.infinite-scroll') }}
+        {{ $changes->links('infinite-scroll', ['targets' => 'changes']) }}
     </section>
 </x-layout.app>

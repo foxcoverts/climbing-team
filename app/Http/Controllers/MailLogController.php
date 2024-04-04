@@ -18,7 +18,7 @@ class MailLogController extends Controller
         Gate::authorize('viewAny', MailLog::class);
 
         return view('mail-log.index', [
-            'mails' => MailLog::orderByDesc('created_at')->get(),
+            'mails' => MailLog::orderByDesc('created_at')->paginate(5),
         ]);
     }
 
@@ -44,7 +44,6 @@ class MailLogController extends Controller
             'Content-Type' => 'text/plain; charset=utf-8',
         ]);
     }
-
 
     /**
      * Remove the specified resource from storage.
