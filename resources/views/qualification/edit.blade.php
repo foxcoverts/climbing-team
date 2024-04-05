@@ -27,7 +27,7 @@
         },
     }">
         <header>
-            <h1 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
+            <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                 {{ $user->name }} - @lang('Edit Qualification')
             </h1>
         </header>

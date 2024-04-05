@@ -2,7 +2,7 @@
 <x-layout.app :title="__('Qualifications') . ' - ' . $user->name">
     <section class="py-4" x-data="{ showExpired: false }">
         <header class="px-4 sm:px-8">
-            <h1 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
+            <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                 {{ $user->name }}
             </h1>
         </header>

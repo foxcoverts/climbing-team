@@ -1,6 +1,6 @@
 <x-layout.app :title="__('Changes')">
     <section class="p-4 sm:px-8 max-w-3xl space-y-4">
-        <h1 class="text-2xl sm:text-3xl font-medium">@lang('Changes')</h1>
+        <h1 class="text-2xl font-medium">@lang('Changes')</h1>
 
         <div class="space-y-2" id="changes" x-merge="append">
             @php($booking_link = 'change.partials.booking-link')

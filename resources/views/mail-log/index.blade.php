@@ -1,12 +1,12 @@
 <x-layout.app :title="__('Mail log')">
-    <section class="py-4">
-        <header class="px-4 sm:px-8">
-            <h1 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
+    <section>
+        <header class="p-4 sm:px-8 bg-white dark:bg-gray-900 sm:sticky sm:top-0 border-b">
+            <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                 @lang('Mail log')
             </h1>
         </header>
 
-        <div class="text-gray-700 dark:text-gray-300 divide-y border-y mt-4" id="mails" x-merge="append">
+        <div class="text-gray-700 dark:text-gray-300 divide-y border-b" id="mails" x-merge="append">
             @forelse ($mails as $mail)
                 <div class="p-2 px-4 sm:px-8 flex items-start gap-2 hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                     @click="window.location='{{ route('mail.show', $mail) }}'">

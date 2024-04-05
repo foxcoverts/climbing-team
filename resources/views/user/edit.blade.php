@@ -24,7 +24,7 @@
         },
     }">
         <header>
-            <h2 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
+            <h2 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                 @lang('Profile Information')
             </h2>
             <p class="mt-1 text-md text-gray-600 dark:text-gray-400">

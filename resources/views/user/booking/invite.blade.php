@@ -1,7 +1,7 @@
 <x-layout.app :title="__('Invite to Bookings - :name', ['name' => $user->name])">
     <section class="p-4 sm:px-8">
         <header>
-            <h1 class="text-2xl sm:text-3xl font-medium">{{ $user->name }}</h1>
+            <h1 class="text-2xl font-medium">{{ $user->name }}</h1>
         </header>
 
         @if ($bookings->isNotEmpty())

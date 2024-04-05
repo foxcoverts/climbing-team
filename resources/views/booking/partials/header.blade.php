@@ -1,6 +1,6 @@
 @props(['booking'])
 <header>
-    <h2 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100 flex flex-wrap gap-2">
+    <h2 class="text-2xl font-medium text-gray-900 dark:text-gray-100 flex flex-wrap gap-2">
         <span>{{ $booking->activity }}</span>
         -
         <span x-data='{ start_at:"{{ localDate($booking->start_at) }}" }' x-text="dateString(start_at)"></span>

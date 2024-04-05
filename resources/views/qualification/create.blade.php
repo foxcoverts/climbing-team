@@ -6,7 +6,7 @@
 <x-layout.app :title="__('Add Qualification') . ' - ' . $user->name">
     <section class="p-4 sm:px-8 max-w-xl">
         <header>
-            <h1 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
+            <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                 {{ $user->name }} - @lang('Add Qualification')
             </h1>
         </header>

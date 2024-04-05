@@ -1,7 +1,7 @@
 @use('Carbon\Carbon')
 @if ($post)
     <section class="p-4 sm:px-8 space-y-4">
-        <h2 class="mb-6 text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+        <h2 class="mb-6 text-2xl font-medium text-gray-900 dark:text-gray-100 flex items-center space-x-2">
             @if (isset($icon) && $icon)
                 <x-dynamic-component :component="'icon.' . $icon" style="height: .75lh; width: .75lh" class="fill-current"
                     aria-hidden="true" />

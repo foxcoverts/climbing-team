@@ -1,7 +1,7 @@
 <x-layout.app :title="__('Mail')">
     <section class="p-4 sm:px-8 space-y-4">
         <header>
-            <h2 class="text-2xl sm:text-3xl font-medium">@lang('Mail')</h2>
+            <h2 class="text-2xl font-medium">@lang('Mail')</h2>
         </header>
 
         @if ($mail->isValid())

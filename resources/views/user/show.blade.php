@@ -1,7 +1,7 @@
 <x-layout.app :title="$user->name">
     <section class="p-4 sm:px-8 max-w-xl space-y-4">
         <header>
-            <h2 class="text-2xl sm:text-3xl font-medium">{{ $user->name }}</h2>
+            <h2 class="text-2xl font-medium">{{ $user->name }}</h2>
         </header>
 
         <div class="max-w-xl flex-grow">

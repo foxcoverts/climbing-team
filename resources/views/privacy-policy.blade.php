@@ -1,7 +1,7 @@
 <x-layout.app :title="__('Privacy Policy')">
     <article class="p-4 sm:px-8 space-y-4 sm:space-y-6 text-gray-900 dark:text-gray-300">
         <header class="space-y-2">
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-medium text-gray-900 dark:text-gray-100">Privacy Policy</h2>
+            <h2 class="text-2xl lg:text-4xl font-medium text-gray-900 dark:text-gray-100">Privacy Policy</h2>
             <p><dfn>Last updated:</dfn> 19 March 2024</p>
         </header>
 

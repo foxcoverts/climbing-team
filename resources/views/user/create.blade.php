@@ -4,7 +4,7 @@
 <x-layout.app :title="__('Add User')">
     <section class="p-4 sm:px-8 max-w-xl">
         <header>
-            <h2 class="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100">
+            <h2 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                 @lang('Add User')
             </h2>
         </header>
