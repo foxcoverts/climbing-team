@@ -1,72 +1,50 @@
 @use('App\Enums\Accreditation')
 @use('App\Models\User')
 <x-layout.app :title="__('Users')">
-    <section class="p-4 sm:px-8">
-        <header>
-            <h2 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                @lang('Users')
-            </h2>
+    <section>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-50">
+            <div class="px-4 sm:px-8 flex items-center justify-between">
+                <h1 class="text-2xl font-medium py-4 text-gray-900 dark:text-gray-100">
+                    @lang('Users')
+                </h1>
+
+                @can('create', App\Models\User::class)
+                    <nav>
+                        <x-button.primary :href="route('user.create')">@lang('Add User')</x-button.primary>
+                    </nav>
+                @endcan
+            </div>
         </header>
 
-        <table class="w-full mt-6 text-gray-700 dark:text-gray-300 ">
-            <thead>
-                <tr>
-                    <th
-                        class="px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 w-full">
-                        @lang('Name')</th>
-                    <th
-                        class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell">
-                        @lang('Active')</th>
-                    <th
-                        class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell">
-                        @lang('Section')
-                    <th
-                        class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
-                        @lang('Role')</th>
-                    <th
-                        class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden sm:table-cell">
-                        @lang('Permits')</th>
-                    <th
-                        class="px-3 py-2 text-center text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300 hidden xl:table-cell">
-                        @lang('Manages')</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200 border-y border-gray-200">
-                @foreach ($users as $user)
-                    <tr class="hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                        @click="window.location='{{ route('user.show', $user) }}'">
-                        <td class="px-3 py-2">
-                            <a href="{{ route('user.show', $user) }}">{{ $user->name }}</a>
-                        </td>
-                        <td class="px-1 text-center hidden sm:table-cell">
+        <div>
+            @foreach ($users as $user)
+                <div class="py-2 px-4 sm:px-8 border-b hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                    @click="window.location='{{ route('user.show', $user) }}'">
+                    <h2 class="text-lg font-medium"><a href="{{ route('user.show', $user) }}">{{ $user->name }}</a></h2>
+
+                    <div class="flex flex-wrap items-center gap-2 mt-2">
+                        @unless ($user->isActive())
                             <x-badge.active :active="$user->isActive()" class="text-sm text-nowrap whitespace-nowrap" />
-                        </td>
-                        <td class="px-1 text-center hidden sm:table-cell">
-                            @if ($user->isUnder18() || $user->isParent())
-                                <x-badge.section :section="$user->section" class="text-sm text-nowrap whitespace-nowrap" />
-                            @endif
-                        </td>
-                        <td class="px-1 text-center">
-                            <x-badge.role :role="$user->role" class="text-sm text-nowrap whitespace-nowrap" />
-                        </td>
-                        <td class="px-1 text-center hidden sm:table-cell">
-                            @if ($user->isPermitHolder())
+                        @endunless
+                        @if ($user->isUnder18() || $user->isParent())
+                            <x-badge.section :section="$user->section" class="text-sm text-nowrap whitespace-nowrap" />
+                        @endif
+                        <x-badge.role :role="$user->role" class="text-sm text-nowrap whitespace-nowrap" />
+                        @if ($user->isPermitHolder())
+                            <a href="{{ route('user.qualification.index', $user) }}">
                                 <x-badge.permit-holder class="text-sm text-nowrap whitespace-nowrap" />
+                            </a>
+                        @endif
+                        @foreach (Accreditation::cases() as $accreditation)
+                            @if ($user->accreditations->contains($accreditation))
+                                <x-badge.accreditation :accreditation="$accreditation"
+                                    class="text-sm text-nowrap whitespace-nowrap" />
                             @endif
-                        </td>
-                        <td class="px-1 text-center hidden xl:table-cell">
-                            <div class="flex items-center justify-center gap-1">
-                                @foreach (Accreditation::cases() as $accreditation)
-                                    @if ($user->accreditations->contains($accreditation))
-                                        <x-badge.accreditation :accreditation="$accreditation"
-                                            class="text-sm text-nowrap whitespace-nowrap" />
-                                    @endif
-                                @endforeach
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
     </section>
 </x-layout.app>
