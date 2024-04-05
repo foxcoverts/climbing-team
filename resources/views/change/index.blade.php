@@ -1,44 +1,49 @@
 <x-layout.app :title="__('Changes')">
-    <section class="p-4 sm:px-8 max-w-3xl space-y-4">
-        <h1 class="text-2xl font-medium">@lang('Changes')</h1>
+    <section>
+        <header class="p-4 sm:px-8 bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-50">
+            <h1 class="text-2xl font-medium">@lang('Changes')</h1>
+        </header>
 
-        <div class="space-y-2" id="changes" x-merge="append">
-            @php($booking_link = 'change.partials.booking-link')
-            @foreach ($changes as $change)
-                <x-recent-activity.item :id="$change->id">
-                    <x-slot:time>
-                        <p>
-                            <span title="{{ localDate($change->created_at)->toDayDateTimeString() }}" class="cursor-help">
-                                {{ localDate($change->created_at)->ago() }}
-                            </span>
-                        </p>
-                    </x-slot:time>
+        <div class="px-4 sm:px-8 max-w-3xl space-y-2 my-4">
+            <div class="space-y-2" id="changes" x-merge="append">
+                @php($booking_link = 'change.partials.booking-link')
+                @foreach ($changes as $change)
+                    <x-recent-activity.item :id="$change->id">
+                        <x-slot:time>
+                            <p>
+                                <span title="{{ localDate($change->created_at)->toDayDateTimeString() }}"
+                                    class="cursor-help">
+                                    {{ localDate($change->created_at)->ago() }}
+                                </span>
+                            </p>
+                        </x-slot:time>
 
-                    @foreach ($change->attendees as $attendee)
-                        @php($attendee->change = $change)
-                        @can('view', $attendee)
-                            @include('change.partials.attendance')
-                        @endcan
-                    @endforeach
+                        @foreach ($change->attendees as $attendee)
+                            @php($attendee->change = $change)
+                            @can('view', $attendee)
+                                @include('change.partials.attendance')
+                            @endcan
+                        @endforeach
 
-                    @foreach ($change->comments as $comment)
-                        @php($comment->change = $change)
-                        @php($comment->author = $change->author)
-                        @can('view', $comment)
-                            @include('change.partials.comment')
-                        @endcan
-                    @endforeach
+                        @foreach ($change->comments as $comment)
+                            @php($comment->change = $change)
+                            @php($comment->author = $change->author)
+                            @can('view', $comment)
+                                @include('change.partials.comment')
+                            @endcan
+                        @endforeach
 
-                    @foreach ($change->fields as $field)
-                        @php($field->change = $change)
-                        @can('view', $field)
-                            @include('change.partials.field')
-                        @endcan
-                    @endforeach
-                </x-recent-activity.item>
-            @endforeach
+                        @foreach ($change->fields as $field)
+                            @php($field->change = $change)
+                            @can('view', $field)
+                                @include('change.partials.field')
+                            @endcan
+                        @endforeach
+                    </x-recent-activity.item>
+                @endforeach
+            </div>
+
+            {{ $changes->links('infinite-scroll', ['targets' => 'changes', 'loading' => 'change.partials.loading']) }}
         </div>
-
-        {{ $changes->links('infinite-scroll', ['targets' => 'changes', 'loading' => 'change.partials.loading']) }}
     </section>
 </x-layout.app>

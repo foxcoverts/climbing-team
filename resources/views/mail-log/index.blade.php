@@ -1,6 +1,6 @@
 <x-layout.app :title="__('Mail log')">
     <section>
-        <header class="p-4 sm:px-8 bg-white dark:bg-gray-900 sm:sticky sm:top-0 border-b">
+        <header class="p-4 sm:px-8 bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-50">
             <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                 @lang('Mail log')
             </h1>
