@@ -59,6 +59,6 @@
             @endforelse
         </div>
 
-        {{ $mails->links('infinite-scroll', ['targets' => 'mails']) }}
+        {{ $mails->links('infinite-scroll', ['targets' => 'mails', 'loading' => 'mail-log.partials.loading']) }}
     </section>
 </x-layout.app>
