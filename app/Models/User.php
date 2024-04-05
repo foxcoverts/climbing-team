@@ -84,7 +84,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function keys(): HasMany
     {
-        return $this->hasMany(Key::class)->orderBy('name');
+        return $this->hasMany(Key::class, 'holder_id')->orderBy('name');
     }
 
     public function qualifications(): HasMany
@@ -160,6 +160,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isGuest(): bool
     {
         return $this->role == Role::Guest;
+    }
+
+    public function isKeyHolder(): bool
+    {
+        return $this->keys->isNotEmpty();
     }
 
     public function isPermitHolder(): bool

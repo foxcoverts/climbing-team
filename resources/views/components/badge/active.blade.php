@@ -1,7 +1,7 @@
 @props(['active' => true])
 
 @if ($active)
-    <x-badge color="lime" {{ $attributes }}>@lang('Active')</x-badge>
+    <x-badge {{ $attributes->merge(['color' => 'lime', 'label' => __('Active')]) }} />
 @else
-    <x-badge color="gray" {{ $attributes }}>@lang('Inactive')</x-badge>
+    <x-badge {{ $attributes->merge(['color' => 'gray', 'label' => __('Inactive')]) }} />
 @endif

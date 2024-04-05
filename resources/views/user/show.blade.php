@@ -7,17 +7,22 @@
         <div class="max-w-xl flex-grow">
             <p class="flex flex-wrap gap-2 items-center mb-4">
                 @unless ($user->isActive())
-                    <x-badge.active :active="false" class="text-sm" />
+                    <x-badge.active :active="$user->isActive()" class="text-sm text-nowrap whitespace-nowrap" />
                 @endunless
-                <x-badge.role :role="$user->role" class="text-sm" />
-                @if ($user->isUnder18())
-                    <x-badge color="pink" class="text-sm" :label="__('Under 18')" />
+                <x-badge.role :role="$user->role" class="text-sm text-nowrap whitespace-nowrap" />
+                @if ($user->isUnder18() || $user->isParent())
+                    <x-badge.section :section="$user->section" class="text-sm text-nowrap whitespace-nowrap" />
                 @endif
                 @if ($user->isPermitHolder())
-                    <x-badge.permit-holder class="text-sm" />
+                    <a href="{{ route('user.qualification.index', $user) }}">
+                        <x-badge.permit-holder class="text-sm text-nowrap whitespace-nowrap" />
+                    </a>
+                @endif
+                @if ($user->isKeyHolder())
+                    <x-badge.key-holder class="text-sm text-nowrap whitespace-nowrap" />
                 @endif
                 @foreach ($user->accreditations as $accreditation)
-                    <x-badge.accreditation :accreditation="$accreditation" class="text-sm" />
+                    <x-badge.accreditation :accreditation="$accreditation" class="text-sm text-nowrap whitespace-nowrap" />
                 @endforeach
             </p>
 

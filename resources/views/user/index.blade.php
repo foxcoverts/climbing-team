@@ -26,20 +26,20 @@
                         @unless ($user->isActive())
                             <x-badge.active :active="$user->isActive()" class="text-sm text-nowrap whitespace-nowrap" />
                         @endunless
+                        <x-badge.role :role="$user->role" class="text-sm text-nowrap whitespace-nowrap" />
                         @if ($user->isUnder18() || $user->isParent())
                             <x-badge.section :section="$user->section" class="text-sm text-nowrap whitespace-nowrap" />
                         @endif
-                        <x-badge.role :role="$user->role" class="text-sm text-nowrap whitespace-nowrap" />
                         @if ($user->isPermitHolder())
                             <a href="{{ route('user.qualification.index', $user) }}">
-                                <x-badge.permit-holder class="text-sm text-nowrap whitespace-nowrap" />
+                                <x-badge.permit-holder class="text-sm" />
                             </a>
                         @endif
-                        @foreach (Accreditation::cases() as $accreditation)
-                            @if ($user->accreditations->contains($accreditation))
-                                <x-badge.accreditation :accreditation="$accreditation"
-                                    class="text-sm text-nowrap whitespace-nowrap" />
-                            @endif
+                        @if ($user->isKeyHolder())
+                            <x-badge.key-holder label="" class="text-sm text-nowrap whitespace-nowrap" />
+                        @endif
+                        @foreach ($user->accreditations as $accreditation)
+                            <x-badge.accreditation :accreditation="$accreditation" class="text-sm text-nowrap whitespace-nowrap" />
                         @endforeach
                     </div>
                 </div>

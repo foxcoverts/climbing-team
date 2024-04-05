@@ -13,4 +13,8 @@
         @php($color = 'gray')
 @endswitch
 
-<x-badge :color="$color" {{ $attributes }}>@lang("app.user.accreditation.{$accreditation->value}")</x-badge>
+<x-badge
+    {{ $attributes->merge([
+        'color' => $color,
+        'label' => __('app.user.accreditation.' . $accreditation->value),
+    ]) }} />

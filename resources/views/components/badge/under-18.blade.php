@@ -1,5 +1,5 @@
 @props(['under18' => true])
 
 @if ($under18)
-    <x-badge color="pink" {{ $attributes }}>@lang('Under 18')</x-badge>
+    <x-badge {{ $attributes->merge(['color' => 'pink', 'label' => __('Under 18')]) }} />
 @endif

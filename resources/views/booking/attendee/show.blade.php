@@ -16,15 +16,19 @@
 
                     <div class="flex flex-wrap items-center gap-1">
                         @if ($attendee->isPermitHolder())
-                            <x-badge.permit-holder class="text-sm" />
+                            <x-badge.permit-holder class="text-sm whitespace-nowrap" />
                         @endif
 
                         @if ($attendee->isGuest())
-                            <x-badge.role :role="Role::Guest" class="text-sm" />
+                            <x-badge.role :role="Role::Guest" class="text-sm whitespace-nowrap" />
                         @endif
 
                         @if ($attendee->isUnder18())
-                            <x-badge.under-18 class="text-sm" />
+                            <x-badge.under-18 class="text-sm whitespace-nowrap" />
+                        @endif
+
+                        @if ($attendee->isKeyHolder())
+                            <x-badge.key-holder class="text-sm whitespace-nowrap" />
                         @endif
                     </div>
 

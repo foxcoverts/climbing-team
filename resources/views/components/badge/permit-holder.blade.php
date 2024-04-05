@@ -1,1 +1,4 @@
-<x-badge color="sky" {{ $attributes }}>@lang('Permit Holder')</x-badge>
+<x-badge {{ $attributes->merge([
+    'color' => 'sky',
+    'label' => __('Permit Holder'),
+]) }} />

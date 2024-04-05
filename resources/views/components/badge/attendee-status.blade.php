@@ -26,6 +26,9 @@
         @php($color = 'pink')
 @endswitch
 
-<x-badge :color="$color" :icon="$icon" {{ $attributes }}>
-    @lang("app.attendee.status.{$status->value}")
-</x-badge>
+<x-badge
+    {{ $attributes->merge([
+        'color' => $color,
+        'icon' => $icon,
+        'label' => __('app.attendee.status.' . $status->value),
+    ]) }} />

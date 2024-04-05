@@ -1,3 +1,1 @@
-<x-badge color="lime" icon="inbox.check" {{ $attributes }}>
-    @lang('Lead Instructor')
-</x-badge>
+<x-badge {{ $attributes->merge(['color' => 'lime', 'icon' => 'inbox.check', 'label' => __('Lead Instructor')]) }} />

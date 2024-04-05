@@ -2,7 +2,8 @@
 @use('App\Enums\Role')
 @props(['booking', 'attendee', 'currentUser'])
 
-<div x-data @click="if ($refs.link) window.location = $refs.link.href;" :class="{ 'cursor-pointer': $refs.link }">
+<div x-data @click="if ($refs.link) window.location = $refs.link.href;" class="flex items-center gap-1"
+    :class="{ 'cursor-pointer': $refs.link }">
     @can('view', $attendee->attendance)
         <a href="{{ route('booking.attendee.show', [$booking, $attendee]) }}" x-ref="link">{{ $attendee->name }}</a>
     @else
@@ -10,18 +11,22 @@
     @endcan
 
     @if ($attendee->isPermitHolder())
-        <x-badge.permit-holder class="text-xs" />
+        <x-badge.permit-holder class="text-xs whitespace-nowrap" />
     @endif
 
     @if ($attendee->isGuest())
-        <x-badge.role :role="Role::Guest" class="text-xs" />
+        <x-badge.role :role="Role::Guest" class="text-xs whitespace-nowrap" />
     @endif
 
     @if ($attendee->isUnder18())
-        <x-badge.under-18 class="text-xs" />
+        <x-badge.under-18 class="text-xs whitespace-nowrap" />
+    @endif
+
+    @if ($attendee->isKeyHolder())
+        <x-badge.key-holder label="" class="text-xs whitespace-nowrap" />
     @endif
 
     @if ($attendee->is($currentUser))
-        <x-badge color="lime" class="text-xs">@lang('You')</x-badge>
+        <x-badge color="lime" class="text-xs whitespace-nowrap">@lang('You')</x-badge>
     @endif
 </div>

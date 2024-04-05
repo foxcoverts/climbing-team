@@ -25,4 +25,8 @@
         @php($color = 'gray')
 @endswitch
 
-<x-badge :color="$color" {{ $attributes }}>@lang("app.user.section.{$section->value}")</x-badge>
+<x-badge :color="$color"
+    {{ $attributes->merge([
+        'color' => $color,
+        'label' => __('app.user.section.' . $section->value),
+    ]) }} />
