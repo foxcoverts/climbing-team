@@ -12,14 +12,29 @@
             </div>
         </header>
 
-        @foreach ($keys as $key)
-            <div class="py-2 px-4 sm:px-8 border-b">
-                <h2 class="text-lg font-medium">{{ $key->name }}</h2>
-                <p class="text-gray-900 dark:text-gray-100"><dfn
-                        class="not-italic font-medium text-black dark:text-white">@lang('Held by'):</dfn>
-                    {{ $key->holder->name }}
-                </p>
-            </div>
-        @endforeach
+        <div x-init x-merge="morph" id="keys" @ajax:before="$dispatch('dialog:open')"
+            @key:updated="$ajax({{ Js::from(route('key.index')) }})">
+            @foreach ($keys as $key)
+                <div class="py-2 px-4 sm:px-8 border-b space-y-1">
+                    <h2 class="text-lg font-medium">{{ $key->name }}</h2>
+                    <p class="text-gray-900 dark:text-gray-100"><dfn
+                            class="not-italic font-medium text-black dark:text-white">@lang('Held by'):</dfn>
+                        {{ $key->holder->name }}
+                    </p>
+
+                    @can('update', $key)
+                        <x-button.primary class="gap-2 group" :href="route('key.transfer', $key)" x-target="transfer-key">
+                            <x-icon.transfer class="w-4 h-4 fill-current" />
+                            <span class="hidden group-hover:block">@lang('Transfer Key')</span>
+                        </x-button.primary>
+                    @endcan
+                </div>
+            @endforeach
+        </div>
+
+        <dialog x-init @dialog:open.window="$el.showModal()" @ajax:success="$el.close()"
+            @click="if ($event.target === $el) $el.close()" class="bg-white dark:bg-gray-900">
+            <form id="transfer-key"></form>
+        </dialog>
     </section>
 </x-layout.app>

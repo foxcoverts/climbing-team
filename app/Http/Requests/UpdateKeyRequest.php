@@ -17,8 +17,8 @@ class UpdateKeyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', Rule::unique(Key::class)->ignore($this->key)],
-            'holder_id' => ['required', Rule::exists(User::class)],
+            'name' => ['sometimes', 'required', 'string', Rule::unique(Key::class)->ignore($this->key)],
+            'holder_id' => ['sometimes', 'required', Rule::exists(User::class, 'id')],
         ];
     }
 }

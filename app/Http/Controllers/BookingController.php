@@ -228,7 +228,9 @@ class BookingController extends Controller
         $booking->delete();
 
         return redirect()->route('booking.calendar')
-            ->with('alert.info', __('Booking deleted.'))
-            ->with('restore', route('trash.booking.update', $booking));
+            ->with('alert', [
+                'info' => __('Booking deleted.'),
+                'restore' => route('trash.booking.update', $booking),
+            ]);
     }
 }

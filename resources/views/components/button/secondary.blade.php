@@ -1,3 +1,2 @@
-<x-button color="secondary" {{ $attributes }}>
-    {{ $slot }}
-</x-button>
+@props(['label' => $slot])
+<x-button :$label {{ $attributes->merge(['color' => 'secondary']) }} />

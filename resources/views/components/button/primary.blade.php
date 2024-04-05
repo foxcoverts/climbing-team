@@ -1,3 +1,2 @@
-<x-button color="primary" {{ $attributes->merge(['type' => 'submit']) }}>
-    {{ $slot }}
-</x-button>
+@props(['label' => $slot])
+<x-button :$label {{ $attributes->merge(['type' => 'submit', 'color' => 'primary']) }} />

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Gate;
 class KeyController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the key.
      */
     public function index(): View
     {
@@ -26,7 +26,7 @@ class KeyController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new key.
      */
     public function create(Request $request): View
     {
@@ -45,20 +45,20 @@ class KeyController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created key in storage.
      */
     public function store(StoreKeyRequest $request): RedirectResponse
     {
         Gate::authorize('create', Key::class);
 
-        Key::create($request->validated());
+        $key = Key::create($request->validated());
 
         return redirect()->route('key.index')
-            ->with('alert.info', __('Key added.'));
+            ->with('alert.message', __(':Name added.', ['name' => $key->name]));
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified key.
      */
     public function show(Key $key): View
     {
@@ -70,7 +70,7 @@ class KeyController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified key.
      */
     public function edit(Key $key): View
     {
@@ -83,7 +83,21 @@ class KeyController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Show the form for transferring the key to another holder.
+     */
+    public function transfer(Request $request, Key $key): View
+    {
+        Gate::authorize('update', $key);
+
+        return view('key.transfer', [
+            'ajax' => $request->ajax(),
+            'key' => $key,
+            'users' => User::orderBy('name')->get(),
+        ]);
+    }
+
+    /**
+     * Update the specified key in storage.
      */
     public function update(UpdateKeyRequest $request, Key $key): RedirectResponse
     {
@@ -91,11 +105,25 @@ class KeyController extends Controller
 
         $key->update($request->validated());
 
-        return redirect()->back()->with('alert.info', __('Key updated.'));
+        if ($key->wasChanged('holder_id')) {
+            return redirect()->route('key.index')
+                ->with('alert', [
+                    'message' => __('Key transferred to :name.', ['name' => $key->holder->name]),
+                    '$dispatch' => 'key:updated',
+                ]);
+        } elseif ($key->wasChanged()) {
+            return redirect()->route('key.index')
+                ->with('alert', [
+                    'message', __('Key updated.'),
+                    '$dispatch' => 'key:updated',
+                ]);
+        } else {
+            return redirect()->route('key.index');
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified key from storage.
      */
     public function destroy(Key $key): RedirectResponse
     {
@@ -103,6 +131,6 @@ class KeyController extends Controller
 
         $key->delete();
 
-        return redirect()->route('key.index')->with('alert.info', __('Key deleted.'));
+        return redirect()->route('key.index')->with('alert.message', __('Key deleted.'));
     }
 }

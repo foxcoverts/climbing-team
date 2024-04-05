@@ -86,6 +86,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('change', ChangeController::class)->name('change.index');
 
+    Route::get('key/{key}/transfer', [KeyController::class, 'transfer'])->name('key.transfer');
     Route::resource('key', KeyController::class);
 
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);

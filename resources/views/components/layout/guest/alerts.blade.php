@@ -1,8 +1,5 @@
-<div class="w-full sm:max-w-md">
-    @if (Session::has('alert.info'))
-        <x-alert :restore="session('restore')" class="mt-6">{{ Session::pull('alert.info') }}</x-alert>
-    @endif
-    @if (Session::has('alert.error'))
-        <x-alert color="red" class="mt-6">{{ Session::pull('alert.error') }}</x-alert>
+<div x-sync id="alerts" aria-live="polite" class="w-full sm:max-w-md">
+    @if (Session::has('alert'))
+        <x-alert :alert="Session::pull('alert')" />
     @endif
 </div>

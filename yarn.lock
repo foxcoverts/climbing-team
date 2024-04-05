@@ -25,6 +25,11 @@
   resolved "https://registry.yarnpkg.com/@alpinejs/mask/-/mask-3.13.8.tgz#2284c52dbdaa172f15bdd27d16958a19da0f2913"
   integrity sha512-aFH1eLyNvmmRaCJBDaro6AOx4AW8J5EMkQhwu2jakx64W1+6fb3r8JLBvlaHCT+k2mrYrkw/6J1Qv+Xz4Q+x0w==
 
+"@alpinejs/morph@^3.13":
+  version "3.13.8"
+  resolved "https://registry.yarnpkg.com/@alpinejs/morph/-/morph-3.13.8.tgz#9eb192d44dd1235adcf82e6ee0be4801f3044656"
+  integrity sha512-VM8azc7UPIXupU/9T7wvKj+bTudK4ttW+AkXL9SNUyN8ysuq/RGYovetQdYNM1Vz8OfD23KTgO90CpAzDLgz8A==
+
 "@alpinejs/persist@^3.13":
   version "3.13.8"
   resolved "https://registry.yarnpkg.com/@alpinejs/persist/-/persist-3.13.8.tgz#3388cd341a6cecb44e245afcaf797e74fa9e592f"
