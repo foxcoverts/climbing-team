@@ -1,5 +1,5 @@
 @use('App\Enums\BookingStatus')
-<nav class="w-full pt-4 pb-2 border-b md:bottom-0 md:fixed md:top-16 md:z-20 lg:block lg:w-64 lg:border-b-0 lg:border-r bg-gray-100 dark:bg-gray-900 overflow-y-auto space-y-4"
+<nav class="hidden w-full pt-4 pb-2 border-b md:bottom-0 md:fixed md:top-16 md:z-20 lg:block lg:w-64 lg:border-b-0 lg:border-r bg-gray-100 dark:bg-gray-900 overflow-y-auto space-y-4"
     :class="{ 'hidden': !sidebarOpen }" id="main-nav">
 
     <x-sidebar.group :heading="__('Main')">
