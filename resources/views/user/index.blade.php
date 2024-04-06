@@ -22,7 +22,7 @@
                     @click="window.location='{{ route('user.show', $user) }}'">
                     <h2 class="text-lg font-medium"><a href="{{ route('user.show', $user) }}">{{ $user->name }}</a></h2>
 
-                    <div class="flex flex-wrap items-center gap-2 mt-2">
+                    <div class="flex flex-wrap items-stretch gap-2 mt-2">
                         @unless ($user->isActive())
                             <x-badge.active :active="$user->isActive()" class="text-sm text-nowrap whitespace-nowrap" />
                         @endunless
@@ -36,7 +36,13 @@
                             </a>
                         @endif
                         @if ($user->isKeyHolder())
-                            <x-badge.key-holder label="" class="text-sm text-nowrap whitespace-nowrap" />
+                            @can('manage', App\Models\Key::class)
+                                <a href="{{ route('key.index') }}" class="flex items-stretch">
+                                    <x-badge.key-holder label="" class="text-sm whitespace-nowrap" />
+                                </a>
+                            @else
+                                <x-badge.key-holder label="" class="text-sm whitespace-nowrap" />
+                            @endcan
                         @endif
                         @foreach ($user->accreditations as $accreditation)
                             <x-badge.accreditation :accreditation="$accreditation" class="text-sm text-nowrap whitespace-nowrap" />

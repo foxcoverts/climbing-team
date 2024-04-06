@@ -14,7 +14,7 @@
                     <h2 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
                         {{ $attendee->name }}</h2>
 
-                    <div class="flex flex-wrap items-center gap-1">
+                    <div class="flex flex-wrap items-stretch gap-1">
                         @if ($attendee->isPermitHolder())
                             <x-badge.permit-holder class="text-sm whitespace-nowrap" />
                         @endif
@@ -28,7 +28,13 @@
                         @endif
 
                         @if ($attendee->isKeyHolder())
-                            <x-badge.key-holder class="text-sm whitespace-nowrap" />
+                            @can('manage', App\Models\Key::class)
+                                <a href="{{ route('key.index') }}" class="flex items-stretch">
+                                    <x-badge.key-holder class="text-sm whitespace-nowrap" />
+                                </a>
+                            @else
+                                <x-badge.key-holder class="text-sm whitespace-nowrap" />
+                            @endcan
                         @endif
                     </div>
 

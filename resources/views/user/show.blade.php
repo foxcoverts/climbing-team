@@ -5,7 +5,7 @@
         </header>
 
         <div class="max-w-xl flex-grow">
-            <p class="flex flex-wrap gap-2 items-center mb-4">
+            <p class="flex flex-wrap gap-2 items-stretch mb-4">
                 @unless ($user->isActive())
                     <x-badge.active :active="$user->isActive()" class="text-sm text-nowrap whitespace-nowrap" />
                 @endunless
@@ -19,7 +19,13 @@
                     </a>
                 @endif
                 @if ($user->isKeyHolder())
-                    <x-badge.key-holder class="text-sm text-nowrap whitespace-nowrap" />
+                    @can('manage', App\Models\Key::class)
+                        <a href="{{ route('key.index') }}" class="flex items-stretch">
+                            <x-badge.key-holder class="text-sm whitespace-nowrap" />
+                        </a>
+                    @else
+                        <x-badge.key-holder class="text-sm whitespace-nowrap" />
+                    @endcan
                 @endif
                 @foreach ($user->accreditations as $accreditation)
                     <x-badge.accreditation :accreditation="$accreditation" class="text-sm text-nowrap whitespace-nowrap" />
