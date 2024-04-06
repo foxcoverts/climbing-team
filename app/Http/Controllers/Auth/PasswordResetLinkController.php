@@ -30,7 +30,7 @@ class PasswordResetLinkController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::findByEmail($request->email);
         if ($user?->password === '') {
             $user->sendAccountSetupNotification();
             $status = Password::RESET_LINK_SENT;

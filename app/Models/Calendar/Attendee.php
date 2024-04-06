@@ -13,18 +13,17 @@ class Attendee
     ) {
     }
 
-    public function getUser(): User|null
+    public function getUser(): ?User
     {
-        return User::firstWhere('email', $this->getEmail());
+        return User::findByEmail($this->getEmail());
     }
 
     public function getEmail(): string
     {
-        return
-            str_replace('mailto:', '', $this->vattendee->getValue());
+        return str_replace('mailto:', '', $this->vattendee->getValue());
     }
 
-    public function getStatus(): AttendeeStatus|null
+    public function getStatus(): ?AttendeeStatus
     {
         return match ((string) $this->vattendee['PARTSTAT']) {
             'ACCEPTED' => AttendeeStatus::Accepted,
@@ -35,13 +34,14 @@ class Attendee
         };
     }
 
-    public function getComment(): string|null
+    public function getComment(): ?string
     {
         if (isset($this->vattendee['X-RESPONSE-COMMENT'])) {
             return html_entity_decode(
                 str_replace('\;', ';', (string) $this->vattendee['X-RESPONSE-COMMENT'])
             );
         }
+
         return null;
     }
 }

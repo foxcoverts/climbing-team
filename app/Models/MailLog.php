@@ -8,6 +8,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
+/**
+ * @property-read string $rawBody
+ * @property-read ?string $sentAt
+ * @property-read ?string $to
+ * @property-read ?string $from
+ * @property-read ?string $subject
+ * @property-read ?array $attachments
+ * @property-read ?string $bodyHtml
+ * @property-read ?string $fromEmail
+ * @property-read ?User $fromUser
+ * @property-read ?Calendar\Calendar $calendar
+ * @property-read ?string $toEmail
+ * @property-read ?Booking $toBooking
+ * @property-read ?Booking $booking
+ * @property-read ?User $user
+ */
 class MailLog extends Model
 {
     use HasFactory, HasUlids;
@@ -18,7 +34,7 @@ class MailLog extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'body'
+        'body',
     ];
 
     protected $casts = [
@@ -37,6 +53,7 @@ class MailLog extends Model
         if (is_null($this->read_at) || $force) {
             $this->read_at = $this->freshTimestamp();
         }
+
         return $this;
     }
 
@@ -49,7 +66,7 @@ class MailLog extends Model
         if (empty($json)) {
             throw new InvalidArgumentException('Body must be valid JSON.');
         }
-        if (!property_exists($json, 'subject')) {
+        if (! property_exists($json, 'subject')) {
             throw new InvalidArgumentException('Body does not look like an encoded email object.');
         }
         $this->attributes['body'] = $value;
@@ -57,7 +74,7 @@ class MailLog extends Model
 
     public function isValid(): bool
     {
-        return !is_null($this->body);
+        return ! is_null($this->body);
     }
 
     protected function rawBody(): Attribute
@@ -107,8 +124,10 @@ class MailLog extends Model
                     for ($i = 0; $i < count($calendar->content->data); $i++) {
                         $data .= chr($calendar->content->data[$i]);
                     }
+
                     return Calendar\Calendar::loadData($data);
                 }
+
                 return null;
             }
         );
@@ -140,7 +159,7 @@ class MailLog extends Model
     {
         return Attribute::make(
             get: fn () => $this->fromEmail
-                ? User::where('email', $this->fromEmail)->first()
+                ? User::findByEmail($this->fromEmail)
                 : null,
         );
     }

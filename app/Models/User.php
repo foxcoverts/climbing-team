@@ -102,6 +102,25 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(UserAccreditation::class);
     }
 
+    public static function findByEmail(string $email): ?static
+    {
+        $interchangeable = [
+            ['btopenworld.com', 'btinternet.com'],
+            ['googlemail.com', 'gmail.com'],
+        ];
+
+        $parts = explode('@', $email, 2);
+
+        $emails = [$email];
+        foreach ($interchangeable as $domains) {
+            if (in_array($parts[1], $domains)) {
+                $emails = array_map(fn ($domain) => $parts[0].'@'.$domain, $domains);
+            }
+        }
+
+        return static::whereIn('email', $emails)->first();
+    }
+
     public function getAccreditationsAttribute(): Collection
     {
         return $this->user_accreditations->pluck('accreditation');

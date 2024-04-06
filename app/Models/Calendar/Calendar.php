@@ -26,7 +26,7 @@ class Calendar
     }
 
     /**
-     * @return array<Event>
+     * @return Illuminate\Support\Collection<Event>
      */
     public function getEvents(): Collection
     {
@@ -34,6 +34,7 @@ class Calendar
         foreach ($this->vcalendar->VEVENT as $vevent) {
             $events[] = new Event($vevent);
         }
+
         return collect($events);
     }
 
