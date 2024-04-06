@@ -72,13 +72,13 @@ class KeyController extends Controller
     /**
      * Show the form for editing the specified key.
      */
-    public function edit(Key $key): View
+    public function edit(Request $request, Key $key): View
     {
         Gate::authorize('update', $key);
 
         return view('key.edit', [
+            'ajax' => $request->ajax(),
             'key' => $key,
-            'users' => User::orderBy('name')->get(),
         ]);
     }
 

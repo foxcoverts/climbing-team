@@ -12,18 +12,26 @@
             </div>
         </header>
 
-        <div x-init x-merge="morph" id="keys" @ajax:before="$dispatch('dialog:open')"
-            @key:updated="$ajax({{ Js::from(route('key.index')) }})">
+        <div x-init x-merge="morph" id="keys" @key:updated="$ajax({{ Js::from(route('key.index')) }})">
             @foreach ($keys as $key)
                 <div class="py-2 px-4 sm:px-8 border-b space-y-1">
-                    <h2 class="text-lg font-medium">{{ $key->name }}</h2>
+                    <h2 class="text-lg font-medium" id="{{ sprintf('key-%s-name', $key->id) }}">
+                        <a href="{{ route('key.edit', $key) }}"
+                            x-target="{{ sprintf('key-%s-name', $key->id) }}">{{ $key->name }}</a>
+                    </h2>
+
                     <p class="text-gray-900 dark:text-gray-100"><dfn
                             class="not-italic font-medium text-black dark:text-white">@lang('Held by'):</dfn>
-                        {{ $key->holder->name }}
+                        @can('view', $key->holder)
+                            <a href="{{ route('user.show', $key->holder) }}">{{ $key->holder->name }}</a>
+                        @else
+                            {{ $key->holder->name }}
+                        @endcan
                     </p>
 
                     @can('update', $key)
-                        <x-button.primary class="gap-2 group" :href="route('key.transfer', $key)" x-target="transfer-key">
+                        <x-button.primary class="gap-2 group" :href="route('key.transfer', $key)" x-target="transfer-key"
+                            @ajax:before="$dispatch('dialog:open')">
                             <x-icon.transfer class="w-4 h-4 fill-current" />
                             <span class="hidden group-hover:block">@lang('Transfer Key')</span>
                         </x-button.primary>
