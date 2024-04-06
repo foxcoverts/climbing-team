@@ -16,12 +16,13 @@ class KeyController extends Controller
     /**
      * Display a listing of the key.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         Gate::authorize('viewAny', Key::class);
 
         return view('key.index', [
-            'keys' => Key::orderBy('name')->with('holder')->get(),
+            'keys' => Key::forUser($request->user())
+                ->orderBy('name')->with('holder')->get(),
         ]);
     }
 
@@ -83,20 +84,6 @@ class KeyController extends Controller
     }
 
     /**
-     * Show the form for transferring the key to another holder.
-     */
-    public function transfer(Request $request, Key $key): View
-    {
-        Gate::authorize('update', $key);
-
-        return view('key.transfer', [
-            'ajax' => $request->ajax(),
-            'key' => $key,
-            'users' => User::orderBy('name')->get(),
-        ]);
-    }
-
-    /**
      * Update the specified key in storage.
      */
     public function update(UpdateKeyRequest $request, Key $key): RedirectResponse
@@ -105,13 +92,7 @@ class KeyController extends Controller
 
         $key->update($request->validated());
 
-        if ($key->wasChanged('holder_id')) {
-            return redirect()->route('key.index')
-                ->with('alert', [
-                    'message' => __('Key transferred to :name.', ['name' => $key->holder->name]),
-                    '$dispatch' => 'key:updated',
-                ]);
-        } elseif ($key->wasChanged()) {
+        if ($key->wasChanged()) {
             return redirect()->route('key.index')
                 ->with('alert', [
                     'message', __('Key updated.'),

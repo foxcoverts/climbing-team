@@ -17,9 +17,9 @@ use App\Http\Controllers\KeyController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProfileKeyController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
+use App\Http\Controllers\TransferKeyController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\UserBookingController;
 use App\Http\Controllers\UserBookingInviteController;
@@ -81,7 +81,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('change', ChangeController::class)->name('change.index');
 
-    Route::get('key/{key}/transfer', [KeyController::class, 'transfer'])->name('key.transfer');
+    Route::controller(TransferKeyController::class)->group(function () {
+        Route::get('key/{key}/transfer', 'edit')->name('key.transfer');
+        Route::put('key/{key}/transfer', 'update');
+        Route::patch('key/{key}/transfer', 'update');
+    });
     Route::resource('key', KeyController::class);
 
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
@@ -91,9 +95,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->parameters(['news' => 'post'])
         ->only('index', 'show');
 
-    Route::controller(ProfileKeyController::class)->group(function () {
-        Route::get('profile/key', 'index')->name('profile.key.index');
-    });
     Route::controller(ProfileController::class)->group(function () {
         Route::get('profile', 'edit')->name('profile.edit');
         Route::patch('profile', 'update')->name('profile.update');

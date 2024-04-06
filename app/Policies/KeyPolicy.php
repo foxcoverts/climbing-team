@@ -20,7 +20,7 @@ class KeyPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('manage', Key::class);
+        return true;
     }
 
     /**
@@ -37,6 +37,15 @@ class KeyPolicy
     public function create(User $user): bool
     {
         return $user->can('manage', Key::class);
+    }
+
+    /**
+     * Determine whether the user can transfer keys.
+     */
+    public function transfer(User $user, Key $key): bool
+    {
+        return $user->can('manage', Key::class)
+            || ($user->id == $key->holder_id);
     }
 
     /**

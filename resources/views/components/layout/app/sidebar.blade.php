@@ -64,9 +64,9 @@
                 </x-slot:icon>
             </x-sidebar.link>
         @endcan
-        @can('viewAny', App\Models\Key::class)
+        @if (auth()->user()->keys()->exists())
             <x-sidebar.link route='key.index' :match-routes="['key.*']" :label="__('Keys')" icon="key" />
-        @endcan
+        @endif
         @can('viewAny', App\Models\MailLog::class)
             <x-sidebar.link route='mail.index' :match-routes="['mail.*']" :label="__('Mail Log')">
                 <x-slot:icon>
@@ -88,9 +88,6 @@
     <x-sidebar.group :heading="__('Account')">
         @auth
             <x-sidebar.link route='profile.edit' :label="__('Profile')" icon="user-solid-square" />
-            @if (auth()->user()->keys()->exists())
-                <x-sidebar.link route='profile.key.index' :label="__('Keys')" icon="key" />
-            @endif
             <x-sidebar.button route='logout' method="POST" :label="__('Logout')">
                 <x-slot:icon>
                     <path

@@ -33,7 +33,7 @@
                         @endcan
                     </p>
 
-                    @can('update', $key)
+                    @can('transfer', $key)
                         <x-button.primary class="gap-2 group" :href="route('key.transfer', $key)" x-target="transfer-key"
                             @ajax:before="$dispatch('dialog:open')">
                             <x-icon.transfer class="w-4 h-4 fill-current" />

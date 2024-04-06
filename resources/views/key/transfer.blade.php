@@ -4,7 +4,7 @@
             <h1 class="text-2xl font-medium py-4 text-gray-900 dark:text-gray-100">{{ $key->name }}</h1>
         </header>
 
-        <form {!! $ajax ? 'x-target="transfer-key keys"' : '' !!} id="transfer-key" method="POST" action="{{ route('key.update', $key) }}"
+        <form {!! $ajax ? 'x-target="transfer-key keys"' : '' !!} id="transfer-key" method="POST" action="{{ route('key.transfer', $key) }}"
             aria-label="__('Transfer Key')" x-data="{
                 key: {{ Js::from([
                     'name' => $key->name,
