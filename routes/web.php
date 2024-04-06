@@ -17,6 +17,7 @@ use App\Http\Controllers\KeyController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileKeyController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TrashedBookingController;
@@ -31,12 +32,6 @@ Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
-
-    Route::controller(ProfileController::class)->group(function () {
-        Route::get('profile', 'edit')->name('profile.edit');
-        Route::patch('profile', 'update')->name('profile.update');
-        Route::delete('profile', 'destroy')->name('profile.destroy');
-    });
 
     Route::get('booking', [BookingController::class, 'calendar'])->name('booking.calendar');
     foreach (BookingStatus::cases() as $status) {
@@ -95,6 +90,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('news', NewsPostController::class)
         ->parameters(['news' => 'post'])
         ->only('index', 'show');
+
+    Route::controller(ProfileKeyController::class)->group(function () {
+        Route::get('profile/key', 'index')->name('profile.key.index');
+    });
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('profile', 'edit')->name('profile.edit');
+        Route::patch('profile', 'update')->name('profile.update');
+        Route::delete('profile', 'destroy')->name('profile.destroy');
+    });
 
     Route::controller(UserBookingInviteController::class)->group(function () {
         Route::get('user/{user}/booking/invite', 'create')->name('user.booking.invite');

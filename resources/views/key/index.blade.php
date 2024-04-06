@@ -13,11 +13,15 @@
         </header>
 
         <div x-init x-merge="morph" id="keys" @key:updated="$ajax({{ Js::from(route('key.index')) }})">
-            @foreach ($keys as $key)
+            @forelse ($keys as $key)
                 <div class="py-2 px-4 sm:px-8 border-b space-y-1">
                     <h2 class="text-lg font-medium" id="{{ sprintf('key-%s-name', $key->id) }}">
-                        <a href="{{ route('key.edit', $key) }}"
-                            x-target="{{ sprintf('key-%s-name', $key->id) }}">{{ $key->name }}</a>
+                        @can('update', $key)
+                            <a href="{{ route('key.edit', $key) }}"
+                                x-target="{{ sprintf('key-%s-name', $key->id) }}">{{ $key->name }}</a>
+                        @else
+                            {{ $key->name }}
+                        @endcan
                     </h2>
 
                     <p class="text-gray-900 dark:text-gray-100"><dfn
@@ -37,7 +41,11 @@
                         </x-button.primary>
                     @endcan
                 </div>
-            @endforeach
+            @empty
+                <div class="py-2 px-4 sm:px-8 border-b">
+                    @lang('You have no keys.')
+                </div>
+            @endforelse
         </div>
 
         <dialog x-init @dialog:open.window="$el.showModal()" @ajax:success="$el.close()"
