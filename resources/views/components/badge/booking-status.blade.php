@@ -1,25 +1,16 @@
 @use('App\Enums\BookingStatus')
-@props(['status'])
-
-@switch($status)
-    @case(BookingStatus::Tentative)
-        @php($icon = 'calendar.tee')
-        @php($color = 'yellow')
-    @break
-
-    @case(BookingStatus::Confirmed)
-        @php($icon = 'calendar.check')
-        @php($color = 'lime')
-    @break
-
-    @default
-        @php($icon = 'calendar.cross')
-        @php($color = 'pink')
-@endswitch
-
-<x-badge
-    {{ $attributes->merge([
-        'color' => $color,
-        'icon' => $icon,
-        'label' => __('app.booking.status.' . $status->value),
-    ]) }} />
+@props([
+    'status',
+    'color' => match ($status) {
+        BookingStatus::Tentative => 'yellow',
+        BookingStatus::Confirmed => 'lime',
+        default => 'pink',
+    },
+    'icon' => match ($status) {
+        BookingStatus::Tentative => 'calendar.tee',
+        BookingStatus::Confirmed => 'calendar.check',
+        default => 'calendar.cross',
+    },
+    'label' => __('app.booking.status.' . $status->value),
+])
+<x-badge :$color :$icon :$label {{ $attributes }} />

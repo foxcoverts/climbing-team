@@ -1,7 +1,7 @@
-@props(['active' => true])
-
-@if ($active)
-    <x-badge {{ $attributes->merge(['color' => 'lime', 'label' => __('Active')]) }} />
-@else
-    <x-badge {{ $attributes->merge(['color' => 'gray', 'label' => __('Inactive')]) }} />
-@endif
+@props([
+    'active',
+    'color' => $active ? 'lime' : 'gray',
+    'icon' => null,
+    'label' => $active ? __('Active') : __('Inactive'),
+])
+<x-badge :$color :$icon :$label {{ $attributes }} />

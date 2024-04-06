@@ -1,4 +1,4 @@
-@props(['color' => 'gray', 'label' => $slot, 'icon' => null])
+@props(['color' => 'gray', 'icon' => null, 'label' => $slot])
 <span
     {{ $attributes->class([
         'inline-flex items-center self-stretch gap-1 rounded-md px-2 py-1 font-medium ring-1 ring-inset h-1lh',
@@ -17,6 +17,6 @@
             aria-hidden="true" />
     @endif
     @if (!empty($label))
-        <span>{{ $label }}</span>
+        <span label>{{ $label }}</span>
     @endif
 </span>

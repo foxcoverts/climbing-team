@@ -1,4 +1,2 @@
-<x-badge {{ $attributes->merge([
-    'color' => 'sky',
-    'label' => __('Permit Holder'),
-]) }} />
+@props(['color' => 'sky', 'icon' => null, 'label' => __('Permit Holder')])
+<x-badge :$color :$icon :$label {{ $attributes }} />
