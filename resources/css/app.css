@@ -41,6 +41,32 @@ body::-webkit-scrollbar {
         --fc-list-event-hover-bg-color: rgba(255, 255, 255, 0.1);
     }
 }
+
+.fc .fc-toolbar.fc-header-toolbar {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin: 0;
+}
+.fc .fc-view-harness {
+    padding: 1rem;
+}
+@media (min-width: 640px) {
+    .fc .fc-toolbar.fc-header-toolbar {
+        border-bottom-width: 1px;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+    .fc .fc-view-harness {
+        padding: 2rem;
+    }
+}
+.fc .fc-toolbar-title {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 500;
+}
 .fc .fc-toolbar {
     flex-wrap: wrap;
     column-gap: 0.75em;
