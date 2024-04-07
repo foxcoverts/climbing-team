@@ -1,7 +1,7 @@
 @use('App\Enums\BookingStatus')
 @use('Carbon\Carbon')
 @props(['showRoute' => 'booking.show'])
-<table class="w-full mt-6 text-gray-700 dark:text-gray-300 border border-gray-300">
+<table class="w-full text-gray-700 dark:text-gray-300 border border-gray-300">
     @forelse ($bookings as $day => $list)
         <thead>
             <tr class="border border-gray-300">
