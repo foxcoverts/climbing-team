@@ -1,12 +1,7 @@
 @props(['booking'])
-<div class="space-y-2 my-2 w-full max-w-xl flex-grow">
-    <div
-        class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between">
-        <p class="flex items-center">
-            <x-icon.location class="h-5 w-5 fill-current mr-1" />
-            {{ $booking->location }}
-        </p>
-        <x-badge.booking-status :status="$booking->status" class="text-sm" />
+<div class="space-y-2 w-full max-w-prose flex-grow">
+    <div class="border-b border-gray-800 dark:border-gray-200">
+        <h2 class="text-xl font-medium text-gray-800 dark:text-gray-200">@lang('Booking Details')</h2>
     </div>
 
     <div>

@@ -1,9 +1,9 @@
 <x-layout.app :title="__('Share Booking')">
-    <section class="p-4 sm:px-8">
+    <section>
         @include('booking.partials.header')
 
-        <div class="flex flex-wrap gap-4">
-            <div class="w-full max-w-xl">
+        <div class="p-4 sm:px-8 flex flex-wrap gap-4">
+            <div class="w-full max-w-prose">
                 @include('booking.partials.details')
 
                 <div class="space-y-2">

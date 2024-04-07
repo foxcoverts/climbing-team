@@ -1,13 +1,23 @@
 @use('Carbon\Carbon')
 <x-layout.app :title="__('Qualification - :name', ['name' => $user->name])">
-    <section class="p-4 sm:px-8 max-w-xl space-y-4">
-        <header>
-            <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                {{ $user->name }}
-            </h1>
+    <section>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10 px-4 sm:px-8">
+            <div class="py-2 flex flex-wrap min-h-16 items-center justify-between gap-2 max-w-prose">
+                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                    {{ $user->name }}
+                </h1>
+
+                @can('update', $qualification)
+                    <nav class="grow flex justify-end">
+                        <x-button.primary :href="route('user.qualification.edit', [$user, $qualification])">
+                            @lang('Edit')
+                        </x-button.primary>
+                    </nav>
+                @endcan
+            </div>
         </header>
 
-        <article class="space-y-2">
+        <article class="mt-4 px-4 sm:px-8 space-y-2 max-w-prose">
             <h2 class="text-lg sm:text-xl font-medium text-gray-900 dark:text-gray-100">@lang('app.qualification.type.' . $qualification->detail_type)</h2>
 
             @if ($qualification->detail instanceof \App\Models\GirlguidingQualification)
@@ -71,17 +81,12 @@
             @endif
         </article>
 
-        <footer class="flex flex-wrap items-start gap-4 mt-6">
-            @can('update', $qualification)
-                <x-button.primary :href="route('user.qualification.edit', [$user, $qualification])">
-                    @lang('Edit')
-                </x-button.primary>
-            @endcan
-            @can('viewAny', [App\Models\Qualification::class, $user])
+        @can('viewAny', [App\Models\Qualification::class, $user])
+            <footer class="p-4 sm:px-8 mt-4 flex flex-wrap items-start gap-4">
                 <x-button.secondary :href="route('user.qualification.index', $user)">
                     @lang('Back')
                 </x-button.secondary>
-            @endcan
-        </footer>
+            </footer>
+        @endcan
     </section>
 </x-layout.app>

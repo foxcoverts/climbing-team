@@ -2,7 +2,7 @@
 @use('App\Enums\Role')
 @use('App\Enums\Section')
 <x-layout.app :header="$user->name" :title="__('Update - :name', $user->only('name'))">
-    <section class="p-4 sm:px-8 max-w-xl" x-data="{
+    <section x-data="{
         submitted: false,
         user: {{ Js::from([
             'name' => old('name', $user->name),
@@ -23,21 +23,26 @@
             });
         },
     }">
-        <header>
-            <h2 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                @lang('Profile Information')
-            </h2>
-            <p class="mt-1 text-md text-gray-600 dark:text-gray-400">
-                @lang("Update this User's profile information.")
-            </p>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10">
+            <div class="px-4 sm:px-8">
+                <div class="py-2 flex flex-wrap min-h-16 max-w-prose items-center justify-between gap-2">
+                    <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                        @lang('Profile Information')
+                    </h1>
+                </div>
+            </div>
         </header>
 
         <form method="post" action="{{ route('user.update', $user) }}" id="update-user"
-            x-on:submit="setTimeout(() => submitted = true, 0)">
+            x-on:submit="setTimeout(() => submitted = true, 0)" class="p-4 sm:px-8">
             @method('PATCH')
             @csrf
 
-            <div class="mt-6">
+            <div class="max-w-prose">
+                <p class="mb-6 text-md text-gray-600 dark:text-gray-400">
+                    @lang("Update this User's profile information.")
+                </p>
+
                 <div class="mb-6">
                     <x-input-label for="name" :value="__('Name')" />
                     <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" required
@@ -179,13 +184,11 @@
             </div>
         </form>
 
-        <footer class="flex flex-wrap items-center gap-4 mt-6">
+        <footer class="px-4 pb-4 sm:px-8 flex flex-wrap items-center gap-4">
             <x-button.primary x-bind:disabled="submitted" form="update-user" class="whitespace-nowrap"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
             @include('user.partials.delete-button')
-            <x-button.secondary :href="route('user.show', $user)">
-                @lang('Back')
-            </x-button.secondary>
+            <x-button.secondary :href="route('user.show', $user)" :label="__('Back')" />
         </footer>
     </section>
 </x-layout.app>

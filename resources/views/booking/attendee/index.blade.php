@@ -1,14 +1,14 @@
 @use('App\Enums\AttendeeStatus')
 <x-layout.app :title="__('Roll call')">
-    <section class="p-4 sm:px-8">
+    <section>
         @include('booking.partials.header')
 
-        <div class="flex flex-wrap-reverse gap-4">
-            <div class="w-full max-w-xl">
+        <div class="p-4 sm:px-8 flex flex-wrap-reverse gap-4">
+            <div class="w-full max-w-prose">
                 @include('booking.partials.details')
             </div>
 
-            <aside class="my-2 flex-grow flex-shrink basis-80 max-w-xl">
+            <aside class="my-2 flex-grow flex-shrink basis-80 max-w-prose">
                 <form method="POST" action="">
                     @csrf
                     @method('PATCH')
@@ -35,13 +35,13 @@
                             </div>
                         @endif
 
-                        @if ($list = $attendees[AttendeeStatus::Accepted->value])
+                        @if (isset($attendees[AttendeeStatus::Accepted->value]))
                             <div>
                                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                                     @lang('app.attendee.status.' . AttendeeStatus::Accepted->value)
                                 </h3>
                                 <ul>
-                                    @foreach ($list as $attendee)
+                                    @foreach ($attendees[AttendeeStatus::Accepted->value] as $attendee)
                                         <li>
                                             <label class="flex items-center gap-1 text-gray-800 dark:text-gray-200">
                                                 <input type="checkbox" name="attendee_ids[]" value="{{ $attendee->id }}"

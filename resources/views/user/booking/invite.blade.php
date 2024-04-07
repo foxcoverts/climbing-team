@@ -1,19 +1,23 @@
 <x-layout.app :title="__('Invite to Bookings - :name', ['name' => $user->name])">
-    <section class="p-4 sm:px-8">
-        <header>
-            <h1 class="text-2xl font-medium">{{ $user->name }}</h1>
+    <section>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10 px-4 sm:px-8 ">
+            <div class="py-2 flex flex-wrap min-h-16 max-w-prose items-center justify-between gap-2">
+                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                    {{ $user->name }}
+                </h1>
+            </div>
         </header>
 
         @if ($bookings->isNotEmpty())
             <form method="post" action="{{ route('user.booking.invite.store', $user) }}"
-                class="my-2 flex-grow flex-shrink basis-80 max-w-xl" x-data="{ form: { booking_ids: [] }, emailVerified: {{ Js::from($user->hasVerifiedEmail()) }}, submitted: false }"
+                class="p-4 sm:px-8 flex-grow flex-shrink basis-80" x-data="{ form: { booking_ids: [] }, emailVerified: {{ Js::from($user->hasVerifiedEmail()) }}, submitted: false }"
                 x-on:submit="setTimeout(() => submitted = true, 0)">
                 @csrf
 
-                <div class="space-y-6">
+                <div class="space-y-6 max-w-prose">
                     @unless ($user->hasVerifiedEmail())
                         <fieldset class="m-0 p-0">
-                            <legend class="text-lg font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
+                            <legend class="text-xl font-medium border-b border-gray-800 dark:border-gray-200 w-full">
                                 @lang('Email unverified')</legend>
 
                             <p class="mt-1 text-md">
@@ -30,7 +34,7 @@
                     <fieldset x-data="checkboxes({{ Js::from($bookings->pluck('id')) }})" x-modelable="values" x-model="form.booking_ids"
                         x-show="emailVerified" {{ $user->hasVerifiedEmail() ? '' : 'x-transition x-cloak' }}
                         class="m-0 p-0">
-                        <legend class="text-lg font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
+                        <legend class="text-xl font-medium border-b border-gray-800 dark:border-gray-200 w-full">
                             @lang('Invite to Bookings')</legend>
 
                         <p class="mt-1 text-md text-gray-600 dark:text-gray-400">

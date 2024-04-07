@@ -1,7 +1,7 @@
 <x-layout.app :title="__('Keys')">
     <section>
-        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10">
-            <div class="px-4 sm:px-8 flex items-center justify-between">
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10 px-4 sm:px-8">
+            <div class="flex items-center justify-between max-w-prose">
                 <h1 class="text-2xl font-medium py-4 text-gray-900 dark:text-gray-100">@lang('Keys')</h1>
 
                 @can('create', App\Models\Key::class)
@@ -14,7 +14,7 @@
 
         <div x-init x-merge="morph" id="keys" @key:updated="$ajax({{ Js::from(route('key.index')) }})">
             @forelse ($keys as $key)
-                <div class="py-2 px-4 sm:px-8 border-b space-y-1">
+                <div class="p-4 sm:px-8 border-b space-y-1">
                     <h2 class="text-lg font-medium" id="{{ sprintf('key-%s-name', $key->id) }}">
                         @can('update', $key)
                             <a href="{{ route('key.edit', $key) }}"

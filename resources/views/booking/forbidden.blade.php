@@ -3,18 +3,17 @@
         {{ $booking->activity }} on {{ localDate($booking->start_at)->toFormattedDayDateString() }}
     </x-slot:title>
 
-    <section class="p-4 sm:px-8">
+    <section>
         @include('booking.partials.header')
 
-        <div class="flex flex-wrap gap-4">
-            <div class="w-full max-w-xl">
-                <div class="space-y-2 my-2 w-full max-w-xl flex-grow">
+        <div class="p-4 sm:px-8 flex flex-wrap gap-4">
+            <div class="w-full max-w-prose">
+                <div class="space-y-2 my-2 w-full flex-grow">
                     <div
-                        class="text-lg text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between">
-                        <p class="flex items-center">
-                            <x-icon.location class="h-5 w-5 fill-current mr-1" />
-                            {{ $booking->location }}
-                        </p>
+                        class="text-lg font-medium text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between">
+                        <h2 class="flex items-center">
+                            @lang('Booking Details')
+                        </h2>
                     </div>
 
                     <div>

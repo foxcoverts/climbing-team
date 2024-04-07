@@ -27,6 +27,10 @@
 
                 <footer class="flex items-start gap-4">
                     <x-button.primary :label="__('Transfer')" />
+
+                    @unless ($ajax)
+                        <x-button.secondary :href="route('key.index')" :label="__('Back')" />
+                    @endunless
                 </footer>
             </div>
         </form>

@@ -1,17 +1,17 @@
 @use('App\Enums\AttendeeStatus')
 <x-layout.app :title="__('Add Attendee')">
-    <section class="p-4 sm:px-8">
+    <section>
         @include('booking.partials.header')
 
-        <div class="flex flex-wrap-reverse gap-4">
+        <div class="p-4 sm:px-8 flex flex-wrap-reverse gap-4">
             @include('booking.partials.details')
 
-            <div class="my-2 flex-grow flex-shrink basis-80 max-w-xl">
+            <div class="flex-grow flex-shrink basis-80 max-w-prose">
                 @if ($users->isNotEmpty())
                     <form method="post" action="{{ route('booking.attendee.store', $booking) }}" x-data="{ form: {}, submitted: false, }"
                         x-on:submit="setTimeout(() => submitted = true, 0)">
                         @csrf
-                        <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
+                        <h3 class="text-xl font-medium border-b border-gray-800 dark:border-gray-200 w-full">
                             @lang('Attendance')</h3>
 
                         <div class="space-y-1 my-1">

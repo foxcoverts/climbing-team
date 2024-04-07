@@ -1,9 +1,14 @@
 <x-layout.app :title="__('Privacy Policy')">
+    <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10 px-4 sm:px-8">
+        <div class="py-2 flex flex-wrap min-h-16 max-w-prose items-center justify-between gap-2">
+            <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                Privacy Policy
+            </h1>
+        </div>
+    </header>
+
     <article class="p-4 sm:px-8 space-y-4 sm:space-y-6 text-gray-900 dark:text-gray-300">
-        <header class="space-y-2">
-            <h2 class="text-2xl lg:text-4xl font-medium text-gray-900 dark:text-gray-100">Privacy Policy</h2>
-            <p><dfn>Last updated:</dfn> 19 March 2024</p>
-        </header>
+        <p><dfn>Last updated:</dfn> 19 March 2024</p>
 
         <section class="space-y-2">
             <h3 class="text-lg sm:text-xl lg:text-2xl font-medium text-gray-900 dark:text-gray-100">Our contact details

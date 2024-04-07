@@ -1,9 +1,12 @@
 <x-layout.app :title="__('Booking')">
-    <section class="p-4 sm:px-8">
+    <section>
         @include('booking.partials.header')
-        @include('booking.partials.details')
 
-        <footer class="mt-6 flex items-start gap-4">
+        <div class="p-4 sm:px-8">
+            @include('booking.partials.details')
+        </div>
+
+        <footer class="p-4 sm:px-8 flex items-start gap-4">
             @can('restore', $booking)
                 <form method="POST" action="{{ route('trash.booking.update', $booking) }}" x-data="{ submitted: false }"
                     x-on:submit="setTimeout(() => submitted = true, 0)">

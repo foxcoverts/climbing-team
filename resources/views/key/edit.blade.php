@@ -8,10 +8,13 @@
             <form x-target id="{{ sprintf('key-%s-name', $key->id) }}" method="POST"
                 action="{{ route('key.update', $key) }}">
                 @csrf @method('PATCH')
-                <input type="text" name="name" value="{{ $key->name }}"
-                    class="text-lg font-medium max-w-full border-0 p-0 text-left -ml-1 pl-1" autocomplete="off"
-                    x-autofocus @keyup.escape="$el.form.reset(); $el.form.requestSubmit();"
-                    @click.outside="$el.form.requestSubmit()" data-1p-ignore />
+                <input type="text" name="name" value="{{ $key->name }}" autocomplete="off" data-1p-ignore
+                    class="text-lg font-medium max-w-full border-0 p-0 text-left -ml-1 pl-1
+                    disabled:cursor-not-allowed disabled:text-gray-400 dark:bg-gray-900 dark:text-gray-300 dark:disabled:text-gray-600
+                    focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"
+                    style="color-scheme: light dark;" x-autofocus
+                    @keyup.escape="$el.form.reset(); $el.form.requestSubmit();"
+                    @click.outside="$el.form.requestSubmit()" />
                 <input type="submit" :class="'hidden'" />
             </form>
         @else
@@ -33,6 +36,7 @@
 
                     <footer class="flex items-start gap-4">
                         <x-button.primary :label="__('Save')" />
+                        <x-button.secondary :href="route('key.index')" :label="__('Back')" />
                     </footer>
                 </div>
             </form>

@@ -1,19 +1,19 @@
 @use('App\Enums\Accreditation')
 <x-layout.app :title="__('Invite Attendees')">
-    <section class="p-4 sm:px-8">
+    <section>
         @include('booking.partials.header')
 
-        <div class="flex flex-wrap-reverse gap-4">
+        <div class="p-4 sm:px-8 flex flex-wrap-reverse gap-4">
             @include('booking.partials.details')
 
             @if ($users->isNotEmpty())
                 <form method="post" action="{{ route('booking.attendee.invite.store', $booking) }}"
-                    class="my-2 flex-grow flex-shrink basis-80 max-w-xl" x-data="{ form: { user_ids: [] }, submitted: false }"
+                    class="flex-grow flex-shrink basis-80 max-w-prose" x-data="{ form: { user_ids: [] }, submitted: false }"
                     x-on:submit="setTimeout(() => submitted = true, 0)">
                     @csrf
 
                     <fieldset x-data="checkboxes({{ Js::from($users->pluck('id')) }})" x-modelable="values" x-model="form.user_ids" class="m-0 p-0">
-                        <legend class="text-lg font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
+                        <legend class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full mb-1">
                             @lang('Invite Attendees')</legend>
 
                         <label class="mt-1 w-full flex gap-1 items-center">

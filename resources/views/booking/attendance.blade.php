@@ -1,10 +1,10 @@
 @use('App\Enums\AttendeeStatus')
 @use('Illuminate\Contracts\Auth\Access\Gate')
 <x-layout.app :title="__('Edit Attendance')">
-    <section class="p-4 sm:px-8">
+    <section>
         @include('booking.partials.header')
-        <div class="md:flex md:space-x-4">
-            <div class="w-full max-w-xl">
+        <div class="p-4 sm:px-8 md:flex md:space-x-4">
+            <div class="w-full max-w-prose">
                 @include('booking.partials.details')
 
                 @if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('respond', [$booking, $currentUser]))

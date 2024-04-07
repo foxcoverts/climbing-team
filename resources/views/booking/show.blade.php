@@ -3,25 +3,21 @@
         {{ $booking->activity }} on {{ localDate($booking->start_at)->toFormattedDayDateString() }}
     </x-slot:title>
 
-    <section class="p-4 sm:px-8">
+    <section>
         @include('booking.partials.header')
 
-        <div class="flex flex-wrap gap-4">
-            <div class="w-full max-w-xl">
+        <div class="p-4 sm:px-8 flex flex-wrap gap-4">
+            <div class="w-full max-w-prose">
                 @include('booking.partials.details')
-
-                @include('booking.partials.recent-activity')
 
                 @can('update', $booking)
                     <footer class="flex flex-wrap items-start gap-4 mt-4">
-                        <x-button.primary :href="route('booking.edit', $booking)">
-                            @lang('Edit')
-                        </x-button.primary>
-                        <x-button.secondary :href="route('booking.share', $booking)">
-                            @lang('Share')
-                        </x-button.secondary>
+                        <x-button.primary :href="route('booking.edit', $booking)" :label="__('Edit')" />
+                        <x-button.secondary :href="route('booking.share', $booking)" :label="__('Share')" />
                     </footer>
                 @endcan
+
+                @include('booking.partials.recent-activity')
             </div>
 
             <x-guest-list :$booking :$currentUser />
