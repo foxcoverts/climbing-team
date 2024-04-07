@@ -1,10 +1,12 @@
 <x-layout.app :title="$user->name">
-    <section class="p-4 sm:px-8 max-w-xl space-y-4">
-        <header>
-            <h2 class="text-2xl font-medium">{{ $user->name }}</h2>
+    <section>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10">
+            <h1 class="p-4 sm:px-8 text-2xl font-medium text-gray-900 dark:text-gray-100">
+                {{ $user->name }}
+            </h1>
         </header>
 
-        <div class="max-w-xl flex-grow">
+        <div class="p-4 sm:px-8 max-w-xl flex-grow">
             <p class="flex flex-wrap gap-2 items-stretch mb-4">
                 @unless ($user->isActive())
                     <x-badge.active :active="$user->isActive()" class="text-sm text-nowrap whitespace-nowrap" />
@@ -157,7 +159,7 @@
             </div>
         </div>
 
-        <footer class="flex flex-wrap items-start gap-4 mt-6">
+        <footer class="px-4 sm:px-8 mt-4 flex flex-wrap items-start gap-4">
             @can('update', $user)
                 <x-button.primary :href="route('user.edit', $user)">
                     @lang('Edit')
