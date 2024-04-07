@@ -18,7 +18,8 @@ class MailLogController extends Controller
         Gate::authorize('viewAny', MailLog::class);
 
         return view('mail-log.index', [
-            'mails' => MailLog::orderByDesc('created_at')->paginate(5),
+            'mails' => MailLog::orderByDesc('created_at')
+                ->cursorPaginate(5),
         ]);
     }
 

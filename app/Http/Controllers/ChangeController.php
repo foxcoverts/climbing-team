@@ -18,7 +18,7 @@ class ChangeController extends Controller
         $changes = Change::with('booking', 'booking.attendees', 'author', 'attendees', 'comments', 'fields')
             ->has('booking')
             ->orderByDesc('created_at')
-            ->paginate(10);
+            ->cursorPaginate(10);
 
         return view('change.index', [
             'changes' => $changes,
