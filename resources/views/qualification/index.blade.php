@@ -23,8 +23,9 @@
 
         <div class="text-gray-700 dark:text-gray-300 divide-y">
             @forelse ($qualifications as $qualification)
-                <div class="px-4 py-2 sm:px-8" x-data="{{ Js::from(['isExpired' => $qualification->isExpired()]) }}" x-cloak x-show="!isExpired || showExpired"
-                    x-transition>
+                <div class="py-2 px-4 sm:px-8 hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                    x-data="{{ Js::from(['isExpired' => $qualification->isExpired()]) }}" x-cloak x-show="!isExpired || showExpired" x-transition
+                    @click="window.location={{ Js::from(route('user.qualification.show', [$user, $qualification])) }}">
                     <h3 class="font-medium"><a
                             href="{{ route('user.qualification.show', [$user, $qualification]) }}">{{ $qualification->detail->summary }}</a>
                     </h3>

@@ -9,7 +9,7 @@
         <div class="text-gray-700 dark:text-gray-300 divide-y border-b" id="mails" x-merge="append">
             @forelse ($mails as $mail)
                 <div class="p-2 px-4 sm:px-8 flex items-start gap-2 hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                    @click="window.location='{{ route('mail.show', $mail) }}'">
+                    @click="window.location={{ Js::from(route('mail.show', $mail)) }}">
                     <div>
                         <p @class(['py-0.5', 'text-sky-500' => $mail->isUnread()])>
                             @if ($mail->done)
