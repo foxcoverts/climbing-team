@@ -122,7 +122,7 @@ class BookingController extends Controller
                 'currentUser' => $request->user(),
             ]);
         } elseif (auth()->guest()) {
-            return response()->view('booking.preview', [
+            return view('booking.preview', [
                 'booking' => $booking,
             ]);
         } else {

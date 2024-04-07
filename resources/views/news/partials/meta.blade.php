@@ -7,7 +7,7 @@
         @endisset
     @endisset
     @isset($post->date)
-        Posted
+        @lang('Posted')
         <span class="cursor-default"
             title="{{ localDate($post->date)->toDayDateTimeString() }}">{{ localDate($post->date)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span>
     @endisset

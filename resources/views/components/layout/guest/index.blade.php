@@ -43,7 +43,7 @@
         @endif
     @endisset
     @isset($updated)
-        <meta property="og:updated_time" content="{{ $updated->toIso8601String() }}" />
+        <meta property="og:updated_time" content="{{ localDate($updated)->toIso8601String() }}" />
     @endisset
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="{{ config('app.locale', 'en') }}" />
@@ -77,15 +77,22 @@
 
         <x-layout.guest.alerts />
 
-        <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-            @if (!empty($title))
-                <div>
-                    <h1 class="border-b mb-4 font-bold text-lg">{{ $title }}</h1>
-                </div>
-            @endif
+        <div class="w-full sm:max-w-md mt-6 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            @isset($image)
+                @if ($image->attributes->get('hero'))
+                    <img src="{{ $image }}" width="{{ $image->attributes->get('width') }}"
+                        height="{{ $image->attributes->get('height') }}" />
+                @endif
+            @endisset
+            <div class="px-6 py-4">
+                @if (!empty($title))
+                    <div>
+                        <h1 class="border-b mb-4 font-bold text-lg">{{ $title }}</h1>
+                    </div>
+                @endif
 
-            {{ $slot }}
+                {{ $slot }}
+            </div>
         </div>
     </div>
 </body>

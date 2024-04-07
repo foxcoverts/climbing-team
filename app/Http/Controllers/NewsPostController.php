@@ -33,6 +33,12 @@ class NewsPostController extends Controller
      */
     public function show(NewsPost $post): View
     {
+        if (auth()->guest()) {
+            return view('news.preview', [
+                'post' => $post,
+            ]);
+        }
+
         Gate::authorize('view', $post);
 
         return view('news.show', [

@@ -33,15 +33,14 @@
         </h1>
 
         <div class="w-full sm:max-w-xl bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-            <img src="{{ asset('about/climber.jpg') }}"
-                srcset="{{ asset('about/climber.jpg') }}, {{ asset('about/climber@2x.jpg') }} 2x" alt="Child climbing"
-                width="576" height="296" class="w-full max-w-full" />
+            <img src="{{ asset('images/about/climber.jpg') }}"
+                srcset="{{ asset('images/about/climber.jpg') }}, {{ asset('images/about/climber@2x.jpg') }} 2x"
+                alt="Child climbing" width="576" height="296" class="w-full max-w-full" />
 
             <div class="px-6 py-4 space-y-4">
                 <p>Climbing and Abseiling sessions at Fox Coverts Campsite are run by our team of qualified climbing
                     instructors. Groups with their own instructors and equipment wishing to hire the climbing tower
-                    should
-                    contact the Climbing Manager for advice.</p>
+                    should contact the Climbing Manager for advice.</p>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>

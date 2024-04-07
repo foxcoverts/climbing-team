@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Repositories\NewsPostRepository;
+use Illuminate\Contracts\Routing\UrlRoutable;
 use Illuminate\Support\Arr;
 use League\CommonMark\Extension\FrontMatter\Output\RenderedContentWithFrontMatter;
 use League\CommonMark\Output\RenderedContentInterface;
-use Illuminate\Contracts\Routing\UrlRoutable;
 
 /**
  * File-based news system. Some functions added to feel like eloquent.
@@ -28,11 +28,20 @@ class NewsPost implements UrlRoutable
         }
     }
 
+    protected function getSummary(): string
+    {
+        if (empty($this->markdown->getContent())) {
+            return '';
+        }
+
+        $doc = new \DOMDocument();
+        $doc->loadHTML($this->markdown->getContent());
+
+        return $doc->saveHTML($doc->getElementsByTagName('p')->item(0));
+    }
+
     /**
      * Dynamically retrieve attributes on the model.
-     *
-     * @param  string  $key
-     * @return mixed
      */
     public function __get(string $key): mixed
     {
@@ -48,25 +57,25 @@ class NewsPost implements UrlRoutable
         }
 
         if ($key === 'summary') {
-            if (empty($this->markdown->getContent())) return '';
-
-            $doc = new \DOMDocument();
-            $doc->loadHTML($this->markdown->getContent());
-            return $doc->saveHTML($doc->getElementsByTagName('p')->item(0));
+            return $this->getSummary();
+        }
+        if ($key === 'summaryText') {
+            return strip_tags($this->getSummary());
         }
 
-        throw new \DomainException("Cannot get unknown property '$key' on " . get_class($this));
+        throw new \DomainException("Cannot get unknown property '$key' on ".get_class($this));
     }
 
     /**
      * Dynamically check attributes exist on the model.
-     *
-     * @param string $key
-     * @return boolean
      */
     public function __isset(string $key): bool
     {
-        return (Arr::has($this->getAttributes(), $key) || $key === 'filename' || $key === 'content');
+        return Arr::has($this->getAttributes(), $key)
+            || $key === 'filename'
+            || $key === 'content'
+            || $key === 'summary'
+            || $key === 'summaryText';
     }
 
     /**
@@ -77,6 +86,7 @@ class NewsPost implements UrlRoutable
         if ($this->markdown instanceof RenderedContentWithFrontMatter) {
             return $this->markdown->getFrontMatter();
         }
+
         return [
             'title' => $this->filepath,
         ];
