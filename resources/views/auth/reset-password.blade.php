@@ -33,7 +33,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <x-button.primary x-bind:disabled="submitted"
+            <x-button.primary x-bind:disabled="submitted" :label="__('Reset Password')"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Reset Password') }}'" />
         </div>
     </form>

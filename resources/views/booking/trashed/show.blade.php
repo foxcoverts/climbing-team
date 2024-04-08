@@ -13,7 +13,7 @@
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="deleted_at" value="0" />
-                    <x-button.primary x-bind:disabled="submitted"
+                    <x-button.primary x-bind:disabled="submitted" :label="__('Restore')"
                         x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Restore') }}'" />
                 </form>
             @endcan

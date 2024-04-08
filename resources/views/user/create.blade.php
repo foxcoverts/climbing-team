@@ -117,7 +117,7 @@
             </div>
 
             <footer class="mt-6 flex flex-wrap items-center gap-4">
-                <x-button.primary x-bind:disabled="submitted" class="whitespace-nowrap"
+                <x-button.primary class="whitespace-nowrap" x-bind:disabled="submitted" :label="__('Create')"
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Create') }}'" />
 
                 @can('viewAny', App\Models\User::class)

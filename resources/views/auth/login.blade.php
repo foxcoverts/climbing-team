@@ -42,7 +42,7 @@
                 </a>
             @endif
 
-            <x-button.primary class="ml-3" x-bind:disabled="submitted"
+            <x-button.primary class="ml-3" x-bind:disabled="submitted" :label="__('Log in')"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Log in') }}'" />
         </div>
     </form>

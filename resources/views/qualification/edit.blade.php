@@ -215,14 +215,14 @@
         </form>
 
         <footer class="p-4 sm:px-8 flex flex-wrap items-center gap-4">
-            <x-button.primary x-bind:disabled="submitted" form="update-form" class="whitespace-nowrap"
-                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Save') }}'" />
+            <x-button.primary class="whitespace-nowrap" form="update-form" x-bind:disabled="submitted"
+                :label="__('Save')" x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Save') }}'" />
             @can('delete', $qualification)
                 <form method="post" action="{{ route('user.qualification.destroy', [$user, $qualification]) }}"
                     x-data="{ submitted: false }" x-on:submit="setTimeout(() => submitted = true, 0)">
                     @csrf
                     @method('delete')
-                    <x-button.danger x-bind:disabled="submitted" class="whitespace-nowrap"
+                    <x-button.danger class="whitespace-nowrap" x-bind:disabled="submitted" :label="__('Remove')"
                         x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Remove') }}'" />
                 </form>
             @endcan

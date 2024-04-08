@@ -47,7 +47,7 @@
 
                     <footer class="flex flex-wrap items-start gap-4 pt-4">
                         <x-button.primary class="whitespace-nowrap" disabled
-                            x-bind:disabled="submitted || form.user_ids.length == 0"
+                            x-bind:disabled="submitted || form.user_ids.length == 0" :label="__('Send Invitations')"
                             x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Send Invitations') }}'" />
 
                         <x-button.secondary :href="route('booking.show', $booking)">

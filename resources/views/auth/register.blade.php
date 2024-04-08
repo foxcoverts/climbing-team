@@ -92,7 +92,7 @@
                 @lang('Already registered?')
             </a>
 
-            <x-button.primary class="ml-4" x-bind:disabled="submitted"
+            <x-button.primary class="ml-4" x-bind:disabled="submitted" :label="__('Register')"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Register') }}'" />
         </div>
     </form>

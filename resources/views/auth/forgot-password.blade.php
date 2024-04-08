@@ -19,7 +19,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <x-button.primary x-bind:disabled="submitted"
+            <x-button.primary x-bind:disabled="submitted" :label="__('Email Password Reset Link')"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Email Password Reset Link') }}'" />
         </div>
     </form>

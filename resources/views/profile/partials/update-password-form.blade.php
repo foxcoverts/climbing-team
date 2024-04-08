@@ -36,7 +36,7 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <x-button.primary x-bind:disabled="submitted"
+            <x-button.primary x-bind:disabled="submitted" :label="__('Save')"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Save') }}'" />
 
             @if (session('status') === 'password-updated')

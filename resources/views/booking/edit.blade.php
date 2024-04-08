@@ -222,7 +222,7 @@
 
                 <footer class="flex flex-wrap items-start gap-4 mt-6 mb-4">
                     <x-button.primary form="update-booking" class="whitespace-nowrap"
-                        x-bind:disabled="submitted || booking.cancelled"
+                        x-bind:disabled="submitted || booking.cancelled" :label="__('Update')"
                         x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
 
                     @include('booking.partials.delete-button', ['booking' => $form->booking])

@@ -63,7 +63,7 @@
                         </fieldset>
 
                         <footer class="flex flex-wrap items-start gap-4">
-                            <x-button.primary disabled class="whitespace-nowrap"
+                            <x-button.primary disabled class="whitespace-nowrap" :label="__('Send Invitations')"
                                 x-bind:disabled="submitted || !emailVerified || form.booking_ids.length == 0"
                                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Send Invitations') }}'" />
 

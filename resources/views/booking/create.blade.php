@@ -123,7 +123,7 @@
             </div>
 
             <footer class="mt-6 flex items-center gap-4">
-                <x-button.primary x-bind:disabled="submitted"
+                <x-button.primary x-bind:disabled="submitted" :label="__('Create')"
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Create') }}'" />
 
                 @can('viewAny', App\Models\Booking::class)

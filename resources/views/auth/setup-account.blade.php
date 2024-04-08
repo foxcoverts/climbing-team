@@ -95,7 +95,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <x-button.primary class="ml-4" x-bind:disabled="submitted"
+            <x-button.primary class="ml-4" x-bind:disabled="submitted" :label="__('Setup')"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Setup') }}'" />
         </div>
     </form>

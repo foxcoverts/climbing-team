@@ -190,7 +190,8 @@
                         <form method="post" action="{{ route('user.invite', $user) }}" x-data="{ submitted: false }"
                             x-on:submit="setTimeout(() => submitted = true, 0)">
                             @csrf
-                            <x-button.secondary type="submit" x-bind:disabled="submitted" class="whitespace-nowrap"
+                            <x-button.secondary type="submit" class="whitespace-nowrap" x-bind:disabled="submitted"
+                                :label="__('Re-send Invite')"
                                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Re-send Invite') }}'" />
                         </form>
                     @endcan

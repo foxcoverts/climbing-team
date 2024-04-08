@@ -67,7 +67,7 @@
                 @csrf
                 @method('DELETE')
                 <p class="inline-flex">@lang('Delete this comment?')</p>
-                <x-button.danger x-bind:disabled="submitted"
+                <x-button.danger x-bind:disabled="submitted" :label="__('Yes, delete')"
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Yes, delete') }}'" />
                 <x-button.secondary x-show="!submitted" @click="deleting = false">@lang('Cancel')</x-button.secondary>
             </form>

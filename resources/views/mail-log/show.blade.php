@@ -162,7 +162,7 @@
                         x-on:submit="setTimeout(() => submitted = true, 0)">
                         @method('DELETE')
                         @csrf
-                        <x-button.danger x-bind:disabled="submitted" class="whitespace-nowrap"
+                        <x-button.danger class="whitespace-nowrap" x-bind:disabled="submitted" :label="__('Delete')"
                             x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Delete') }}'" />
                     </form>
                 @endcan

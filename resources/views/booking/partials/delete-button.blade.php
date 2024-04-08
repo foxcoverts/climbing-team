@@ -7,7 +7,7 @@
             @csrf
             @method('delete')
 
-            <x-button.danger x-bind:disabled="submitted"
+            <x-button.danger x-bind:disabled="submitted" :label="__('Delete')"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Delete') }}'" />
         </form>
     @endcan
@@ -19,7 +19,7 @@
             @method('patch')
             <input type="hidden" name="status" value="{{ BookingStatus::Cancelled }}" />
 
-            <x-button.danger x-bind:disabled="submitted"
+            <x-button.danger x-bind:disabled="submitted" :label="__('Cancel')"
                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Cancel') }}'" />
         </form>
     @endcan

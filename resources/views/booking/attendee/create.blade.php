@@ -43,7 +43,8 @@
                         </div>
 
                         <footer class="flex flex-wrap items-start gap-4 mt-4">
-                            <x-button.primary x-bind:disabled="submitted || !form.user_id" class="whitespace-nowrap"
+                            <x-button.primary class="whitespace-nowrap" x-bind:disabled="submitted || !form.user_id"
+                                :label="__('Add Attendee')"
                                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Add Attendee') }}'" />
 
                             <x-button.secondary :href="route('booking.show', $booking)">

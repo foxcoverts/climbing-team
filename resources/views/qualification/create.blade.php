@@ -241,7 +241,7 @@
             </div>
 
             <footer class="p-4 sm:px-8 flex flex-wrap items-center gap-4">
-                <x-button.primary x-bind:disabled="submitted" class="whitespace-nowrap"
+                <x-button.primary class="whitespace-nowrap" x-bind:disabled="submitted" :label="__('Save')"
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Save') }}'" />
 
                 @can('viewAny', [App\Models\Qualification::class, $user])

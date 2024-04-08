@@ -185,8 +185,8 @@
         </form>
 
         <footer class="px-4 pb-4 sm:px-8 flex flex-wrap items-center gap-4">
-            <x-button.primary x-bind:disabled="submitted" form="update-user" class="whitespace-nowrap"
-                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
+            <x-button.primary class="whitespace-nowrap" form="update-user" x-bind:disabled="submitted"
+                :label="__('Update')" x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Update') }}'" />
             @include('user.partials.delete-button')
             <x-button.secondary :href="route('user.show', $user)" :label="__('Back')" />
         </footer>
