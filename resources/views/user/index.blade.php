@@ -16,9 +16,9 @@
             </div>
         </header>
 
-        <div>
+        <div class="divide-y">
             @foreach ($users as $user)
-                <div class="py-2 px-4 sm:px-8 border-b hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                <div class="py-2 px-4 sm:px-8 hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                     @click="window.location={{ Js::from(route('user.show', $user)) }}">
                     <div class="max-w-prose">
                         <h2 class="text-lg font-medium"><a href="{{ route('user.show', $user) }}">{{ $user->name }}</a>
