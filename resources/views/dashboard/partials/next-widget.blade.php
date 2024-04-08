@@ -8,7 +8,7 @@
             <span>{{ $title }}</span>
         </h2>
 
-        <div class="border divide-y max-w-xl">
+        <div class="border divide-y max-w-prose">
             <h3
                 class="font-medium px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
                 <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}" x-text="dateString(start_at)"></span>
