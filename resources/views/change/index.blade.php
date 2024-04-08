@@ -1,3 +1,4 @@
+@use('Carbon\Carbon')
 <x-layout.app :title="__('Changes')">
     <section>
         <header class="p-4 sm:px-8 bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10">
@@ -11,7 +12,8 @@
                     <x-recent-activity.item :id="$change->id">
                         <x-slot:time>
                             <p><span x-data="{{ Js::from(['start_at' => localDate($change->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
-                                    class="cursor-help">{{ localDate($change->created_at)->ago() }}</span></p>
+                                    class="cursor-help">{{ localDate($change->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span>
+                            </p>
                         </x-slot:time>
 
                         @foreach ($change->attendees as $attendee)

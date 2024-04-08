@@ -1,3 +1,4 @@
+@use('Carbon\Carbon')
 <x-layout.app :title="__('Mail log')">
     <section>
         <header class="p-4 sm:px-8 bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10">
@@ -52,7 +53,7 @@
                             <dfn class="not-italic font-medium">@lang('Received'):</dfn>
 
                             <span x-data="{{ Js::from(['start_at' => localDate($mail->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
-                                class="cursor-help">{{ localDate($mail->created_at)->ago() }}</span>
+                                class="cursor-help">{{ localDate($mail->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span>
 
                         </p>
                     </div>
