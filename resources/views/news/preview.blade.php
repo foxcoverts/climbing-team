@@ -14,8 +14,8 @@
         @isset($post->date)
             <p class="m-0 text-gray-700 dark:text-gray-300">
                 @lang('Posted')
-                <span class="cursor-default"
-                    title="{{ localDate($post->date)->toDayDateTimeString() }}">{{ localDate($post->date)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span>
+                <span x-data="{{ Js::from(['start_at' => localDate($post->date)]) }}" x-bind:title="dateTimeString(start_at)"
+                    class="cursor-help">{{ localDate($post->date)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span>
             </p>
         @endisset
 

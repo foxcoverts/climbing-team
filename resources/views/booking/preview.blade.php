@@ -3,21 +3,12 @@
         {{ $booking->activity }} on {{ localDate($booking->start_at)->toFormattedDayDateString() }}
     </x-slot:title>
     <x-slot:description>
-        @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
-            {{ __(':activity from :start_time to :end_time at :location.', [
-                'activity' => $booking->activity,
-                'start_time' => localDate($booking->start_at)->format('H:i'),
-                'end_time' => localDate($booking->end_at)->format('H:i'),
-                'location' => $booking->location,
-            ]) }}
-        @else
-            {{ __(':activity on :start to :end at :location.', [
-                'activity' => $booking->activity,
-                'start' => localDate($booking->start_at)->toDayDateTimeString(),
-                'end' => localDate($booking->end_at)->toDayDateTimeString(),
-                'location' => $booking->location,
-            ]) }}
-        @endif
+        {{ __(':activity from :start_time to :end_time at :location.', [
+            'activity' => $booking->activity,
+            'start_time' => localDate($booking->start_at)->format('H:i'),
+            'end_time' => localDate($booking->end_at)->format('H:i'),
+            'location' => $booking->location,
+        ]) }}
     </x-slot:description>
     <x-slot:image width="700" height="700">
         {{ asset('images/dates/' . $booking->start_at->format('n/n-j') . '.png') }}
@@ -27,18 +18,11 @@
         <div>
             <x-fake-label :value="__('When')" />
             <p>
-                @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
-                    {{ __(':start_date from :start_time to :end_time', [
-                        'start_time' => localDate($booking->start_at)->format('H:i'),
-                        'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
-                        'end_time' => localDate($booking->end_at)->format('H:i'),
-                    ]) }}
-                @else
-                    {{ __(':start to :end', [
-                        'start' => localDate($booking->start_at)->toDayDateTimeString(),
-                        'end' => localDate($booking->end_at)->toDayDateTimeString(),
-                    ]) }}
-                @endif
+                {{ __(':start_date from :start_time to :end_time', [
+                    'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
+                    'start_time' => localDate($booking->start_at)->format('H:i'),
+                    'end_time' => localDate($booking->end_at)->format('H:i'),
+                ]) }}
             </p>
         </div>
 

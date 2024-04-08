@@ -55,7 +55,11 @@
                                 <label class="mt-1 w-full flex gap-1 items-center">
                                     <input type="checkbox" value="{{ $booking->id }}" name="booking_ids[]"
                                         x-model="values" />
-                                    <span>@lang(':activity - :date', ['activity' => $booking->activity, 'date' => localDate($booking->start_at)->toFormattedDayDateString()])</span>
+                                    <span>
+                                        {{ $booking->activity }} -
+                                        <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}"
+                                            x-text="dateString(start_at)">{{ localDate($booking->start_at)->toFormattedDayDateString() }}</span>
+                                    </span>
                                     <x-badge.booking-status :status="$booking->status" class="text-xs" />
                                 </label>
                             @endforeach

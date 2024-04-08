@@ -14,9 +14,8 @@
                     class="flex flex-wrap gap-1 group justify-between px-3 py-2 text-left text-nowrap sticky top-0 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-300">
                     <span class="font-medium group-hover:underline">{{ $post->title }}</span>
                     @isset($post->date)
-                        <span>@lang('Posted :ago', [
-                            'ago' => localDate($post->date)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]),
-                        ])</span>
+                        <span>@lang('Posted') <span x-data="{{ Js::from(['start_at' => localDate($post->date)]) }}" x-bind:title="dateTimeString(start_at)"
+                                class="cursor-help">{{ localDate($post->date)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span></span>
                     @endisset
                 </a></h3>
             <div class="px-3 py-2">

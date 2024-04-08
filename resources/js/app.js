@@ -25,6 +25,22 @@ window.dateString = function (date) {
     });
 };
 
+window.dateTimeString = function (date) {
+    var time = Date.parse(date);
+    if (isNaN(time)) {
+        time = Date.now();
+    }
+    return new Date(time).toLocaleString(undefined, {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+    });
+};
+
 window.Alpine = Alpine;
 
 Alpine.plugin(morph); // morph must come before ajax

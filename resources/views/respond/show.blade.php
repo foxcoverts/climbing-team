@@ -4,18 +4,13 @@
         <div>
             <x-fake-label :value="__('When')" />
             <p>
-                @if (localDate($booking->start_at)->isSameDay(localDate($booking->end_at)))
-                    {{ __(':start_date from :start_time to :end_time', [
-                        'start_time' => localDate($booking->start_at)->format('H:i'),
-                        'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
-                        'end_time' => localDate($booking->end_at)->format('H:i'),
-                    ]) }}
-                @else
-                    {{ __(':start to :end', [
-                        'start' => localDate($booking->start_at)->toDayDateTimeString(),
-                        'end' => localDate($booking->end_at)->toDayDateTimeString(),
-                    ]) }}
-                @endif
+                <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}"
+                    x-text="dateString(start_at)">{{ localDate($booking->start_at)->toFormattedDayDateString() }}</span>
+                {{ __('from :start_time to :end_time (:duration)', [
+                    'start_time' => localDate($booking->start_at)->format('H:i'),
+                    'end_time' => localDate($booking->end_at)->format('H:i'),
+                    'duration' => $booking->start_at->diffAsCarbonInterval($booking->end_at),
+                ]) }}
             </p>
         </div>
 

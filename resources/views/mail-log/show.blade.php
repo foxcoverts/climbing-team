@@ -34,7 +34,9 @@
                                             href="{{ route('booking.show', $booking) }}">
                                             <x-icon.calendar class="w-5 h-5 fill-current" />
                                             <span>{{ $booking->activity }} -
-                                                {{ localDate($booking->start_at)->toFormattedDayDateString() }}</span>
+                                                <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}"
+                                                    x-text="dateString(start_at)">{{ localDate($booking->start_at)->toFormattedDayDateString() }}</span>
+                                            </span>
                                         </a>
                                     </x-fake-input>
                                 @else
@@ -101,7 +103,9 @@
                                         href="{{ route('booking.show', $mail->toBooking) }}">
                                         <x-icon.calendar class="w-5 h-5 fill-current" />
                                         <span>{{ $mail->toBooking->activity }} -
-                                            {{ localDate($mail->toBooking->start_at)->toFormattedDayDateString() }}</span>
+                                            <span x-data="{{ Js::from(['start_at' => localDate($mail->toBooking->start_at)]) }}"
+                                                x-text="dateString(start_at)">{{ localDate($mail->toBooking->start_at)->toFormattedDayDateString() }}</span>
+                                        </span>
                                     </a>
                                 </x-fake-input>
                             @else

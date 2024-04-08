@@ -28,7 +28,8 @@
                                 <span class="block truncate">
                                     {{ $mail->booking->activity }}
                                     -
-                                    {{ localDate($mail->booking->start_at)->toFormattedDayDateString() }}
+                                    <span x-data="{{ Js::from(['start_at' => localDate($mail->booking->start_at)]) }}"
+                                        x-text="dateString(start_at)">{{ localDate($mail->booking->start_at)->toFormattedDayDateString() }}</span>
                                 </span>
                             @else
                                 <span class="block truncate">{{ $mail->to }}</span>
@@ -50,7 +51,9 @@
                         <p class="flex items-center space-x-1">
                             <dfn class="not-italic font-medium">@lang('Received'):</dfn>
 
-                            <span>{{ localDate($mail->created_at) }}</span>
+                            <span x-data="{{ Js::from(['start_at' => localDate($mail->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
+                                class="cursor-help">{{ localDate($mail->created_at)->ago() }}</span>
+
                         </p>
                     </div>
                 </div>

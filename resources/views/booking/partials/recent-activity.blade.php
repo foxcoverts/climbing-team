@@ -16,9 +16,8 @@
             @php($change->booking = $booking)
             <x-recent-activity.item :id="$change->id">
                 <x-slot:time>
-                    <p><span title="{{ localDate($change->created_at)->toDayDateTimeString() }}" class="cursor-help">
-                            {{ localDate($change->created_at)->ago() }}
-                        </span></p>
+                    <p><span x-data="{{ Js::from(['start_at' => localDate($change->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
+                            class="cursor-help">{{ localDate($change->created_at)->ago() }}</span></p>
                 </x-slot:time>
 
                 @foreach ($change->attendees as $attendee)
@@ -49,9 +48,8 @@
             </x-recent-activity.item>
         @endforeach
         <div>
-            <p><span title="{{ localDate($booking->created_at)->toDayDateTimeString() }}" class="cursor-help">
-                    {{ localDate($booking->created_at)->ago() }}
-                </span></p>
+            <p><span x-data="{{ Js::from(['start_at' => localDate($booking->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
+                    class="cursor-help">{{ localDate($booking->created_at)->ago() }}</span></p>
             <div class="border-l-2 ml-2 pl-2">@lang('This booking was created.')</div>
         </div>
     </div>
