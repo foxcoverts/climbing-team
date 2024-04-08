@@ -1,10 +1,10 @@
 @use('App\Enums\BookingStatus')
 <x-layout.app :title="__('Edit Booking')">
     <section x-data="{
-        booking: {
-            cancelled: {{ Js::from($form->isCancelled()) }},
-            confirmed: {{ Js::from($form->isConfirmed()) }},
-        },
+        booking: {{ Js::from([
+            'cancelled' => $form->isCancelled(),
+            'confirmed' => $form->isConfirmed(),
+        ]) }},
         submitted: false,
         updateCancelled(ev) {
             this.booking.cancelled = !ev.target.checked;
@@ -18,9 +18,9 @@
             <div class="px-4 sm:px-8">
                 <div class="max-w-prose flex flex-wrap py-2 min-h-16 items-center justify-between gap-2">
                     <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                        <span x-text="booking.activity || 'Booking'"></span>
+                        <span x-text="booking.activity || 'Booking'">{{ $form->activity }}</span>
                         -
-                        <span x-text="dateString(booking.start_date)"></span>
+                        <span x-text="dateString(booking.start_date)">&nbsp;</span>
                     </h1>
                     <div class="grow flex justify-end">
                         <x-badge.booking-status :status="$form->status" />

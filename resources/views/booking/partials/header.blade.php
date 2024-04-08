@@ -5,7 +5,7 @@
             <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                 <span>{{ $booking->activity }}</span>
                 -
-                <span x-data='{ start_at:"{{ localDate($booking->start_at) }}" }' x-text="dateString(start_at)"></span>
+                <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}" x-text="dateString(start_at)">&nbsp;</span>
             </h1>
             <div class="grow flex justify-end">
                 <x-badge.booking-status :status="$booking->status" />
