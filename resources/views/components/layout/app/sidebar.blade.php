@@ -47,11 +47,7 @@
             <x-sidebar.link route='booking.create' :label="__('Add Booking')" icon="calendar.plus" />
         @endcan
         @can('viewTrashed', App\Models\Booking::class)
-            <x-sidebar.link route='trash.booking.index' match-routes='trash.booking.*' :label="__('Deleted')">
-                <x-slot:icon>
-                    <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z" />
-                </x-slot:icon>
-            </x-sidebar.link>
+            <x-sidebar.link route='trash.booking.index' match-routes='trash.booking.*' :label="__('Deleted')" icon="trash" />
         @endcan
     </x-sidebar.group>
 
@@ -63,6 +59,9 @@
                         d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
                 </x-slot:icon>
             </x-sidebar.link>
+        @endcan
+        @can('viewAny', App\Models\Document::class)
+            <x-sidebar.link route='document.index' :match-routes="['document.*', 'trash.document.*']" :label="__('Documents')" icon="document" />
         @endcan
         @if (auth()->user()->keys()->exists())
             <x-sidebar.link route='key.index' :match-routes="['key.*']" :label="__('Keys')" icon="key" />

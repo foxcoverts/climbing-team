@@ -13,6 +13,7 @@ use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\KeyController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TransferKeyController;
 use App\Http\Controllers\TrashedBookingController;
+use App\Http\Controllers\TrashedDocumentController;
 use App\Http\Controllers\UserBookingController;
 use App\Http\Controllers\UserBookingInviteController;
 use App\Http\Controllers\UserController;
@@ -78,9 +80,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('booking', TrashedBookingController::class)
             ->only(['index', 'show', 'update', 'destroy'])
             ->withTrashed(['show', 'update', 'destroy']);
+
+        Route::resource('document', TrashedDocumentController::class)
+            ->only(['index', 'show', 'update', 'destroy'])
+            ->withTrashed(['show', 'update', 'destroy']);
     });
 
     Route::get('change', ChangeController::class)->name('change.index');
+
+    Route::resource('document', DocumentController::class);
 
     Route::controller(TransferKeyController::class)->group(function () {
         Route::get('key/{key}/transfer', 'edit')->name('key.transfer');
