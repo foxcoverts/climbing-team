@@ -29,7 +29,6 @@ class BookingAttendeeController extends Controller
 
         $attendees = $booking->attendees
             ->where('id', '!=', $booking->lead_instructor_id)
-            ->whereIn('attendance.status', [AttendeeStatus::Accepted, AttendeeStatus::Tentative])
             ->sortBy([
                 fn ($a, $b) => $a->attendance->status->compare($b->attendance->status),
                 'name',
