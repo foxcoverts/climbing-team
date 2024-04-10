@@ -9,7 +9,7 @@
         </header>
 
         <div class="p-4 sm:px-8 sm:mt-4">
-            @include('booking.partials.table-list', ['showRoute' => 'trash.booking.show'])
+            @include('booking.partials.list', ['showRoute' => 'trash.booking.show'])
         </div>
     </section>
 </x-layout.app>
