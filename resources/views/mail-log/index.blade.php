@@ -53,7 +53,7 @@
                             <dfn class="not-italic font-medium">@lang('Received'):</dfn>
 
                             <span x-data="{{ Js::from(['start_at' => localDate($mail->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
-                                class="cursor-help">{{ localDate($mail->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span>
+                                class="cursor-help">{{ ucfirst(localDate($mail->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS])) }}</span>
 
                         </p>
                     </div>

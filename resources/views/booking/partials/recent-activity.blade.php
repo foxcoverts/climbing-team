@@ -17,7 +17,7 @@
             <x-recent-activity.item :id="$change->id">
                 <x-slot:time>
                     <p><span x-data="{{ Js::from(['start_at' => localDate($change->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
-                            class="cursor-help">{{ localDate($change->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span>
+                            class="cursor-help">{{ ucfirst(localDate($change->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS])) }}</span>
                     </p>
                 </x-slot:time>
 
@@ -50,7 +50,7 @@
         @endforeach
         <div>
             <p><span x-data="{{ Js::from(['start_at' => localDate($booking->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
-                    class="cursor-help">{{ localDate($booking->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span>
+                    class="cursor-help">{{ ucfirst(localDate($booking->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS])) }}</span>
             </p>
             <div class="border-l-2 ml-2 pl-2">@lang('This booking was created.')</div>
         </div>
