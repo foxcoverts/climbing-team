@@ -19,7 +19,7 @@
                 <div class="py-2 px-4 sm:px-8 hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                     @click="window.location={{ Js::from(route('document.show', $document)) }}">
                     <div class="max-w-prose flex justify-start gap-4">
-                        <x-icon.file.pdf class="min-w-9 w-9 my-1" />
+                        <x-icon.file.pdf class="min-w-9 w-9 my-1 self-start" />
                         <div class="grow">
                             <h2 class="text-lg font-medium"><a
                                     href="{{ route('document.show', $document) }}">{{ $document->title }}</a></h2>
