@@ -9,10 +9,26 @@
             </div>
         </header>
 
-        <div class="p-4 sm:px-8 sm:mt-4">
-            @include('booking.partials.table-list', [
-                'showRoute' => 'booking.attendance.edit',
-            ])
-        </div>
+        @if ($invites->isNotEmpty())
+            <div class="p-4 sm:px-8 space-y-2">
+                <h2 class="text-xl font-medium">@lang('Invited')</h2>
+                <p>@lang('You have been invited to the following bookings.')</p>
+                @include('booking.partials.table-list', [
+                    'showRoute' => 'booking.attendance.edit',
+                    'bookings' => $invites,
+                ])
+            </div>
+        @endif
+
+        @if ($maybes->isNotEmpty())
+            <div class="p-4 sm:px-8 space-y-2">
+                <h2 class="text-xl font-medium">@lang('Maybe')</h2>
+                <p>@lang('You have not yet confirmed that you can, or cannot, the following bookings.')</p>
+                @include('booking.partials.table-list', [
+                    'showRoute' => 'booking.attendance.edit',
+                    'bookings' => $maybes,
+                ])
+            </div>
+        @endif
     </section>
 </x-layout.app>
