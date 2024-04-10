@@ -23,10 +23,10 @@
                         <div class="grow">
                             <h2 class="text-lg font-medium"><a
                                     href="{{ route('document.show', $document) }}">{{ $document->title }}</a></h2>
-                            @if (!empty($booking->description))
+                            @if (!empty($document->description))
                                 <div
                                     class="prose dark:prose-invert prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0">
-                                    <x-markdown :text="$booking->description" />
+                                    <x-markdown :text="$document->description" />
                                 </div>
                             @endif
                             <p><dfn class="not-italic font-medium">@lang('Updated')</dfn>:
