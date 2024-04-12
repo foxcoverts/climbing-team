@@ -108,9 +108,8 @@
                                         </p>
                                         <p>
                                             <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
-                                                <x-icon.empty-outline class="mt-1 w-4 h-4 fill-current"
-                                                    x-show="!gdprContact" />
-                                                <x-icon.checkmark-outline class="mt-1 w-4 h-4 fill-current" x-cloak
+                                                <x-icon.outline class="mt-1 w-4 h-4 fill-current" x-show="!gdprContact" />
+                                                <x-icon.outline.checkmark class="mt-1 w-4 h-4 fill-current" x-cloak
                                                     x-show="gdprContact" />
                                                 <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
                                             </button>
@@ -150,9 +149,8 @@
                                         </p>
                                         <p>
                                             <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
-                                                <x-icon.empty-outline class="my-1 w-4 h-4 fill-current"
-                                                    x-show="!gdprContact" />
-                                                <x-icon.checkmark-outline class="my-1 w-4 h-4 fill-current" x-cloak
+                                                <x-icon.outline class="my-1 w-4 h-4 fill-current" x-show="!gdprContact" />
+                                                <x-icon.outline.checkmark class="my-1 w-4 h-4 fill-current" x-cloak
                                                     x-show="gdprContact" />
                                                 <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
                                             </button>

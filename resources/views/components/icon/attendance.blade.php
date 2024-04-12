@@ -7,14 +7,14 @@
 @endif
 @switch($attendance)
     @case(AttendeeStatus::Declined)
-        <x-icon.close-outline {{ $attributes }} />
+        <x-icon.outline.close {{ $attributes }} />
     @break
 
     @case(AttendeeStatus::NeedsAction)
     @case(null)
-        <x-icon.question-outline {{ $attributes }} />
+        <x-icon.outline.question {{ $attributes }} />
     @break
 
     @default
-        <x-icon.checkmark-outline {{ $attributes }} />
+        <x-icon.outline.checkmark {{ $attributes }} />
 @endswitch

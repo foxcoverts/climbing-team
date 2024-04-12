@@ -14,9 +14,9 @@
                     <div>
                         <p @class(['py-0.5', 'text-sky-500' => $mail->isUnread()])>
                             @if ($mail->done)
-                                <x-icon.checkmark-outline class="w-5 h-5 fill-current" />
+                                <x-icon.outline.checkmark class="w-5 h-5 fill-current" />
                             @else
-                                <x-icon.empty-outline class="w-5 h-5 fill-current" />
+                                <x-icon.outline class="w-5 h-5 fill-current" />
                             @endif
                         </p>
                     </div>
