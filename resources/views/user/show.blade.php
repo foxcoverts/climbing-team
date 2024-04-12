@@ -56,6 +56,11 @@
                             <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
                             <span>@lang('Contact Details')</span>
+                            @if ($user->hasVerifiedEmail())
+                                <x-badge color="lime" icon="outline.checkmark" :label="__('Email Verified')" class="text-sm" />
+                            @else
+                                <x-badge color="pink" icon="outline.exclamation" :label="__('Email Unverified')" class="text-sm" />
+                            @endif
                         </button>
                     </h3>
                     <div class="space-y-2 sm:pl-5" x-show="open" x-cloak x-transition>
@@ -76,19 +81,11 @@
                             <div>
                                 <x-fake-label :value="__('Email')" />
                                 <p class="text-gray-700 dark:text-gray-300">
-                                    @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
-                                        @if ($user->hasVerifiedEmail())
-                                            <a href="mailto:{{ $user->email }}"
-                                                class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">{{ $user->email }}</a>
-                                            <x-badge color="lime" class="text-xs">
-                                                @lang('Verified')
-                                            </x-badge>
-                                        @else
-                                            <span>{{ $user->email }}</span>
-                                            <x-badge color="pink" class="text-xs">
-                                                @lang('Unverified')
-                                            </x-badge>
-                                        @endif
+                                    @if ($user->hasVerifiedEmail())
+                                        <a href="mailto:{{ $user->email }}"
+                                            class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">{{ $user->email }}</a>
+                                    @else
+                                        <span>{{ $user->email }}</span>
                                     @endif
                                 </p>
                             </div>
