@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -85,6 +86,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function keys(): HasMany
     {
         return $this->hasMany(Key::class, 'holder_id')->orderBy('name');
+    }
+
+    public function kitChecks(): HasMany
+    {
+        return $this->hasMany(KitCheck::class)->orderByDesc('checked_on');
+    }
+
+    public function latestKitCheck(): HasOne
+    {
+        return $this->hasOne(KitCheck::class)->ofMany('checked_on');
     }
 
     public function qualifications(): HasMany
