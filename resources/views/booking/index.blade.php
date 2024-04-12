@@ -26,8 +26,8 @@
             </h1>
         </header>
 
-        <div class="p-4 sm:px-8 sm:mt-4">
-            @include('booking.partials.table-list', [
+        <div class="p-4 sm:px-8 sm:my-4">
+            @include('booking.partials.list', [
                 'showRoute' => 'booking.show',
             ])
         </div>

@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" prefix="og: https://ogp.me/ns#">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Climbing Team') }}</title>
+
+    <!-- Social Metadata -->
+    <meta property="twitter:title" content="{{ config('app.name', 'Climbing Team') }}" />
+    <meta property="og:url" content="{{ route('home') }}" />
+    <meta name="description" content="@lang('Climbing and Abseiling sessions at Fox Coverts Campsite are run by our team of qualified climbing instructors.')" />
+    <meta property="og:description" content="@lang('Climbing and Abseiling sessions at Fox Coverts Campsite are run by our team of qualified climbing instructors.')" />
+    <meta name="twitter:description" content="@lang('Climbing and Abseiling sessions at Fox Coverts Campsite are run by our team of qualified climbing instructors.')" />
+    <meta property="og:image" content="{{ asset('images/about/climber@2x.jpg') }}" />
+    <meta name="twitter:image" content="{{ asset('images/about/climber@2x.jpg') }}" />
+    <meta property="og:image:width" content="576" />
+    <meta property="og:image:height" content="296" />
+    <meta property="og:updated_time" content="{{ localDate('2024-04-01T00:00:00Z')->toIso8601String() }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="{{ config('app.locale', 'en') }}" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@FoxCoverts" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -83,7 +98,7 @@
 
         <div class="w-full max-w-xl">
             <a class="block w-full text-center py-6 text-gray-500 hover:text-zinc-800 dark:hover:text-zinc-200 hover:underline"
-                href="{{ route('dashboard') }}">@lang('Go to Team Dashboard')</a>
+                href="{{ route('dashboard') }}" rel="nofollow">@lang('Go to Team Dashboard')</a>
         </div>
     </div>
 </body>

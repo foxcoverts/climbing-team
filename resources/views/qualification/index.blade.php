@@ -21,9 +21,9 @@
             </div>
         </header>
 
-        <div class="text-gray-700 dark:text-gray-300 divide-y">
+        <div class="text-gray-700 dark:text-gray-300">
             @forelse ($qualifications as $qualification)
-                <div class="py-2 px-4 sm:px-8 hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                <div class="py-2 px-4 sm:px-8 hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 border-b cursor-pointer"
                     x-data="{{ Js::from(['isExpired' => $qualification->isExpired()]) }}" x-cloak x-show="!isExpired || showExpired" x-transition
                     @click="window.location={{ Js::from(route('user.qualification.show', [$user, $qualification])) }}">
                     <h3 class="font-medium"><a

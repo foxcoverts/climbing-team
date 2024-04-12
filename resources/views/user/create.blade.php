@@ -100,7 +100,7 @@
                                         <span>@lang("app.user.accreditation.$accreditation->value")</span>
                                     </label>
                                 @endforeach
-                                <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
+                                <x-input-error class="mt-2" :messages="$errors->get('accreditations')" />
                             </fieldset>
                         @endcan
 

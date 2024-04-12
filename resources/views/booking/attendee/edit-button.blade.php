@@ -16,8 +16,8 @@
                     @lang("app.attendee.status.{$attendance->status->value}")
                 @endif
 
-                <x-icon.cheveron-down class="w-4 h-4 fill-current" x-show="!open" />
-                <x-icon.cheveron-up class="w-4 h-4 fill-current" x-show="open" x-cloak />
+                <x-icon.cheveron.down class="w-4 h-4 fill-current" x-show="!open" />
+                <x-icon.cheveron.up class="w-4 h-4 fill-current" x-show="open" x-cloak />
             </button>
 
             <div x-show="open" x-cloak x-on:click.outside="open = false" x-data="{ submitted: false }"
@@ -40,7 +40,7 @@
                             <button name="status" value="{{ $status->value }}" type="submit" form="update-attendee"
                                 x-bind:disabled="submitted" :class="submitted ? 'cursor-progress' : ''"
                                 class="relative focus:z-30 flex gap-2 flex-nowrap items-center min-w-full px-4 py-2 text-xs uppercase font-semibold tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25">
-                                <x-icon.empty-outline class="h-4 w-4 fill-current" />
+                                <x-icon.outline class="h-4 w-4 fill-current" />
                                 <span class="flex-grow text-left">@lang("app.attendee.status.{$status->value}")</span>
                             </button>
                         @endif
@@ -49,7 +49,7 @@
                         <button type="submit" form="remove-attendee" x-bind:disabled="submitted"
                             :class="submitted ? 'cursor-progress' : ''"
                             class="relative focus:z-30 flex gap-2 flex-nowrap items-center min-w-full px-4 py-2 text-xs uppercase font-semibold tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 text-red-500 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25">
-                            <x-icon.close-outline class="h-4 w-4 fill-current" />
+                            <x-icon.outline.close class="h-4 w-4 fill-current" />
                             <span class="flex-grow text-left">@lang('Remove')</span>
                         </button>
                     @endcan

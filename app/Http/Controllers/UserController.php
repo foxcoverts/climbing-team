@@ -73,7 +73,7 @@ class UserController extends Controller
         Gate::authorize('view', $user);
 
         return view('user.show', [
-            'user' => $user,
+            'user' => $user->load('latestKitCheck'),
         ]);
     }
 

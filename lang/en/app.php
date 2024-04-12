@@ -62,6 +62,7 @@ return [
     ],
     'user' => [
         'accreditation' => [
+            'kit-checker' => 'Kit Checker',
             'manage-bookings' => 'Manage Bookings',
             'manage-qualifications' => 'Manage Qualifications',
             'manage-users' => 'Manage Users',

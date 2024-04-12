@@ -51,11 +51,16 @@
                     open: false,
                     gdprContact: $persist(false).using(sessionStorage).as('gdpr-contact-{{ $user->id }}')
                 }">
-                    <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
+                    <h3 class="text-lg sm:text-xl my-2">
                         <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
-                            <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                            <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
                             <span>@lang('Contact Details')</span>
+                            @if ($user->hasVerifiedEmail())
+                                <x-badge color="lime" icon="outline.checkmark" :label="__('Email Verified')" class="text-sm" />
+                            @else
+                                <x-badge color="pink" icon="outline.exclamation" :label="__('Email Unverified')" class="text-sm" />
+                            @endif
                         </button>
                     </h3>
                     <div class="space-y-2 sm:pl-5" x-show="open" x-cloak x-transition>
@@ -65,8 +70,8 @@
                             </p>
                             <p>
                                 <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
-                                    <x-icon.empty-outline class="mt-1 w-4 h-4 fill-current" x-show="!gdprContact" />
-                                    <x-icon.checkmark-outline class="mt-1 w-4 h-4 fill-current" x-cloak
+                                    <x-icon.outline class="mt-1 w-4 h-4 fill-current" x-show="!gdprContact" />
+                                    <x-icon.outline.checkmark class="mt-1 w-4 h-4 fill-current" x-cloak
                                         x-show="gdprContact" />
                                     <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
                                 </button>
@@ -76,19 +81,11 @@
                             <div>
                                 <x-fake-label :value="__('Email')" />
                                 <p class="text-gray-700 dark:text-gray-300">
-                                    @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
-                                        @if ($user->hasVerifiedEmail())
-                                            <a href="mailto:{{ $user->email }}"
-                                                class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">{{ $user->email }}</a>
-                                            <x-badge color="lime" class="text-xs">
-                                                @lang('Verified')
-                                            </x-badge>
-                                        @else
-                                            <span>{{ $user->email }}</span>
-                                            <x-badge color="pink" class="text-xs">
-                                                @lang('Unverified')
-                                            </x-badge>
-                                        @endif
+                                    @if ($user->hasVerifiedEmail())
+                                        <a href="mailto:{{ $user->email }}"
+                                            class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">{{ $user->email }}</a>
+                                    @else
+                                        <span>{{ $user->email }}</span>
                                     @endif
                                 </p>
                             </div>
@@ -111,10 +108,10 @@
                         open: false,
                         gdprContact: $persist(false).using(sessionStorage).as('gdpr-emergency-contact-{{ $user->id }}')
                     }">
-                        <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
+                        <h3 class="text-lg sm:text-xl my-2">
                             <button @click="open = !open" x-bind:aria-pressed="open"
                                 class="flex items-center space-x-1">
-                                <x-icon.cheveron-down aria-hidden="true"
+                                <x-icon.cheveron.down aria-hidden="true"
                                     class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
                                 <span>@lang('Emergency Contact')</span>
                             </button>
@@ -126,8 +123,8 @@
                                 </p>
                                 <p>
                                     <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
-                                        <x-icon.empty-outline class="mt-1 w-4 h-4 fill-current" x-show="!gdprContact" />
-                                        <x-icon.checkmark-outline class="mt-1 w-4 h-4 fill-current" x-cloak
+                                        <x-icon.outline class="mt-1 w-4 h-4 fill-current" x-show="!gdprContact" />
+                                        <x-icon.outline.checkmark class="mt-1 w-4 h-4 fill-current" x-cloak
                                             x-show="gdprContact" />
                                         <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
                                     </button>
@@ -151,10 +148,51 @@
                     </div>
                 @endif
 
-                <div x-data="{ open: true }">
-                    <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
+                <div x-data="{ open: false }">
+                    <h3 class="text-lg sm:text-xl my-2">
                         <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
-                            <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                            <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                                ::class="open ? '' : '-rotate-90'" />
+                            <span>@lang('Kit Checks')</span>
+                            @isset($user->latestKitCheck)
+                                <x-badge.kit-check-expired :expired="$user->latestKitCheck->isExpired()" class="text-sm" />
+                            @else
+                                <x-badge color="yellow" icon="outline.exclamation" :label="__('Unknown')" class="text-sm" />
+                            @endisset
+                        </button>
+                    </h3>
+                    <div class="space-y-2 sm:pl-5" x-show="open" x-cloak x-transition>
+                        @isset($user->latestKitCheck)
+                            <x-fake-label :value="__('Last checked')" />
+                            <div class="flex items-center gap-2">
+                                @can('viewAny', App\Models\KitCheck::class)
+                                    <p><a href="{{ route('kit-check.user.index', $user) }}" x-data="{{ Js::from(['checked_on' => localDate($user->latestKitCheck->checked_on)]) }}"
+                                            x-text="dateString(checked_on)">
+                                            {{ localDate($user->latestKitCheck->checked_on)->toFormattedDayDateString() }}
+                                        </a>
+                                    </p>
+                                @else
+                                    <p>
+                                        {{ localDate($user->latestKitCheck->checked_on)->toFormattedDayDateString() }}
+                                    </p>
+                                @endcan
+                            </div>
+                        @else
+                            <p>
+                                <strong>@lang('This user has not checked their kit yet.')</strong>
+                                @lang('If this user has any climbing kit of their own they should ask one of the team\'s kit checkers to look over it with them to ensure it is in good condition.')
+                            </p>
+                        @endisset
+                        @can('create', App\Models\KitCheck::class)
+                            <x-button.primary :href="route('kit-check.create', ['users' => $user->id])" :label="__('Log Kit Check')" />
+                        @endcan
+                    </div>
+                </div>
+
+                <div x-data="{ open: true }">
+                    <h3 class="text-lg sm:text-xl my-2">
+                        <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
+                            <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
                             <span>@lang('Settings')</span>
                         </button>

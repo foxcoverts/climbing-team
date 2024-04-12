@@ -15,6 +15,8 @@ use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\KeyController;
+use App\Http\Controllers\KitCheckController;
+use App\Http\Controllers\KitCheckUserController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
@@ -96,6 +98,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('key/{key}/transfer', 'update');
     });
     Route::resource('key', KeyController::class);
+
+    Route::get('kit-check/user/{user}', [KitCheckUserController::class, 'index'])->name('kit-check.user.index');
+    Route::resource('kit-check', KitCheckController::class);
 
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
