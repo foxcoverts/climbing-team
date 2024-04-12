@@ -197,6 +197,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->keys->isNotEmpty();
     }
 
+    public function isKitChecker(): bool
+    {
+        return $this->accreditations->contains(Accreditation::KitChecker);
+    }
+
     public function isPermitHolder(): bool
     {
         return $this->qualifications->where('detail_type', ScoutPermit::class)->count() > 0;

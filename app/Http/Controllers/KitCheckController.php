@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Http\Requests\StoreKitCheckRequest;
 use App\Http\Requests\UpdateKitCheckRequest;
@@ -9,9 +10,10 @@ use App\Models\KitCheck;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
 class KitCheckController extends Controller
@@ -41,11 +43,11 @@ class KitCheckController extends Controller
         $kitCheck = new KitCheck([
             'checked_on' => Carbon::now()->toDateString(),
         ]);
-        $kitCheck->checked_by = $request->user();
+        $kitCheck->checked_by()->associate($request->user());
 
         return view('kit-check.create', [
             'kitCheck' => $kitCheck,
-            'checkers' => $this->getCheckers(),
+            'checkers' => $this->getCheckers($request->user()),
             'users' => User::orderBy('name')->get(),
             'user_ids' => (array) $request->get('users'),
         ]);
@@ -91,12 +93,12 @@ class KitCheckController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(KitCheck $kitCheck): View
+    public function edit(Request $request, KitCheck $kitCheck): View
     {
         Gate::authorize('update', $kitCheck);
 
         return view('kit-check.edit', [
-            'checkers' => $this->getCheckers(),
+            'checkers' => $this->getCheckers($request->user()),
             'kitCheck' => $kitCheck,
         ]);
     }
@@ -127,8 +129,15 @@ class KitCheckController extends Controller
             ->with('alert.message', __('Kit check deleted.'));
     }
 
-    protected function getCheckers(): Collection
+    protected function getCheckers(User $user): Collection
     {
-        return User::where('role', Role::TeamLeader)->orderBy('name')->get();
+        if ($user->can('manage', KitCheck::class)) {
+            return User::whereHas('user_accreditations', fn (Builder $query) => $query->where('accreditation', Accreditation::KitChecker))
+                ->orWhere('role', Role::TeamLeader)
+                ->orderBy('name')
+                ->get();
+        }
+
+        return collect([$user]);
     }
 }
