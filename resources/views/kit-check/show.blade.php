@@ -11,11 +11,9 @@
         <div class="py-2 px-4 sm:px-8 text-gray-700 dark:text-gray-300">
             <div class="space-y-4 max-w-prose">
                 <div class="flex items-center gap-2">
-                    <h2 @class(['text-xl font-medium'])>
-                        <span x-data="{{ Js::from(['checked_on' => localDate($kitCheck->checked_on)]) }}" x-text="dateString(checked_on)">
-                            {{ localDate($kitCheck->checked_on)->toFormattedDayDateString() }}
+                    <h2 class="text-xl font-medium" x-data="{{ Js::from(['checked_on' => localDate($kitCheck->checked_on)]) }}" x-text="dateString(checked_on)">
+                        {{ localDate($kitCheck->checked_on)->toFormattedDayDateString() }}
                     </h2>
-                    </span>
 
                     <x-badge.kit-check-expired :expired="$kitCheck->isExpired()" class="text-md" />
                 </div>

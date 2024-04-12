@@ -51,7 +51,7 @@
                     open: false,
                     gdprContact: $persist(false).using(sessionStorage).as('gdpr-contact-{{ $user->id }}')
                 }">
-                    <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
+                    <h3 class="text-lg sm:text-xl my-2">
                         <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
                             <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
@@ -111,7 +111,7 @@
                         open: false,
                         gdprContact: $persist(false).using(sessionStorage).as('gdpr-emergency-contact-{{ $user->id }}')
                     }">
-                        <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
+                        <h3 class="text-lg sm:text-xl my-2">
                             <button @click="open = !open" x-bind:aria-pressed="open"
                                 class="flex items-center space-x-1">
                                 <x-icon.cheveron.down aria-hidden="true"
@@ -151,8 +151,49 @@
                     </div>
                 @endif
 
+                <div x-data="{ open: false }">
+                    <h3 class="text-lg sm:text-xl my-2">
+                        <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
+                            <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                                ::class="open ? '' : '-rotate-90'" />
+                            <span>@lang('Kit Checks')</span>
+                            @isset($user->latestKitCheck)
+                                <x-badge.kit-check-expired :expired="$user->latestKitCheck->isExpired()" class="text-sm" />
+                            @else
+                                <x-badge color="yellow" icon="outline.exclamation" :label="__('Unknown')" class="text-sm" />
+                            @endisset
+                        </button>
+                    </h3>
+                    <div class="space-y-2 sm:pl-5" x-show="open" x-cloak x-transition>
+                        @isset($user->latestKitCheck)
+                            <x-fake-label :value="__('Last checked')" />
+                            <div class="flex items-center gap-2">
+                                @can('viewAny', App\Models\KitCheck::class)
+                                    <p><a href="{{ route('kit-check.user.index', $user) }}" x-data="{{ Js::from(['checked_on' => localDate($user->latestKitCheck->checked_on)]) }}"
+                                            x-text="dateString(checked_on)">
+                                            {{ localDate($user->latestKitCheck->checked_on)->toFormattedDayDateString() }}
+                                        </a>
+                                    </p>
+                                @else
+                                    <p>
+                                        {{ localDate($user->latestKitCheck->checked_on)->toFormattedDayDateString() }}
+                                    </p>
+                                @endcan
+                            </div>
+                        @else
+                            <p>
+                                <strong>@lang('This user has not checked their kit yet.')</strong>
+                                @lang('If this user has any climbing kit of their own they should ask one of the team\'s kit checkers to look over it with them to ensure it is in good condition.')
+                            </p>
+                        @endisset
+                        @can('create', App\Models\KitCheck::class)
+                            <x-button.primary :href="route('kit-check.create', ['users' => $user->id])" :label="__('Log Kit Check')" />
+                        @endcan
+                    </div>
+                </div>
+
                 <div x-data="{ open: true }">
-                    <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
+                    <h3 class="text-lg sm:text-xl my-2">
                         <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
                             <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
