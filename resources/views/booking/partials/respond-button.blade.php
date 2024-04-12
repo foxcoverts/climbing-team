@@ -14,8 +14,8 @@
                     @lang("app.attendee.status.{$attendance->status->value}")
                 @endif
 
-                <x-icon.cheveron-down class="w-4 h-4 fill-current" x-show="!open" />
-                <x-icon.cheveron-up class="w-4 h-4 fill-current" x-show="open" x-cloak />
+                <x-icon.cheveron.down class="w-4 h-4 fill-current" x-show="!open" />
+                <x-icon.cheveron.up class="w-4 h-4 fill-current" x-show="open" x-cloak />
             </button>
 
             <div x-show="open" x-cloak x-on:click.outside="open = false" x-data="{ submitted: false }"

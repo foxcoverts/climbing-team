@@ -53,7 +53,7 @@
                 }">
                     <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
                         <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
-                            <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                            <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
                             <span>@lang('Contact Details')</span>
                         </button>
@@ -114,7 +114,7 @@
                         <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
                             <button @click="open = !open" x-bind:aria-pressed="open"
                                 class="flex items-center space-x-1">
-                                <x-icon.cheveron-down aria-hidden="true"
+                                <x-icon.cheveron.down aria-hidden="true"
                                     class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
                                 <span>@lang('Emergency Contact')</span>
                             </button>
@@ -154,7 +154,7 @@
                 <div x-data="{ open: true }">
                     <h3 class="text-lg sm:text-xl my-2 flex items-center space-x-1">
                         <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
-                            <x-icon.cheveron-down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
+                            <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
                             <span>@lang('Settings')</span>
                         </button>

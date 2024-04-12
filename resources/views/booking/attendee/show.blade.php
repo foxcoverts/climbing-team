@@ -44,7 +44,7 @@
                                 <h3 class="text-lg my-2 flex items-center gap-1">
                                     <button @click="open = !open" x-bind:aria-pressed="open"
                                         class="flex items-center space-x-1">
-                                        <x-icon.cheveron-down aria-hidden="true"
+                                        <x-icon.cheveron.down aria-hidden="true"
                                             class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
                                         <span>@lang('Qualifications')</span>
                                     </button>
@@ -96,7 +96,7 @@
                                 <h3 class="text-lg my-2 flex items-center space-x-1">
                                     <button @click="open = !open" x-bind:aria-pressed="open"
                                         class="flex items-center space-x-1">
-                                        <x-icon.cheveron-down aria-hidden="true"
+                                        <x-icon.cheveron.down aria-hidden="true"
                                             class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
                                         <span>@lang('Contact Details')</span>
                                     </button>
@@ -132,7 +132,7 @@
                             <h3 class="text-lg my-2 flex items-center space-x-1">
                                 <button @click="open = !open" x-bind:aria-pressed="open"
                                     class="flex items-center space-x-1">
-                                    <x-icon.cheveron-down aria-hidden="true"
+                                    <x-icon.cheveron.down aria-hidden="true"
                                         class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
                                     <span>@lang('Emergency Contact')</span>
                                 </button>
