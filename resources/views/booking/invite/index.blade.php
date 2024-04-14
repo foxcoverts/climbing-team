@@ -23,7 +23,7 @@
         @if ($maybes->isNotEmpty())
             <div class="p-4 sm:px-8 space-y-2">
                 <h2 class="text-xl font-medium">@lang('Maybe')</h2>
-                <p>@lang('You have not yet confirmed that you can, or cannot, the following bookings.')</p>
+                <p>@lang('You have not yet confirmed that you can, or cannot, attend the following bookings.')</p>
                 @include('booking.partials.list', [
                     'showRoute' => 'booking.attendance.edit',
                     'bookings' => $maybes,
