@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Enums\AttendeeStatus;
 use App\iCal\Domain\Enum\CalendarMethod;
 use App\Models\Booking;
 use App\Models\User;
@@ -76,22 +77,33 @@ class BookingInvite extends Mailable
     }
 
     /**
-     * The label for the call to action button.
+     * The URL for the booking.
      */
-    public function getButtonLabel(): string
+    public function getBookingUrl(): string
     {
-        return 'Respond';
+        return route('booking.show', $this->booking);
     }
 
     /**
-     * The URL for the call to action button.
+     * The URL for the call to action buttons.
      */
-    public function getButtonUrl(): string
+    public function getRespondUrl(string $action = 'accept'): string
     {
-        return URL::route('respond', [
+        return URL::route("respond.$action", [
             $this->booking, $this->attendee,
             'invite' => $this->attendee->attendance->token,
         ]);
+    }
+
+    /**
+     * The email template to use.
+     */
+    public function getTemplate(): string
+    {
+        return match ($this->attendee->attendance->status) {
+            AttendeeStatus::Accepted => 'mail.booking.update',
+            default => 'mail.booking.invite',
+        };
     }
 
     /**
@@ -100,13 +112,15 @@ class BookingInvite extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.booking.invite',
+            markdown: $this->getTemplate(),
             with: array_merge([
                 'title' => __($this->getTitle()),
                 'changed_summary' => $this->buildChangedSummary(),
                 'when' => $this->buildDateString(),
-                'button_label' => __($this->getButtonLabel()),
-                'button_url' => $this->getButtonUrl(),
+                'booking_url' => $this->getBookingUrl(),
+                'accept_url' => $this->getRespondUrl('accept'),
+                'decline_url' => $this->getRespondUrl('decline'),
+                'tentative_url' => $this->getRespondUrl('tentative'),
             ], $this->buildChangedList())
         );
     }

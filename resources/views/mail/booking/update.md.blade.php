@@ -40,23 +40,9 @@
 </x-markdown>
 @endif
 
-<x-mail::panel>
-<x-mail::center>
-## @lang('Can you attend this event?')
-</x-mail::center>
-
-<x-mail::button-group>
-<x-mail::button-group.button :url="$accept_url" color="success">
-@lang('Yes')
-</x-mail::button-group.button>
-<x-mail::button-group.button :url="$decline_url" color="error">
-@lang('No')
-</x-mail::button-group.button>
-<x-mail::button-group.button :url="$tentative_url">
-@lang('Maybe')
-</x-mail::button-group.button>
-</x-mail::button-group>
-</x-mail::panel>
+<x-mail::button :url="$booking_url">
+@lang('View Booking')
+</x-mail::button>
 
 @lang('Thanks,')<br>
 {{ config('app.name') }}

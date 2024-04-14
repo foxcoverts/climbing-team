@@ -13,14 +13,4 @@ class BookingChanged extends BookingInvite
     {
         return 'Booking Changed';
     }
-
-    public function getButtonLabel(): string
-    {
-        return 'View Booking';
-    }
-
-    public function getButtonUrl(): string
-    {
-        return route('booking.show', $this->booking);
-    }
 }
