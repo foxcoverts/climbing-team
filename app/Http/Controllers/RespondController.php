@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Actions\RespondToBookingAction;
-use App\Http\Requests\StoreRespondRequest;
+use App\Enums\AttendeeStatus;
 use App\Models\Booking;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RespondController extends Controller
 {
     /**
-     * Display the specified resource.
+     * Display the invitation.
      */
     public function show(Request $request, Booking $booking, User $attendee)
     {
@@ -37,9 +38,33 @@ class RespondController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Accept the invitation.
      */
-    public function store(StoreRespondRequest $request, Booking $booking, User $attendee)
+    public function accept(Request $request, Booking $booking, User $attendee): RedirectResponse
+    {
+        return $this->store($request, $booking, $attendee, AttendeeStatus::Accepted);
+    }
+
+    /**
+     * Respond tentatively to the invitation.
+     */
+    public function tentative(Request $request, Booking $booking, User $attendee): RedirectResponse
+    {
+        return $this->store($request, $booking, $attendee, AttendeeStatus::Tentative);
+    }
+
+    /**
+     * Decline the invitation.
+     */
+    public function decline(Request $request, Booking $booking, User $attendee): RedirectResponse
+    {
+        return $this->store($request, $booking, $attendee, AttendeeStatus::Declined);
+    }
+
+    /**
+     * Record the attendee's response.
+     */
+    protected function store(Request $request, Booking $booking, User $attendee, AttendeeStatus $status): RedirectResponse
     {
         Gate::authorize('update', $attendee->attendance);
 
@@ -55,10 +80,14 @@ class RespondController extends Controller
 
         $respondToBooking(
             $attendee,
-            $request->validated('status')
+            $status,
         );
 
-        $request->session()->put('alert.info', __('Thank-you. Your response has been recorded.'));
-        return redirect()->route('booking.invite');
+        $request->session()->put('alert', [
+            'message' => __('Thank-you. Your response has been recorded.'),
+            'type' => 'info',
+        ]);
+
+        return redirect()->route('booking.show', $booking);
     }
 }

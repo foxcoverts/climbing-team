@@ -127,7 +127,9 @@ Route::middleware(Authenticate::fromParam('attendee'))
     ->controller(RespondController::class)
     ->group(function () {
         Route::get('respond/{booking}/{attendee}', 'show')->scopeBindings()->name('respond');
-        Route::post('respond/{booking}/{attendee}', 'store')->scopeBindings();
+        Route::get('respond/{booking}/{attendee}/accept', 'accept')->scopeBindings()->name('respond.accept');
+        Route::get('respond/{booking}/{attendee}/tentative', 'tentative')->scopeBindings()->name('respond.tentative');
+        Route::get('respond/{booking}/{attendee}/decline', 'decline')->scopeBindings()->name('respond.decline');
     });
 
 require __DIR__.'/auth.php';
