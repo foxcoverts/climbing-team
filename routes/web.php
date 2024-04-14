@@ -14,6 +14,7 @@ use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\KeyController;
 use App\Http\Controllers\KitCheckController;
 use App\Http\Controllers\KitCheckUserController;
@@ -91,6 +92,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('change', ChangeController::class)->name('change.index');
 
     Route::resource('document', DocumentController::class);
+
+    Route::controller(IncidentController::class)->group(function () {
+        Route::get('incident', 'create')->name('incident.create');
+        Route::post('incident', 'store');
+    });
 
     Route::controller(TransferKeyController::class)->group(function () {
         Route::get('key/{key}/transfer', 'edit')->name('key.transfer');

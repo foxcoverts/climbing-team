@@ -77,6 +77,9 @@
                 </x-slot:icon>
             </x-sidebar.link>
         @endcan
+        @can('create', App\Models\Incident::class)
+            <x-sidebar.link route='incident.create' :label="__('Report Incident')" icon="incident" />
+        @endcan
         @can('viewAny', App\Models\User::class)
             <x-sidebar.link route='user.index' :match-routes="['user.*', 'user.booking.*', 'user.qualification.*']" :label="__('Users')">
                 <x-slot:icon>
