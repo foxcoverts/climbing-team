@@ -1,20 +1,16 @@
 <x-layout.app :title="$user->name">
     <section>
-        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10">
-            <div class="px-4 sm:px-8">
-                <div class="py-2 flex flex-wrap min-h-16 max-w-prose items-center justify-between gap-2">
-                    <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                        {{ $user->name }}
-                    </h1>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+            <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
+                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                    {{ $user->name }}
+                </h1>
 
-                    @can('update', $user)
-                        <nav class="grow flex justify-end">
-                            <x-button.primary :href="route('user.edit', $user)">
-                                @lang('Edit')
-                            </x-button.primary>
-                        </nav>
-                    @endcan
-                </div>
+                @can('update', $user)
+                    <nav class="flex items-center gap-4 justify-end grow">
+                        <x-button.primary :href="route('user.edit', $user)" :label="__('Edit')" />
+                    </nav>
+                @endcan
             </div>
         </header>
 

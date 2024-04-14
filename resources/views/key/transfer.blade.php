@@ -1,7 +1,11 @@
 <x-layout.app :title="__('Transfer Key')">
     <section>
-        <header class="px-4 sm:px-8 bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10">
-            <h1 class="text-2xl font-medium py-4 text-gray-900 dark:text-gray-100">{{ $key->name }}</h1>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+            <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
+                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                    {{ $key->name }}
+                </h1>
+            </div>
         </header>
 
         <form {!! $ajax ? 'x-target="transfer-key keys"' : '' !!} id="transfer-key" method="POST" action="{{ route('key.transfer', $key) }}"

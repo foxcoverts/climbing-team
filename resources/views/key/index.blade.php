@@ -1,11 +1,13 @@
 <x-layout.app :title="__('Keys')">
     <section>
-        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10 px-4 sm:px-8">
-            <div class="flex items-center justify-between max-w-prose">
-                <h1 class="text-2xl font-medium py-4 text-gray-900 dark:text-gray-100">@lang('Keys')</h1>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+            <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
+                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                    @lang('Keys')
+                </h1>
 
                 @can('create', App\Models\Key::class)
-                    <nav>
+                    <nav class="flex items-center gap-4 justify-end grow">
                         <x-button.primary :href="route('key.create')">@lang('Add Key')</x-button.primary>
                     </nav>
                 @endcan

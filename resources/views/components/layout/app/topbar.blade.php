@@ -1,7 +1,6 @@
 @aware(['title', 'header'])
 
-<div
-    class="md:top-0 md:sticky lg:fixed lg:w-64 z-40 text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-900 border-b lg:border-r">
+<div class="lg:fixed lg:w-64 z-40 text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-900 border-b lg:border-r">
     <div class="w-full h-16 sm:px-4 flex items-center">
         <div class="flex grow overflow-hidden">
             <div class="lg:hidden flex items-center mx-4">

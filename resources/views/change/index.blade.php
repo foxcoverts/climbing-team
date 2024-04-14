@@ -1,8 +1,12 @@
 @use('Carbon\Carbon')
 <x-layout.app :title="__('Changes')">
     <section>
-        <header class="p-4 sm:px-8 bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10">
-            <h1 class="text-2xl font-medium">@lang('Changes')</h1>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
+            <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
+                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                    @lang('Changes')
+                </h1>
+            </div>
         </header>
 
         <div class="px-4 sm:px-8 max-w-3xl space-y-2 my-4">

@@ -1,10 +1,12 @@
 <x-layout.app :title="__('News')">
     <section>
-        <header class="p-4 sm:px-8 border-b sm:sticky sm:top-0 sm:z-10 bg-white dark:bg-gray-800">
-            <h1 class="text-2xl font-medium flex items-center gap-3">
-                <x-icon.news style="height: .75lh" class="fill-current" aria-hidden="true" />
-                <span>@lang('News')</span>
-            </h1>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+            <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
+                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                    <x-icon.news style="height: .75lh" class="fill-current" aria-hidden="true" />
+                    <span>@lang('News')</span>
+                </h1>
+            </div>
         </header>
         <div class="p-4 sm:px-8 max-w-prose space-y-6">
             @foreach ($posts as $post)

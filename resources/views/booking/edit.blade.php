@@ -14,17 +14,15 @@
             this.booking.confirmed = ev.target.checked;
         }
     }">
-        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 sm:z-10">
-            <div class="px-4 sm:px-8">
-                <div class="max-w-prose flex flex-wrap py-2 min-h-16 items-center justify-between gap-2">
-                    <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                        <span x-text="booking.activity || 'Booking'">{{ $form->activity }}</span>
-                        -
-                        <span x-text="dateString(booking.start_date)">&nbsp;</span>
-                    </h1>
-                    <div class="grow flex justify-end">
-                        <x-badge.booking-status :status="$form->status" />
-                    </div>
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+            <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
+                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                    <span x-text="booking.activity || 'Booking'">{{ $form->activity }}</span>
+                    -
+                    <span x-text="dateString(booking.start_date)">&nbsp;</span>
+                </h1>
+                <div class="flex items-center gap-4 justify-end grow">
+                    <x-badge.booking-status :status="$form->status" />
                 </div>
             </div>
         </header>
