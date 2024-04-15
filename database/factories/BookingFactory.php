@@ -44,6 +44,16 @@ class BookingFactory extends Factory
     }
 
     /**
+     * Get a cancelled booking.
+     */
+    public function cancelled(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => BookingStatus::Cancelled->value,
+        ]);
+    }
+
+    /**
      * Get a confirmed booking.
      */
     public function confirmed(): static
