@@ -66,7 +66,7 @@ class TrashedBookingController extends Controller
 
         $booking->forceDelete();
 
-        return redirect()->route('trash.booking.trash')
+        return redirect()->route('trash.booking.index')
             ->with('alert.info', __('Booking permanently deleted.'));
     }
 }

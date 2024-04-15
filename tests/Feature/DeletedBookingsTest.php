@@ -62,6 +62,22 @@ class DeletedBookingsTest extends TestCase
         $this->assertTrue($booking->isCancelled(), 'Booking is Cancelled');
     }
 
+    public function test_permanently_delete_booking(): void
+    {
+        $user = User::factory()->teamLeader()->create();
+        $booking = Booking::factory()->cancelled()->create();
+        $booking->delete();
+
+        $this
+            ->actingAs($user)
+            ->delete('/trash/booking/'.$booking->id, [
+                'confirm' => 'DELETE',
+            ])
+            ->assertRedirect('/trash/booking');
+
+        $this->assertNull($booking->fresh());
+    }
+
     public function test_team_member_cannot_see_deleted_bookings(): void
     {
         $user = User::factory()->teamMember()->create();
