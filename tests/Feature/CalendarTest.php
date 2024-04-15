@@ -34,7 +34,7 @@ class CalendarTest extends TestCase
 
     public function test_guest_cannot_see_calendar(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->guest()->create();
 
         $this
             ->actingAs($user)

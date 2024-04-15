@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\BookingStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
@@ -21,32 +22,44 @@ class BookingFactory extends Factory
             fake()->dateTimeBetween('now', '+1 year'),
             'Europe/London'
         );
-        $group = fake()->randomElement([
-            '1st Barwell',
-            '1st Britannia',
-            '1st Earl Shilton',
-            '1st Hinckley',
-            '1st Sapcote',
-            '1st Stoke Golding',
-            '1st Stoney Stanton',
-            '2nd Hinckley',
-            '6th Hinckley',
-            '11th Hinckley',
-            '12th Hinckley',
+        $activity = fake()->randomElement([
+            'Abseiling',
+            'Climbing',
+            'Climbing & Abseiling',
         ]);
-        $section = fake()->randomElement([
-            'Beavers',
-            'Cubs',
-            'Scouts',
-            'Explorers',
+        $status = fake()->randomElement([
+            BookingStatus::Confirmed->value,
+            BookingStatus::Tentative->value,
         ]);
 
         return [
             'start_at' => $start,
             'end_at' => $start->addHours(2),
             'location' => 'Fox Coverts Campsite',
-            'group_name' => "$group $section",
-            'notes' => "x12 $section",
+            'activity' => $activity,
+            'group_name' => fake()->scoutGroupName(),
+            'notes' => 'x12 Young People',
+            'status' => $status,
         ];
+    }
+
+    /**
+     * Get a confirmed booking.
+     */
+    public function confirmed(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => BookingStatus::Confirmed->value,
+        ]);
+    }
+
+    /**
+     * Get a tentative booking.
+     */
+    public function tentative(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => BookingStatus::Tentative->value,
+        ]);
     }
 }

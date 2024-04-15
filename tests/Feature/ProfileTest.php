@@ -14,11 +14,11 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this
+        $this
             ->actingAs($user)
-            ->get('/profile');
-
-        $response->assertOk();
+            ->get('/profile')
+            ->assertOk()
+            ->assertSee('Profile Information');
     }
 
     public function test_profile_information_can_be_updated(): void
@@ -65,7 +65,8 @@ class ProfileTest extends TestCase
 
     public function test_user_can_delete_their_account(): void
     {
-        $user = User::factory()->create();
+        // Note: Team Leader cannot delete their own account.
+        $user = User::factory()->teamMember()->create();
 
         $response = $this
             ->actingAs($user)
@@ -83,7 +84,8 @@ class ProfileTest extends TestCase
 
     public function test_correct_password_must_be_provided_to_delete_account(): void
     {
-        $user = User::factory()->create();
+        // Note: Team Leader cannot delete their own account.
+        $user = User::factory()->teamMember()->create();
 
         $response = $this
             ->actingAs($user)

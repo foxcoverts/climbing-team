@@ -28,14 +28,11 @@ class InviteTest extends TestCase
             $user,
             ['status' => AttendeeStatus::NeedsAction]
         );
-        $bookingSummary = __(
-            ':activity for :group at :location',
-            [
-                'activity' => $booking->activity,
-                'group' => $booking->group_name,
-                'location' => $booking->location,
-            ]
-        );
+        $bookingSummary = __(':activity for :group at :location', [
+            'activity' => $booking->activity,
+            'group' => $booking->group_name,
+            'location' => $booking->location,
+        ]);
 
         $this
             ->actingAs($user)
@@ -45,7 +42,7 @@ class InviteTest extends TestCase
                 'Invited',
                 'You have been invited to the following bookings.',
                 $bookingSummary,
-            ]);
+            ], escape: false);
     }
 
     public function test_invite_displays_tentative_booking(): void
@@ -56,14 +53,11 @@ class InviteTest extends TestCase
             $user,
             ['status' => AttendeeStatus::Tentative],
         );
-        $bookingSummary = __(
-            ':activity for :group at :location',
-            [
-                'activity' => $booking->activity,
-                'group' => $booking->group_name,
-                'location' => $booking->location,
-            ]
-        );
+        $bookingSummary = __(':activity for :group at :location', [
+            'activity' => $booking->activity,
+            'group' => $booking->group_name,
+            'location' => $booking->location,
+        ]);
 
         $this
             ->actingAs($user)
@@ -73,7 +67,7 @@ class InviteTest extends TestCase
                 'Maybe',
                 'You have not yet confirmed that you can, or cannot, attend the following bookings.',
                 $bookingSummary,
-            ]);
+            ], escape: false);
     }
 
     public function test_invite_displays_on_dashboard(): void

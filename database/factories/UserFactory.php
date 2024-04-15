@@ -25,6 +25,14 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        if (fake()->boolean()) {
+            $emergency_name = fake()->name();
+            $emergency_phone = fake()->e164PhoneNumber();
+        } else {
+            $emergency_name = null;
+            $emergency_phone = null;
+        }
+
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
@@ -32,11 +40,11 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'timezone' => 'UTC',
-            'role' => Role::Guest->value,
-            'section' => Section::Adult->value,
-            'phone' => null,
-            'emergency_name' => null,
-            'emergency_phone' => null,
+            'role' => fake()->randomElement(Role::class)->value,
+            'section' => fake()->randomElement(Section::class)->value,
+            'phone' => fake()->optional()->e164PhoneNumber(),
+            'emergency_name' => $emergency_name,
+            'emergency_phone' => $emergency_phone,
         ];
     }
 
@@ -47,6 +55,16 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Get a guest.
+     */
+    public function guest(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => Role::Guest->value,
         ]);
     }
 
