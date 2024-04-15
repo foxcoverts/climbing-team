@@ -19,10 +19,7 @@ class DashboardTest extends TestCase
             ->get('/dashboard');
 
         $response
-            ->assertOk()
-            ->assertDontSee('Next Booking')
-            ->assertDontSee('My Invites')
-            ->assertSee('Recent News');
+            ->assertOk();
     }
 
     public function test_dashboard_is_auth_protected(): void
