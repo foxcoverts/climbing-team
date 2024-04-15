@@ -88,4 +88,16 @@ class RotaTest extends TestCase
                 $otherBookingSummary
             );
     }
+
+    public function test_no_next_booking_is_displayed_on_dashboard_when_there_is_none(): void
+    {
+        $user = User::factory()->create();
+        $booking = Booking::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('/dashboard')
+            ->assertOk()
+            ->assertDontSee('Next Booking');
+    }
 }
