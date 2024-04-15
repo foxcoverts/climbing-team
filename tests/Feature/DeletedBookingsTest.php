@@ -43,6 +43,25 @@ class DeletedBookingsTest extends TestCase
             );
     }
 
+    public function test_restore_deleted_booking(): void
+    {
+        $user = User::factory()->teamLeader()->create();
+        $booking = Booking::factory()->cancelled()->create();
+        $booking->delete();
+
+        $this
+            ->actingAs($user)
+            ->put('/trash/booking/'.$booking->id, [
+                'deleted_at' => false,
+            ])
+            ->assertRedirectToRoute('booking.show', $booking);
+
+        $booking->refresh();
+
+        $this->assertNull($booking->deleted_at);
+        $this->assertTrue($booking->isCancelled(), 'Booking is Cancelled');
+    }
+
     public function test_team_member_cannot_see_deleted_bookings(): void
     {
         $user = User::factory()->teamMember()->create();
