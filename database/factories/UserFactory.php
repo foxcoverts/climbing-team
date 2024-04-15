@@ -49,4 +49,24 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Get a team member.
+     */
+    public function teamMember(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => Role::TeamMember->value,
+        ]);
+    }
+
+    /**
+     * Get a team leader.
+     */
+    public function teamLeader(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => Role::TeamLeader->value,
+        ]);
+    }
 }
