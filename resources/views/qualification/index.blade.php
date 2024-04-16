@@ -8,10 +8,12 @@
                 </h1>
 
                 <nav class="flex items-center gap-4 justify-end grow">
-                    <label class="block cursor-pointer">
-                        <x-input-checkbox name="__show_expired" x-model="showExpired" />
-                        @lang('Show expired')
-                    </label>
+                    @if ($qualifications->contains(fn($qualification) => $qualification->isExpired()))
+                        <label class="block cursor-pointer">
+                            <x-input-checkbox name="__show_expired" x-model="showExpired" />
+                            @lang('Show expired')
+                        </label>
+                    @endif
                     @can('create', [App\Models\Qualification::class, $user])
                         <x-button.primary :href="route('user.qualification.create', $user)">
                             @lang('Add')
