@@ -16,8 +16,8 @@
 
         <div x-init x-merge="morph" id="keys" @key:updated="$ajax({{ Js::from(route('key.index')) }})">
             @forelse ($keys as $key)
-                <div class="p-4 sm:px-8 border-b space-y-1">
-                    <h2 class="text-lg font-medium" id="{{ sprintf('key-%s-name', $key->id) }}">
+                <div class="p-4 sm:px-8 border-b space-y-2">
+                    <h2 class="text-lg font-medium leading-normal" id="{{ sprintf('key-%s-name', $key->id) }}">
                         @can('update', $key)
                             <a href="{{ route('key.edit', $key) }}"
                                 x-target="{{ sprintf('key-%s-name', $key->id) }}">{{ $key->name }}</a>
