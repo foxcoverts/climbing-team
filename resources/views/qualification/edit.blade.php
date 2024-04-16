@@ -26,7 +26,7 @@
             }
         },
     }">
-        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ $user->name }} - @lang('Edit Qualification')
@@ -195,10 +195,10 @@
                                 x-bind:required="!no_restrictions" x-bind:readonly="no_restrictions"
                                 x-bind:placeholder="no_restrictions ? 'None' : ''" x-model="qualification.restrictions"
                                 x-on:input='oneLineInput' />
-                            <label class="mt-1 w-full flex items-center gap-2">
-                                <input type="checkbox" name="__no_restrictions" x-model="no_restrictions"
+                            <label class="mt-1 block">
+                                <x-input-checkbox name="__no_restrictions" x-model="no_restrictions"
                                     x-on:change='checkRestrictions' />
-                                <span>@lang('No restrictions')</span>
+                                @lang('No restrictions')
                             </label>
                             <x-input-error class="mt-2" :messages="$errors->get('restrictions')" />
                         </div>

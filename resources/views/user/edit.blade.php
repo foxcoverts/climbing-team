@@ -23,7 +23,7 @@
             });
         },
     }">
-        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     @lang('Profile Information')
@@ -148,21 +148,20 @@
 
                         @can('accredit', $user)
                             <fieldset x-data="checkboxes({{ Js::from(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations"
-                                class="space-y-1">
-                                <legend class="font-bold text-gray-900 dark:text-gray-100">
+                                class="space-y-2">
+                                <legend class="font-medium text-gray-900 dark:text-gray-100">
                                     @lang('Accreditations')</legend>
 
-                                <label class="flex w-full items-center gap-1">
-                                    <input type="checkbox" name="all" @change="selectAll"
-                                        x-effect="indeterminate($el)" />
-                                    <span>@lang('Select all')</span>
+                                <label class="block">
+                                    <x-input-checkbox name="all" @change="selectAll" x-effect="indeterminate($el)" />
+                                    @lang('Select all')
                                 </label>
 
                                 @foreach (Accreditation::cases() as $accreditation)
-                                    <label class="flex w-full items-center gap-1">
-                                        <input type="checkbox" value="{{ $accreditation->value }}"
-                                            name="accreditations[]" x-model="values" />
-                                        <span>@lang("app.user.accreditation.$accreditation->value")</span>
+                                    <label class="block">
+                                        <x-input-checkbox value="{{ $accreditation->value }}" name="accreditations[]"
+                                            x-model="values" />
+                                        @lang("app.user.accreditation.$accreditation->value")
                                     </label>
                                 @endforeach
                                 <x-input-error class="mt-2" :messages="$errors->get('user_id')" />

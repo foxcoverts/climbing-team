@@ -46,8 +46,8 @@
                                 <p>
                                     @lang('This booking has been cancelled. If you restore this booking you will need to find instructors and confirm the booking again. If you do not want to invite any of the previous attendees you should remove them from the booking first.')
                                 </p>
-                                <label class="mt-1 w-full flex gap-1 items-center">
-                                    <input type="checkbox" id="status" name="status"
+                                <label class="mt-1 block">
+                                    <x-input-checkbox id="status" name="status"
                                         value="{{ BookingStatus::Tentative }}" x-model.fill="booking.status"
                                         @change="updateCancelled" />
                                     <span>@lang('Restore booking')</span>
@@ -63,8 +63,8 @@
                                     <p>@lang('Before you confirm this booking you should ensure that there are enough instructors attending and that you have chosen a ')
                                         <a href="#lead_instructor_id" class="hover:underline">@lang('Lead Instructor')</a>.
                                     </p>
-                                    <label class="mt-1 w-full flex gap-1 items-center">
-                                        <input type="checkbox" id="status" name="status"
+                                    <label class="mt-1 block">
+                                        <x-input-checkbox id="status" name="status"
                                             value="{{ BookingStatus::Confirmed }}" @change="updateConfirmed" />
                                         <span>@lang('Confirm booking')</span>
                                     </label>
@@ -75,9 +75,9 @@
                             {{-- Booking is confirmed --}}
                             <div class="space-y-1">
                                 <x-fake-label :value="__('Confirm Booking')" />
-                                <label class="mt-1 w-full flex gap-1 items-center">
-                                    <input type="checkbox" name="_status" checked disabled required />
-                                    <span>@lang('This booking has been confirmed.')</span>
+                                <label class="mt-1 block">
+                                    <x-input-checkbox name="_status" checked disabled required />
+                                    @lang('This booking has been confirmed.')
                                 </label>
                                 <x-input-error :messages="$errors->get('status')" />
                             </div>

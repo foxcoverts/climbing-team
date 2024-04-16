@@ -8,9 +8,9 @@
                 </h1>
 
                 <nav class="flex items-center gap-4 justify-end grow">
-                    <label class="flex items-center gap-1 cursor-pointer">
-                        <input type="checkbox" name="__show_expired" x-model="showExpired" />
-                        <span>@lang('Show expired')</span>
+                    <label class="block cursor-pointer">
+                        <x-input-checkbox name="__show_expired" x-model="showExpired" />
+                        @lang('Show expired')
                     </label>
                     @can('create', [App\Models\Qualification::class, $user])
                         <x-button.primary :href="route('user.qualification.create', $user)">

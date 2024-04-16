@@ -25,10 +25,9 @@
                                 </h3>
                                 <ul>
                                     <li>
-                                        <label class="flex items-center gap-1">
-                                            <input type="checkbox" name="attendee_ids[]" checked disabled
-                                                class="cursor-not-allowed" />
-                                            <span>{{ $lead_instructor->name }}</span>
+                                        <label class="block my-2">
+                                            <x-input-checkbox name="attendee_ids[]" checked disabled />
+                                            {{ $lead_instructor->name }}
                                         </label>
                                     </li>
                                 </ul>
@@ -43,10 +42,10 @@
                                 <ul>
                                     @foreach ($attendees[AttendeeStatus::Accepted->value] as $attendee)
                                         <li>
-                                            <label class="flex items-center gap-1 text-gray-800 dark:text-gray-200">
-                                                <input type="checkbox" name="attendee_ids[]" value="{{ $attendee->id }}"
-                                                    checked disabled class="cursor-not-allowed" />
-                                                <span>{{ $attendee->name }}</span>
+                                            <label class="block my-2 text-gray-800 dark:text-gray-200">
+                                                <x-input-checkbox name="attendee_ids[]" value="{{ $attendee->id }}"
+                                                    checked disabled />
+                                                {{ $attendee->name }}
                                             </label>
                                         </li>
                                     @endforeach
@@ -67,11 +66,9 @@
                                     <ul>
                                         @foreach ($list as $attendee)
                                             <li>
-                                                <label
-                                                    class="flex items-center gap-1 text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white">
-                                                    <input type="checkbox" name="attendee_ids[]"
-                                                        value="{{ $attendee->id }}" />
-                                                    <span>{{ $attendee->name }}</span>
+                                                <label class="block my-2">
+                                                    <x-input-checkbox name="attendee_ids[]" value="{{ $attendee->id }}" />
+                                                    {{ $attendee->name }}
                                                 </label>
                                             </li>
                                         @endforeach
@@ -87,10 +84,9 @@
                             <ul>
                                 @foreach ($nonAttendees as $user)
                                     <li>
-                                        <label
-                                            class="flex items-center gap-1 text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white">
-                                            <input type="checkbox" name="attendee_ids[]" value="{{ $user->id }}" />
-                                            <span>{{ $user->name }}</span>
+                                        <label class="block my-2">
+                                            <x-input-checkbox name="attendee_ids[]" value="{{ $user->id }}" />
+                                            {{ $user->name }}
                                         </label>
                                     </li>
                                 @endforeach
@@ -99,7 +95,7 @@
                     </div>
 
                     <footer class="flex flex-wrap items-center gap-4 mt-6">
-                        <x-button.primary>@lang('Update Attendance')</x-button.primary>
+                        <x-button.primary>@lang('Mark Present')</x-button.primary>
                         <x-button.secondary :href="route('booking.show', $booking)">@lang('Back')</x-button.secondary>
                     </footer>
                 </form>

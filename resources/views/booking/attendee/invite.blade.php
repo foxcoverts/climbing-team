@@ -16,16 +16,16 @@
                         <legend class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full mb-1">
                             @lang('Invite Attendees')</legend>
 
-                        <label class="mt-1 w-full flex gap-1 items-center">
-                            <input type="checkbox" name="all" @change="selectAll" x-effect="indeterminate($el)"
+                        <label class="my-2 block">
+                            <x-input-checkbox name="all" @change="selectAll" x-effect="indeterminate($el)"
                                 autofocus />
-                            <span>@lang('Invite all')</span>
+                            @lang('Invite all')
                         </label>
 
                         @foreach ($users as $user)
-                            <label class="mt-1 w-full flex gap-1 items-center">
-                                <input type="checkbox" value="{{ $user->id }}" name="user_ids[]" x-model="values" />
-                                <span>{{ $user->name }}</span>
+                            <label class="my-2 block">
+                                <x-input-checkbox value="{{ $user->id }}" name="user_ids[]" x-model="values" />
+                                {{ $user->name }}
 
                                 @if ($user->isGuest())
                                     <x-badge.role :role="$user->role" class="text-xs" />

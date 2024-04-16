@@ -28,8 +28,8 @@
                                     @lang('This user has not verified their email address yet, invitations will not be delivered to them by email. Any bookings you invite this user to will be waiting for them in their invites list when they verify their account.')
                                 </p>
 
-                                <label class="mt-1 w-full flex gap-1 items-center">
-                                    <input type="checkbox" name="force" x-model="emailVerified" autofocus />
+                                <label class="mt-1 block">
+                                    <x-input-checkbox name="force" x-model="emailVerified" autofocus />
                                     @lang('Send invitations with no email')
                                 </label>
                             </fieldset>
@@ -46,15 +46,15 @@
                             </p>
 
                             <label class="my-2 block">
-                                <input type="checkbox" name="all" @change="selectAll" x-effect="indeterminate($el)"
-                                    autofocus class="relative align-middle bottom-px" />
+                                <x-input-checkbox name="all" @change="selectAll" x-effect="indeterminate($el)"
+                                    autofocus />
                                 @lang('Invite to all')
                             </label>
 
                             @foreach ($bookings as $booking)
                                 <label class="my-2 block">
-                                    <input type="checkbox" value="{{ $booking->id }}" name="booking_ids[]"
-                                        x-model="values" class="relative align-middle bottom-px" />
+                                    <x-input-checkbox value="{{ $booking->id }}" name="booking_ids[]"
+                                        x-model="values" />
                                     {{ $booking->activity }} -
                                     <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}"
                                         x-text="dateString(start_at)">{{ localDate($booking->start_at)->toFormattedDayDateString() }}</span>

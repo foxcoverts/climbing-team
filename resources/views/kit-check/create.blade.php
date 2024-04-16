@@ -1,7 +1,7 @@
 @use('Carbon\Carbon')
 <x-layout.app :title="__('Record Kit Check')">
     <section>
-        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     @lang('Record Kit Check')
@@ -63,10 +63,10 @@
                     <legend class="font-bold text-gray-900 dark:text-gray-100">@lang('Users')</legend>
 
                     @foreach ($users as $user)
-                        <label class="flex w-full items-center gap-1">
-                            <input type="checkbox" value="{{ $user->id }}" name="user_ids[]"
+                        <label class="my-2 block">
+                            <x-input-checkbox value="{{ $user->id }}" name="user_ids[]"
                                 x-model="kitCheck.user_ids" />
-                            <span>{{ $user->name }}</span>
+                            {{ $user->name }}
                         </label>
                     @endforeach
                     <x-input-error class="mt-2" :messages="$errors->get('user_ids')" />
