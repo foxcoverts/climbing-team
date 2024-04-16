@@ -1,7 +1,7 @@
 @props(['color' => 'gray', 'icon' => null, 'label' => $slot])
 <span
     {{ $attributes->class([
-        'inline-flex items-center self-stretch gap-1 rounded-md px-2 py-1 font-medium ring-1 ring-inset h-1lh',
+        'inline-flex items-center self-stretch gap-1 rounded-md px-2 py-1 font-medium ring-1 ring-inset',
         'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 ring-gray-500/25 dark:ring-gray-300/25' =>
             $color == 'gray',
         'bg-lime-50 dark:bg-lime-700 text-lime-600 dark:text-lime-300 ring-lime-500/25 dark:ring-lime-300/25' =>
@@ -13,10 +13,11 @@
             $color == 'yellow',
     ]) }}>
     @if (!empty($icon))
-        <x-dynamic-component :component="'icon.' . $icon" style="height: .75lh; width: .75lh" class="fill-current"
-            aria-hidden="true" />
+        <span class="inline-flex items-center h-[1lh]">
+            <x-dynamic-component :component="'icon.' . $icon" class="fill-current h-[.75lh] w-[.75lh]" aria-hidden="true" />
+        </span>
     @endif
     @if (!empty($label))
-        <span label>{{ $label }}</span>
+        <span>{{ $label }}</span>
     @endif
 </span>

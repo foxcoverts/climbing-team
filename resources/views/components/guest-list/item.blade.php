@@ -2,7 +2,7 @@
 @use('App\Enums\Role')
 @props(['booking', 'attendee', 'currentUser'])
 
-<div x-data @click="if ($refs.link) window.location = $refs.link.href;" class="flex items-stretch gap-1"
+<div x-data @click="if ($refs.link) window.location = $refs.link.href;" class="flex flex-wrap items-start gap-1"
     :class="{ 'cursor-pointer': $refs.link }">
     @can('view', $attendee->attendance)
         <a href="{{ route('booking.attendee.show', [$booking, $attendee]) }}" x-ref="link">{{ $attendee->name }}</a>
@@ -24,7 +24,7 @@
 
     @if ($attendee->isKeyHolder())
         @can('manage', App\Models\Key::class)
-            <a href="{{ route('key.index') }}" class="flex items-stretch">
+            <a href="{{ route('key.index') }}">
                 <x-badge.key-holder label="" class="text-xs whitespace-nowrap" />
             </a>
         @else
