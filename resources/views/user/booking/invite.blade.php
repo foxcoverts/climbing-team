@@ -1,6 +1,6 @@
 <x-layout.app :title="__('Invite to Bookings - :name', ['name' => $user->name])">
     <section>
-        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ $user->name }}
@@ -45,21 +45,19 @@
                                 @lang('Select the bookings below that you wish to invite this user to.')
                             </p>
 
-                            <label class="mt-1 w-full flex gap-1 items-center">
+                            <label class="my-2 block">
                                 <input type="checkbox" name="all" @change="selectAll" x-effect="indeterminate($el)"
-                                    autofocus />
-                                <span>@lang('Invite all')</span>
+                                    autofocus class="relative align-middle bottom-px" />
+                                @lang('Invite to all')
                             </label>
 
                             @foreach ($bookings as $booking)
-                                <label class="mt-1 w-full flex gap-1 items-center">
+                                <label class="my-2 block">
                                     <input type="checkbox" value="{{ $booking->id }}" name="booking_ids[]"
-                                        x-model="values" />
-                                    <span>
-                                        {{ $booking->activity }} -
-                                        <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}"
-                                            x-text="dateString(start_at)">{{ localDate($booking->start_at)->toFormattedDayDateString() }}</span>
-                                    </span>
+                                        x-model="values" class="relative align-middle bottom-px" />
+                                    {{ $booking->activity }} -
+                                    <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}"
+                                        x-text="dateString(start_at)">{{ localDate($booking->start_at)->toFormattedDayDateString() }}</span>
                                     <x-badge.booking-status :status="$booking->status" class="text-xs" />
                                 </label>
                             @endforeach
