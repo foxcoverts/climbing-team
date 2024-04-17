@@ -21,7 +21,7 @@
                                     type="submit" name="status" x-bind:disabled="submitted"
                                     :value="AttendeeStatus::Accepted->value">@lang('Yes')</x-button>
                                 <x-button
-                                    color="{{ $attendance?->status == AttendeeStatus::Declined ? 'primary' : 'secondary' }}"
+                                    color="{{ $attendance?->status == AttendeeStatus::Declined ? 'danger' : 'secondary' }}"
                                     type="submit" name="status" x-bind:disabled="submitted"
                                     :value="AttendeeStatus::Declined->value">@lang('No')</x-button>
                                 <x-button
