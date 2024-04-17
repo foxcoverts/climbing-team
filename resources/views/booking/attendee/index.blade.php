@@ -5,7 +5,7 @@
 
         <div class="p-4 sm:px-8 grid md:max-lg:grid-cols-booking xl:grid-cols-booking gap-4">
             <div class="max-w-prose md:max-lg:order-2 xl:order-2">
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('booking.attendee.updateMany', $booking) }}">
                     @csrf
                     @method('PATCH')
 
