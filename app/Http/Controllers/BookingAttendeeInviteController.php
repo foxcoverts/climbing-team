@@ -32,7 +32,7 @@ class BookingAttendeeInviteController extends Controller
             'users' => User::query()
                 ->whereNotNull('email_verified_at')
                 ->whereDoesntHave('bookings', fn (Builder $query) => $query->where('booking_id', $booking->id))
-                ->with('qualifications')
+                ->with('qualifications', 'keys')
                 ->orderBy('name')->get(),
         ]);
     }

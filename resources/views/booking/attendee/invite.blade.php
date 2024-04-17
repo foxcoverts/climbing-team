@@ -24,15 +24,26 @@
                             @foreach ($users as $user)
                                 <label class="my-2 block">
                                     <x-input-checkbox value="{{ $user->id }}" name="user_ids[]" x-model="values" />
-                                    {{ $user->name }}
 
-                                    @if ($user->isGuest())
-                                        <x-badge.role :role="$user->role" class="text-xs" />
-                                    @endif
+                                    <div class="inline-flex items-center gap-1">
+                                        {{ $user->name }}
 
-                                    @if ($user->isPermitHolder())
-                                        <x-badge.permit-holder class="text-xs" />
-                                    @endif
+                                        @if ($user->isGuest())
+                                            <x-badge.role :role="$user->role" class="text-xs whitespace-nowrap" />
+                                        @endif
+
+                                        @if ($user->isPermitHolder())
+                                            <x-badge.permit-holder class="text-xs whitespace-nowrap" />
+                                        @endif
+
+                                        @if ($user->isUnder18())
+                                            <x-badge.under-18 class="text-xs whitespace-nowrap" />
+                                        @endif
+
+                                        @if ($user->isKeyHolder())
+                                            <x-badge.key-holder label="" class="text-xs whitespace-nowrap" />
+                                        @endif
+                                    </div>
                                 </label>
                             @endforeach
                             <x-input-error class="mt-2" :messages="$errors->get('user_ids')" />
