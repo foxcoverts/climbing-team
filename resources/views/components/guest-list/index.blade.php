@@ -1,5 +1,5 @@
 @use('App\Models\Attendance')
-<aside class="flex-grow flex-shrink basis-80 max-w-prose">
+<aside {{ $attributes }}>
     <h2 class="text-xl font-medium border-b border-gray-800 dark:border-gray-200">
         @lang('Guest list')
     </h2>

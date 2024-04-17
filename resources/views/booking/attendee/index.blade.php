@@ -3,12 +3,8 @@
     <section>
         @include('booking.partials.header')
 
-        <div class="p-4 sm:px-8 flex flex-wrap-reverse gap-4">
-            <div class="w-full max-w-prose">
-                @include('booking.partials.details')
-            </div>
-
-            <aside class="my-2 flex-grow flex-shrink basis-80 max-w-prose">
+        <div class="p-4 sm:px-8 grid md:max-lg:grid-cols-booking xl:grid-cols-booking gap-4">
+            <div class="max-w-prose md:max-lg:order-2 xl:order-2">
                 <form method="POST" action="">
                     @csrf
                     @method('PATCH')
@@ -99,7 +95,9 @@
                         <x-button.secondary :href="route('booking.show', $booking)">@lang('Back')</x-button.secondary>
                     </footer>
                 </form>
-            </aside>
+            </div>
+
+            @include('booking.partials.details')
         </div>
     </section>
 </x-layout.app>

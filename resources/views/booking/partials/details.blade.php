@@ -1,5 +1,5 @@
 @props(['booking'])
-<div class="space-y-2 w-full max-w-prose flex-grow">
+<div class="space-y-2">
     <div class="border-b border-gray-800 dark:border-gray-200">
         <h2 class="text-xl font-medium text-gray-800 dark:text-gray-200">@lang('Booking Details')</h2>
     </div>

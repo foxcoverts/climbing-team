@@ -6,10 +6,8 @@
     <section>
         @include('booking.partials.header')
 
-        <div class="p-4 sm:px-8 flex flex-wrap-reverse gap-4">
-            @include('booking.partials.details')
-
-            <div class="flex-grow flex-shrink basis-80 max-w-prose">
+        <div class="p-4 sm:px-8 grid md:max-lg:grid-cols-booking xl:grid-cols-booking gap-4">
+            <div class="max-w-prose md:max-lg:order-2 xl:order-2">
                 <div class="space-y-1">
                     <h2 class="text-xl font-medium border-b border-gray-800 dark:border-gray-200 w-full">
                         {{ $attendee->name }}</h2>
@@ -183,6 +181,8 @@
                     </x-button.secondary>
                 </footer>
             </div>
+
+            @include('booking.partials.details')
         </div>
     </section>
 </x-layout.app>

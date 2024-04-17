@@ -27,8 +27,8 @@
             </div>
         </header>
 
-        <div class="p-4 sm:px-8 flex flex-wrap gap-4">
-            <div class="max-w-prose flex-grow">
+        <div class="p-4 sm:px-8 grid md:max-lg:grid-cols-booking xl:grid-cols-booking gap-4">
+            <div class="w-full max-w-prose">
                 <form method="post" action="{{ $form->route('booking.update') }}" id="update-booking"
                     x-on:submit="setTimeout(() => submitted = true, 0)">
                     @csrf

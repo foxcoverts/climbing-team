@@ -16,6 +16,9 @@ export default {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
+            gridTemplateColumns: {
+                'booking': 'minmax(auto, 65ch) minmax(20rem, 1fr)',
+            }
         },
     },
 

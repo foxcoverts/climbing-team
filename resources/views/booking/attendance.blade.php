@@ -3,7 +3,7 @@
 <x-layout.app :title="__('Edit Attendance')">
     <section>
         @include('booking.partials.header')
-        <div class="p-4 sm:px-8 md:flex md:space-x-4">
+        <div class="p-4 sm:px-8 grid md:max-lg:grid-cols-booking xl:grid-cols-booking gap-4">
             <div class="w-full max-w-prose">
                 @include('booking.partials.details')
 

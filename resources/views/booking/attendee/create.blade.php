@@ -3,10 +3,8 @@
     <section>
         @include('booking.partials.header')
 
-        <div class="p-4 sm:px-8 flex flex-wrap-reverse gap-4">
-            @include('booking.partials.details')
-
-            <div class="flex-grow flex-shrink basis-80 max-w-prose">
+        <div class="p-4 sm:px-8 grid md:max-lg:grid-cols-booking xl:grid-cols-booking gap-4">
+            <div class="max-w-prose md:max-lg:order-2 xl:order-2">
                 @if ($users->isNotEmpty())
                     <form method="post" action="{{ route('booking.attendee.store', $booking) }}" x-data="{ form: {}, submitted: false, }"
                         x-on:submit="setTimeout(() => submitted = true, 0)">
@@ -65,6 +63,8 @@
                     </footer>
                 @endif
             </div>
+
+            @include('booking.partials.details')
         </div>
     </section>
 </x-layout.app>

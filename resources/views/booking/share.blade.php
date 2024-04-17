@@ -2,7 +2,7 @@
     <section>
         @include('booking.partials.header')
 
-        <div class="p-4 sm:px-8 flex flex-wrap gap-4">
+        <div class="p-4 sm:px-8">
             <div class="w-full max-w-prose">
                 @include('booking.partials.details')
 
