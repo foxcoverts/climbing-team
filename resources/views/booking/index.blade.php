@@ -1,7 +1,7 @@
 @use('App\Enums\BookingStatus')
 <x-layout.app :title="__(':Status Bookings', ['status' => $status->value])">
     <section>
-        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100 flex items-center gap-3">
                     @switch ($status)
