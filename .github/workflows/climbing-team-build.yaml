@@ -1,0 +1,95 @@
+# To better understand this file read this:
+# https://docs.ionos.space/docs/github-actions-customization/
+
+name: "Deploy Now: Execute Build"
+
+on:
+  workflow_call:
+    inputs:
+      site-url:
+        required: true
+        type: string
+      branch-id:
+        required: true
+        type: string
+
+env:
+  DEPLOYMENT_FOLDER: ./
+
+jobs:
+# Please do not rename this job
+  build-project:
+    name: build climbing-team
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      # if you add permissions here this needs to be done in the climbing-team-orchestration.yaml as well
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Render templates
+        uses: ionos-deploy-now/template-renderer-action@v2
+        id: template
+        with:
+          input-directory: .deploy-now/climbing-team
+          output-directory: ${{ env.DEPLOYMENT_FOLDER }}
+          intermediate-data-file: ${{ env.DEPLOYMENT_FOLDER }}/.template-renderer-data
+
+      - name: Setup PHP with composer and custom process timeout
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, fileinfo, mysql
+          tools: composer:v2
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader --no-dev
+
+      - name: Build PHP assets
+# uncomment the following lines if you want to add environment variables for this step
+#        env:
+#          MY_ENV_VAR: value-for-my-env-var
+#          MY_SECRET_ENV_VAR: ${{ secrets.MY_SECRET }} # here you can find information how to create secrets: https://docs.github.com/en/actions/security-guides/encrypted-secrets
+        run: php artisan key:generate --force -n
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: v20.x
+
+      - name: Build Node assets
+        env:
+          CI: true
+          SITE_URL: ${{ inputs.site-url }}
+        run: |
+          npm install --global yarn
+          yarn install --frozen-lockfile
+          yarn build
+
+# Please do not touch the following action
+      - name: Store deployment content
+        uses: ionos-deploy-now/artifact-action@v1
+        with:
+          api-key: ${{ secrets.IONOS_API_KEY }}
+          service-host: api-eu.ionos.space
+          project-id: bc0306bd-c04c-4ec7-80d0-087a820f10cf
+          branch-id: ${{ inputs.branch-id }}
+          version: ${{ github.sha }}
+          folder: ${{ env.DEPLOYMENT_FOLDER }}
+          config-file: .deploy-now/climbing-team/config.yaml
+          action: upload
