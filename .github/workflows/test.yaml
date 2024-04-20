@@ -68,5 +68,5 @@ jobs:
           php artisan migrate -n
 
       - name: Run phpunit
-        run: php artisan test --coverage -n
+        run: php artisan test --coverage
 
