@@ -10,7 +10,7 @@ jobs:
     env:
       APP_ENV: testing
       DB_CONNECTION: mariadb
-      DB_DATABASE: laravel
+      DB_DATABASE: testing
       DB_USERNAME: root
       DB_PASSWORD: password
       DB_HOST: 127.0.0.1
@@ -25,8 +25,8 @@ jobs:
         image: mariadb:10.4
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_ROOT_PASSWORD: "${{ env.DB_PASSWORD }}"
-          MYSQL_DATABASE: "${{ env.DB_DATABASE }}"
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
         ports:
           - "32574:3306"
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
