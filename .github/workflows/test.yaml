@@ -9,6 +9,7 @@ jobs:
 
     env:
       APP_ENV: testing
+      DB_CONNECTION: mariadb
       DB_DATABASE: laravel
       DB_USERNAME: root
       DB_PASSWORD: password
