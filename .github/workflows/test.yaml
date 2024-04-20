@@ -1,0 +1,71 @@
+name: Test
+
+on: push
+
+jobs:
+  test:
+    name: Artisan Test
+    runs-on: ubuntu-latest
+
+    env:
+      APP_ENV: testing
+      DB_DATABASE: laravel
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_HOST: mariadb
+      DB_PORT: 32574
+      BROADCAST_DRIVER: log
+      CACHE_DRIVER: database
+      QUEUE_CONNECTION: 
+      SESSION_DRIVER: database
+
+    services:
+      mariadb:
+        image: mariadb:10.4
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_ROOT_PASSWORD: "${{ env.DB_PASSWORD }}"
+          MYSQL_DATABASE: "${{ env.DB_DATABASE }}"
+        ports:
+          - "${{ env.DB_PORT }}:3306"
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.2']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, dom, fileinfo, mysql
+          coverage: xdebug
+          tools: composer:v2
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader --no-dev
+
+      - name: Prepare the application environment
+        run: |
+          php -r "copy('.env.example', '.env');"
+          php artisan key:generate -n
+          php artisan config:clear
+          php artisan migrate -n
+
+      - name: Run phpunit
+        run: vendor/bin/phpunit --coverage-text
+
