@@ -52,6 +52,5 @@ jobs:
       - uses: php-actions/phpunit@v3
         with:
           php_version: ${{ matrix.php-version }}
-          php_extensions: mbstring dom fileinfo pdo_mysql
+          php_extensions: mbstring dom fileinfo pdo_mysql xdebug
           args: --coverage-text
-
