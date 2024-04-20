@@ -43,7 +43,7 @@ jobs:
         with:
           input-prefix: DOTENV_
         env:
-          DOTENV_APP_KEY: ""
+          DOTENV_APP_KEY: ${{ secrets.APP_KEY }}
 
           DOTENV_DB_CONNECTION: mysql
           DOTENV_DB_HOST: ${{ vars.DB_HOST }}
