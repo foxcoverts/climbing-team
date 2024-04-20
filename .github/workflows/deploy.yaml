@@ -1,0 +1,113 @@
+name: Deploy to Webspace
+
+concurrency: deploy-production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://climbfoxcoverts.co.uk/
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP with composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, fileinfo, mysql
+          tools: composer:v2
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader --no-dev
+
+      - name: Generate dotenv file
+        uses: iamsauravsharma/create-dotenv@v2.0.1
+        with:
+          input-prefix: DOTENV_
+        env:
+          DOTENV_APP_KEY: ""
+
+          DOTENV_DB_CONNECTION: mysql
+          DOTENV_DB_HOST: ${{ vars.DB_HOST }}
+          DOTENV_DB_PORT: ${{ vars.DB_PORT }}
+          DOTENV_DB_DATABASE: ${{ vars.DB_NAME }}
+          DOTENV_DB_USERNAME: "${{ vars.DB_USERNAME }}"
+          DOTENV_DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
+
+          DOTENV_MAIL_MAILER: "sendgrid"
+          DOTENV_SENDGRID_API_KEY: "${{ secrets.SENDGRID_API_KEY }}"
+
+          # DOTENV_MAIL_HOST: ${{ vars.MAIL_HOST }}
+          # DOTENV_MAIL_PORT: ${{ vars.MAIL_PORT }}
+          # DOTENV_MAIL_USERNAME: "${{ vars.MAIL_USERNAME }}"
+          # DOTENV_MAIL_PASSWORD: "${{ secrets.MAIL_PASSWORD }}"
+          # DOTENV_MAIL_ENCRYPTION: ${{ vars.MAIL_ENCRYPTION }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: v20.x
+          cache: yarn
+
+      - name: Build Node assets
+        env:
+          CI: true
+          SITE_URL: ${{ inputs.site-url }}
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+
+      - name: Generate maintenance page
+        run: php artisan down --render=down.deploy --retry=60 --refresh=15
+
+      - name: Remove unwanted files and directories
+        run:
+          rm -rf .devcontainer .editorconfig .prettierrc DOCKER_ENV docker_tag docker-compose.yml node_modules output.log tests
+
+      - name: Put site into maintenance mode
+        uses: easingthemes/ssh-deploy@v5.0.3
+        with:
+          REMOTE_HOST: ${{ vars.SSH_HOST }}
+          REMOTE_USER: ${{ vars.SSH_USERNAME }}
+          REMOTE_PORT: ${{ vars.SSH_PORT }}
+          SSH_PRIVATE_KEY: "${{ secrets.SSH_PRIVATE_KEY }}"
+          SOURCE: "storage/framework/down"
+          TARGET: "${{ vars.SSH_PATH }}/storage/framework/"
+          EXCLUDE: ".git,.github,.gitattributes,.gitignore"
+
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@v5.0.3
+        with:
+          REMOTE_HOST: ${{ vars.SSH_HOST }}
+          REMOTE_USER: ${{ vars.SSH_USERNAME }}
+          REMOTE_PORT: ${{ vars.SSH_PORT }}
+          SSH_PRIVATE_KEY: "${{ secrets.SSH_PRIVATE_KEY }}"
+          TARGET: "${{ vars.SSH_PATH }}"
+          EXCLUDE: ".git,.github,.gitattributes,.gitignore"
+
+      - name: Run deploy scripts
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USERNAME }}
+          port: ${{ vars.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: "cd ${{ vars.SSH_PATH }} && bash ./.deploy/push.sh"
