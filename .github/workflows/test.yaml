@@ -59,6 +59,19 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: v20.x
+          cache: yarn
+
+      - name: Build Node assets
+        env:
+          CI: true
+          SITE_URL: ${{ inputs.site-url }}
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+
       - name: Run phpunit
         run: php artisan test --coverage
-
