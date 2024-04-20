@@ -63,6 +63,7 @@ jobs:
         with:
           php_version: ${{ matrix.php-version }}
           php_extensions: mbstring dom fileinfo pdo_mysql xdebug
-          args: --coverage-text
-        env:
-          XDEBUG_MODE: coverage
+          # args: --coverage-text
+          test_suffix: ""
+        # env:
+        #   XDEBUG_MODE: coverage
