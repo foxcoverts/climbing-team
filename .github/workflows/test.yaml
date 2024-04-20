@@ -62,7 +62,7 @@ jobs:
 
       - name: Prepare the application environment
         run: |
-          php -r "copy('.env.example', '.env');"
+          php -r "copy('.env.testing', '.env');"
           php artisan key:generate -n
           php artisan config:clear
           php artisan migrate -n
