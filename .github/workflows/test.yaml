@@ -1,0 +1,65 @@
+name: Test
+
+on: push
+
+jobs:
+  test:
+    name: Artisan Test
+    runs-on: ubuntu-latest
+
+    env:
+      APP_ENV: testing
+      DB_CONNECTION: mariadb
+      DB_DATABASE: testing
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_HOST: 127.0.0.1
+      DB_PORT: 32574
+      SITE_URL: https://climbfoxcoverts.co.uk/
+      BROADCAST_DRIVER: log
+      CACHE_DRIVER: database
+      SESSION_DRIVER: database
+
+    services:
+      mariadb:
+        image: mariadb:10.4
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - "32574:3306"
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.2']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      - uses: php-actions/composer@v6
+        with:
+          php_version: ${{ matrix.php-version }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: v20.x
+          cache: yarn
+
+      - name: Build assets
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+
+      - uses: php-actions/phpunit@v3
+        with:
+          php_version: ${{ matrix.php-version }}
+          php_extensions: mbstring dom fileinfo pdo_mysql
+          test_suffix: ""
