@@ -13,7 +13,7 @@ jobs:
       DB_DATABASE: laravel
       DB_USERNAME: root
       DB_PASSWORD: password
-      DB_HOST: mariadb
+      DB_HOST: 127.0.0.1
       DB_PORT: 32574
       BROADCAST_DRIVER: log
       CACHE_DRIVER: database
