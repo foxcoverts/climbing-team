@@ -36,7 +36,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
       - uses: php-actions/composer@v6
+        with:
+          php_version: ${{ matrix.php-version }}
+
       - uses: actions/setup-node@v4
         with:
           node-version: v20.x
@@ -54,3 +64,5 @@ jobs:
           php_version: ${{ matrix.php-version }}
           php_extensions: mbstring dom fileinfo pdo_mysql xdebug
           args: --coverage-text
+        env:
+          XDEBUG_MODE: coverage
