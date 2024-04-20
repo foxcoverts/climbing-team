@@ -16,7 +16,7 @@ php8.2-cli artisan optimize:clear ||:
 php8.2-cli artisan migrate --force -n
 
 # Setup storage links
-php8.2-cli artisan storage:link
+php8.2-cli artisan storage:link --force -n
 
 # Recreate cache
 php8.2-cli artisan optimize
