@@ -30,29 +30,15 @@ class CalendarFactory extends EluceoCalendarFactory
 
     protected function getCalendarMethodValue(CalendarMethod $calendarMethod): TextValue
     {
-        if ($calendarMethod === CalendarMethod::Add) {
-            return new TextValue('ADD');
-        }
-        if ($calendarMethod === CalendarMethod::Cancel) {
-            return new TextValue('CANCEL');
-        }
-        if ($calendarMethod === CalendarMethod::Counter) {
-            return new TextValue('COUNTER');
-        }
-        if ($calendarMethod === CalendarMethod::DeclineCounter) {
-            return new TextValue('DECLINECOUNTER');
-        }
-        if ($calendarMethod === CalendarMethod::Publish) {
-            return new TextValue('PUBLISH');
-        }
-        if ($calendarMethod === CalendarMethod::Refresh) {
-            return new TextValue('REFRESH');
-        }
-        if ($calendarMethod === CalendarMethod::Reply) {
-            return new TextValue('REPLY');
-        }
-        if ($calendarMethod === CalendarMethod::Request) {
-            return new TextValue('REQUEST');
-        }
+        return new TextValue(match ($calendarMethod) {
+            CalendarMethod::Add => 'ADD',
+            CalendarMethod::Cancel => 'CANCEL',
+            CalendarMethod::Counter => 'COUNTER',
+            CalendarMethod::DeclineCounter => 'DECLINECOUNTER',
+            CalendarMethod::Publish => 'PUBLISH',
+            CalendarMethod::Refresh => 'REFRESH',
+            CalendarMethod::Reply => 'REPLY',
+            CalendarMethod::Request => 'REQUEST',
+        });
     }
 }
