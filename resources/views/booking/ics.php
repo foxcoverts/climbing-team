@@ -9,7 +9,10 @@ use App\iCal\Domain\Enum\Classification;
 use App\iCal\Domain\ValueObject\Sequence;
 use App\iCal\Presentation\Factory\CalendarFactory;
 use App\iCal\Presentation\Factory\EventFactory;
+use Carbon\Carbon;
+use Carbon\Factory as CarbonFactory;
 use Eluceo\iCal\Domain\Entity\Attendee;
+use Eluceo\iCal\Domain\Entity\TimeZone;
 use Eluceo\iCal\Domain\Enum\CalendarUserType;
 use Eluceo\iCal\Domain\Enum\EventStatus;
 use Eluceo\iCal\Domain\Enum\ParticipationStatus;
@@ -27,10 +30,24 @@ if (! isset($method) || ! $method instanceof CalendarMethod) {
     $method = CalendarMethod::Publish;
 }
 
+$dateFactory = new CarbonFactory([
+    'locale' => config('app.locale', 'en_GB'),
+    'timezone' => $user->timezone,
+]);
+
 $calendar = new Calendar();
 $calendar->setMethod($method);
 
+$minDate = $maxDate = Carbon::now();
+
 foreach ($bookings as $booking) {
+    if ($booking->start_at->isBefore($minDate)) {
+        $minDate = $booking->start_at->toDateTimeImmutable();
+    }
+    if ($booking->end_at->isAfter($maxDate)) {
+        $maxDate = $booking->end_at->toDateTimeImmutable();
+    }
+
     $description = $booking->group_name;
     if (is_string($booking->notes)) {
         $description .= "\n\n".$booking->notes;
@@ -48,8 +65,8 @@ foreach ($bookings as $booking) {
     $event
         ->setOccurrence(
             new TimeSpan(
-                new DateTime($booking->start_at, true),
-                new DateTime($booking->end_at, true)
+                new DateTime($dateFactory->make($booking->start_at), true),
+                new DateTime($dateFactory->make($booking->end_at), true)
             )
         )
         ->setSummary($booking->activity)
@@ -112,6 +129,12 @@ foreach ($bookings as $booking) {
 
     $calendar->addEvent($event);
 }
+
+$calendar->addTimeZone(TimeZone::createFromPhpDateTimeZone(
+    $user->timezone,
+    $dateFactory->make($minDate)->toDateTimeImmutable(),
+    $dateFactory->make($maxDate)->toDateTimeImmutable(),
+));
 
 $eventFactory = new EventFactory();
 $calendarFactory = new CalendarFactory(eventFactory: $eventFactory);
