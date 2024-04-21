@@ -18,10 +18,11 @@ class Event extends EluceoEvent
         parent::__construct($uniqueIdentifier);
     }
 
+    /**
+     * @throws TypeError when classification is not set.
+     */
     public function getClassification(): Classification
     {
-        assert($this->classification !== null);
-
         return $this->classification;
     }
 
