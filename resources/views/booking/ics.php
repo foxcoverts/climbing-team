@@ -8,6 +8,7 @@ use App\iCal\Domain\Enum\CalendarMethod;
 use App\iCal\Domain\Enum\Classification;
 use App\iCal\Domain\ValueObject\Sequence;
 use App\iCal\Presentation\Factory\CalendarFactory;
+use App\iCal\Presentation\Factory\EventFactory;
 use Eluceo\iCal\Domain\Entity\Attendee;
 use Eluceo\iCal\Domain\Enum\CalendarUserType;
 use Eluceo\iCal\Domain\Enum\EventStatus;
@@ -112,5 +113,6 @@ foreach ($bookings as $booking) {
     $calendar->addEvent($event);
 }
 
-$calendarFactory = new CalendarFactory();
+$eventFactory = new EventFactory();
+$calendarFactory = new CalendarFactory(eventFactory: $eventFactory);
 echo $calendarFactory->createCalendar($calendar);
