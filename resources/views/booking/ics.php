@@ -5,6 +5,7 @@ use App\Enums\BookingStatus;
 use App\iCal\Domain\Entity\Calendar;
 use App\iCal\Domain\Entity\Event;
 use App\iCal\Domain\Enum\CalendarMethod;
+use App\iCal\Domain\Enum\Classification;
 use App\iCal\Domain\ValueObject\Sequence;
 use App\iCal\Presentation\Factory\CalendarFactory;
 use Eluceo\iCal\Domain\Entity\Attendee;
@@ -21,7 +22,7 @@ use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Domain\ValueObject\Uri;
 
-if (!isset($method) || !$method instanceof CalendarMethod) {
+if (! isset($method) || ! $method instanceof CalendarMethod) {
     $method = CalendarMethod::Publish;
 }
 
@@ -31,7 +32,7 @@ $calendar->setMethod($method);
 foreach ($bookings as $booking) {
     $description = $booking->group_name;
     if (is_string($booking->notes)) {
-        $description .= "\n\n" . $booking->notes;
+        $description .= "\n\n".$booking->notes;
     }
 
     $organiser = new Organizer(
@@ -41,6 +42,7 @@ foreach ($bookings as $booking) {
 
     $event = new Event(new UniqueIdentifier($booking->uid));
     $event
+        ->setClassification(Classification::Private)
         ->setSequence(new Sequence($booking->sequence));
     $event
         ->setOccurrence(

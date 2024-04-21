@@ -12,6 +12,7 @@
 namespace App\iCal\Presentation\Factory;
 
 use App\iCal\Domain\Entity\Event;
+use App\iCal\Domain\Enum\Classification;
 use DateInterval;
 use Eluceo\iCal\Domain\Collection\Events;
 use Eluceo\iCal\Domain\Enum\EventStatus;
@@ -46,10 +47,12 @@ use UnexpectedValueException;
 class EventFactory
 {
     private AlarmFactory $alarmFactory;
+
     private DateTimeFactory $dateTimeFactory;
+
     private AttendeeFactory $attendeeFactory;
 
-    public function __construct(AlarmFactory $alarmFactory = null, DateTimeFactory $dateTimeFactory = null, AttendeeFactory $attendeeFactory = null)
+    public function __construct(?AlarmFactory $alarmFactory = null, ?DateTimeFactory $dateTimeFactory = null, ?AttendeeFactory $attendeeFactory = null)
     {
         $this->alarmFactory = $alarmFactory ?? new AlarmFactory();
         $this->dateTimeFactory = $dateTimeFactory ?? new DateTimeFactory();
@@ -130,6 +133,10 @@ class EventFactory
 
         if ($event->hasStatus()) {
             yield new Property('STATUS', $this->getEventStatusTextValue($event->getStatus()));
+        }
+
+        if ($event->hasClassification()) {
+            yield new Property('CLASS', $this->getEventClassificationTextValue($event->getClassification()));
         }
 
         foreach ($event->getAttachments() as $attachment) {
@@ -284,5 +291,15 @@ class EventFactory
         }
 
         throw new UnexpectedValueException(sprintf('The enum %s resulted into an unknown status type value that is not yet implemented.', EventStatus::class));
+    }
+
+    private function getEventClassificationTextValue(Classification $classification): TextValue
+    {
+        return new TextValue(match ($classification) {
+            Classification::Confidential => 'CONFIDENTIAL',
+            Classification::Private => 'PRIVATE',
+            Classification::Public => 'PUBLIC',
+            default => throw new UnexpectedValueException(sprintf('The enum %s resulted in an unknown classification value that is not yet implemented.', Classification::class))
+        });
     }
 }
