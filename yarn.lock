@@ -31,9 +31,9 @@
   integrity sha512-VM8azc7UPIXupU/9T7wvKj+bTudK4ttW+AkXL9SNUyN8ysuq/RGYovetQdYNM1Vz8OfD23KTgO90CpAzDLgz8A==
 
 "@alpinejs/persist@^3.13":
-  version "3.13.8"
-  resolved "https://registry.yarnpkg.com/@alpinejs/persist/-/persist-3.13.8.tgz#3388cd341a6cecb44e245afcaf797e74fa9e592f"
-  integrity sha512-NLfU6yS1fdWp0O5ujT17yVxB6KnINh/deRrvcezP3eqZZxpXCgPb5a7OFje5VBhR6zxsfUJJ6Ukz5AthozhLTg==
+  version "3.13.9"
+  resolved "https://registry.yarnpkg.com/@alpinejs/persist/-/persist-3.13.9.tgz#fc5bae1ad8a06c5f55b534ca900b849189d36b67"
+  integrity sha512-itKK/+k1dkF7u1QUD3bPyIbI9wbHKwekX6U2v3kUHKC2PwQB6SqDBwFTImKgotrUnOsx9ZAkuQFZZ18Lp9WfUw==
 
 "@esbuild/aix-ppc64@0.20.2":
   version "0.20.2"
