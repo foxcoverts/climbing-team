@@ -64,7 +64,9 @@
                 @endif
             </div>
 
-            @include('booking.partials.details')
+            <aside class="hidden sm:block">
+                @include('booking.partials.details')
+            </aside>
         </div>
     </section>
 </x-layout.app>
