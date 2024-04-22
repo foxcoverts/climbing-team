@@ -21,9 +21,9 @@
   integrity sha512-f4z6owi/2+wIl2mgJzmwg6FXM4cY0Uhd4GVaDaCUJ14OsgXLGcdNeUWW17mAyspVPW7uhEXqLPNpK3a3UNwF/w==
 
 "@alpinejs/mask@^3.13":
-  version "3.13.8"
-  resolved "https://registry.yarnpkg.com/@alpinejs/mask/-/mask-3.13.8.tgz#2284c52dbdaa172f15bdd27d16958a19da0f2913"
-  integrity sha512-aFH1eLyNvmmRaCJBDaro6AOx4AW8J5EMkQhwu2jakx64W1+6fb3r8JLBvlaHCT+k2mrYrkw/6J1Qv+Xz4Q+x0w==
+  version "3.13.9"
+  resolved "https://registry.yarnpkg.com/@alpinejs/mask/-/mask-3.13.9.tgz#d11b78d80f973a7339a5d426982dea9939e8cd0c"
+  integrity sha512-kpM2ln0dl3Th9jY6ESRCcMVX78Es8b88BhUf/GT/23z+f5wKdI6BzrP6nkMz7KmtotkgYiNiVadmTzTaNEZvxw==
 
 "@alpinejs/morph@^3.13":
   version "3.13.8"
