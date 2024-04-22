@@ -9,9 +9,11 @@ use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 
 class Event extends EluceoEvent
 {
-    private ?Sequence $sequence = null;
-
     private ?Classification $classification = null;
+
+    private ?string $comment = null;
+
+    private ?Sequence $sequence = null;
 
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
@@ -41,6 +43,33 @@ class Event extends EluceoEvent
     public function unsetClassification(): static
     {
         $this->classification = null;
+
+        return $this;
+    }
+
+    /**
+     * @throws TypeError when comment is not set.
+     */
+    public function getComment(): string
+    {
+        return $this->comment;
+    }
+
+    public function hasComment(): bool
+    {
+        return $this->comment !== null;
+    }
+
+    public function setComment(string $comment): static
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function unsetComment(): static
+    {
+        $this->comment = null;
 
         return $this;
     }

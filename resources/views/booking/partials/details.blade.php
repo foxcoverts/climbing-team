@@ -38,4 +38,13 @@
             <x-markdown :text="$booking->notes" />
         </div>
     @endif
+
+    @if (!empty($booking->lead_instructor_notes))
+        @can('lead', $booking)
+            <div class="prose dark:prose-invert prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0">
+                <x-fake-label :value="__('Lead Instructor Notes')" />
+                <x-markdown :text="$booking->lead_instructor_notes" />
+            </div>
+        @endcan
+    @endif
 </div>

@@ -120,6 +120,15 @@
                         x-meta-enter.prevent="$el.form.requestSubmit()" />
                     <x-input-error :messages="$errors->get('notes')" />
                 </div>
+
+                <div class="space-y-1">
+                    <x-input-label for="lead_instructor_notes" :value="__('Lead Instructor Notes')" />
+                    <p class="text-sm">@lang('The Lead Instructor Notes will only be visible to the Lead Instructor. You can use these to share access arrangements, gate codes, etc.')</p>
+                    <x-textarea id="lead_instructor_notes" name="lead_instructor_notes" class="block w-full"
+                        :value="old('lead_instructor_notes', $form->lead_instructor_notes)" x-bind:disabled="booking.cancelled"
+                        x-meta-enter.prevent="$el.form.requestSubmit()" />
+                    <x-input-error :messages="$errors->get('lead_instructor_notes')" />
+                </div>
             </div>
 
             <footer class="mt-6 flex items-center gap-4">

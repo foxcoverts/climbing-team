@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\BookingStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreBookingRequest extends FormRequest
 {
@@ -23,6 +21,7 @@ class StoreBookingRequest extends FormRequest
             'activity' => ['required', 'string', 'max:255'],
             'group_name' => ['required', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
+            'lead_instructor_notes' => ['nullable', 'string'],
         ];
     }
 
@@ -36,6 +35,7 @@ class StoreBookingRequest extends FormRequest
             'activity' => __('Activity'),
             'group_name' => __('Group Name'),
             'notes' => __('Notes'),
+            'lead_instructor_notes' => __('Lead Instructor Notes'),
         ];
     }
 }

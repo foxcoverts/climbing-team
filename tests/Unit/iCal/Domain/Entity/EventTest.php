@@ -22,7 +22,7 @@ class EventTest extends TestCase
         $this->assertEquals($classification, $event->getClassification());
     }
 
-    public function test_get_classifcation_fails_with_no_classification(): void
+    public function test_get_classification_fails_with_no_classification(): void
     {
         $this->expectException(TypeError::class);
 
@@ -44,5 +44,44 @@ class EventTest extends TestCase
         $event->setClassification($classification);
         $this->assertEquals($event, $event->unsetClassification());
         $this->assertFalse($event->hasClassification());
+    }
+
+    public function test_set_get_comment(): void
+    {
+        $comment = fake()->words(15, asText: true);
+
+        $event = new Event;
+        // setComment is chainable
+        $this->assertEquals($event, $event->setComment($comment));
+        // hasComment is true when any comment is set
+        $this->assertTrue($event->hasComment());
+        // getComment returns the set comment
+        $this->assertEquals($comment, $event->getComment());
+    }
+
+    public function test_has_comment_with_no_comment(): void
+    {
+        $event = new Event;
+        $this->assertFalse($event->hasComment());
+    }
+
+    public function test_get_comment_fails_with_no_comment(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $event = new Event;
+        $event->getComment();
+    }
+
+    public function test_unset_comment(): void
+    {
+        $comment = fake()->words(15, asText: true);
+
+        $event = new Event;
+        $event->setComment($comment);
+        // unsetComment is chainable
+        $this->assertEquals($event, $event->unsetComment());
+        // hasComment is false when comment is unset
+        $this->assertFalse($event->hasComment());
     }
 }

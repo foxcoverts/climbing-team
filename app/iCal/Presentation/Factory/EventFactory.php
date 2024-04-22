@@ -38,6 +38,10 @@ class EventFactory extends EluceoEventFactory
             if ($event->hasClassification()) {
                 $component = $component->withProperty(new Property('CLASS', $this->getEventClassificationTextValue($event->getClassification())));
             }
+
+            if ($event->hasComment()) {
+                $component = $component->withProperty(new Property('COMMENT', new TextValue($event->getComment())));
+            }
         }
 
         return $component;

@@ -33,6 +33,7 @@ class Booking extends Model
         'group_name',
         'notes',
         'lead_instructor_id',
+        'lead_instructor_notes',
     ];
 
     /**
