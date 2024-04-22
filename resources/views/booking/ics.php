@@ -25,6 +25,7 @@ use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Domain\ValueObject\Uri;
+use Illuminate\Support\Facades\Gate;
 
 if (! isset($method) || ! $method instanceof CalendarMethod) {
     $method = CalendarMethod::Publish;
@@ -81,6 +82,10 @@ foreach ($bookings as $booking) {
         ->setLastModified(
             new Timestamp($booking->updated_at)
         );
+
+    if (is_string($booking->lead_instructor_notes) && Gate::check('lead', $booking)) {
+        $event->setComment($booking->lead_instructor_notes);
+    }
 
     $event->setStatus(match ($booking->status) {
         BookingStatus::Tentative => EventStatus::TENTATIVE(),

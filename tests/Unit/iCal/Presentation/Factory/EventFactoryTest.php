@@ -30,4 +30,17 @@ class EventFactoryTest extends TestCase
             [Classification::Public, 'PUBLIC'],
         ];
     }
+
+    public function test_comment_is_rendered(): void
+    {
+        $comment = fake()->words(5, asText: true);
+
+        $event = new Event();
+        $event->setComment($comment);
+
+        $factory = new EventFactory();
+        $output = $factory->createComponent($event);
+
+        $this->assertStringContainsString("COMMENT:$comment\r\n", (string) $output);
+    }
 }

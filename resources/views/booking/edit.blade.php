@@ -155,40 +155,6 @@
                         </div>
 
                         <div class="space-y-1">
-                            @if ($form->instructors_attending->isEmpty())
-                                <x-fake-label :value="__('Lead Instructor')" />
-                                <p>@lang('No instructors are going to this booking yet.')</p>
-                            @elseif ($form->isCancelled())
-                                <x-fake-label :value="__('Lead Instructor')" />
-                                <x-fake-input class="mt-1" x-bind:aria-disabled="booking.cancelled ? 'true' : ''">
-                                    @if ($form->lead_instructor)
-                                        {{ $form->lead_instructor->name }}
-                                    @else
-                                        @lang('No lead instructor.')
-                                    @endif
-                                </x-fake-input>
-                            @else
-                                <x-input-label for="lead_instructor_id" :value="__('Lead Instructor')" />
-                                <x-select-input id="lead_instructor_id" name="lead_instructor_id" class="mt-1 block"
-                                    :value="$form->lead_instructor_id" x-model.fill="booking.lead_instructor_id"
-                                    x-bind:required="booking.confirmed" :required="$form->isConfirmed()">
-                                    @if (is_null($form->lead_instructor) || $form->isTentative())
-                                        <option value="" @selected(is_null($form->lead_instructor)) @disabled($form->isConfirmed())
-                                            x-bind:disabled="booking.confirmed">@lang('No lead instructor')
-                                        </option>
-                                    @endif
-                                    <optgroup label="{{ __('Permit Holders') }}">
-                                        <x-select-input.collection :options="$form->instructors_attending" label_key="name" />
-                                    </optgroup>
-                                </x-select-input>
-                                <p class="text-sm">
-                                    @lang('Someone missing? Only instructors who are going to this booking will appear here.')
-                                </p>
-                            @endif
-                            <x-input-error :messages="$errors->get('location')" />
-                        </div>
-
-                        <div class="space-y-1">
                             <datalist id="activity-suggestions">
                                 @foreach ($form->activity_suggestions as $activity)
                                     <option>{{ $activity }}</option>
@@ -214,6 +180,50 @@
                             <x-textarea id="notes" name="notes" class="block w-full" :value="old('notes', $form->notes)"
                                 x-bind:disabled="booking.cancelled" x-meta-enter.prevent="$el.form.requestSubmit()" />
                             <x-input-error :messages="$errors->get('notes')" />
+                        </div>
+
+                        <div class="space-y-1">
+                            @if ($form->instructors_attending->isEmpty())
+                                <x-fake-label :value="__('Lead Instructor')" />
+                                <p>@lang('No instructors are going to this booking yet.')</p>
+                            @elseif ($form->isCancelled())
+                                <x-fake-label :value="__('Lead Instructor')" />
+                                <x-fake-input class="mt-1" x-bind:aria-disabled="booking.cancelled ? 'true' : ''">
+                                    @if ($form->lead_instructor)
+                                        {{ $form->lead_instructor->name }}
+                                    @else
+                                        @lang('No lead instructor.')
+                                    @endif
+                                </x-fake-input>
+                            @else
+                                <x-input-label for="lead_instructor_id" :value="__('Lead Instructor')" />
+                                <x-select-input id="lead_instructor_id" name="lead_instructor_id" class="mt-1 block"
+                                    :value="$form->lead_instructor_id" x-model.fill="booking.lead_instructor_id"
+                                    x-bind:required="booking.confirmed" :required="$form->isConfirmed()">
+                                    @if (is_null($form->lead_instructor) || $form->isTentative())
+                                        <option value="" @selected(is_null($form->lead_instructor))
+                                            @disabled($form->isConfirmed()) x-bind:disabled="booking.confirmed">
+                                            @lang('No lead instructor')
+                                        </option>
+                                    @endif
+                                    <optgroup label="{{ __('Permit Holders') }}">
+                                        <x-select-input.collection :options="$form->instructors_attending" label_key="name" />
+                                    </optgroup>
+                                </x-select-input>
+                                <p class="text-sm">
+                                    @lang('Someone missing? Only instructors who are going to this booking will appear here.')
+                                </p>
+                            @endif
+                            <x-input-error :messages="$errors->get('location')" />
+                        </div>
+
+                        <div class="space-y-1">
+                            <x-input-label for="lead_instructor_notes" :value="__('Lead Instructor Notes')" />
+                            <p class="text-sm">@lang('The Lead Instructor Notes will only be visible to the Lead Instructor. You can use these to share access arrangements, gate codes, etc.')</p>
+                            <x-textarea id="lead_instructor_notes" name="lead_instructor_notes" class="block w-full"
+                                :value="old('lead_instructor_notes', $form->lead_instructor_notes)" x-bind:disabled="booking.cancelled"
+                                x-meta-enter.prevent="$el.form.requestSubmit()" />
+                            <x-input-error :messages="$errors->get('lead_instructor_notes')" />
                         </div>
                     </div>
                 </form>

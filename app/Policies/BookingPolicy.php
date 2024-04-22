@@ -11,9 +11,6 @@ class BookingPolicy
 {
     /**
      * Shortcut to check if the user should be able to manage any booking.
-     *
-     * @param User $user
-     * @return boolean
      */
     public function manage(User $user): bool
     {
@@ -21,25 +18,25 @@ class BookingPolicy
     }
 
     /**
-     * Determine whether the user can view any models.
+     * Determine whether the user can view any bookings.
      */
     public function viewAny(User $user, ?BookingStatus $status = null): bool
     {
         switch ($status) {
             case BookingStatus::Confirmed:
-                return $this->manage($user) || !$user->isGuest();
+                return $this->manage($user) || ! $user->isGuest();
 
             case BookingStatus::Tentative:
             case BookingStatus::Cancelled:
                 return $this->manage($user);
 
             default:
-                return $this->manage($user) || !$user->isGuest();
+                return $this->manage($user) || ! $user->isGuest();
         }
     }
 
     /**
-     * Determine whether the user can view the Bookings they have been invited to.
+     * Determine whether the user can view the bookings they have been invited to.
      */
     public function viewOwn(User $user): bool
     {
@@ -47,13 +44,13 @@ class BookingPolicy
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can view the booking.
      */
     public function view(User $user, Booking $booking): bool
     {
         if ($booking->trashed()) {
             return $this->manage($user);
-        } else if ($booking->attendees->find($user)) {
+        } elseif ($booking->attendees->find($user)) {
             return true;
         } else {
             return $this->viewAny($user, $booking->status);
@@ -61,7 +58,15 @@ class BookingPolicy
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can perform lead instructor tasks for the booking.
+     */
+    public function lead(User $user, Booking $booking): bool
+    {
+        return ($user->id === $booking->lead_instructor_id) || $this->manage($user);
+    }
+
+    /**
+     * Determine whether the user can create bookings.
      */
     public function create(User $user): bool
     {
@@ -69,7 +74,7 @@ class BookingPolicy
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can update the booking.
      */
     public function update(User $user, Booking $booking): bool
     {
@@ -104,11 +109,12 @@ class BookingPolicy
         if ($booking->attendees()->find($user)) {
             return true;
         }
+
         return false;
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determine whether the user can delete the booking.
      */
     public function delete(User $user, Booking $booking): bool
     {
@@ -116,7 +122,7 @@ class BookingPolicy
     }
 
     /**
-     * Determine whether the user can view trashed models.
+     * Determine whether the user can view trashed bookings.
      */
     public function viewTrashed(User $user): bool
     {
@@ -124,7 +130,7 @@ class BookingPolicy
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can restore the booking.
      */
     public function restore(User $user, Booking $booking): bool
     {
@@ -132,7 +138,7 @@ class BookingPolicy
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can permanently delete the booking.
      */
     public function forceDelete(User $user, Booking $booking): bool
     {

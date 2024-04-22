@@ -27,9 +27,10 @@ class UpdateBookingRequest extends FormRequest
 
             // TODO: Restrict only to 'PermitHolder' attendees of the booking.
             'lead_instructor_id' => [
-                'exclude_if:status,' . BookingStatus::Cancelled->value,
-                'sometimes', 'nullable', 'ulid', Rule::exists(User::class, 'id')
+                'exclude_if:status,'.BookingStatus::Cancelled->value,
+                'sometimes', 'nullable', 'ulid', Rule::exists(User::class, 'id'),
             ],
+            'lead_instructor_notes' => ['sometimes', 'nullable', 'string'],
 
             'status' => [
                 'sometimes', 'required',
@@ -41,7 +42,7 @@ class UpdateBookingRequest extends FormRequest
                     ->when(
                         $this->booking->isCancelled(),
                         fn ($rule) => $rule->except(BookingStatus::Confirmed)
-                    )
+                    ),
             ],
         ];
     }
@@ -57,6 +58,7 @@ class UpdateBookingRequest extends FormRequest
             'group_name' => __('Group Name'),
             'notes' => __('Notes'),
             'lead_instructor_id' => __('Lead Instructor'),
+            'lead_instructor_notes' => __('Lead Instructor Notes'),
             'status' => __('Status'),
         ];
     }
