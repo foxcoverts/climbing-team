@@ -8,9 +8,9 @@
   integrity sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==
 
 "@alpinejs/focus@^3.13":
-  version "3.13.8"
-  resolved "https://registry.yarnpkg.com/@alpinejs/focus/-/focus-3.13.8.tgz#a254ece754f0fb50d0b2e95276fcf265582a868c"
-  integrity sha512-ioGVlcRsD/8qcMs0dHyuhcPvIFAkSjGhHNXW+0j6kaNh9RoNQHT+webmTShJEoPTyBfjmRr5BzB7lWbyfgYpNA==
+  version "3.13.9"
+  resolved "https://registry.yarnpkg.com/@alpinejs/focus/-/focus-3.13.9.tgz#14b8a08359a4786a1706b7765d3a475f3e247299"
+  integrity sha512-XsiXvvudOB37LHVIevj0NTdR98TMEMxL1E+AbjHzkHube67TbdQXK17148AQJendNg5iX97GR/dpS6a8QdDZ6w==
   dependencies:
     focus-trap "^6.9.4"
     tabbable "^5.3.3"
