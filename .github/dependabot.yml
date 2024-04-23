@@ -9,7 +9,7 @@ updates:
       day: "friday"
     ignore:
       - dependency-name: "php-actions/phpunit"
-        versions: ['>= 7']
+        versions: ['>= 5']
 
   # Maintain dependencies for npm/yarn
   - package-ecosystem: "npm"
