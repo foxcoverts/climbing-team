@@ -14,7 +14,7 @@
 @endphp
 @if (Arr::has($alert, 'message'))
     <div {{ $attributes->class([
-        'border-b mb-2 sm:mb-0 text-black px-4 py-3 flex items-center',
+        'border-b mb-2 sm:mb-0 text-black px-4 sm:px-8 py-3 flex items-center',
         'bg-blue-100 border-blue-200' => $color == 'blue',
         'bg-red-100 border-red-200' => $color == 'red',
     ]) }}
