@@ -12,8 +12,10 @@ enum MembershipType: string
     case ScoutNetwork = 'Scout Network';
     case AdultVolunteer = 'Adult volunteer (not Scout Network)';
     case NonUKScout = 'Non UK Scout (any age)';
-    case YouthNonMember = 'Youth non member';
-    case AdultNonMember = 'Adult non member';
+    case YouthNonMember = 'Organised Group Young Person';
+    case AdultNonMember = 'Organised Group Adult';
+    case YouthPublic = 'Young member of public';
+    case AdultPublic = 'Adult member of public';
 
     public static function groups(): array
     {
@@ -30,9 +32,13 @@ enum MembershipType: string
             'Non UK Scout' => [
                 self::NonUKScout,
             ],
-            'Non member' => [
+            'Organised Group (not Scouts)' => [
                 self::YouthNonMember,
                 self::AdultNonMember,
+            ],
+            'Public' => [
+                self::YouthPublic,
+                self::AdultPublic,
             ],
         ];
     }
