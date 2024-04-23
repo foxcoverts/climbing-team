@@ -1,2 +1,2 @@
-{{ $slot }}: {{ $url }}
-
+@props(['label' => null, 'url'])
+{{ $label ?? ($slot ?? '') }}: {{ $url }}
