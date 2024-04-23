@@ -18,7 +18,7 @@ width: 100% !important;
 }
 
 @media only screen and (max-width: 500px) {
-.button {
+.action .button {
 width: 100% !important;
 }
 }
