@@ -58,7 +58,7 @@ jobs:
           yarn install --frozen-lockfile
           yarn build
 
-      - uses: php-actions/phpunit@v3
+      - uses: php-actions/phpunit@v6
         with:
           php_version: ${{ matrix.php-version }}
           php_extensions: mbstring dom fileinfo pdo_mysql
