@@ -4,9 +4,11 @@ namespace App\Mail;
 
 use App\Enums\AttendeeStatus;
 use App\iCal\Domain\Enum\CalendarMethod;
+use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
@@ -16,9 +18,11 @@ use Illuminate\Support\Facades\URL;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
 
-class BookingInvite extends Mailable
+class BookingInvite extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
+
+    public Attendance $attendance;
 
     /**
      * Create a new message instance.
@@ -28,8 +32,8 @@ class BookingInvite extends Mailable
         public User $attendee,
         public array $changes = [],
     ) {
-        $booking->load('attendees', 'lead_instructor');
-        $this->attendee = $booking->attendees->find($attendee);
+        $booking->load('lead_instructor');
+        $this->attendance = $booking->attendees()->find($attendee)->attendance;
     }
 
     /**
@@ -91,7 +95,7 @@ class BookingInvite extends Mailable
     {
         return URL::route("respond.$action", [
             $this->booking, $this->attendee,
-            'invite' => $this->attendee->attendance->token,
+            'invite' => $this->attendance->token,
         ]);
     }
 
@@ -100,7 +104,7 @@ class BookingInvite extends Mailable
      */
     public function getTemplate(): string
     {
-        return match ($this->attendee->attendance->status) {
+        return match ($this->attendance->status) {
             AttendeeStatus::Accepted => 'mail.booking.update',
             default => 'mail.booking.invite',
         };
