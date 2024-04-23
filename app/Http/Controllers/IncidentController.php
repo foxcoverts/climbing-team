@@ -30,5 +30,7 @@ class IncidentController extends Controller
     public function store(StoreIncidentRequest $request)
     {
         Gate::authorize('create', Incident::class);
+
+        $incident = new Incident($request->validated());
     }
 }
