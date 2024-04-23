@@ -10,7 +10,11 @@
             </div>
         </header>
 
-        <form method="post" action="{{ route('user.store') }}" class="p-4 sm:px-8" x-data="{
+        @unless ($errors->isEmpty())
+            @dump($errors)
+        @endunless
+
+        <form method="post" action="{{ route('incident.create') }}" class="p-4 sm:px-8" x-data="{
             submitted: false,
             today() {
                 return (new Date()).toISOString().substring(0, 10);
@@ -97,10 +101,10 @@
                     <div>
                         <x-input-label for="location_description" :value="__('Location Description')" />
                         <p class="text-sm mt-1">@lang('Please tell us where the incident occurred.')</p>
-                        <x-textarea id="location_description" name="location_description"
-                            x-model="form.location_descripition" class="mt-1 w-full" required
+                        <x-text-input id="location_description" name="location_description"
+                            x-model="form.location_description" class="mt-1 w-full" required
                             :placeholder="__('For example: back steps, warden\'s hut, by the picnic bench.')"></x-textarea>
-                        <x-input-error class="mt-2" :messages="$errors->get('location_description')" />
+                            <x-input-error class="mt-2" :messages="$errors->get('location_description')" />
                     </div>
                 </fieldset>
 
@@ -217,7 +221,7 @@
 
                         @foreach (App\Enums\Incident\Injury::cases() as $option)
                             <x-input-label>
-                                <x-input-checkbox name="injuries[]" :value="$option->name" x-model="form.injuries" />
+                                <x-input-checkbox name="injuries[]" :value="$option->value" x-model="form.injuries" />
                                 @lang($option->value)
                             </x-input-label>
                         @endforeach
