@@ -16,49 +16,59 @@
                 return (new Date()).toISOString().substring(0, 10);
             },
             form: {{ Js::from([
-                'incident_type' => App\Enums\Incident\Type::HealthOrIllness,
-                'severity' => App\Enums\Incident\Severity::Other,
-                'date' => Carbon\Carbon::now()->format('Y-m-d'),
-                'time' => Carbon\Carbon::now()->format('H:i'),
+                'date' => localDate(Carbon\Carbon::now())->format('Y-m-d'),
+                'time' => localDate(Carbon\Carbon::now())->format('H:i'),
                 'location_name' => 'Fox Coverts Scout Campsite, Newbold Road, Kirkby Mallory, LE9 7QG',
-                'date_of_birth' => Carbon\Carbon::now()->format('Y-m-d'),
-                'gender' => App\Enums\Incident\Gender::Unknown,
+                'location_description' => '',
+            
+                'injured' => null,
+            
+                'injured_name' => '',
+                'injured_dob' => localDate(Carbon\Carbon::now())->format('Y-m-d'),
+                'injured_gender' => null,
+            
                 'membership_type' => App\Enums\Incident\MembershipType::AdultVolunteer,
+                'group_name' => '', // type != public
+                'contact_name' => '', // any type
+                'contact_phone' => '', // type == public
+                'contact_address' => '', // type == public
+            
+                'injuries' => [],
+                'emergency_services' => 'no',
+                'hospital' => 'no',
+                'damaged' => 'no',
+            
+                'details' => '',
+                'first_aid' => '',
+            
+                'reporter_name' => $currentUser->name,
+                'reporter_email' => $currentUser->email,
+                'reporter_phone' => $currentUser->phone?->formatForCountry('GB'),
             ]) }},
+            checkInjuries(value) {
+                var injuriesEl = document.getElementById('injuries');
+                if (injuriesEl) {
+                    el = injuriesEl.getElementsByTagName('input').item(0);
+                    if (value.length > 0) {
+                        el.setCustomValidity('');
+                    } else {
+                        el.setCustomValidity('You must select at least one injury.');
+                    }
+                }
+            },
+            isPublic(membership) {
+                return (membership == {{ Js::from(App\Enums\Incident\MembershipType::YouthPublic->value) }}) ||
+                    (membership == {{ Js::from(App\Enums\Incident\MembershipType::AdultPublic->value) }});
+            },
+            init() {
+                this.$watch('form.injuries', this.checkInjuries);
+            },
         }"
             x-on:submit="setTimeout(() => submitted = true, 0)">
             @csrf
 
-
             <div class="space-y-6 max-w-prose">
-                <fieldset class="space-y-6">
-                    <legend class="text-xl font-medium">@lang('Incident details')</legend>
-
-                    <div>
-                        <x-input-label for="incident_type" :value="__('Type of Incident')" />
-                        <x-select-input id="incident_type" name="incident_type" x-model="form.incident_type"
-                            class="mt-1 w-full max-w-full" required>
-                            <template x-if="!form.incident_type">
-                                <option value="" selected disabled></option>
-                            </template>
-                            <x-select-input.enum :options="App\Enums\Incident\Type::class" lang=":value" />
-                        </x-select-input>
-                        <x-input-error class="mt-2" :messages="$errors->get('incident_type')" />
-                    </div>
-
-                    <div>
-                        <x-input-label for="severity" :value="__('Severity')" />
-                        <x-select-input id="severity" name="severity" x-model="form.severity" class="mt-1" required>
-                            <template x-if="!form.severity">
-                                <option value="" selected disabled></option>
-                            </template>
-                            <x-select-input.enum :options="App\Enums\Incident\Severity::class" lang=":value" />
-                        </x-select-input>
-                        <x-input-error class="mt-2" :messages="$errors->get('severity')" />
-                    </div>
-                </fieldset>
-
-                <fieldset class="space-y-6">
+                <fieldset class="space-y-4">
                     <legend class="text-xl font-medium">@lang('When/Where did the incident happened?')</legend>
 
                     <div class="flex flex-wrap gap-6">
@@ -86,56 +96,65 @@
 
                     <div>
                         <x-input-label for="location_description" :value="__('Location Description')" />
-                        <p class="text-sm mt-1">@lang("Please tell us where the incident occurred. For example: back steps, warden's hut, by the picnic bench.")</p>
+                        <p class="text-sm mt-1">@lang('Please tell us where the incident occurred.')</p>
                         <x-textarea id="location_description" name="location_description"
-                            x-model="form.location_descripition" class="mt-1 w-full" required></x-textarea>
+                            x-model="form.location_descripition" class="mt-1 w-full" required
+                            :placeholder="__('For example: back steps, warden\'s hut, by the picnic bench.')"></x-textarea>
                         <x-input-error class="mt-2" :messages="$errors->get('location_description')" />
                     </div>
                 </fieldset>
 
-                <fieldset class="space-y-6">
-                    <legend class="text-xl font-medium">@lang('Who was involved?')</legend>
-                    <p>@lang('Please provide the name of the injured person. If no one was injured in this incident please use the organisation name, for example: First name: 1st Anytown Scouts / Last name: Cub section')</p>
+                <fieldset class="space-y-2">
+                    <legend class="text-xl font-medium">@lang('Was anyone injured?')</legend>
 
-                    <div class="grid grid-flow-col auto-cols-auto gap-6">
+                    <x-input-label>
+                        <input type="radio" name="injured" value="yes" required x-model="form.injured" />
+                        @lang('Yes')
+                    </x-input-label>
+                    <x-input-label>
+                        <input type="radio" name="injured" value="no" required x-model="form.injured" />
+                        @lang('No')
+                    </x-input-label>
+                </fieldset>
+
+                <fieldset class="space-y-4">
+                    <template x-if="form.injured != 'yes'">
+                        <legend class="text-xl font-medium">@lang('Who was involved in this incident?')</legend>
+                    </template>
+                    <template x-if="form.injured == 'yes'">
+                        <legend class="text-xl font-medium">@lang('Who was injured?')</legend>
+                    </template>
+
+                    <template x-if="form.injured == 'yes'">
                         <div>
-                            <x-input-label for="first_name" :value="__('First Name')" />
-                            <x-text-input id="first_name" name="first_name" x-model="form.first_name"
-                                class="mt-1 w-full" required />
-                            <x-input-error class="mt-2" :messages="$errors->get('first_name')" />
+                            <x-input-label for="injured_name" :value="__('Name')" />
+                            <x-text-input id="injured_name" name="injured_name" required autocomplete="off"
+                                x-model="form.injured_name" class="mt-1 w-full" />
                         </div>
+                    </template>
 
+                    <template x-if="form.injured == 'yes'">
                         <div>
-                            <x-input-label for="last_name" :value="__('Last Name')" />
-                            <x-text-input id="last_name" name="last_name" x-model="form.last_name" class="mt-1 w-full"
-                                required />
-                            <x-input-error class="mt-2" :messages="$errors->get('last_name')" />
+                            <x-input-label for="injured_dob" :value="__('Date of Birth')" />
+                            <x-text-input id="injured_dob" name="injured_dob" type="date" x-model="form.injured_dob"
+                                class="mt-1" x-bind:max="today" required />
+                            <x-input-error class="mt-2" :messages="$errors->get('injured_dob')" />
                         </div>
-                    </div>
+                    </template>
 
-                    <p>@lang('Please provide the Date of Birth for the injured person. If no one was injured please select the date of incident, for a person related incident without confirmed Date of Birth use best guess.')</p>
-
-                    <div>
-                        <x-input-label for="date_of_birth" :value="__('Date of Birth')" />
-                        <x-text-input id="date_of_birth" name="date_of_birth" type="date"
-                            x-model="form.date_of_birth" class="mt-1" x-bind:max="today" required />
-                        <x-input-error class="mt-2" :messages="$errors->get('date_of_birth')" />
-                    </div>
-
-                    <p>@lang('Please provide the Gender of the injured person. If no one was injured please select Unknown.')</p>
-
-                    <div>
-                        <x-input-label for="gender" :value="__('Gender')" />
-                        <x-select-input id="gender" name="gender" x-model="form.gender" class="mt-1" required>
-                            <template x-if="!form.gender">
-                                <option value="" selected disabled></option>
-                            </template>
-                            <x-select-input.enum :options="App\Enums\Incident\Gender::class" lang=":value" />
-                        </x-select-input>
-                        <x-input-error class="mt-2" :messages="$errors->get('gender')" />
-                    </div>
-
-                    <p>@lang('Please select the membership type or category for non-member injured. If the injured person has more than one role, please select the membership type they were when the incident occurred. If no one was injured please select the type of the group involved.')</p>
+                    <template x-if="form.injured == 'yes'">
+                        <div>
+                            <x-input-label for="injured_gender" :value="__('Gender')" />
+                            <x-select-input id="injured_gender" name="injured_gender" x-model="form.injured_gender"
+                                class="mt-1" required>
+                                <template x-if="!form.injured_gender">
+                                    <option value="" selected disabled></option>
+                                </template>
+                                <x-select-input.enum :options="App\Enums\Incident\Gender::class" lang=":value" />
+                            </x-select-input>
+                            <x-input-error class="mt-2" :messages="$errors->get('injured_gender')" />
+                        </div>
+                    </template>
 
                     <div>
                         <x-input-label for="membership_type" :value="__('Membership Type')" />
@@ -154,62 +173,149 @@
                         </x-select-input>
                         <x-input-error class="mt-2" :messages="$errors->get('membership_type')" />
                     </div>
+
+                    <template x-if="!isPublic(form.membership_type)">
+                        <div>
+                            <x-input-label for="group_name" :value="__('Group Name')" />
+                            <x-text-input id="group_name" name="group_name" class="mt-1" required
+                                x-model="form.group_name" />
+                            <x-input-error class="mt-2" :messages="$errors->get('group_name')" />
+                        </div>
+                    </template>
+
+                    <template x-if="form.membership_type">
+                        <div>
+                            <x-input-label for="contact_name" :value="__('Contact Name')" />
+                            <x-text-input id="contact_name" name="contact_name" class="mt-1 w-full" required
+                                x-model="form.contact_name" />
+                            <x-input-error class="mt-2" :messages="$errors->get('contact_name')" />
+                        </div>
+                    </template>
+
+                    <template x-if="isPublic(form.membership_type)">
+                        <div>
+                            <x-input-label for="contact_phone" :value="__('Contact Phone')" />
+                            <x-text-input type="tel" id="contact_phone" name="contact_phone" class="mt-1 w-full"
+                                required x-model="form.contact_phone" />
+                            <x-input-error class="mt-2" :messages="$errors->get('contact_phone')" />
+                        </div>
+                    </template>
+
+                    <template x-if="isPublic(form.membership_type)">
+                        <div>
+                            <x-input-label for="contact_address" :value="__('Contact Address & Postcode')" />
+                            <x-text-input id="contact_address" name="contact_address" class="mt-1 w-full" required
+                                x-model="form.contact_address" />
+                            <x-input-error class="mt-2" :messages="$errors->get('contact_address')" />
+                        </div>
+                    </template>
                 </fieldset>
 
-                <fieldset class="space-y-6">
-                    <legend class="text-xl font-medium">@lang('Home details of injured person')</legend>
-                    {{-- Country --}}
-                    {{-- County/Area/Region --}}
-                    {{-- District --}}
+                <template x-if="form.injured == 'yes'">
+                    <fieldset id="injuries" class="space-y-2" x-init="checkInjuries(form.injuries)">
+                        <legend class="text-xl font-medium">@lang('What were the injuries?')</legend>
+
+                        @foreach (App\Enums\Incident\Injury::cases() as $option)
+                            <x-input-label>
+                                <x-input-checkbox name="injuries[]" :value="$option->name" x-model="form.injuries" />
+                                @lang($option->value)
+                            </x-input-label>
+                        @endforeach
+                    </fieldset>
+                </template>
+
+                <template x-if="form.injured == 'yes'">
+                    <fieldset class="space-y-2">
+                        <legend class="text-xl font-medium">@lang('Did the emergency services attend?')</legend>
+
+                        <x-input-label for="emergency_services_yes">
+                            <input type="radio" id="emergency_services_yes" name="emergency_services"
+                                value="yes" x-model="form.emergency_services" />
+                            @lang('Yes')
+                        </x-input-label>
+                        <x-input-label for="emergency_services_no">
+                            <input type="radio" id="emergency_services_no" name="emergency_services"
+                                value="no" x-model="form.emergency_services" />
+                            @lang('No')
+                        </x-input-label>
+                    </fieldset>
+                </template>
+
+                <template x-if="form.injured == 'yes'">
+                    <fieldset class="space-y-2">
+                        <legend class="text-xl font-medium">@lang('Did the injured person go directly to hospital for treatment?')</legend>
+
+                        <x-input-label for="hospital_yes">
+                            <input type="radio" id="hospital_yes" name="hospital" value="yes"
+                                x-model="form.hospital" />
+                            @lang('Yes')
+                        </x-input-label>
+                        <x-input-label for="hospital_no">
+                            <input type="radio" id="hospital_no" name="hospital" value="no"
+                                x-model="form.hospital" />
+                            @lang('No')
+                        </x-input-label>
+                    </fieldset>
+                </template>
+
+                <fieldset class="space-y-2">
+                    <legend class="text-xl font-medium">@lang('Was any property or equipment damaged?')</legend>
+
+                    <x-input-label for="damaged_yes">
+                        <input type="radio" id="damaged_yes" name="damaged" value="yes"
+                            x-model="form.damaged" />
+                        @lang('Yes')
+                    </x-input-label>
+                    <x-input-label for="damaged_no">
+                        <input type="radio" id="damaged_no" name="damaged" value="no"
+                            x-model="form.damaged" />
+                        @lang('No')
+                    </x-input-label>
                 </fieldset>
 
-                <fieldset class="space-y-6">
-                    <legend class="text-xl font-medium">@lang('What was happening when the incident occurred?')</legend>
-                    {{-- Activity --}}
-                    {{-- Activity - sub category --}}
-                    {{-- Injury - type --}}
-                    {{-- Injury - body part affected
-                        // - Back
-                        // - Face - ears
-                        // - Face - eyes
-                        // - Face - mouth
-                        // - Face - nose
-                        // - Head/scalp
-                        // - Limbs - ankles
-                        // - Limbs - elbows
-                        // - Limbs - feet
-                        // - Limbs - fingers/thumb
-                        // - Limbs - hands
-                        // - Limbs - knees
-                        // - Limbs - lower arms
-                        // - Limbs - lower legs
-                        // - Limbs - toes
-                        // - Limbs - upper arms
-                        // - Limbs - upper legs
-                        // - Limbs - wrists
-                        // - Neck
-                        // - Torso
-                        // - Trunk/pelvis
-                        // - Unknown
-                    --}}
-                    {{-- Treatment or external assistance received from
-                        // - A&E
-                        // - Ambulance called but person not taken to hospital
-                        // - Ambulance treatment and taken to hospital
-                        // - Basic first aid treatment
-                        // - Dentist
-                        // - Fire Service
-                        // - GP or family doctor
-                        // - Helicopter
-                        // - Lifeboat (RNLI)
-                        // - Minor injuries / walk in centre
-                        // - Mountain rescue
-                        // - Police
-                        // - St John Ambulance or similar
-                    --}}
-                    {{-- Was the injured person taken directly to hospital from the scene of the incident? --}}
-                    {{-- Details of incident --}}
-                    <p class="mt-1">@lang('Please provide a summary of what happened. This should include a description of what led up to the incident occurring as well what happened after.')</p>
+                <fieldset class="space-y-4">
+                    <legend class="text-xl font-medium">@lang('Details of accident, injury or near miss')</legend>
+
+                    <div>
+                        <x-input-label for="details" :value="__('What happened?')" />
+                        <x-textarea id="details" name="details" required :placeholder="__('Please give as much detail as possible, including any contributing factors.')" x-model="form.details"
+                            class="mt-1 w-full" />
+                        <x-input-error class="mt-2" :messages="$errors->get('details')" />
+                    </div>
+
+                    <template x-if="form.injured == 'yes'">
+                        <div>
+                            <x-input-label for="first_aid" :value="__('What first aid was performed?')" />
+                            <x-textarea id="first_aid" name="first_aid" required x-model="form.first_aid"
+                                class="mt-1 w-full" />
+                            <x-input-error class="mt-2" :messages="$errors->get('first_aid')" />
+                        </div>
+                    </template>
+                </fieldset>
+
+                <fieldset class="space-y-4">
+                    <legend class="text-xl font-medium">@lang('Your contact details')</legend>
+
+                    <div>
+                        <x-input-label for="reporter_name" :value="__('Your Name')" />
+                        <x-text-input id="reporter_name" name="reporter_name" required autocomplete="name"
+                            x-model="form.reporter_name" class="mt-1 w-full" />
+                        <x-input-error class="mt-2" :messages="$errors->get('reporter_name')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="reporter_email" :value="__('Your Email Address')" />
+                        <x-text-input type="email" id="reporter_email" name="reporter_email" required
+                            autocomplete="email" x-model="form.reporter_email" class="mt-1 w-full" />
+                        <x-input-error class="mt-2" :messages="$errors->get('reporter_email')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="reporter_phone" :value="__('Your Phone Number')" />
+                        <x-text-input type="tel" id="reporter_phone" name="reporter_phone" required
+                            autocomplete="tel" x-model="form.reporter_phone" class="mt-1 w-full" />
+                        <x-input-error class="mt-2" :messages="$errors->get('reporter_phone')" />
+                    </div>
                 </fieldset>
             </div>
 
