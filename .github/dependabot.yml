@@ -6,15 +6,53 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "friday"
 
   # Maintain dependencies for npm/yarn
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "friday"
+    groups:
+      alpinejs:
+        applies-to: version-updates
+        patterns:
+        - "alpinejs"
+        - "@alpinejs/*"
+      fullcalendar:
+        applies-to: version-updates
+        patterns:
+        - "@fullcalendar/*"
+      tailwindcss:
+        applies-to: version-updates
+        patterns:
+        - "autoprefixer"
+        - "postcss"
+        - "tailwindcss"
+        - "@tailwindcss/*"
+      vite:
+        applies-to: version-updates
+        patterns:
+        - "vite"
+        - "laravel-vite-plugin"
 
   # Maintain dependencies for Composer
   - package-ecosystem: "composer"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "friday"
+    groups:
+      laravel:
+        applies-to: version-updates
+        patterns:
+        - "laravel/*"
+      league:
+        applies-to: version-updates
+        patterns:
+        - "league/*"
+      symfony:
+        applies-to: version-updates
+        patterns:
+        - "symfony/*"
