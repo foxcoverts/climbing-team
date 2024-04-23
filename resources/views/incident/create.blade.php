@@ -16,34 +16,34 @@
                 return (new Date()).toISOString().substring(0, 10);
             },
             form: {{ Js::from([
-                'date' => localDate(Carbon\Carbon::now())->format('Y-m-d'),
-                'time' => localDate(Carbon\Carbon::now())->format('H:i'),
-                'location_name' => 'Fox Coverts Scout Campsite, Newbold Road, Kirkby Mallory, LE9 7QG',
-                'location_description' => '',
+                'date' => old('date', localDate(Carbon\Carbon::now())->format('Y-m-d')),
+                'time' => old('time', localDate(Carbon\Carbon::now())->format('H:i')),
+                'location_name' => old('location_name', 'Fox Coverts Scout Campsite, Newbold Road, Kirkby Mallory, LE9 7QG'),
+                'location_description' => old('location_description', ''),
             
-                'injured' => null,
+                'injured' => old('injured'),
             
-                'injured_name' => '',
-                'injured_dob' => localDate(Carbon\Carbon::now())->format('Y-m-d'),
-                'injured_gender' => null,
+                'injured_name' => old('injured_name', ''),
+                'injured_dob' => old('injured_dob', localDate(Carbon\Carbon::now())->format('Y-m-d')),
+                'injured_gender' => old('injured_gender'),
             
-                'membership_type' => App\Enums\Incident\MembershipType::AdultVolunteer,
-                'group_name' => '', // type != public
-                'contact_name' => '', // any type
-                'contact_phone' => '', // type == public
-                'contact_address' => '', // type == public
+                'membership_type' => old('membership_type', App\Enums\Incident\MembershipType::AdultVolunteer),
+                'group_name' => old('group_name', ''), // type != public
+                'contact_name' => old('contact_name', ''), // any type
+                'contact_phone' => old('contact_phone', ''), // type == public
+                'contact_address' => old('contact_address', ''), // type == public
             
-                'injuries' => [],
-                'emergency_services' => 'no',
-                'hospital' => 'no',
-                'damaged' => 'no',
+                'injuries' => old('injuries', []),
+                'emergency_services' => old('emergency_services', 'no'),
+                'hospital' => old('hospital', 'no'),
+                'damaged' => old('damaged', 'no'),
             
-                'details' => '',
-                'first_aid' => '',
+                'details' => old('details', ''),
+                'first_aid' => old('first_aid', ''),
             
-                'reporter_name' => $currentUser->name,
-                'reporter_email' => $currentUser->email,
-                'reporter_phone' => $currentUser->phone?->formatForCountry('GB'),
+                'reporter_name' => old('reporter_name', $currentUser->name),
+                'reporter_email' => old('reporter_email', $currentUser->email),
+                'reporter_phone' => old('reporter_phone', $currentUser->phone?->formatForCountry('GB')),
             ]) }},
             checkInjuries(value) {
                 var injuriesEl = document.getElementById('injuries');
