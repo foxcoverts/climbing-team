@@ -20,7 +20,7 @@
 
         <article class="prose dark:prose-invert p-4 sm:p-8">
             @include('news.partials.meta')
-            {!! $post->content !!}
+            <x-markdown :text="$post->body" />
         </article>
     </section>
 </x-layout.app>

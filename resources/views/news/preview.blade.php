@@ -1,5 +1,5 @@
 @use('Carbon\Carbon')
-<x-layout.guest :title="$post->title" :description="$post->summaryText" :updated="$post->date">
+<x-layout.guest :title="$post->title" :description="$post->summaryText" :updated="$post->updated_at">
     @if (isset($post->image))
         <x-slot:image :width="$post->image['width']" :height="$post->image['height']" hero>
             {{ asset($post->image['file']) }}

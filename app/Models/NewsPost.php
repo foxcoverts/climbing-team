@@ -2,138 +2,72 @@
 
 namespace App\Models;
 
-use App\Repositories\NewsPostRepository;
-use Illuminate\Contracts\Routing\UrlRoutable;
-use Illuminate\Support\Arr;
-use League\CommonMark\Extension\FrontMatter\Output\RenderedContentWithFrontMatter;
-use League\CommonMark\Output\RenderedContentInterface;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
-/**
- * File-based news system. Some functions added to feel like eloquent.
- */
-class NewsPost implements UrlRoutable
+class NewsPost extends Model
 {
-    protected string $filepath;
-
-    protected RenderedContentInterface $markdown;
-
-    public function __construct(
-        array $attributes = []
-    ) {
-        if (Arr::has($attributes, 'filepath')) {
-            $this->filepath = Arr::get($attributes, 'filepath');
-        }
-        if (Arr::has($attributes, 'markdown')) {
-            $this->markdown = Arr::get($attributes, 'markdown');
-        }
-    }
-
-    protected function getSummary(): string
-    {
-        if (empty($this->markdown->getContent())) {
-            return '';
-        }
-
-        $doc = new \DOMDocument();
-        $doc->loadHTML($this->markdown->getContent());
-
-        return $doc->saveHTML($doc->getElementsByTagName('p')->item(0));
-    }
+    use HasUlids;
 
     /**
-     * Dynamically retrieve attributes on the model.
-     */
-    public function __get(string $key): mixed
-    {
-        if (Arr::has($this->getAttributes(), $key)) {
-            return Arr::get($this->getAttributes(), $key);
-        }
-
-        if ($key === 'filename') {
-            return pathinfo($this->filepath, PATHINFO_FILENAME);
-        }
-        if ($key === 'content') {
-            return $this->markdown->getContent();
-        }
-
-        if ($key === 'summary') {
-            return $this->getSummary();
-        }
-        if ($key === 'summaryText') {
-            return strip_tags($this->getSummary());
-        }
-
-        throw new \DomainException("Cannot get unknown property '$key' on ".get_class($this));
-    }
-
-    /**
-     * Dynamically check attributes exist on the model.
-     */
-    public function __isset(string $key): bool
-    {
-        return Arr::has($this->getAttributes(), $key)
-            || $key === 'filename'
-            || $key === 'content'
-            || $key === 'summary'
-            || $key === 'summaryText';
-    }
-
-    /**
-     * Get front matter for this news post.
-     */
-    public function getAttributes(): array
-    {
-        if ($this->markdown instanceof RenderedContentWithFrontMatter) {
-            return $this->markdown->getFrontMatter();
-        }
-
-        return [
-            'title' => $this->filepath,
-        ];
-    }
-
-    /**
-     * Get the value of the model's route key.
+     * The attributes that are mass assignable.
      *
-     * @return mixed
+     * @var array<int, string>
      */
-    public function getRouteKey()
+    protected $fillable = [
+        'slug',
+        'title',
+        'body',
+    ];
+
+    public function author(): BelongsTo
     {
-        return $this->filename;
+        return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
-        return 'post';
+        return 'slug';
     }
 
-    /**
-     * Retrieve the model for a bound value.
-     *
-     * @param  mixed  $value
-     * @param  string|null  $field
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    public function resolveRouteBinding($value, $field = null): ?static
+    protected function summary(): Attribute
     {
-        return app()->make(NewsPostRepository::class)->find($value);
+        return Attribute::make(
+            get: function () {
+                if (empty($this->markdown)) {
+                    return '';
+                }
+
+                $doc = new \DOMDocument();
+                $doc->loadHTML($this->markdown);
+
+                return $doc->saveHTML($doc->getElementsByTagName('p')->item(0));
+            },
+        );
     }
 
-    /**
-     * Retrieve the child model for a bound value.
-     *
-     * @param  string  $childType
-     * @param  mixed  $value
-     * @param  string|null  $field
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    public function resolveChildRouteBinding($childType, $value, $field)
+    protected function summaryText(): Attribute
     {
-        return null;
+        return Attribute::make(
+            get: fn () => strip_tags($this->summary),
+        );
+    }
+
+    protected function markdown(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Str::markdown($this->body, [
+                'renderer' => [
+                    'block_separator' => "\n",
+                    'inner_separator' => "\n",
+                    'soft_break' => '<br \\>',
+                ],
+                'html_input' => 'strip',
+                'allow_unsafe_links' => false,
+            ]),
+        );
     }
 }
