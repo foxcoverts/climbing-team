@@ -2,14 +2,13 @@
 <nav class="hidden w-full pt-4 pb-2 border-b lg:bottom-0 lg:fixed lg:top-16 lg:block lg:w-64 lg:border-b-0 lg:border-r bg-gray-100 dark:bg-gray-900 overflow-y-auto space-y-4"
     :class="{ 'hidden': !sidebarOpen }" id="main-nav">
 
-    <x-sidebar.group :heading="__('Main')">
+    <x-sidebar.group :heading="__('Menu')">
         @auth
             <x-sidebar.link route='dashboard' :label="__('Dashboard')">
                 <x-slot:icon>
                     <path d="M8 20H3V10H0L10 0l10 10h-3v10h-5v-6H8v6z" />
                 </x-slot:icon>
             </x-sidebar.link>
-            <x-sidebar.link route='news.index' match-routes="news.*" :label="__('News')" icon="news" />
         @endauth
         @guest
             <x-sidebar.link route='home' :label="__('Home')">
@@ -27,6 +26,15 @@
         @can('viewOwn', App\Models\Booking::class)
             <x-sidebar.link route='booking.rota' :label="__('My Rota')" icon="inbox.check" />
             <x-sidebar.link route='booking.invite' :match-routes="['booking.invite', 'booking.attendance.*']" :label="__('Invites')" icon="inbox" />
+        @endcan
+        @can('viewAny', App\Models\Document::class)
+            <x-sidebar.link route='document.index' :match-routes="['document.*', 'trash.document.*']" :label="__('Documents')" icon="document" />
+        @endcan
+        @can('viewAny', App\Models\NewsPost::class)
+            <x-sidebar.link route='news.index' match-routes="news.*" :label="__('News')" icon="news" />
+        @endcan
+        @can('create', App\Models\Incident::class)
+            <x-sidebar.link route='incident.create' :label="__('Report Incident')" icon="incident" />
         @endcan
     </x-sidebar.group>
 
@@ -60,9 +68,6 @@
                 </x-slot:icon>
             </x-sidebar.link>
         @endcan
-        @can('viewAny', App\Models\Document::class)
-            <x-sidebar.link route='document.index' :match-routes="['document.*', 'trash.document.*']" :label="__('Documents')" icon="document" />
-        @endcan
         @if (auth()->user()->keys()->exists())
             <x-sidebar.link route='key.index' match-routes="key.*" :label="__('Keys')" icon="key" />
         @endif
@@ -76,9 +81,6 @@
                         d="M18 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h16zm-4.37 9.1L20 16v-2l-5.12-3.9L20 6V4l-10 8L0 4v2l5.12 4.1L0 14v2l6.37-4.9L10 14l3.63-2.9z" />
                 </x-slot:icon>
             </x-sidebar.link>
-        @endcan
-        @can('create', App\Models\Incident::class)
-            <x-sidebar.link route='incident.create' :label="__('Report Incident')" icon="incident" />
         @endcan
         @can('viewAny', App\Models\User::class)
             <x-sidebar.link route='user.index' :match-routes="['user.*', 'user.booking.*', 'user.qualification.*']" :label="__('Users')">
