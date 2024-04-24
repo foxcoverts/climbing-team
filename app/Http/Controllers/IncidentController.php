@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Role;
-use App\Forms\IncidentForm;
 use App\Http\Requests\StoreIncidentRequest;
 use App\Mail\IncidentReport;
 use App\Models\Incident;
@@ -24,7 +23,6 @@ class IncidentController extends Controller
         Gate::authorize('create', Incident::class);
 
         return view('incident.create', [
-            'form' => new IncidentForm,
             'currentUser' => $request->user(),
         ]);
     }
