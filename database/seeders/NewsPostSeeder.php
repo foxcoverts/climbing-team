@@ -84,13 +84,15 @@ EOL
         ];
 
         foreach ($posts as $data) {
-            $post = new NewsPost();
-            $post->slug = $data['slug'];
-            $post->title = $data['title'];
-            $post->created_at = $post->updated_at = $data['date'];
-            $post->body = $data['body'];
-            $post->author()->associate($author);
-            $post->save();
+            if (! NewsPost::where('slug', $data['slug'])->exists()) {
+                $post = new NewsPost();
+                $post->slug = $data['slug'];
+                $post->title = $data['title'];
+                $post->created_at = $post->updated_at = $data['date'];
+                $post->body = $data['body'];
+                $post->author()->associate($author);
+                $post->save();
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ class NewsPost extends Model
     protected $fillable = [
         'slug',
         'title',
+        'author_id',
         'body',
     ];
 

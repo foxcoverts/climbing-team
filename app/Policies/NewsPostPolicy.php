@@ -7,6 +7,11 @@ use App\Models\User;
 
 class NewsPostPolicy
 {
+    public function manage(User $user)
+    {
+        return $user->isTeamLeader();
+    }
+
     public function viewAny(User $user)
     {
         return true;
@@ -15,5 +20,15 @@ class NewsPostPolicy
     public function view(User $user, NewsPost $post)
     {
         return true;
+    }
+
+    public function update(User $user, NewsPost $post)
+    {
+        return $user->can('manage', $post);
+    }
+
+    public function delete(User $user, NewsPost $post)
+    {
+        return $user->can('manage', $post);
     }
 }

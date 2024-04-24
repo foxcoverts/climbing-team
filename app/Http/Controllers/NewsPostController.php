@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateNewsPostRequest;
 use App\Models\NewsPost;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
 
@@ -38,5 +40,44 @@ class NewsPostController extends Controller
         return view('news.show', [
             'post' => $post,
         ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(NewsPost $post): View
+    {
+        Gate::authorize('update', $post);
+
+        return view('news.edit', [
+            'post' => $post,
+            'authors' => User::orderBy('name')->select(['id', 'name'])->get(),
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateNewsPostRequest $request, NewsPost $post)
+    {
+        Gate::authorize('update', $post);
+
+        $post->update($request->validated());
+
+        return redirect()->route('news.show', $post)
+            ->with('alert.message', __('News updated.'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(NewsPost $post)
+    {
+        Gate::authorize('delete', $post);
+
+        $post->delete();
+
+        return redirect()->route('news.index')
+            ->with('alert.message', __('News deleted.'));
     }
 }
