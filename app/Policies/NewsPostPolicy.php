@@ -17,6 +17,11 @@ class NewsPostPolicy
         return true;
     }
 
+    public function create(User $user)
+    {
+        return $user->can('manage', NewsPost::class);
+    }
+
     public function view(User $user, NewsPost $post)
     {
         return true;

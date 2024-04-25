@@ -1,46 +1,46 @@
-<x-layout.app :title="__('Edit News')">
+<x-layout.app :title="__('Add News')">
     <section x-data="{ submitted: false }">
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Edit News')
+                    @lang('Add News')
                 </h1>
             </div>
         </header>
 
-        <form method="post" action="{{ route('news.update', $post) }}" id="update-news" class="p-4 sm:px-8"
-            x-data="{
-                post: {{ Js::from([
-                    'date' => $post->created_at->format('Y-m-d'),
-                    'title' => old('title', $post->title),
-                    'slug' => old('slug', $post->slug),
-                    'author_id' => old('author_id', $post->author_id),
-                    'body' => old('body', $post->body),
-                ]) }},
-                makeSlug(date, title) {
-                    var cleanTitle = (title || '')
-                        .toLowerCase()
-                        .replace(/&/g, ' and ')
-                        .replace(/[^\-\w\s]+/g, ' ')
-                        .replace(/^\s+|\s+$/g, '');
-            
-                    return [date, ...(cleanTitle || 'untitled').split(/[\-\s_]+/)]
-                        .join('-');
-                },
-                watchTitle(title, oldTitle) {
-                    oldSlug = $data.makeSlug($data.post.date, oldTitle);
-                    if ($data.post.slug == oldSlug) {
-                        $data.post.slug = $data.makeSlug($data.post.date, title);
-                    }
-                },
-                init() {
-                    if (!this.post.slug) {
-                        this.post.slug = this.makeSlug(this.post.date, this.post.title);
-                    }
-                    this.$watch('post.title', this.watchTitle);
-                },
-            }" x-on:submit="setTimeout(() => submitted = 'update-news', 0)">
-            @csrf @method('PATCH')
+        <form method="post" action="{{ route('news.store') }}" id="create-news" class="p-4 sm:px-8" x-data="{
+            post: {{ Js::from([
+                'date' => Carbon\Carbon::now()->format('Y-m-d'),
+                'title' => old('title', 'Untitled'),
+                'slug' => old('slug'),
+                'author_id' => old('author_id', $currentUser->id),
+                'body' => old('body'),
+            ]) }},
+            makeSlug(date, title) {
+                var cleanTitle = (title || '')
+                    .toLowerCase()
+                    .replace(/&/g, ' and ')
+                    .replace(/[^\-\w\s]+/g, ' ')
+                    .replace(/^\s+|\s+$/g, '');
+        
+                return [date, ...(cleanTitle || 'untitled').split(/[\-\s_]+/)]
+                    .join('-');
+            },
+            watchTitle(title, oldTitle) {
+                oldSlug = $data.makeSlug($data.post.date, oldTitle);
+                if ($data.post.slug == oldSlug) {
+                    $data.post.slug = $data.makeSlug($data.post.date, title);
+                }
+            },
+            init() {
+                if (!this.post.slug) {
+                    this.post.slug = this.makeSlug(this.post.date, this.post.title);
+                }
+                this.$watch('post.title', this.watchTitle);
+            },
+        }"
+            x-on:submit="setTimeout(() => submitted = 'create-news', 0)">
+            @csrf
 
             <div class="space-y-6 max-w-prose">
                 <div>
@@ -79,26 +79,13 @@
             </div>
         </form>
 
-        @can('delete', $post)
-            <form method="POST" action="{{ route('news.destroy', $post) }}" id="delete-news"
-                x-on:submit="setTimeout(() => submitted = 'delete-news', 0)">
-                @csrf @method('DELETE')
-            </form>
-        @endcan
-
         <footer class="pb-4 px-4 sm:px-8 flex flex-wrap items-center gap-4">
             <x-button.primary class="whitespace-nowrap" x-bind:disabled="submitted" :label="__('Save')"
-                x-text="submitted == 'update-news' ? '{{ __('Please wait...') }}' : '{{ __('Save') }}'"
-                form="update-news" />
+                x-text="submitted == 'create-news' ? '{{ __('Please wait...') }}' : '{{ __('Save') }}'"
+                form="create-news" />
 
-            @can('delete', $post)
-                <x-button.danger class="whitespace-nowrap" x-bind:disabled="submitted" :label="__('Delete')"
-                    x-text="submitted == 'delete-news' ? '{{ __('Please wait...') }}' : '{{ __('Delete') }}'"
-                    form="delete-news" />
-            @endcan
-
-            @can('view', $post)
-                <x-button.secondary :href="route('news.show', $post)">
+            @can('viewAny', App\Models\NewsPost::class)
+                <x-button.secondary :href="route('news.index')">
                     @lang('Back')
                 </x-button.secondary>
             @endcan
