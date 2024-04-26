@@ -10,6 +10,19 @@ use Tests\TestCase;
 
 class CalendarFactoryTest extends TestCase
 {
+    public function test_description_is_rendered(): void
+    {
+        $description = fake()->sentence(nbWords: 2);
+
+        $calendar = new Calendar();
+        $calendar->setDescription($description);
+
+        $factory = new CalendarFactory();
+        $output = $factory->createCalendar($calendar);
+
+        $this->assertStringContainsString("X-WR-CALDESC:$description\r\n", (string) $output);
+    }
+
     #[DataProvider('method_output_provider')]
     public function test_method_is_rendered(CalendarMethod $method, string $expected): void
     {

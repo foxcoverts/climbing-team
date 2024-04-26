@@ -24,6 +24,7 @@ class BookingIcsController extends Controller
             $bookings->get(),
             $request->user(),
             title: __(':Name Bookings', ['name' => config('app.name', 'Fox Coverts Climbing')]),
+            description: __('All bookings for the team.'),
             debug: config('app.debug') && $request->get('debug'),
         );
     }
@@ -47,6 +48,7 @@ class BookingIcsController extends Controller
             $bookings->get(),
             $request->user(),
             title: __(':Name Rota', ['name' => config('app.name', 'Fox Coverts Climbing')]),
+            description: __('All of the bookings you are attending.'),
             debug: config('app.debug') && $request->get('debug'),
         );
     }
@@ -72,12 +74,13 @@ class BookingIcsController extends Controller
      *
      * @param  array<Booking>  $bookings
      */
-    protected function ics($bookings, User $user, string $title, string $filename = 'booking', bool $debug = false): Response
+    protected function ics($bookings, User $user, string $title, string $description = '', string $filename = 'booking', bool $debug = false): Response
     {
         $ics = response()->view('booking.ics', [
             'bookings' => $bookings,
             'user' => $user,
             'name' => $title,
+            'description' => $description,
         ]);
 
         if ($debug) {

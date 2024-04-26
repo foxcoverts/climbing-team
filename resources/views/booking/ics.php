@@ -42,6 +42,9 @@ $calendar->setMethod($method);
 if (! empty($name)) {
     $calendar->setName($name);
 }
+if (! empty($description)) {
+    $calendar->setDescription($description);
+}
 
 $minDate = $maxDate = Carbon::now();
 

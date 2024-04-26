@@ -29,6 +29,12 @@ class CalendarFactory extends EluceoCalendarFactory
                     new Property('X-WR-CALNAME', new TextValue($calendar->getName()))
                 );
             }
+
+            if ($calendar->hasDescription()) {
+                $component = $component->withProperty(
+                    new Property('X-WR-CALDESC', new TextValue($calendar->getDescription()))
+                );
+            }
         }
 
         return $component;

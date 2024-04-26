@@ -9,6 +9,45 @@ use TypeError;
 
 class CalendarTest extends TestCase
 {
+    public function test_set_get_description(): void
+    {
+        $description = fake()->paragraph();
+
+        $calendar = new Calendar;
+        // setDescription is chainable
+        $this->assertEquals($calendar, $calendar->setDescription($description));
+        // hasDescription is true when any description is set
+        $this->assertTrue($calendar->hasDescription());
+        // getDescription returns the set description
+        $this->assertEquals($description, $calendar->getDescription());
+    }
+
+    public function test_has_description_with_no_description(): void
+    {
+        $calendar = new Calendar;
+        $this->assertFalse($calendar->hasDescription());
+    }
+
+    public function test_get_description_fails_with_no_description(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $calendar = new Calendar;
+        $calendar->getDescription();
+    }
+
+    public function test_unset_description(): void
+    {
+        $description = fake()->paragraph();
+
+        $calendar = new Calendar;
+        $calendar->setDescription($description);
+        // unsetDescription is chainable
+        $this->assertEquals($calendar, $calendar->unsetDescription());
+        // hasDescription is false when description is unset
+        $this->assertFalse($calendar->hasDescription());
+    }
+
     public function test_set_get_method(): void
     {
         $method = fake()->randomElement(CalendarMethod::class);

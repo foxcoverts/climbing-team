@@ -7,14 +7,38 @@ use Eluceo\iCal\Domain\Entity\Calendar as EluceoCalendar;
 
 class Calendar extends EluceoCalendar
 {
+    private ?string $description = null;
+
     private ?CalendarMethod $method = null;
 
     private ?string $name = null;
 
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function hasDescription(): bool
+    {
+        return $this->description !== null;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function unsetDescription(): static
+    {
+        $this->description = null;
+
+        return $this;
+    }
+
     public function getMethod(): CalendarMethod
     {
-        assert($this->method !== null);
-
         return $this->method;
     }
 
