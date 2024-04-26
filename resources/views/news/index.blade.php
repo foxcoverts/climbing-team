@@ -6,11 +6,17 @@
                     <x-icon.news style="height: .75lh" class="fill-current" aria-hidden="true" />
                     <span>@lang('News')</span>
                 </h1>
+
+                @can('create', \App\Models\NewsPost::class)
+                    <nav class="flex items-center gap-4 justify-end grow">
+                        <x-button.primary :href="route('news.create')" :label="__('New')" />
+                    </nav>
+                @endcan
             </div>
         </header>
-        <div class="p-4 sm:px-8 max-w-prose space-y-6">
+        <div class="p-4 sm:px-8 space-y-6">
             @foreach ($posts as $post)
-                <article class="space-y-2">
+                <article class="space-y-2 max-w-prose">
                     <h2 class="text-xl sm:text-2xl font-medium"><a
                             href="{{ route('news.show', $post) }}">{{ $post->title }}</a></h2>
                     @include('news.partials.meta')

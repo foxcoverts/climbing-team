@@ -72,7 +72,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('booking/{booking}/preview', BookingPreviewController::class);
 Route::get('booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
-Route::get('news/{post}', [NewsPostController::class, 'show'])->name('news.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('invite', BookingInviteController::class)->name('booking.invite');
@@ -111,7 +110,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
 
-    Route::get('news', [NewsPostController::class, 'index'])->name('news.index');
+    Route::resource('news', NewsPostController::class)
+        ->except('show')
+        ->parameters(['news' => 'post']);
 
     Route::controller(ProfileController::class)->group(function () {
         Route::get('profile', 'edit')->name('profile.edit');
@@ -128,6 +129,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('user.qualification', QualificationController::class);
     Route::resource('user', UserController::class);
 });
+
+Route::get('news/{post}', [NewsPostController::class, 'show'])->name('news.show');
 
 Route::middleware(Authenticate::fromParam('attendee'))
     ->controller(RespondController::class)
