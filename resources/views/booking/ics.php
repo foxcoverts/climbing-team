@@ -48,9 +48,6 @@ if (! empty($description)) {
 if (! empty($refreshInterval)) {
     $calendar->setRefreshInterval($refreshInterval);
 }
-if (! empty($user->timezone)) {
-    $calendar->setTimeZone(new TimeZone($user->timezone->getName()));
-}
 
 $minDate = $maxDate = Carbon::now();
 
@@ -148,11 +145,13 @@ foreach ($bookings as $booking) {
     $calendar->addEvent($event);
 }
 
-$calendar->addTimeZone(TimeZone::createFromPhpDateTimeZone(
+$timeZone = TimeZone::createFromPhpDateTimeZone(
     $user->timezone,
     $dateFactory->make($minDate)->toDateTimeImmutable(),
     $dateFactory->make($maxDate)->toDateTimeImmutable(),
-));
+);
+$calendar->addTimeZone($timeZone);
+$calendar->setTimeZone($timeZone);
 
 $eventFactory = new EventFactory();
 $calendarFactory = new CalendarFactory(eventFactory: $eventFactory);
