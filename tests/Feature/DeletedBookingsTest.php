@@ -31,6 +31,7 @@ class DeletedBookingsTest extends TestCase
 
         $this
             ->actingAs($user)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->get('/trash/booking')
             ->assertOk()
             ->assertSeeInOrder([
@@ -51,6 +52,7 @@ class DeletedBookingsTest extends TestCase
 
         $this
             ->actingAs($user)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->put('/trash/booking/'.$booking->id, [
                 'deleted_at' => false,
             ])
@@ -70,6 +72,7 @@ class DeletedBookingsTest extends TestCase
 
         $this
             ->actingAs($user)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->delete('/trash/booking/'.$booking->id, [
                 'confirm' => 'DELETE',
             ])
@@ -84,6 +87,7 @@ class DeletedBookingsTest extends TestCase
 
         $this
             ->actingAs($user)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->get('/trash/booking')
             ->assertForbidden();
     }
@@ -94,6 +98,7 @@ class DeletedBookingsTest extends TestCase
 
         $this
             ->actingAs($user)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->get('/trash/booking')
             ->assertForbidden();
     }
