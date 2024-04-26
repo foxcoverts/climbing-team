@@ -16,6 +16,7 @@ class ProfileTest extends TestCase
 
         $this
             ->actingAs($user)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->get('/profile')
             ->assertOk()
             ->assertSee('Profile Information');
@@ -25,15 +26,14 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this
+        $this
             ->actingAs($user)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->patch('/profile', [
                 'name' => 'Test User',
                 'email' => 'test@example.com',
                 'timezone' => 'UTC',
-            ]);
-
-        $response
+            ])
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');
 
@@ -48,15 +48,14 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this
+        $this
             ->actingAs($user)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->patch('/profile', [
                 'name' => 'Test User',
                 'email' => $user->email,
                 'timezone' => 'UTC',
-            ]);
-
-        $response
+            ])
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');
 
@@ -68,13 +67,12 @@ class ProfileTest extends TestCase
         // Note: Team Leader cannot delete their own account.
         $user = User::factory()->teamMember()->create();
 
-        $response = $this
+        $this
             ->actingAs($user)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->delete('/profile', [
                 'password' => 'password',
-            ]);
-
-        $response
+            ])
             ->assertSessionHasNoErrors()
             ->assertRedirect('/');
 
@@ -87,14 +85,13 @@ class ProfileTest extends TestCase
         // Note: Team Leader cannot delete their own account.
         $user = User::factory()->teamMember()->create();
 
-        $response = $this
+        $this
             ->actingAs($user)
+            ->withSession(['auth.password_confirmed_at' => time()])
             ->from('/profile')
             ->delete('/profile', [
                 'password' => 'wrong-password',
-            ]);
-
-        $response
+            ])
             ->assertSessionHasErrorsIn('userDeletion', 'password')
             ->assertRedirect('/profile');
 

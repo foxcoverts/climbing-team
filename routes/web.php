@@ -36,8 +36,6 @@ Route::view('/', 'welcome')->name('home');
 Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', DashboardController::class)->name('dashboard');
-
     Route::get('booking', [BookingController::class, 'calendar'])->name('booking.calendar');
     foreach (BookingStatus::cases() as $status) {
         Route::get('booking/'.$status->value, [BookingController::class, $status->value])
@@ -68,25 +66,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::resource('booking', BookingController::class)->except('index', 'show');
-});
 
-Route::get('booking/{booking}/preview', BookingPreviewController::class);
-Route::get('booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('invite', BookingInviteController::class)->name('booking.invite');
 
     Route::get('rota', BookingRotaController::class)->name('booking.rota');
-
-    Route::prefix('trash')->name('trash.')->group(function () {
-        Route::resource('booking', TrashedBookingController::class)
-            ->only(['index', 'show', 'update', 'destroy'])
-            ->withTrashed(['show', 'update', 'destroy']);
-
-        Route::resource('document', TrashedDocumentController::class)
-            ->only(['index', 'show', 'update', 'destroy'])
-            ->withTrashed(['show', 'update', 'destroy']);
-    });
 
     Route::get('change', ChangeController::class)->name('change.index');
 
@@ -114,21 +99,36 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->except('show')
         ->parameters(['news' => 'post']);
 
-    Route::controller(ProfileController::class)->group(function () {
-        Route::get('profile', 'edit')->name('profile.edit');
-        Route::patch('profile', 'update')->name('profile.update');
-        Route::delete('profile', 'destroy')->name('profile.destroy');
-    });
+    Route::middleware('password.confirm')->group(function () {
+        Route::controller(ProfileController::class)->group(function () {
+            Route::get('profile', 'edit')->name('profile.edit');
+            Route::patch('profile', 'update')->name('profile.update');
+            Route::delete('profile', 'destroy')->name('profile.destroy');
+        });
 
-    Route::controller(UserBookingInviteController::class)->group(function () {
-        Route::get('user/{user}/booking/invite', 'create')->name('user.booking.invite');
-        Route::post('user/{user}/booking/invite', 'store')->name('user.booking.invite.store');
+        Route::prefix('trash')->name('trash.')->group(function () {
+            Route::resource('booking', TrashedBookingController::class)
+                ->only(['index', 'show', 'update', 'destroy'])
+                ->withTrashed(['show', 'update', 'destroy']);
+
+            Route::resource('document', TrashedDocumentController::class)
+                ->only(['index', 'show', 'update', 'destroy'])
+                ->withTrashed(['show', 'update', 'destroy']);
+        });
+
+        Route::controller(UserBookingInviteController::class)->group(function () {
+            Route::get('user/{user}/booking/invite', 'create')->name('user.booking.invite');
+            Route::post('user/{user}/booking/invite', 'store')->name('user.booking.invite.store');
+        });
+        Route::get('user/{user}/booking', UserBookingController::class)->name('user.booking.index');
+        Route::post('user/{user}/invite', [UserController::class, 'sendInvite'])->name('user.invite');
+        Route::resource('user.qualification', QualificationController::class);
+        Route::resource('user', UserController::class);
     });
-    Route::get('user/{user}/booking', UserBookingController::class)->name('user.booking.index');
-    Route::post('user/{user}/invite', [UserController::class, 'sendInvite'])->name('user.invite');
-    Route::resource('user.qualification', QualificationController::class);
-    Route::resource('user', UserController::class);
 });
+
+Route::get('booking/{booking}/preview', BookingPreviewController::class);
+Route::get('booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
 
 Route::get('news/{post}', [NewsPostController::class, 'show'])->name('news.show');
 
