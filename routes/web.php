@@ -61,6 +61,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('booking/{booking}/share', BookingShareController::class)->name('booking.share');
 
+    Route::get('booking/{booking}.ics', [BookingIcsController::class, 'show'])->name('booking.show.ics');
+
     Route::resource('booking', BookingController::class)->except('index', 'show');
 
     Route::get('dashboard', DashboardController::class)->name('dashboard');
@@ -130,7 +132,6 @@ Route::controller(BookingIcsController::class)
     ->middleware(Authenticate::fromParam('user'))
     ->group(function () {
         Route::get('ical/{user:ical_token}/booking.ics', 'index')->name('booking.ics');
-        Route::get('ical/{user:ical_token}/booking/{booking}.ics', 'show')->name('booking.show.ics');
         Route::get('ical/{user:ical_token}/rota.ics', 'rota')->name('booking.rota.ics');
     });
 

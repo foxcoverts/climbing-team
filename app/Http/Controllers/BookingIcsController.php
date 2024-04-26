@@ -57,7 +57,7 @@ class BookingIcsController extends Controller
     /**
      * Display an iCal listing for the specified resource.
      */
-    public function show(Request $request, User $user, Booking $booking): Response
+    public function show(Request $request, Booking $booking): Response
     {
         Gate::authorize('view', $booking);
 
