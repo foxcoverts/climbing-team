@@ -9,6 +9,8 @@ class Calendar extends EluceoCalendar
 {
     private ?CalendarMethod $method = null;
 
+    private ?string $name = null;
+
     public function getMethod(): CalendarMethod
     {
         assert($this->method !== null);
@@ -31,6 +33,30 @@ class Calendar extends EluceoCalendar
     public function unsetMethod(): static
     {
         $this->method = null;
+
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function hasName(): bool
+    {
+        return $this->name !== null;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function unsetName(): static
+    {
+        $this->name = null;
 
         return $this;
     }

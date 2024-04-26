@@ -23,6 +23,12 @@ class CalendarFactory extends EluceoCalendarFactory
                     new Property('METHOD', $this->getCalendarMethodValue($calendar->getMethod()))
                 );
             }
+
+            if ($calendar->hasName()) {
+                $component = $component->withProperty(
+                    new Property('X-WR-CALNAME', new TextValue($calendar->getName()))
+                );
+            }
         }
 
         return $component;

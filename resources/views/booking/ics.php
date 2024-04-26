@@ -39,6 +39,10 @@ $dateFactory = new CarbonFactory([
 $calendar = new Calendar();
 $calendar->setMethod($method);
 
+if (! empty($name)) {
+    $calendar->setName($name);
+}
+
 $minDate = $maxDate = Carbon::now();
 
 foreach ($bookings as $booking) {

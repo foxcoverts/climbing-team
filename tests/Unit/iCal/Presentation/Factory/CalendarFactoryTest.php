@@ -35,4 +35,17 @@ class CalendarFactoryTest extends TestCase
             [CalendarMethod::Request, 'REQUEST'],
         ];
     }
+
+    public function test_name_is_rendered(): void
+    {
+        $name = fake()->sentence(nbWords: 2);
+
+        $calendar = new Calendar();
+        $calendar->setName($name);
+
+        $factory = new CalendarFactory();
+        $output = $factory->createCalendar($calendar);
+
+        $this->assertStringContainsString("X-WR-CALNAME:$name\r\n", (string) $output);
+    }
 }
