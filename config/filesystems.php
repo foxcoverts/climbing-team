@@ -36,12 +36,6 @@ return [
             'throw' => false,
         ],
 
-        'news' => [
-            'driver' => 'local',
-            'root' => database_path('news'),
-            'read-only' => true,
-        ],
-
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
