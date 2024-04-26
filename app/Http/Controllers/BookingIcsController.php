@@ -14,7 +14,7 @@ class BookingIcsController extends Controller
     /**
      * Display an iCal listing of the resource.
      */
-    public function index(Request $request): Response
+    public function index(Request $request, User $user): Response
     {
         Gate::authorize('viewAny', Booking::class);
 
@@ -34,7 +34,7 @@ class BookingIcsController extends Controller
      * 'ACCEPTED' or 'TENTATIVE'. In contrast to `index` which includes all
      * bookings the current user has permission to view.
      */
-    public function rota(Request $request): Response
+    public function rota(Request $request, User $user): Response
     {
         Gate::authorize('viewOwn', Booking::class);
 
@@ -52,7 +52,7 @@ class BookingIcsController extends Controller
     /**
      * Display an iCal listing for the specified resource.
      */
-    public function show(Request $request, Booking $booking): Response
+    public function show(Request $request, User $user, Booking $booking): Response
     {
         Gate::authorize('view', $booking);
 

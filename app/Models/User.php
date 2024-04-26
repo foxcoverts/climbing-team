@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 
@@ -38,6 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'timezone',
         'section',
         'role',
+        'ical_token',
     ];
 
     /**
@@ -225,5 +227,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendAccountSetupNotification()
     {
         $this->notify(new SetupAccount);
+    }
+
+    /**
+     * Make a new ical token for a user.
+     */
+    public static function generateToken(): string
+    {
+        return hash('sha256', sprintf(
+            '%s%s%s',
+            config('app.token_prefix', ''),
+            $tokenEntropy = Str::random(40),
+            hash('crc32b', $tokenEntropy)
+        ));
     }
 }
