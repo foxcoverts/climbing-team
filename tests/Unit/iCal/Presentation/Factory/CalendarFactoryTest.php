@@ -5,6 +5,7 @@ namespace Tests\Unit\iCal\Presentation\Factory;
 use App\iCal\Domain\Entity\Calendar;
 use App\iCal\Domain\Enum\CalendarMethod;
 use App\iCal\Presentation\Factory\CalendarFactory;
+use Eluceo\iCal\Domain\Entity\TimeZone;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -60,5 +61,18 @@ class CalendarFactoryTest extends TestCase
         $output = $factory->createCalendar($calendar);
 
         $this->assertStringContainsString("X-WR-CALNAME:$name\r\n", (string) $output);
+    }
+
+    public function test_time_zone_is_rendered(): void
+    {
+        $timezone = fake()->timezone();
+
+        $calendar = new Calendar();
+        $calendar->setTimeZone(new TimeZone($timezone));
+
+        $factory = new CalendarFactory();
+        $output = $factory->createCalendar($calendar);
+
+        $this->assertStringContainsString("X-WR-TIMEZONE:$timezone\r\n", (string) $output);
     }
 }

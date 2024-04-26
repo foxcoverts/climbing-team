@@ -4,6 +4,7 @@ namespace Tests\Unit\iCal\Domain\Entity;
 
 use App\iCal\Domain\Entity\Calendar;
 use App\iCal\Domain\Enum\CalendarMethod;
+use Eluceo\iCal\Domain\Entity\TimeZone;
 use Tests\TestCase;
 use TypeError;
 
@@ -124,5 +125,46 @@ class CalendarTest extends TestCase
         $this->assertEquals($calendar, $calendar->unsetName());
         // hasName is false when name is unset
         $this->assertFalse($calendar->hasName());
+    }
+
+    public function test_set_get_time_zone(): void
+    {
+        $timeZoneId = fake()->timezone();
+        $timeZone = new TimeZone($timeZoneId);
+
+        $calendar = new Calendar;
+        // setTimeZone is chainable
+        $this->assertEquals($calendar, $calendar->setTimeZone($timeZone));
+        // hasTimeZone is true when any time zone is set
+        $this->assertTrue($calendar->hasTimeZone());
+        // getTimeZone returns the set time zone
+        $this->assertEquals($timeZone, $calendar->getTimeZone());
+        $this->assertEquals($timeZoneId, $calendar->getTimeZoneId());
+    }
+
+    public function test_has_time_zone_with_no_time_zone(): void
+    {
+        $calendar = new Calendar;
+        $this->assertFalse($calendar->hasTimeZone());
+    }
+
+    public function test_get_time_zone_fails_with_no_time_zone(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $calendar = new Calendar;
+        $calendar->getTimeZone();
+    }
+
+    public function test_unset_time_zone(): void
+    {
+        $timeZone = new TimeZone(fake()->timezone());
+
+        $calendar = new Calendar;
+        $calendar->setTimeZone($timeZone);
+        // unsetTimeZone is chainable
+        $this->assertEquals($calendar, $calendar->unsetTimeZone());
+        // hasTimeZone is false when time zone is unset
+        $this->assertFalse($calendar->hasTimeZone());
     }
 }

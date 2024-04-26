@@ -4,6 +4,7 @@ namespace App\iCal\Domain\Entity;
 
 use App\iCal\Domain\Enum\CalendarMethod;
 use Eluceo\iCal\Domain\Entity\Calendar as EluceoCalendar;
+use Eluceo\iCal\Domain\Entity\TimeZone;
 
 class Calendar extends EluceoCalendar
 {
@@ -12,6 +13,11 @@ class Calendar extends EluceoCalendar
     private ?CalendarMethod $method = null;
 
     private ?string $name = null;
+
+    /**
+     * The TimeZone for the whole calendar.
+     */
+    private ?TimeZone $timeZone = null;
 
     public function getDescription(): string
     {
@@ -81,6 +87,35 @@ class Calendar extends EluceoCalendar
     public function unsetName(): static
     {
         $this->name = null;
+
+        return $this;
+    }
+
+    public function getTimeZone(): TimeZone
+    {
+        return $this->timeZone;
+    }
+
+    public function getTimeZoneId(): string
+    {
+        return $this->getTimeZone()->getTimeZoneId();
+    }
+
+    public function hasTimeZone(): bool
+    {
+        return $this->timeZone !== null;
+    }
+
+    public function setTimeZone(TimeZone $timeZone): static
+    {
+        $this->timeZone = $timeZone;
+
+        return $this;
+    }
+
+    public function unsetTimeZone(): static
+    {
+        $this->timeZone = null;
 
         return $this;
     }

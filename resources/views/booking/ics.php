@@ -45,6 +45,9 @@ if (! empty($name)) {
 if (! empty($description)) {
     $calendar->setDescription($description);
 }
+if (! empty($user->timezone)) {
+    $calendar->setTimeZone(new TimeZone($user->timezone->getName()));
+}
 
 $minDate = $maxDate = Carbon::now();
 

@@ -35,6 +35,12 @@ class CalendarFactory extends EluceoCalendarFactory
                     new Property('X-WR-CALDESC', new TextValue($calendar->getDescription()))
                 );
             }
+
+            if ($calendar->hasTimeZone()) {
+                $component = $component->withProperty(
+                    new Property('X-WR-TIMEZONE', new TextValue($calendar->getTimeZoneId()))
+                );
+            }
         }
 
         return $component;
