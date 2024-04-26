@@ -20,17 +20,11 @@ class BookingIcsController extends Controller
 
         $bookings = Booking::forUser($request->user());
 
-        $ics = $this->ics(
+        return $this->ics(
             $bookings->get(),
-            $request->user()
+            $request->user(),
+            debug: config('app.debug') && $request->get('debug'),
         );
-
-        if (config('app.debug') && $request->get('debug')) {
-            return $ics
-                ->header('Content-Type', 'text/plain; charset=utf-8')
-                ->header('Content-Disposition', 'inline');
-        }
-        return $ics;
     }
 
     /**
@@ -45,22 +39,15 @@ class BookingIcsController extends Controller
         Gate::authorize('viewOwn', Booking::class);
 
         $bookings = Booking::attendeeStatus($request->user(), [
-            AttendeeStatus::Accepted, AttendeeStatus::Tentative
+            AttendeeStatus::Accepted, AttendeeStatus::Tentative,
         ]);
 
-        $ics = $this->ics(
+        return $this->ics(
             $bookings->get(),
-            $request->user()
+            $request->user(),
+            debug: config('app.debug') && $request->get('debug'),
         );
-
-        if (config('app.debug') && $request->get('debug')) {
-            return $ics
-                ->header('Content-Type', 'text/plain; charset=utf-8')
-                ->header('Content-Disposition', 'inline');
-        }
-        return $ics;
     }
-
 
     /**
      * Display an iCal listing for the specified resource.
@@ -69,32 +56,31 @@ class BookingIcsController extends Controller
     {
         Gate::authorize('view', $booking);
 
-        $ics = $this->ics(
+        return $this->ics(
             [$booking],
             $request->user(),
-            filename: sprintf("booking-%s", $booking->id)
+            filename: sprintf('booking-%s', $booking->id),
+            debug: config('app.debug') && $request->get('debug'),
         );
-
-        if (config('app.debug') && $request->get('debug')) {
-            return $ics
-                ->header('Content-Type', 'text/plain; charset=utf-8')
-                ->header('Content-Disposition', 'inline');
-        }
-        return $ics;
     }
 
     /**
      * Turn bookings into an ICS file.
      *
-     * @param array<Booking> $bookings
-     * @param string $filename
-     * @return Response
+     * @param  array<Booking>  $bookings
      */
-    protected function ics($bookings, User $user, string $filename = 'booking'): Response
+    protected function ics($bookings, User $user, string $filename = 'booking', bool $debug = false): Response
     {
-        return response()
-            ->view('booking.ics', ['bookings' => $bookings, 'user' => $user])
-            ->header('Content-Type', 'text/calendar; charset=utf-8')
-            ->header('Content-Disposition', sprintf('inline; filename="%s.ics"', $filename));
+        $ics = response()->view('booking.ics', ['bookings' => $bookings, 'user' => $user]);
+
+        if ($debug) {
+            return $ics
+                ->header('Content-Type', 'text/plain; charset=utf-8')
+                ->header('Content-Disposition', 'inline');
+        } else {
+            return $ics
+                ->header('Content-Type', 'text/calendar; charset=utf-8')
+                ->header('Content-Disposition', sprintf('inline; filename="%s.ics"', $filename));
+        }
     }
 }
