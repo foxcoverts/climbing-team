@@ -45,6 +45,9 @@ if (! empty($name)) {
 if (! empty($description)) {
     $calendar->setDescription($description);
 }
+if (! empty($refreshInterval)) {
+    $calendar->setRefreshInterval($refreshInterval);
+}
 if (! empty($user->timezone)) {
     $calendar->setTimeZone(new TimeZone($user->timezone->getName()));
 }

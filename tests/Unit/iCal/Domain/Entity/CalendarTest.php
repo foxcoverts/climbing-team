@@ -4,6 +4,7 @@ namespace Tests\Unit\iCal\Domain\Entity;
 
 use App\iCal\Domain\Entity\Calendar;
 use App\iCal\Domain\Enum\CalendarMethod;
+use DateInterval;
 use Eluceo\iCal\Domain\Entity\TimeZone;
 use Tests\TestCase;
 use TypeError;
@@ -125,6 +126,45 @@ class CalendarTest extends TestCase
         $this->assertEquals($calendar, $calendar->unsetName());
         // hasName is false when name is unset
         $this->assertFalse($calendar->hasName());
+    }
+
+    public function test_set_get_refresh_interval(): void
+    {
+        $duration = DateInterval::createFromDateString('1 day');
+
+        $calendar = new Calendar;
+        // setRefreshInterval is chainable
+        $this->assertEquals($calendar, $calendar->setRefreshInterval($duration));
+        // hasRefreshInterval is true when any refresh interval is set
+        $this->assertTrue($calendar->hasRefreshInterval());
+        // getRefreshInterval returns the set refresh interval
+        $this->assertEquals($duration, $calendar->getRefreshInterval());
+    }
+
+    public function test_has_refresh_interval_with_no_refresh_interval(): void
+    {
+        $calendar = new Calendar;
+        $this->assertFalse($calendar->hasRefreshInterval());
+    }
+
+    public function test_get_refresh_interval_fails_with_no_refresh_interval(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $calendar = new Calendar;
+        $calendar->getRefreshInterval();
+    }
+
+    public function test_unset_refresh_interval(): void
+    {
+        $duration = DateInterval::createFromDateString('1 week');
+
+        $calendar = new Calendar;
+        $calendar->setRefreshInterval($duration);
+        // unsetRefreshInterval is chainable
+        $this->assertEquals($calendar, $calendar->unsetRefreshInterval());
+        // hasRefreshInterval is false when refresh interval is unset
+        $this->assertFalse($calendar->hasRefreshInterval());
     }
 
     public function test_set_get_time_zone(): void

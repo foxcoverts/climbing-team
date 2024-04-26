@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\AttendeeStatus;
 use App\Models\Booking;
 use App\Models\User;
+use DateInterval;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
@@ -81,6 +82,7 @@ class BookingIcsController extends Controller
             'user' => $user,
             'name' => $title,
             'description' => $description,
+            'refreshInterval' => DateInterval::createFromDateString('7 days'),
         ]);
 
         if ($debug) {

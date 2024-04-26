@@ -3,6 +3,7 @@
 namespace App\iCal\Domain\Entity;
 
 use App\iCal\Domain\Enum\CalendarMethod;
+use DateInterval;
 use Eluceo\iCal\Domain\Entity\Calendar as EluceoCalendar;
 use Eluceo\iCal\Domain\Entity\TimeZone;
 
@@ -13,6 +14,8 @@ class Calendar extends EluceoCalendar
     private ?CalendarMethod $method = null;
 
     private ?string $name = null;
+
+    private ?DateInterval $refreshInterval = null;
 
     /**
      * The TimeZone for the whole calendar.
@@ -87,6 +90,30 @@ class Calendar extends EluceoCalendar
     public function unsetName(): static
     {
         $this->name = null;
+
+        return $this;
+    }
+
+    public function getRefreshInterval(): DateInterval
+    {
+        return $this->refreshInterval;
+    }
+
+    public function hasRefreshInterval(): bool
+    {
+        return $this->refreshInterval !== null;
+    }
+
+    public function setRefreshInterval(DateInterval $name): static
+    {
+        $this->refreshInterval = $name;
+
+        return $this;
+    }
+
+    public function unsetRefreshInterval(): static
+    {
+        $this->refreshInterval = null;
 
         return $this;
     }

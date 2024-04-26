@@ -7,6 +7,7 @@ use App\iCal\Domain\Enum\CalendarMethod;
 use Eluceo\iCal\Domain\Entity\Calendar as EluceoCalendar;
 use Eluceo\iCal\Presentation\Component;
 use Eluceo\iCal\Presentation\Component\Property;
+use Eluceo\iCal\Presentation\Component\Property\Value\DurationValue;
 use Eluceo\iCal\Presentation\Component\Property\Value\TextValue;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory as EluceoCalendarFactory;
 
@@ -33,6 +34,12 @@ class CalendarFactory extends EluceoCalendarFactory
             if ($calendar->hasDescription()) {
                 $component = $component->withProperty(
                     new Property('X-WR-CALDESC', new TextValue($calendar->getDescription()))
+                );
+            }
+
+            if ($calendar->hasRefreshInterval()) {
+                $component = $component->withProperty(
+                    new Property('X-PUBLISHED-TTL', new DurationValue($calendar->getRefreshInterval()))
                 );
             }
 

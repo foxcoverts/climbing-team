@@ -5,7 +5,9 @@ namespace Tests\Unit\iCal\Presentation\Factory;
 use App\iCal\Domain\Entity\Calendar;
 use App\iCal\Domain\Enum\CalendarMethod;
 use App\iCal\Presentation\Factory\CalendarFactory;
+use DateInterval;
 use Eluceo\iCal\Domain\Entity\TimeZone;
+use Eluceo\iCal\Presentation\Component\Property\Value\DurationValue;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -74,5 +76,19 @@ class CalendarFactoryTest extends TestCase
         $output = $factory->createCalendar($calendar);
 
         $this->assertStringContainsString("X-WR-TIMEZONE:$timezone\r\n", (string) $output);
+    }
+
+    public function test_refresh_interval_is_rendered(): void
+    {
+        $interval = DateInterval::createFromDateString('6 days');
+        $duration = new DurationValue($interval);
+
+        $calendar = new Calendar();
+        $calendar->setRefreshInterval($interval);
+
+        $factory = new CalendarFactory();
+        $output = $factory->createCalendar($calendar);
+
+        $this->assertStringContainsString("X-PUBLISHED-TTL:$duration\r\n", (string) $output);
     }
 }
