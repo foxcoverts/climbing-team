@@ -26,6 +26,7 @@ use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
+use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TransferKeyController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\TrashedDocumentController;
@@ -108,6 +109,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('news', NewsPostController::class)
         ->except('show')
         ->parameters(['news' => 'post']);
+
+    Route::resource('todo', TodoController::class);
 
     Route::middleware('password.confirm')->group(function () {
         Route::controller(ProfileController::class)->group(function () {

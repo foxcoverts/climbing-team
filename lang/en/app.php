@@ -60,6 +60,25 @@ return [
             ScoutPermitType::Supervisory->value => 'Supervisory',
         ],
     ],
+    'todo' => [
+        'priority' => [
+            '1' => 'High',
+            '2' => 'High (2)',
+            '3' => 'High (3)',
+            '4' => 'High (4)',
+            '5' => 'Medium',
+            '6' => 'Low (6)',
+            '7' => 'Low (7)',
+            '8' => 'Low (8)',
+            '9' => 'Low',
+        ],
+        'status' => [
+            'in-process' => 'In Process',
+            'needs-action' => 'Not started',
+            'completed' => 'Completed',
+            'cancelled' => 'Cancelled',
+        ],
+    ],
     'user' => [
         'accreditation' => [
             'kit-checker' => 'Kit Checker',
