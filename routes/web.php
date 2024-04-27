@@ -8,6 +8,7 @@ use App\Http\Controllers\BookingCommentController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
+use App\Http\Controllers\BookingLinkController;
 use App\Http\Controllers\BookingPreviewController;
 use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\BookingShareController;
@@ -41,6 +42,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('booking/'.$status->value, [BookingController::class, $status->value])
             ->name('booking.'.$status->value);
     }
+    Route::controller(BookingLinkController::class)
+        ->group(function () {
+            Route::get('booking/links', 'index')->name('booking.links');
+            Route::delete('booking/links', 'destroy')->name('booking.links.reset');
+        });
 
     Route::controller(BookingAttendanceController::class)->group(function () {
         Route::get('booking/{booking}/attendance', 'edit')->name('booking.attendance.edit');
@@ -59,11 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('booking/{booking}/share', BookingShareController::class)->name('booking.share');
 
-    Route::controller(BookingIcsController::class)->group(function () {
-        Route::get('booking.ics', 'index')->name('booking.ics');
-        Route::get('booking/{booking}.ics', 'show')->name('booking.show.ics');
-        Route::get('rota.ics', 'rota')->name('booking.rota.ics');
-    });
+    Route::get('booking/{booking}.ics', [BookingIcsController::class, 'show'])->name('booking.show.ics');
 
     Route::resource('booking', BookingController::class)->except('index', 'show');
 
@@ -130,10 +132,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('booking/{booking}/preview', BookingPreviewController::class);
 Route::get('booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
 
+Route::controller(BookingIcsController::class)
+    ->middleware(Authenticate::fromParam('user'))
+    ->group(function () {
+        Route::get('ical/{user:ical_token}/booking.ics', 'index')->name('booking.ics');
+        Route::get('ical/{user:ical_token}/rota.ics', 'rota')->name('booking.rota.ics');
+    });
+
 Route::get('news/{post}', [NewsPostController::class, 'show'])->name('news.show');
 
-Route::middleware(Authenticate::fromParam('attendee'))
-    ->controller(RespondController::class)
+Route::controller(RespondController::class)
+    ->middleware(Authenticate::fromParam('attendee'))
     ->group(function () {
         Route::get('respond/{booking}/{attendee}', 'show')->scopeBindings()->name('respond');
         Route::get('respond/{booking}/{attendee}/accept', 'accept')->scopeBindings()->name('respond.accept');

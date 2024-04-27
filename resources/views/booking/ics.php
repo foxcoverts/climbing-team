@@ -39,6 +39,16 @@ $dateFactory = new CarbonFactory([
 $calendar = new Calendar();
 $calendar->setMethod($method);
 
+if (! empty($name)) {
+    $calendar->setName($name);
+}
+if (! empty($description)) {
+    $calendar->setDescription($description);
+}
+if (! empty($refreshInterval)) {
+    $calendar->setRefreshInterval($refreshInterval);
+}
+
 $minDate = $maxDate = Carbon::now();
 
 foreach ($bookings as $booking) {
@@ -135,11 +145,13 @@ foreach ($bookings as $booking) {
     $calendar->addEvent($event);
 }
 
-$calendar->addTimeZone(TimeZone::createFromPhpDateTimeZone(
+$timeZone = TimeZone::createFromPhpDateTimeZone(
     $user->timezone,
     $dateFactory->make($minDate)->toDateTimeImmutable(),
     $dateFactory->make($maxDate)->toDateTimeImmutable(),
-));
+);
+$calendar->addTimeZone($timeZone);
+$calendar->setTimeZone($timeZone);
 
 $eventFactory = new EventFactory();
 $calendarFactory = new CalendarFactory(eventFactory: $eventFactory);
