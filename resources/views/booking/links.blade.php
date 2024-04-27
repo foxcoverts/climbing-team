@@ -39,15 +39,15 @@
             </div>
         </div>
 
-        {{-- TODO -------
         <div class="p-4 sm:px-8 border-b">
-            <form action="" method="POST" x-data="{ submitted: false }" class="max-w-prose space-y-2"
-                x-on:submit="setTimeout(() => submitted = true, 0)">
+            <form action="{{ route('booking.links.reset') }}" method="POST" x-data="{ submitted: false }"
+                class="max-w-prose space-y-2" x-on:submit="setTimeout(() => submitted = true, 0)">
+                @csrf @method('DELETE')
                 <h2 class="text-xl font-medium text-gray-900 dark:text-gray-100">@lang('Reset')</h2>
                 <p>@lang('You can reset these links and make the current ones invalid.')</p>
-                <x-button.primary :label="__('Reset')" />
+                <x-button.danger x-bind:disabled="submitted"
+                    x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Reset Links') }}'" />
             </form>
         </div>
-        --}}
     </section>
 </x-layout.app>

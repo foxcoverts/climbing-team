@@ -42,7 +42,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('booking/'.$status->value, [BookingController::class, $status->value])
             ->name('booking.'.$status->value);
     }
-    Route::get('booking/links', BookingLinkController::class)->name('booking.links');
+    Route::controller(BookingLinkController::class)
+        ->group(function () {
+            Route::get('booking/links', 'index')->name('booking.links');
+            Route::delete('booking/links', 'destroy')->name('booking.links.reset');
+        });
 
     Route::controller(BookingAttendanceController::class)->group(function () {
         Route::get('booking/{booking}/attendance', 'edit')->name('booking.attendance.edit');
