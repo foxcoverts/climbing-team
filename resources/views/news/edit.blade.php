@@ -45,7 +45,7 @@
             <div class="space-y-6 max-w-prose">
                 <div>
                     <x-input-label for="title" :value="__('Title')" />
-                    <x-text-input id="title" name="title" class="mt-1 w-full" x-model="post.title" />
+                    <x-text-input id="title" name="title" class="mt-1 w-full" required x-model="post.title" />
                     <x-input-error class="mt-2" :messages="$errors->get('title')" />
                 </div>
 
@@ -53,7 +53,7 @@
                     <x-input-label for="slug" :value="__('Slug')" />
                     <div class="flex items-stretch mt-1">
                         <x-fake-input class="rounded-r-none border-r-0">/news/</x-fake-input>
-                        <x-text-input id="slug" name="slug" x-model.fill="post.slug" pattern="[\-\w_]+"
+                        <x-text-input id="slug" name="slug" x-model.fill="post.slug" required pattern="[\-\w_]+"
                             inputmode="url" class="flex-grow flex-shrink rounded-l-none border-l-0" />
                     </div>
                     <x-input-error class="mt-2" :messages="$errors->get('slug')" />
