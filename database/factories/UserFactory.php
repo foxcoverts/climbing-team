@@ -45,6 +45,7 @@ class UserFactory extends Factory
             'phone' => fake()->optional()->e164PhoneNumber(),
             'emergency_name' => $emergency_name,
             'emergency_phone' => $emergency_phone,
+            'ical_token' => null,
         ];
     }
 
