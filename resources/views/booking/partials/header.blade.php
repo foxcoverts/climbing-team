@@ -4,7 +4,7 @@
         <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
             {{ $booking->activity }}
             -
-            <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}" x-text="dateString(start_at)">&nbsp;</span>
+            <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at, $booking->timezone)]) }}" x-text="dateString(start_at)">&nbsp;</span>
         </h1>
         <div>
             <x-badge.booking-status :status="$booking->status" />

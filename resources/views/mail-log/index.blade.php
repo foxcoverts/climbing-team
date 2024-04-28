@@ -31,8 +31,8 @@
                                 <span class="block truncate">
                                     {{ $mail->booking->activity }}
                                     -
-                                    <span x-data="{{ Js::from(['start_at' => localDate($mail->booking->start_at)]) }}"
-                                        x-text="dateString(start_at)">{{ localDate($mail->booking->start_at)->toFormattedDayDateString() }}</span>
+                                    <span x-data="{{ Js::from(['start_at' => localDate($mail->booking->start_at, $mail->booking->timezone)]) }}"
+                                        x-text="dateString(start_at)">{{ localDate($mail->booking->start_at, $mail->booking->timezone)->toFormattedDayDateString() }}</span>
                                 </span>
                             @else
                                 <span class="block truncate">{{ $mail->to }}</span>

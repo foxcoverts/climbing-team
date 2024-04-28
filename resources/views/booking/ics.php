@@ -49,7 +49,7 @@ $timeZones = [];
 foreach ($bookings as $booking) {
     $dateFactory = new CarbonFactory([
         'locale' => config('app.locale', 'en_GB'),
-        'timezone' => $booking->timezone ?? DateTimeZone::UTC,
+        'timezone' => $booking->timezone ?? CarbonTimeZone::UTC,
     ]);
 
     $timeZoneId = $booking->timezone?->getName() ?? 'UTC';

@@ -5,6 +5,8 @@ namespace App\Forms;
 use App\Enums\AttendeeStatus;
 use App\Models\Booking;
 use Carbon\Carbon;
+use Carbon\CarbonTimeZone;
+use Carbon\Factory as CarbonFactory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -12,10 +14,16 @@ class BookingForm
 {
     public Collection $instructors_attending;
 
+    public CarbonFactory $dateFactory;
+
     public function __construct(
         public Booking $booking,
     ) {
         $this->instructors_attending = $this->getInstructorsAttending();
+        $this->dateFactory = new CarbonFactory([
+            'locale' => config('app.locale', 'en_GB'),
+            'timezone' => $booking->timezone ?? CarbonTimeZone::UTC,
+        ]);
     }
 
     public function route(string $name, ...$arguments): string
@@ -25,7 +33,7 @@ class BookingForm
 
     protected function getStartAtAttribute(): Carbon
     {
-        return localDate($this->booking->start_at);
+        return $this->dateFactory->make($this->booking->start_at);
     }
 
     protected function getStartDateAttribute(): string
@@ -40,7 +48,7 @@ class BookingForm
 
     protected function getEndAtAttribute(): Carbon
     {
-        return localDate($this->booking->end_at);
+        return $this->dateFactory->make($this->booking->end_at);
     }
 
     protected function getEndTimeAttribute(): string

@@ -1,6 +1,6 @@
 <x-layout.app>
     <x-slot:title>
-        {{ $booking->activity }} on {{ localDate($booking->start_at)->toFormattedDayDateString() }}
+        {{ $booking->activity }} on {{ localDate($booking->start_at, $booking->timezone)->toFormattedDayDateString() }}
     </x-slot:title>
 
     <section>

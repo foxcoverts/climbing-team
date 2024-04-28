@@ -1,12 +1,14 @@
+@php($localStartAt = localDate($booking->start_at, $booking->timezone))
+@php($localEndAt = localDate($booking->end_at, $booking->timezone))
 <x-layout.guest :updated="$booking->updated_at">
     <x-slot:title>
-        {{ $booking->activity }} on {{ localDate($booking->start_at)->toFormattedDayDateString() }}
+        {{ $booking->activity }} on {{ $localStartAt->toFormattedDayDateString() }}
     </x-slot:title>
     <x-slot:description>
         {{ __(':activity from :start_time to :end_time at :location.', [
             'activity' => $booking->activity,
-            'start_time' => localDate($booking->start_at)->format('H:i'),
-            'end_time' => localDate($booking->end_at)->format('H:i'),
+            'start_time' => $localStartAt->format('H:i'),
+            'end_time' => $localEndAt->format('H:i'),
             'location' => $booking->location,
         ]) }}
     </x-slot:description>
@@ -19,9 +21,9 @@
             <x-fake-label :value="__('When')" />
             <p>
                 {{ __(':start_date from :start_time to :end_time', [
-                    'start_date' => localDate($booking->start_at)->toFormattedDayDateString(),
-                    'start_time' => localDate($booking->start_at)->format('H:i'),
-                    'end_time' => localDate($booking->end_at)->format('H:i'),
+                    'start_date' => $localStartAt->toFormattedDayDateString(),
+                    'start_time' => $localStartAt->format('H:i'),
+                    'end_time' => $localEndAt->format('H:i'),
                 ]) }}
             </p>
         </div>

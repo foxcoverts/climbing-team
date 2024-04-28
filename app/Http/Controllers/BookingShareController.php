@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\BookingStatus;
 use App\Models\Booking;
+use Carbon\CarbonTimeZone;
+use Carbon\Factory as CarbonFactory;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
@@ -31,8 +33,13 @@ class BookingShareController extends Controller
             BookingStatus::Cancelled => 'Booking cancelled on :start.',
         };
 
-        $start_at = localDate($booking->start_at);
-        $end_at = localDate($booking->end_at);
+        $dateFactory = new CarbonFactory([
+            'locale' => config('app.locale', 'en_GB'),
+            'timezone' => $booking->timezone ?? CarbonTimeZone::UTC,
+        ]);
+
+        $start_at = $dateFactory->make($booking->start_at);
+        $end_at = $dateFactory->make($booking->end_at);
         if ($start_at->isSameDay($end_at)) {
             $when = __(':start_date from :start_time to :end_time', [
                 'start_date' => $start_at->toFormattedDayDateString(),

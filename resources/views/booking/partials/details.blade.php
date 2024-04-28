@@ -1,4 +1,6 @@
 @props(['booking'])
+@php($localStartAt = localDate($booking->start_at, $booking->timezone))
+@php($localEndAt = localDate($booking->end_at, $booking->timezone))
 <div class="space-y-2">
     <div class="border-b border-gray-800 dark:border-gray-200">
         <h2 class="text-xl font-medium text-gray-800 dark:text-gray-200">@lang('Booking Details')</h2>
@@ -7,11 +9,11 @@
     <div>
         <x-fake-label :value="__('When')" />
         <p class="text-gray-700 dark:text-gray-300">
-            <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}"
-                x-text="dateString(start_at)">{{ localDate($booking->start_at)->toFormattedDayDateString() }}</span>
+            <span x-data="{{ Js::from(['start_at' => $localStartAt]) }}"
+                x-text="dateString(start_at)">{{ $localStartAt->toFormattedDayDateString() }}</span>
             {{ __('from :start_time to :end_time (:duration)', [
-                'start_time' => localDate($booking->start_at)->format('H:i'),
-                'end_time' => localDate($booking->end_at)->format('H:i'),
+                'start_time' => $localStartAt->format('H:i'),
+                'end_time' => $localEndAt->format('H:i'),
                 'duration' => $booking->start_at->diffAsCarbonInterval($booking->end_at),
             ]) }}
         </p>

@@ -49,8 +49,8 @@
             </x-recent-activity.item>
         @endforeach
         <div>
-            <p><span x-data="{{ Js::from(['start_at' => localDate($booking->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
-                    class="cursor-help">{{ ucfirst(localDate($booking->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS])) }}</span>
+            <p><span x-data="{{ Js::from(['start_at' => localDate($booking->created_at, $booking->timezone)]) }}" x-bind:title="dateTimeString(start_at)"
+                    class="cursor-help">{{ ucfirst(localDate($booking->created_at, $booking->timezone)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS])) }}</span>
             </p>
             <div class="border-l-2 ml-2 pl-2">@lang('This booking was created.')</div>
         </div>
