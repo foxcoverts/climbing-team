@@ -10,6 +10,7 @@ use App\iCal\Domain\ValueObject\Sequence;
 use App\iCal\Presentation\Factory\CalendarFactory;
 use App\iCal\Presentation\Factory\EventFactory;
 use Carbon\Carbon;
+use Carbon\CarbonTimeZone;
 use Carbon\Factory as CarbonFactory;
 use Eluceo\iCal\Domain\Entity\Attendee;
 use Eluceo\iCal\Domain\Entity\TimeZone;
@@ -31,11 +32,6 @@ if (! isset($method) || ! $method instanceof CalendarMethod) {
     $method = CalendarMethod::Publish;
 }
 
-$dateFactory = new CarbonFactory([
-    'locale' => config('app.locale', 'en_GB'),
-    'timezone' => $user->timezone,
-]);
-
 $calendar = new Calendar();
 $calendar->setMethod($method);
 
@@ -49,14 +45,23 @@ if (! empty($refreshInterval)) {
     $calendar->setRefreshInterval($refreshInterval);
 }
 
-$minDate = $maxDate = Carbon::now();
-
+$timeZones = [];
 foreach ($bookings as $booking) {
-    if ($booking->start_at->isBefore($minDate)) {
-        $minDate = $booking->start_at->toDateTimeImmutable();
+    $dateFactory = new CarbonFactory([
+        'locale' => config('app.locale', 'en_GB'),
+        'timezone' => $booking->timezone ?? DateTimeZone::UTC,
+    ]);
+
+    $timeZoneId = $booking->timezone?->getName() ?? 'UTC';
+    if (! array_key_exists($timeZoneId, $timeZones)) {
+        $timeZones[$timeZoneId]['min'] = Carbon::now();
+        $timeZones[$timeZoneId]['max'] = Carbon::now();
     }
-    if ($booking->end_at->isAfter($maxDate)) {
-        $maxDate = $booking->end_at->toDateTimeImmutable();
+    if ($booking->start_at->isBefore($timeZones[$timeZoneId]['min'])) {
+        $timeZones[$timeZoneId]['min'] = $booking->start_at->toDateTimeImmutable();
+    }
+    if ($booking->end_at->isAfter($timeZones[$timeZoneId]['max'])) {
+        $timeZones[$timeZoneId]['max'] = $booking->end_at->toDateTimeImmutable();
     }
 
     $description = $booking->group_name;
@@ -145,13 +150,19 @@ foreach ($bookings as $booking) {
     $calendar->addEvent($event);
 }
 
-$timeZone = TimeZone::createFromPhpDateTimeZone(
-    $user->timezone,
-    $dateFactory->make($minDate)->toDateTimeImmutable(),
-    $dateFactory->make($maxDate)->toDateTimeImmutable(),
-);
-$calendar->addTimeZone($timeZone);
-$calendar->setTimeZone($timeZone);
+foreach ($timeZones as $timeZoneId => $dates) {
+    if ($timeZoneId == 'UTC') {
+        continue;
+    }
+
+    $timeZone = TimeZone::createFromPhpDateTimeZone(
+        new CarbonTimeZone($timeZoneId),
+        $dates['min'],
+        $dates['max'],
+    );
+    $calendar->addTimeZone($timeZone);
+    $calendar->setTimeZone($timeZone);
+}
 
 $eventFactory = new EventFactory();
 $calendarFactory = new CalendarFactory(eventFactory: $eventFactory);
