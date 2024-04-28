@@ -7,6 +7,7 @@ use App\iCal\Domain\Enum\CalendarMethod;
 use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\User;
+use Carbon\Factory as CarbonFactory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -24,6 +25,8 @@ class BookingInvite extends Mailable implements ShouldQueue
 
     public Attendance $attendance;
 
+    protected CarbonFactory $dateFactory;
+
     /**
      * Create a new message instance.
      */
@@ -34,6 +37,10 @@ class BookingInvite extends Mailable implements ShouldQueue
     ) {
         $booking->load('lead_instructor');
         $this->attendance = $booking->attendees()->find($attendee)->attendance;
+        $this->dateFactory = new CarbonFactory([
+            'locale' => config('app.locale', 'en_GB'),
+            'timezone' => $this->attendee->timezone,
+        ]);
     }
 
     /**
@@ -56,7 +63,9 @@ class BookingInvite extends Mailable implements ShouldQueue
                 $this->getSubject(),
                 [
                     'activity' => $this->booking->activity,
-                    'start' => localDate($this->booking->start_at)->toFormattedDayDateString(),
+                    'start' => $this->dateFactory
+                        ->make($this->booking->start_at)
+                        ->toFormattedDayDateString(),
                 ]
             ),
             replyTo: [
@@ -189,16 +198,19 @@ class BookingInvite extends Mailable implements ShouldQueue
 
     protected function buildDateString(): string
     {
-        if (localDate($this->booking->start_at)->isSameDay(localDate($this->booking->end_at))) {
+        $localStartAt = $this->dateFactory->make($this->booking->start_at);
+        $localEndAt = $this->dateFactory->make($this->booking->end_at);
+
+        if ($localStartAt->isSameDay($localEndAt)) {
             return __(':start_date from :start_time to :end_time', [
-                'start_time' => localDate($this->booking->start_at)->format('H:i'),
-                'start_date' => localDate($this->booking->start_at)->toFormattedDayDateString(),
-                'end_time' => localDate($this->booking->end_at)->format('H:i'),
+                'start_time' => $localStartAt->format('H:i'),
+                'start_date' => $localStartAt->toFormattedDayDateString(),
+                'end_time' => $localEndAt->format('H:i'),
             ]);
         } else {
             return __(':start to :end', [
-                'start' => localDate($this->booking->start_at)->toDayDateTimeString(),
-                'end' => localDate($this->booking->end_at)->toDayDateTimeString(),
+                'start' => $localStartAt->toDayDateTimeString(),
+                'end' => $localEndAt->toDayDateTimeString(),
             ]);
         }
     }
