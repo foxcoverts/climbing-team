@@ -170,8 +170,8 @@
 
                         <div>
                             <x-input-label for="timezone" :value="__('Timezone')" />
-                            <x-select-input id="timezone" name="timezone" class="mt-1 block" required
-                                x-model="user.timezone">
+                            <x-select-input id="timezone" name="timezone" required x-model="user.timezone"
+                                class="mt-1 w-full overflow-ellipsis">
                                 <x-select-input.timezones />
                             </x-select-input>
                             <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
