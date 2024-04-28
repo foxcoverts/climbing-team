@@ -50,6 +50,7 @@ class AddBookingTest extends TestCase
                 'start_date' => '2024-04-15',
                 'start_time' => '10:00',
                 'end_time' => '14:00',
+                'timezone' => 'Europe/London',
                 'location' => 'Fox Coverts Campsite',
                 'activity' => 'Climbing',
                 'group_name' => '1st Anytown Scouts',
@@ -61,8 +62,9 @@ class AddBookingTest extends TestCase
         $response->assertRedirectToRoute('booking.show', $booking);
 
         $this->assertEquals(BookingStatus::Tentative, $booking->status);
-        $this->assertEquals('2024-04-15 10:00', $booking->start_at->format('Y-m-d H:i'));
-        $this->assertEquals('2024-04-15 14:00', $booking->end_at->format('Y-m-d H:i'));
+        $this->assertEquals('2024-04-15 09:00', $booking->start_at->format('Y-m-d H:i')); // UTC
+        $this->assertEquals('2024-04-15 13:00', $booking->end_at->format('Y-m-d H:i')); // UTC
+        $this->assertEquals('Europe/London', $booking->timezone->getName());
         $this->assertEquals('Fox Coverts Campsite', $booking->location);
         $this->assertEquals('Climbing', $booking->activity);
         $this->assertEquals('1st Anytown Scouts', $booking->group_name);
