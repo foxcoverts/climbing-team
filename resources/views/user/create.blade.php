@@ -16,14 +16,14 @@
             user: {{ Js::from([
                 'name' => old('name', $user->name),
                 'email' => old('email', $user->email),
-                'timezone' => old('timezone', (string) $user->timezone),
+                'timezone' => old('timezone', $user->timezone?->getName()),
                 'section' => old('section', $user->section),
                 'role' => old('role', $user->role),
                 'accreditations' => old('accreditations', $user->accreditations->all()),
             ]) }},
             init() {
                 $nextTick(() => {
-                    if (!this.user.timezone || this.user.timezone == 'UTC') {
+                    if (!this.user.timezone) {
                         this.user.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                     }
                 });

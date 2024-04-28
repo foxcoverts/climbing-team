@@ -10,7 +10,7 @@
             'phone' => old('phone', $user->phone?->formatForCountry('GB')),
             'emergency_name' => old('emergency_name', $user->emergency_name),
             'emergency_phone' => old('emergency_phone', $user->emergency_phone?->formatForCountry('GB')),
-            'timezone' => old('timezone', (string) $user->timezone),
+            'timezone' => old('timezone', $user->timezone?->getName()),
             'section' => old('section', $user->section),
             'role' => old('role', $user->role),
             'accreditations' => old('accreditations', $user->accreditations->all()),

@@ -3,24 +3,29 @@
 namespace App\Casts;
 
 use Carbon\CarbonTimeZone;
+use DateTimeZone;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Contracts\Database\Eloquent\SerializesCastableAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
-class Timezone implements CastsAttributes, SerializesCastableAttributes
+class AsTimezone implements CastsAttributes, SerializesCastableAttributes
 {
     /**
      * Cast the given value.
      *
      * @param  array<string, mixed>  $attributes
      */
-    public function get(Model $model, string $key, mixed $value, array $attributes): CarbonTimeZone
+    public function get(Model $model, string $key, mixed $value, array $attributes): ?CarbonTimeZone
     {
+        if (is_null($value)) {
+            return $value;
+        }
         if ($value instanceof CarbonTimeZone) {
             return $value;
         }
-        return new CarbonTimeZone($value);
+
+        return CarbonTimeZone::instance($value);
     }
 
     /**
@@ -28,15 +33,19 @@ class Timezone implements CastsAttributes, SerializesCastableAttributes
      *
      * @param  array<string, mixed>  $attributes
      */
-    public function set(Model $model, string $key, mixed $value, array $attributes): mixed
+    public function set(Model $model, string $key, mixed $value, array $attributes): ?string
     {
+        if (is_null($value)) {
+            return $value;
+        }
         if (is_string($value)) {
             $value = new CarbonTimeZone($value);
         }
-        if (!$value instanceof CarbonTimeZone) {
-            throw new InvalidArgumentException('The given value is not a CarbonTimeZone instance.');
+        if ($value instanceof DateTimeZone) {
+            return $value->getName();
         }
-        return $value->getName();
+
+        throw new InvalidArgumentException('The given value is not a DateTimeZone instance.');
     }
 
     /**
@@ -46,9 +55,13 @@ class Timezone implements CastsAttributes, SerializesCastableAttributes
      */
     public function serialize(Model $model, string $key, mixed $value, array $attributes): string
     {
-        if (!$value instanceof CarbonTimeZone) {
-            throw new InvalidArgumentException('The given value is not a CarbonTimeZone instance.');
+        if (is_null($value)) {
+            return $value;
         }
-        return $value->getName();
+        if ($value instanceof DateTimeZone) {
+            return $value->getName();
+        }
+
+        throw new InvalidArgumentException('The given value is not a DateTimeZone instance.');
     }
 }

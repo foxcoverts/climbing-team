@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\Timezone;
+use App\Casts\AsTimezone;
 use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Enums\Section;
@@ -58,7 +58,6 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $attributes = [
-        'timezone' => 'UTC',
         'role' => Role::Guest->value,
         'section' => Section::Adult->value,
     ];
@@ -72,7 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone' => E164PhoneNumberCast::class.':GB',
         'emergency_phone' => E164PhoneNumberCast::class.':GB',
         'email_verified_at' => 'datetime',
-        'timezone' => Timezone::class,
+        'timezone' => AsTimezone::class,
         'role' => Role::class,
         'section' => Section::class,
     ];
