@@ -79,11 +79,14 @@ class BookingController extends Controller
     {
         Gate::authorize('create', Booking::class);
 
+        $timezone = $request->user()->timezone;
+
         return view('booking.create', [
             'form' => new BookingForm(new Booking([
-                'start_at' => Carbon::parse('Saturday 09:30', $request->user()->timezone)->utc(),
-                'end_at' => Carbon::parse('Saturday 11:30', $request->user()->timezone)->utc(),
+                'start_at' => Carbon::parse('Saturday 09:30', $timezone)->utc(),
+                'end_at' => Carbon::parse('Saturday 11:30', $timezone)->utc(),
                 'status' => BookingStatus::Tentative,
+                'timezone' => $timezone,
             ])),
         ]);
     }
@@ -95,17 +98,18 @@ class BookingController extends Controller
     {
         Gate::authorize('create', Booking::class);
 
-        $attributes = $request->safe()->except('start_date', 'start_time', 'end_time');
-        $attributes['start_at'] = Carbon::parse(
+        $booking = new Booking(
+            $request->safe()->except('start_date', 'start_time', 'end_time')
+        );
+        $booking->start_at = Carbon::parse(
             $request->safe()->start_date.'T'.$request->safe()->start_time,
-            $request->user()->timezone
+            $booking->timezone
         )->utc();
-        $attributes['end_at'] = Carbon::parse(
+        $booking->end_at = Carbon::parse(
             $request->safe()->start_date.'T'.$request->safe()->end_time,
-            $request->user()->timezone
+            $booking->timezone
         )->utc();
-
-        $booking = Booking::create($attributes);
+        $booking->save();
 
         return redirect()->route('booking.show', $booking)
             ->with('alert.info', __('Booking created successfully'));
@@ -157,13 +161,13 @@ class BookingController extends Controller
         if ($request->safe()->has('start_time')) {
             $booking->start_at = Carbon::parse(
                 $request->safe()->start_date.'T'.$request->safe()->start_time,
-                $request->user()->timezone
+                $booking->timezone
             )->utc();
         }
         if ($request->safe()->has('end_time')) {
             $booking->end_at = Carbon::parse(
                 $request->safe()->start_date.'T'.$request->safe()->end_time,
-                $request->user()->timezone
+                $booking->timezone
             )->utc();
         }
         if (($originalStatus == BookingStatus::Cancelled) && ($booking->status != BookingStatus::Cancelled)) {

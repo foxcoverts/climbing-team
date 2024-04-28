@@ -1,17 +1,25 @@
 @use('App\Enums\BookingStatus')
 <x-layout.app :title="__('Create Booking')">
     <section x-data="{
+        submitted: false,
         booking: {{ Js::from([
             'start_date' => old('start_date', $form->start_date),
             'start_time' => old('start_time', $form->start_time),
             'end_time' => old('end_time', $form->end_time),
+            'timezone' => old('timezone', $form->timezone?->getName()),
             'location' => old('location', $form->location),
             'activity' => old('activity', $form->activity),
             'group_name' => old('group_name', $form->group_name),
             'notes' => old('notes', $form->notes),
             'lead_instructor_notes' => old('lead_instructor_notes', $form->lead_instructor_notes),
         ]) }},
-        submitted: false,
+        init() {
+            $nextTick(() => {
+                if (!this.booking.timezone) {
+                    this.booking.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                }
+            });
+        },
     }">
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
@@ -90,6 +98,15 @@
                                 placeholder="hh:mm" required x-model="booking.end_time" @blur="syncDuration" />
                             <x-input-error :messages="$errors->get('end_time')" />
                         </div>
+                    </div>
+
+                    <div class="space-y-1 basis-44 grow">
+                        <x-input-label for="timezone" :value="__('Timezone')" />
+                        <x-select-input id="timezone" name="timezone" required x-model="booking.timezone"
+                            class="w-full overflow-ellipsis">
+                            <x-select-input.timezones />
+                        </x-select-input>
+                        <x-input-error :messages="$errors->get('timezone')" />
                     </div>
                 </div>
 
