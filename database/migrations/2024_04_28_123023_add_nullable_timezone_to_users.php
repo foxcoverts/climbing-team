@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        User::whereIsNull('timezone')->update(['timezone' => 'UTC']);
+        User::whereNull('timezone')->update(['timezone' => 'UTC']);
         Schema::table('users', function (Blueprint $table) {
             $table->string('timezone')->default('UTC')->change();
         });
