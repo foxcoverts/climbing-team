@@ -1,18 +1,35 @@
 @use('App\Enums\BookingStatus')
 <x-layout.app :title="__('Edit Booking')">
     <section x-data="{
+        submitted: false,
         booking: {{ Js::from([
+            'start_date' => old('start_date', $form->start_date),
+            'start_time' => old('start_time', $form->start_time),
+            'end_time' => old('end_time', $form->end_time),
+            'timezone' => old('timezone', $form->timezone?->getName()),
+            'location' => old('location', $form->location),
+            'activity' => old('activity', $form->activity),
+            'group_name' => old('group_name', $form->group_name),
+            'notes' => old('notes', $form->notes),
+            'lead_instructor_id' => old('lead_instructor_id', $form->lead_instructor_id),
+            'lead_instructor_notes' => old('lead_instructor_notes', $form->lead_instructor_notes),
+        
             'cancelled' => $form->isCancelled(),
             'confirmed' => $form->isConfirmed(),
         ]) }},
-        submitted: false,
         updateCancelled(ev) {
             this.booking.cancelled = !ev.target.checked;
-            if (this.booking.cancelled) $refs.form.reset();
         },
         updateConfirmed(ev) {
             this.booking.confirmed = ev.target.checked;
-        }
+        },
+        init() {
+            $nextTick(() => {
+                if (!this.booking.timezone) {
+                    this.booking.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                }
+            });
+        },
     }">
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
@@ -48,8 +65,7 @@
                                 </p>
                                 <label class="mt-1 block">
                                     <x-input-checkbox id="status" name="status"
-                                        value="{{ BookingStatus::Tentative }}" x-model.fill="booking.status"
-                                        @change="updateCancelled" />
+                                        value="{{ BookingStatus::Tentative }}" @change="updateCancelled" />
                                     <span>@lang('Restore booking')</span>
                                 </label>
                                 <x-input-error :messages="$errors->get('status')" />
@@ -84,8 +100,6 @@
                         @endif
 
                         <div class="flex flex-wrap gap-6" x-data="{
-                            start_time: '',
-                            end_time: '',
                             duration: 0,
                         
                             timeToMinutes(timeString) {
@@ -100,17 +114,17 @@
                                     (new String(minutes % 60)).padStart(2, '0');
                             },
                             syncEndTime() {
-                                var endMinutes = this.timeToMinutes(this.start_time) + this.duration;
+                                var endMinutes = this.timeToMinutes(this.booking.start_time) + this.duration;
                                 if (endMinutes > 1440) {
-                                    this.end_time = '23:59';
+                                    this.booking.end_time = '23:59';
                                 } else {
-                                    this.end_time = this.minutesToTime(endMinutes);
+                                    this.booking.end_time = this.minutesToTime(endMinutes);
                                 }
                             },
                             syncDuration() {
-                                this.duration = this.timeToMinutes(this.end_time) - this.timeToMinutes(this.start_time);
+                                this.duration = this.timeToMinutes(this.booking.end_time) - this.timeToMinutes(this.booking.start_time);
                                 if (this.duration < 0) {
-                                    this.end_time = this.start_time;
+                                    this.booking.end_time = this.booking.start_time;
                                     this.duration = 0;
                                 }
                             },
@@ -121,9 +135,8 @@
                         }">
                             <div class="space-y-1">
                                 <x-input-label for="start_date" :value="__('Date')" />
-                                <x-text-input id="start_date" name="start_date" type="date" :value="old('start_date', $form->start_date)"
-                                    placeholder="yyyy-mm-dd" required x-model.fill="booking.start_date"
-                                    x-bind:disabled="booking.cancelled" />
+                                <x-text-input id="start_date" name="start_date" type="date" placeholder="yyyy-mm-dd"
+                                    required x-model="booking.start_date" x-bind:disabled="booking.cancelled" />
                                 <x-input-error :messages="$errors->get('start_date')" />
                             </div>
 
@@ -131,25 +144,34 @@
                                 <div class="space-y-1">
                                     <x-input-label for="start_time" :value="__('Start')" />
                                     <x-text-input id="start_time" name="start_time" type="time" step="60"
-                                        :value="old('start_time', $form->start_time)" placeholder="hh:mm" required x-model.fill="start_time"
-                                        @change="syncEndTime" x-bind:disabled="booking.cancelled" />
+                                        placeholder="hh:mm" required x-model="booking.start_time" @change="syncEndTime"
+                                        x-bind:disabled="booking.cancelled" />
                                     <x-input-error :messages="$errors->get('start_time')" />
                                 </div>
 
                                 <div class="space-y-1">
                                     <x-input-label for="end_time" :value="__('End')" />
                                     <x-text-input id="end_time" name="end_time" type="time" step="60"
-                                        :value="old('end_time', $form->end_time)" placeholder="hh:mm" required x-model.fill="end_time"
-                                        @blur="syncDuration" x-bind:disabled="booking.cancelled" />
+                                        placeholder="hh:mm" required x-model="booking.end_time" @blur="syncDuration"
+                                        x-bind:disabled="booking.cancelled" />
                                     <x-input-error :messages="$errors->get('end_time')" />
                                 </div>
+                            </div>
+
+                            <div class="space-y-1 basis-44 grow">
+                                <x-input-label for="timezone" :value="__('Timezone')" />
+                                <x-select-input id="timezone" name="timezone" required x-model="booking.timezone"
+                                    class="w-full overflow-ellipsis">
+                                    <x-select-input.timezones />
+                                </x-select-input>
+                                <x-input-error :messages="$errors->get('timezone')" />
                             </div>
                         </div>
 
                         <div class="space-y-1">
                             <x-input-label for="location" :value="__('Location')" />
                             <x-text-input id="location" name="location" type="text" class="block w-full"
-                                :value="old('location', $form->location)" maxlength="255" required x-model.fill='booking.location'
+                                maxlength="255" required x-model='booking.location'
                                 x-bind:disabled="booking.cancelled" />
                             <x-input-error :messages="$errors->get('location')" />
                         </div>
@@ -162,22 +184,22 @@
                             </datalist>
                             <x-input-label for="activity" :value="__('Activity')" />
                             <x-text-input id="activity" name="activity" type="text" class="block w-full"
-                                :value="old('activity', $form->activity)" maxlength="255" required autocomplete="on"
-                                list="activity-suggestions" x-model.fill="booking.activity"
-                                x-bind:disabled="booking.cancelled" />
+                                maxlength="255" required autocomplete="on" list="activity-suggestions"
+                                x-model="booking.activity" x-bind:disabled="booking.cancelled" />
                             <x-input-error :messages="$errors->get('activity')" />
                         </div>
 
                         <div class="space-y-1">
                             <x-input-label for="group_name" :value="__('Group Name')" />
                             <x-text-input id="group_name" name="group_name" type="text" class="block w-full"
-                                :value="old('group_name', $form->group_name)" maxlength="255" required x-bind:disabled="booking.cancelled" />
+                                maxlength="255" required x-model="booking.group_name"
+                                x-bind:disabled="booking.cancelled" />
                             <x-input-error :messages="$errors->get('group_name')" />
                         </div>
 
                         <div class="space-y-1">
                             <x-input-label for="notes" :value="__('Notes')" />
-                            <x-textarea id="notes" name="notes" class="block w-full" :value="old('notes', $form->notes)"
+                            <x-textarea id="notes" name="notes" class="block w-full" x-model="booking.notes"
                                 x-bind:disabled="booking.cancelled" x-meta-enter.prevent="$el.form.requestSubmit()" />
                             <x-input-error :messages="$errors->get('notes')" />
                         </div>
@@ -198,8 +220,8 @@
                             @else
                                 <x-input-label for="lead_instructor_id" :value="__('Lead Instructor')" />
                                 <x-select-input id="lead_instructor_id" name="lead_instructor_id" class="mt-1 block"
-                                    :value="$form->lead_instructor_id" x-model.fill="booking.lead_instructor_id"
-                                    x-bind:required="booking.confirmed" :required="$form->isConfirmed()">
+                                    x-model="booking.lead_instructor_id" x-bind:required="booking.confirmed"
+                                    :required="$form->isConfirmed()">
                                     @if (is_null($form->lead_instructor) || $form->isTentative())
                                         <option value="" @selected(is_null($form->lead_instructor))
                                             @disabled($form->isConfirmed()) x-bind:disabled="booking.confirmed">
@@ -221,7 +243,7 @@
                             <x-input-label for="lead_instructor_notes" :value="__('Lead Instructor Notes')" />
                             <p class="text-sm">@lang('The Lead Instructor Notes will only be visible to the Lead Instructor. You can use these to share access arrangements, gate codes, etc.')</p>
                             <x-textarea id="lead_instructor_notes" name="lead_instructor_notes" class="block w-full"
-                                :value="old('lead_instructor_notes', $form->lead_instructor_notes)" x-bind:disabled="booking.cancelled"
+                                x-model="booking.lead_instructor_notes" x-bind:disabled="booking.cancelled"
                                 x-meta-enter.prevent="$el.form.requestSubmit()" />
                             <x-input-error :messages="$errors->get('lead_instructor_notes')" />
                         </div>

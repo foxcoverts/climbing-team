@@ -16,14 +16,14 @@
             user: {{ Js::from([
                 'name' => old('name', $user->name),
                 'email' => old('email', $user->email),
-                'timezone' => old('timezone', (string) $user->timezone),
+                'timezone' => old('timezone', $user->timezone?->getName()),
                 'section' => old('section', $user->section),
                 'role' => old('role', $user->role),
                 'accreditations' => old('accreditations', $user->accreditations->all()),
             ]) }},
             init() {
                 $nextTick(() => {
-                    if (!this.user.timezone || this.user.timezone == 'UTC') {
+                    if (!this.user.timezone) {
                         this.user.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                     }
                 });
@@ -103,8 +103,8 @@
 
                         <div>
                             <x-input-label for="timezone" :value="__('Timezone')" />
-                            <x-select-input id="timezone" name="timezone" class="mt-1 block" required
-                                x-model="user.timezone">
+                            <x-select-input id="timezone" name="timezone" required x-model="user.timezone"
+                                class="mt-1 w-full overflow-ellipsis">
                                 <x-select-input.timezones />
                             </x-select-input>
                             <x-input-error class="mt-2" :messages="$errors->get('timezone')" />

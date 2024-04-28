@@ -1,6 +1,8 @@
+@php($localStartAt = localDate($booking->start_at, $booking->timezone))
+@php($localEndAt = localDate($booking->end_at, $booking->timezone))
 <x-layout.app>
     <x-slot:title>
-        {{ $booking->activity }} on {{ localDate($booking->start_at)->toFormattedDayDateString() }}
+        {{ $booking->activity }} on {{ $localStartAt->toFormattedDayDateString() }}
     </x-slot:title>
 
     <section>
@@ -18,11 +20,11 @@
                 <div>
                     <x-fake-label :value="__('When')" />
                     <p>
-                        <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}"
-                            x-text="dateString(start_at)">{{ localDate($booking->start_at)->toFormattedDayDateString() }}</span>
+                        <span x-data="{{ Js::from(['start_at' => $localStartAt]) }}"
+                            x-text="dateString(start_at)">{{ $localStartAt->toFormattedDayDateString() }}</span>
                         {{ __('from :start_time to :end_time (:duration)', [
-                            'start_time' => localDate($booking->start_at)->format('H:i'),
-                            'end_time' => localDate($booking->end_at)->format('H:i'),
+                            'start_time' => $localStartAt->format('H:i'),
+                            'end_time' => $localEndAt->format('H:i'),
                             'duration' => $booking->start_at->diffAsCarbonInterval($booking->end_at),
                         ]) }}
                     </p>

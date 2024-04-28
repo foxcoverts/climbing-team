@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Casts\Sequence;
+use App\Casts\AsSequence;
+use App\Casts\AsTimezone;
 use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
 use Carbon\Carbon;
@@ -27,6 +28,7 @@ class Booking extends Model
     protected $fillable = [
         'start_at',
         'end_at',
+        'timezone',
         'status',
         'location',
         'activity',
@@ -56,7 +58,8 @@ class Booking extends Model
         'start_at' => 'datetime',
         'end_at' => 'datetime',
         'status' => BookingStatus::class,
-        'sequence' => Sequence::class,
+        'sequence' => AsSequence::class,
+        'timezone' => AsTimezone::class,
     ];
 
     /**

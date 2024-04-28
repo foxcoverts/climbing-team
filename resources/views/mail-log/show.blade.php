@@ -34,8 +34,8 @@
                                             href="{{ route('booking.show', $booking) }}">
                                             <x-icon.calendar class="w-5 h-5 fill-current" />
                                             <span>{{ $booking->activity }} -
-                                                <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at)]) }}"
-                                                    x-text="dateString(start_at)">{{ localDate($booking->start_at)->toFormattedDayDateString() }}</span>
+                                                <span x-data="{{ Js::from(['start_at' => localDate($booking->start_at, $booking->timezone)]) }}"
+                                                    x-text="dateString(start_at)">{{ localDate($booking->start_at, $booking->timezone)->toFormattedDayDateString() }}</span>
                                             </span>
                                         </a>
                                     </x-fake-input>
@@ -103,8 +103,8 @@
                                         href="{{ route('booking.show', $mail->toBooking) }}">
                                         <x-icon.calendar class="w-5 h-5 fill-current" />
                                         <span>{{ $mail->toBooking->activity }} -
-                                            <span x-data="{{ Js::from(['start_at' => localDate($mail->toBooking->start_at)]) }}"
-                                                x-text="dateString(start_at)">{{ localDate($mail->toBooking->start_at)->toFormattedDayDateString() }}</span>
+                                            <span x-data="{{ Js::from(['start_at' => localDate($mail->toBooking->start_at, $mail->toBooking->timezone)]) }}"
+                                                x-text="dateString(start_at)">{{ localDate($mail->toBooking->start_at, $mail->toBooking->timezone)->toFormattedDayDateString() }}</span>
                                         </span>
                                     </a>
                                 </x-fake-input>

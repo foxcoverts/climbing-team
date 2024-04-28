@@ -12,8 +12,8 @@
                 <div class="text-left p-0 group border-b border-gray-300">
                     <a href="{{ route($showRoute, $booking) }}"
                         class="block px-3 py-2 hover:bg-opacity-15 hover:bg-gray-900 hover:text-black dark:text-gray-100 dark:hover:bg-opacity-15 dark:hover:bg-white dark:hover:text-white">
-                        <span class="mr-4">{{ localDate($booking->start_at)->format('H:i') }} -
-                            {{ localDate($booking->end_at)->format('H:i') }}</span>
+                        <span class="mr-4">{{ localDate($booking->start_at, $booking->timezone)->format('H:i') }} -
+                            {{ localDate($booking->end_at, $booking->timezone)->format('H:i') }}</span>
                         <span class="group-hover:underline">@lang(':activity for :group at :location', [
                             'activity' => $booking->activity,
                             'group' => $booking->group_name,

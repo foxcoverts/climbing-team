@@ -10,7 +10,7 @@
             'phone' => old('phone', $user->phone?->formatForCountry('GB')),
             'emergency_name' => old('emergency_name', $user->emergency_name),
             'emergency_phone' => old('emergency_phone', $user->emergency_phone?->formatForCountry('GB')),
-            'timezone' => old('timezone', (string) $user->timezone),
+            'timezone' => old('timezone', $user->timezone?->getName()),
             'section' => old('section', $user->section),
             'role' => old('role', $user->role),
             'accreditations' => old('accreditations', $user->accreditations->all()),
@@ -170,8 +170,8 @@
 
                         <div>
                             <x-input-label for="timezone" :value="__('Timezone')" />
-                            <x-select-input id="timezone" name="timezone" class="mt-1 block" required
-                                x-model="user.timezone">
+                            <x-select-input id="timezone" name="timezone" required x-model="user.timezone"
+                                class="mt-1 w-full overflow-ellipsis">
                                 <x-select-input.timezones />
                             </x-select-input>
                             <x-input-error class="mt-2" :messages="$errors->get('timezone')" />

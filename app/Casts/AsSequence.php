@@ -6,7 +6,7 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
-class Sequence implements CastsAttributes
+class AsSequence implements CastsAttributes
 {
     /**
      * Cast the given value.
@@ -15,7 +15,7 @@ class Sequence implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): int
     {
-        return $value;
+        return (int) $value;
     }
 
     /**
@@ -23,7 +23,7 @@ class Sequence implements CastsAttributes
      *
      * @param  array<string, mixed>  $attributes
      */
-    public function set(Model $model, string $key, mixed $value, array $attributes): array
+    public function set(Model $model, string $key, mixed $value, array $attributes): int
     {
         if (array_key_exists($key, $attributes) && ($value < $attributes[$key])) {
             throw new InvalidArgumentException("Attribute `$key` may not be decreased. Was: $attributes[$key]. Given: $value.");
@@ -32,8 +32,6 @@ class Sequence implements CastsAttributes
             throw new InvalidArgumentException("Attribute `$key` cannot be negative. Given: $value.");
         }
 
-        return [
-            $key => $value,
-        ];
+        return (int) $value;
     }
 }
