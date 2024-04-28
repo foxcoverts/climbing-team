@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\Sequence;
+use App\Casts\AsSequence;
 use App\Enums\AttendeeStatus;
 use App\Enums\BookingStatus;
 use Carbon\Carbon;
@@ -56,7 +56,7 @@ class Booking extends Model
         'start_at' => 'datetime',
         'end_at' => 'datetime',
         'status' => BookingStatus::class,
-        'sequence' => Sequence::class,
+        'sequence' => AsSequence::class,
     ];
 
     /**
