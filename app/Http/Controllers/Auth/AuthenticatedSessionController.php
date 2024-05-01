@@ -16,6 +16,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
+        if (! session()->has('url.intended')) {
+            $current = url()->current();
+            $previous = url()->previous();
+
+            if (parse_url($current, PHP_URL_HOST) == parse_url($previous, PHP_URL_HOST)) {
+                session()->put(['url.intended' => $previous]);
+            }
+        }
+
         return view('auth.login');
     }
 
