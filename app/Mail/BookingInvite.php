@@ -100,11 +100,14 @@ class BookingInvite extends Mailable implements ShouldQueue
     /**
      * The URL for the call to action buttons.
      */
-    public function getRespondUrl(string $action = 'accept'): string
+    public function getRespondUrl(?string $action = null): string
     {
-        return URL::route("respond.$action", [
+        $route = (! $action) ? 'respond' : "respond.$action";
+
+        return URL::route($route, [
             $this->booking, $this->attendee,
             'invite' => $this->attendance->token,
+            'sequence' => $this->booking->sequence,
         ]);
     }
 
@@ -134,6 +137,7 @@ class BookingInvite extends Mailable implements ShouldQueue
                 'accept_url' => $this->getRespondUrl('accept'),
                 'decline_url' => $this->getRespondUrl('decline'),
                 'tentative_url' => $this->getRespondUrl('tentative'),
+                'respond_url' => $this->getRespondUrl(),
             ], $this->buildChangedList())
         );
     }

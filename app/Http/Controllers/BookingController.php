@@ -128,6 +128,7 @@ class BookingController extends Controller
         } elseif (auth()->guest()) {
             return view('booking.preview', [
                 'booking' => $booking,
+                'responded' => $request->get('responded'),
             ]);
         } else {
             return response()->view('booking.forbidden', [
