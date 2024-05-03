@@ -126,10 +126,6 @@ class BookingController extends Controller
                 'currentUser' => $request->user(),
             ]);
         } elseif (auth()->guest()) {
-            if ($request->get('responded')) {
-                session()->remove('alert');
-            }
-
             return view('booking.preview', [
                 'booking' => $booking,
                 'responded' => $request->get('responded'),

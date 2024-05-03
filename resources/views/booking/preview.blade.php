@@ -42,8 +42,6 @@
     @if ($responded)
         <div
             class="my-4 space-y-4 p-4 border text-black bg-blue-100 border-slate-400 dark:text-white dark:bg-blue-900 dark:border-slate-600">
-            <p class="text-lg text-center">@lang('Your response has been recorded!')</p>
-
             <div class="flex justify-center gap-4">
                 <x-button.primary :href="route('login')">
                     @lang('View full details')
