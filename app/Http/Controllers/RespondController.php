@@ -62,6 +62,16 @@ class RespondController extends Controller
     }
 
     /**
+     * Respond to the invitation.
+     */
+    public function respond(Request $request, Booking $booking, User $attendee): RedirectResponse
+    {
+        $status = AttendeeStatus::tryFrom($request->input('status'));
+
+        return $this->store($request, $booking, $attendee, $status);
+    }
+
+    /**
      * Record the attendee's response.
      */
     protected function store(Request $request, Booking $booking, User $attendee, AttendeeStatus $status): RedirectResponse
@@ -70,6 +80,18 @@ class RespondController extends Controller
 
         if ($request->input('invite') != $attendee->attendance->token) {
             abort(Response::HTTP_FORBIDDEN, __('Invitation invalid'));
+        }
+
+        if ($request->input('sequence') != $booking->sequence) {
+            return redirect()
+                ->route('respond', [
+                    $booking, $attendee,
+                    'invite' => $attendee->attendance->token,
+                ])
+                ->with(['alert' => [
+                    'message' => __('This booking has changed. Check the details below before you confirm your attendance.'),
+                    'type' => 'error',
+                ]]);
         }
 
         try {

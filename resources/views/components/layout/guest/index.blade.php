@@ -75,8 +75,6 @@
                 class="font-semibold text-2xl text-blue-400 uppercase">{{ config('app.name', 'Climbing Team') }}</a>
         </div>
 
-        <x-layout.guest.alerts />
-
         <div class="w-full sm:max-w-md mt-6 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
             @isset($image)
                 @if ($image->attributes->get('hero'))
@@ -84,6 +82,9 @@
                         height="{{ $image->attributes->get('height') }}" />
                 @endif
             @endisset
+
+            <x-layout.guest.alerts />
+
             <div class="px-6 py-4">
                 @if (!empty($title))
                     <div>

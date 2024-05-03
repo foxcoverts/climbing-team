@@ -107,6 +107,7 @@ class BookingInvite extends Mailable implements ShouldQueue
         return URL::route($route, [
             $this->booking, $this->attendee,
             'invite' => $this->attendance->token,
+            'sequence' => $this->booking->sequence,
         ]);
     }
 

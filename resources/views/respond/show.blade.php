@@ -49,11 +49,16 @@
     <div
         class="my-4 space-y-4 p-4 border text-black bg-slate-100 border-slate-400 dark:text-white dark:bg-slate-900 dark:border-slate-600">
         <p class="text-lg text-center">@lang('Can you attend this event?')</p>
-        <div class="flex justify-center gap-4">
-            <x-button.primary :href="route('respond.accept', [$booking, $user, 'invite' => $user->attendance->token])" :label="__('Yes')" />
-            <x-button.secondary :href="route('respond.decline', [$booking, $user, 'invite' => $user->attendance->token])" :label="__('No')" />
-            <x-button.secondary :href="route('respond.tentative', [$booking, $user, 'invite' => $user->attendance->token])" :label="__('Maybe')" />
-        </div>
+        <form action="{{ route('respond.store', [$booking, $user]) }}" method="POST">
+            @csrf
+            <input type="hidden" name="invite" value="{{ $user->attendance->token }}" />
+            <input type="hidden" name="sequence" value="{{ $booking->sequence }}" />
+            <div class="flex justify-center gap-4">
+                <x-button.primary type="submit" name="status" :value="AttendeeStatus::Accepted->value" :label="__('Yes')" />
+                <x-button.danger type="submit" name="status" :value="AttendeeStatus::Declined->value" :label="__('No')" />
+                <x-button.secondary type="submit" name="status" :value="AttendeeStatus::Tentative->value" :label="__('Maybe')" />
+            </div>
+        </form>
         <p class="text-sm text-center">@lang('Replying for :name.', ['name' => $user->name])</p>
     </div>
 </x-layout.guest>
