@@ -34,15 +34,23 @@
 {{ $booking->group_name }}
 
 @if ($booking->notes)
-<x-markdown>
 **@lang('Notes')**{{ $notes_changed }}<br>
-{{ $booking->notes }}
-</x-markdown>
+{!! $booking->notes !!}
 @endif
 
 <x-mail::button :url="$booking_url">
 @lang('View Booking')
 </x-mail::button>
+
+<x-slot:subcopy>
+@lang(
+    "If you're having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
+    'into your web browser:',
+    [
+        'actionText' => __('View Booking'),
+    ]
+) <span class="break-all">{{ $booking_url }}</span>
+</x-slot:subcopy>
 
 @lang('Thanks,')<br>
 {{ config('app.name') }}

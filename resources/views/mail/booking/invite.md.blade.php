@@ -34,10 +34,8 @@
 {{ $booking->group_name }}
 
 @if ($booking->notes)
-<x-markdown>
 **@lang('Notes')**{{ $notes_changed }}<br>
-{{ $booking->notes }}
-</x-markdown>
+{!! $booking->notes !!}
 @endif
 
 <x-mail::action-panel>
@@ -51,6 +49,15 @@
 <x-mail::button-group.button :url="$tentative_url" :label="__('Maybe')" />
 </x-mail::button-group>
 </x-mail::action-panel>
+
+@isset($respond_url)
+<x-slot:subcopy>
+@lang(
+    "If you're having trouble clicking the buttons above, copy and paste the URL below\n".
+    'into your web browser:'
+) <x-mail::url-link>{{ $respond_url }}</x-mail::url-link>
+</x-slot:subcopy>
+@endisset
 
 @lang('Thanks,')<br>
 {{ config('app.name') }}
