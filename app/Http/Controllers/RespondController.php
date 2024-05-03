@@ -88,6 +88,6 @@ class RespondController extends Controller
             'type' => 'info',
         ]);
 
-        return redirect()->route('booking.show', $booking);
+        return redirect()->route('booking.show', [$booking, 'responded' => 1]);
     }
 }
