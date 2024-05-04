@@ -40,7 +40,7 @@
 
             <div class="space-y-6 max-w-prose">
                 <div class="border-b border-gray-800 dark:border-gray-200">
-                    <h2 class="text-xl font-medium text-gray-800 dark:text-gray-200">@lang('Add Booking')</h2>
+                    <h2 class="text-xl font-medium text-gray-800 dark:text-gray-200">{{ __('Add Booking') }}</h2>
                 </div>
 
                 <div class="flex flex-wrap gap-6" x-data="{
@@ -145,7 +145,9 @@
 
                 <div class="space-y-1">
                     <x-input-label for="lead_instructor_notes" :value="__('Lead Instructor Notes')" />
-                    <p class="text-sm">@lang('The Lead Instructor Notes will only be visible to the Lead Instructor. You can use these to share access arrangements, gate codes, etc.')</p>
+                    <p class="text-sm">
+                        {{ __('The Lead Instructor Notes will only be visible to the Lead Instructor. You can use these to share access arrangements, gate codes, etc.') }}
+                    </p>
                     <x-textarea id="lead_instructor_notes" name="lead_instructor_notes" class="block w-full"
                         x-model="booking.lead_instructor_notes" x-meta-enter.prevent="$el.form.requestSubmit()" />
                     <x-input-error :messages="$errors->get('lead_instructor_notes')" />
@@ -157,9 +159,7 @@
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Create') }}'" />
 
                 @can('viewAny', App\Models\Booking::class)
-                    <x-button.secondary :href="route('booking.calendar')">
-                        @lang('Back')
-                    </x-button.secondary>
+                    <x-button.secondary :href="route('booking.calendar')" :label="__('Back')" />
                 @endcan
             </footer>
         </form>

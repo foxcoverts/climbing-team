@@ -1,7 +1,7 @@
 @use('App\Models\Attendance')
 <aside {{ $attributes }}>
     <h2 class="text-xl font-medium border-b border-gray-800 dark:border-gray-200">
-        @lang('Guest list')
+        {{ __('Guest list') }}
     </h2>
 
     @if ($attendee = $booking->attendees->find($booking->lead_instructor_id))
@@ -11,7 +11,7 @@
                 <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
                     <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                         ::class="open ? '' : '-rotate-90'" />
-                    <span>@lang('Lead Instructor')</span>
+                    <span>{{ __('Lead Instructor') }}</span>
                 </button>
             </h3>
             <ul class="mb-3 space-y-1 list-disc ml-5" x-show="open" x-transition>
@@ -30,7 +30,7 @@
                 <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
                     <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                         ::class="open ? '' : '-rotate-90'" />
-                    <span>@lang("app.attendee.status.$status")</span>
+                    <span>{{ __("app.attendee.status.$status") }}</span>
                     <span {{ $status != 'accepted' ? '' : 'x-cloak' }} x-show="!open" x-transition
                         class="bg-gray-200 dark:bg-gray-600 dark:text-white px-2 rounded-xl">{{ count($list) }}</span>
                 </button>
@@ -50,7 +50,7 @@
     @endforeach
 
     @empty($attendee)
-        <p class="my-1">@lang('No one has responded to this booking yet.')</p>
+        <p class="my-1">{{ __('No one has responded to this booking yet.') }}</p>
     @endempty
 
     @if ($showTools)
@@ -69,18 +69,14 @@
             <div class="flex flex-wrap gap-4">{{-- flex-group --}}
                 @if ($booking->isFuture() && !$booking->isCancelled())
                     @can('create', [Attendance::class, $booking])
-                        <x-button.primary :href="route('booking.attendee.invite', $booking)">
-                            @lang('Invite')
-                        </x-button.primary>
+                        <x-button.primary :href="route('booking.attendee.invite', $booking)" :label="__('Invite')" />
 
-                        <x-button.primary :href="route('booking.attendee.create', $booking)">
-                            @lang('Add')
-                        </x-button.primary>
+                        <x-button.primary :href="route('booking.attendee.create', $booking)" :label="__('Add')" />
                     @endcan
                 @endif
 
                 @can('rollcall', [Attendance::class, $booking])
-                    <x-button.primary :href="route('booking.attendee.index', $booking)">@lang('Roll call')</x-button.primary>
+                    <x-button.primary :href="route('booking.attendee.index', $booking)" :label="__('Roll call')" />
                 @endcan
             </div>
         </footer>

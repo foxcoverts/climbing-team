@@ -9,9 +9,9 @@
                 :class="{ 'rounded-b-md': !open }" x-on:click="open = true">
                 <x-icon.attendance :$attendance class="w-4 h-4 fill-current" />
                 @if (is_null($attendance))
-                    @lang('Respond')
+                    {{ __('Respond') }}
                 @else
-                    @lang("app.attendee.status.{$attendance->status->value}")
+                    {{ __("app.attendee.status.{$attendance->status->value}") }}
                 @endif
 
                 <x-icon.cheveron.down class="w-4 h-4 fill-current" x-show="!open" />
@@ -39,7 +39,8 @@
                                 x-bind:disabled="submitted" :class="submitted ? 'cursor-progress' : ''"
                                 class="relative focus:z-30 flex gap-2 flex-nowrap items-center min-w-full px-4 py-2 text-xs uppercase font-semibold tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25">
                                 <x-icon.outline class="h-4 w-4 fill-current" />
-                                <span class="flex-grow text-left">@lang("app.attendee.status.{$status->value}")</span>
+                                <span class="flex-grow text-left">
+                                    {{ __("app.attendee.status.{$status->value}") }}</span>
                             </button>
                         @endif
                     @endforeach
@@ -48,7 +49,7 @@
                             :class="submitted ? 'cursor-progress' : ''"
                             class="relative focus:z-30 flex gap-2 flex-nowrap items-center min-w-full px-4 py-2 text-xs uppercase font-semibold tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 text-red-500 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25">
                             <x-icon.outline.close class="h-4 w-4 fill-current" />
-                            <span class="flex-grow text-left">@lang('Remove')</span>
+                            <span class="flex-grow text-left">{{ __('Remove') }}</span>
                         </button>
                     @endcan
                 </div>
@@ -59,12 +60,12 @@
     <div
         class="flex gap-2 px-4 py-2 cursor-not-allowed border rounded-md font-semibold text-xs uppercase tracking-widest bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm disabled:opacity-25">
         <x-icon.outline.close class="h-4 w-4 fill-current" />
-        @lang('Cancelled')
+        {{ __('Cancelled') }}
     </div>
 @elseif (!is_null($attendance))
     <div
         class="flex gap-2 px-4 py-2 cursor-not-allowed border rounded-md font-semibold text-xs uppercase tracking-widest bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm disabled:opacity-25">
         <x-icon.attendance :$attendance class="w-4 h-4 fill-current" />
-        @lang("app.attendee.status.{$attendance->status->value}")
+        {{ __("app.attendee.status.{$attendance->status->value}") }}
     </div>
 @endif

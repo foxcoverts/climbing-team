@@ -116,10 +116,9 @@ class BookingInvite extends Mailable implements ShouldQueue
      */
     public function getTemplate(): string
     {
-        return match ($this->attendance->status) {
-            AttendeeStatus::Accepted => 'mail.booking.update',
-            default => 'mail.booking.invite',
-        };
+        return $this->isResponseNeededFromAttendee()
+            ? 'mail.booking.invite'
+            : 'mail.booking.update';
     }
 
     /**
@@ -227,6 +226,36 @@ class BookingInvite extends Mailable implements ShouldQueue
         return CalendarMethod::Request;
     }
 
+    public function isResponseNeededFromAttendee(): bool
+    {
+        return match ($this->attendance->status) {
+            AttendeeStatus::NeedsAction,
+            AttendeeStatus::Tentative => true,
+            AttendeeStatus::Declined => false,
+            AttendeeStatus::Accepted => $this->hasImportantChanges()
+        };
+    }
+
+    /**
+     * Determine whether details of the booking have changed that could affect
+     * someone's attendance, for example the date, time, duration or location.
+     */
+    public function hasImportantChanges(): bool
+    {
+        $important_keys = [
+            'start_at',
+            'end_at',
+            'location',
+        ];
+        foreach ($important_keys as $key) {
+            if (array_key_exists($key, $this->changes)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function getCalendarMethodAsString(): string
     {
         return match ($this->getCalendarMethod()) {
@@ -288,6 +317,7 @@ class BookingInvite extends Mailable implements ShouldQueue
             'bookings' => [$this->booking],
             'user' => $this->attendee,
             'method' => $this->getCalendarMethod(),
+            'rsvp' => $this->isResponseNeededFromAttendee(),
         ])->render();
     }
 }

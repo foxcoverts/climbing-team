@@ -10,9 +10,9 @@
     <!-- Social Metadata -->
     <meta property="twitter:title" content="{{ config('app.name', 'Climbing Team') }}" />
     <meta property="og:url" content="{{ route('home') }}" />
-    <meta name="description" content="@lang('Climbing and Abseiling sessions at Fox Coverts Campsite are run by our team of qualified climbing instructors.')" />
-    <meta property="og:description" content="@lang('Climbing and Abseiling sessions at Fox Coverts Campsite are run by our team of qualified climbing instructors.')" />
-    <meta name="twitter:description" content="@lang('Climbing and Abseiling sessions at Fox Coverts Campsite are run by our team of qualified climbing instructors.')" />
+    <meta name="description" content="{{ __('Climbing and Abseiling sessions at Fox Coverts Campsite are run by our team of qualified climbing instructors.') }}" />
+    <meta property="og:description" content="{{ __('Climbing and Abseiling sessions at Fox Coverts Campsite are run by our team of qualified climbing instructors.') }}" />
+    <meta name="twitter:description" content="{{ __('Climbing and Abseiling sessions at Fox Coverts Campsite are run by our team of qualified climbing instructors.') }}" />
     <meta property="og:image" content="{{ asset('images/about/climber@2x.jpg') }}" />
     <meta name="twitter:image" content="{{ asset('images/about/climber@2x.jpg') }}" />
     <meta property="og:image:width" content="576" />
@@ -98,7 +98,7 @@
 
         <div class="w-full max-w-xl">
             <a class="block w-full text-center py-6 text-gray-500 hover:text-zinc-800 dark:hover:text-zinc-200 hover:underline"
-                href="{{ route('dashboard') }}" rel="nofollow">@lang('Go to Team Dashboard')</a>
+                href="{{ route('dashboard') }}" rel="nofollow">{{ __('Go to Team Dashboard') }}</a>
         </div>
     </div>
 </body>

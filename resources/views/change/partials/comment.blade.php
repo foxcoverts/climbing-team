@@ -5,7 +5,7 @@
             'booking' => $change->booking,
             'attendee' => $change->author,
         ])
-        @lang('commented')
+        {{ __('commented') }}
         @include($booking_link, [
             'booking' => $change->booking,
             'show' => 'link',
@@ -32,11 +32,11 @@
                     class="absolute right-0 -mt-1 z-40 text-gray-900 bg-gray-100 dark:text-gray-100 dark:bg-gray-900 shadow-sm dark:shadow-gray-400 border border-gray-300 dark:border-gray-400 divide-y divide-gray-200 dark:divide-gray-700">
                     @can('update', $comment)
                         <button type="button" @click="editing = true; menu = false"
-                            class="whitespace-nowrap block hover:bg-gray-200 dark:hover:bg-gray-700 py-1 px-2 w-full text-left">@lang('Edit Comment')</button>
+                            class="whitespace-nowrap block hover:bg-gray-200 dark:hover:bg-gray-700 py-1 px-2 w-full text-left">{{ __('Edit Comment') }}</button>
                     @endcan
                     @can('delete', $comment)
                         <button type="button" @click="deleting = true; menu = false"
-                            class="whitespace-nowrap block hover:bg-gray-200 dark:hover:bg-gray-700 py-1 px-2 w-full text-left">@lang('Delete Comment')</button>
+                            class="whitespace-nowrap block hover:bg-gray-200 dark:hover:bg-gray-700 py-1 px-2 w-full text-left">{{ __('Delete Comment') }}</button>
                     @endcan
                 </div>
             </div>
@@ -66,10 +66,10 @@
                 @submit="setTimeout(() => submitted = true, 0)">
                 @csrf
                 @method('DELETE')
-                <p class="inline-flex">@lang('Delete this comment?')</p>
+                <p class="inline-flex">{{ __('Delete this comment?') }}</p>
                 <x-button.danger x-bind:disabled="submitted" :label="__('Yes, delete')"
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Yes, delete') }}'" />
-                <x-button.secondary x-show="!submitted" @click="deleting = false">@lang('Cancel')</x-button.secondary>
+                <x-button.secondary x-show="!submitted" @click="deleting = false" :label="__('Cancel')" />
             </form>
         </div>
     @endcan

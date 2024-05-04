@@ -59,8 +59,10 @@
 
         <!-- Emergency Contact -->
         <fieldset class="mt-4">
-            <legend class="text-lg font-medium">@lang('Emergency Contact')</legend>
-            <p class="mb-2 text-md text-blue-800 dark:text-blue-200">@lang('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.')</p>
+            <legend class="text-lg font-medium">{{ __('Emergency Contact') }}</legend>
+            <p class="mb-2 text-md text-blue-800 dark:text-blue-200">
+                {{ __('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.') }}
+            </p>
             <div class="mt-4">
                 <x-input-label for="emergency_name" :value="__('Name')" />
                 <x-text-input id="emergency_name" class="block mt-1 w-full" name="emergency_name" :value="old('emergency_name')"
@@ -89,7 +91,7 @@
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                 href="{{ route('login') }}">
-                @lang('Already registered?')
+                {{ __('Already registered?') }}
             </a>
 
             <x-button.primary class="ml-4" x-bind:disabled="submitted" :label="__('Register')"

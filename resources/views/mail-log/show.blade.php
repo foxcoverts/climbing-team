@@ -3,7 +3,7 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Mail')
+                    {{ __('Mail') }}
                 </h1>
             </div>
         </header>
@@ -12,7 +12,7 @@
             @if ($mail->isValid())
                 <div class="space-y-2 my-2 w-full max-w-prose flex-grow">
                     @if ($mail->calendar)
-                        <h3 class="text-xl font-medium">@lang('Calendar')</h3>
+                        <h3 class="text-xl font-medium">{{ __('Calendar') }}</h3>
 
                         <div>
                             <x-input-label for="method" :value="__('Method')" />
@@ -40,7 +40,7 @@
                                         </a>
                                     </x-fake-input>
                                 @else
-                                    <x-input-label for="to">@lang('Booking')</x-input-label>
+                                    <x-input-label for="to">{{ __('Booking') }}</x-input-label>
                                     <x-text-input id="to" name="to" class="w-full mt-1" :value="$event->getUid()"
                                         readonly />
                                 @endif
@@ -58,24 +58,24 @@
                                             </a>
                                         </x-fake-input>
                                     @else
-                                        <x-input-label ::for="$id('attendee')">@lang('Attendee')</x-input-label>
+                                        <x-input-label ::for="$id('attendee')">{{ __('Attendee') }}</x-input-label>
                                         <x-text-input ::id="$id('attendee')" name="attendee[]" class="w-full mt-1" readonly
                                             :value="$attendee->getEmail()" />
                                     @endif
                                 </div>
 
                                 <div x-id="['attendee_status']">
-                                    <x-input-label ::for="$id('attendee_status')">@lang('Status')</x-input-label>
+                                    <x-input-label ::for="$id('attendee_status')">{{ __('Status') }}</x-input-label>
                                     <x-fake-input
                                         class="w-full mt-1 flex-grow flex gap-1 items-center text-black dark:text-white">
                                         <x-icon.attendance :attendance="$attendee->getStatus()" class="w-5 h-5 fill-current" />
-                                        <span>@lang('app.attendee.status.' . $attendee->getStatus()->value)</span>
+                                        <span>{{ __('app.attendee.status.' . $attendee->getStatus()->value) }}</span>
                                     </x-fake-input>
                                 </div>
 
                                 @if ($attendee->getComment())
                                     <div x-id="['attendee_comment']">
-                                        <x-input-label ::for="$id('attendee_comment')">@lang('Comment')</x-input-label>
+                                        <x-input-label ::for="$id('attendee_comment')">{{ __('Comment') }}</x-input-label>
                                         <x-text-input ::id="$id('attendee_comment')" name="attendee[][comment]" class="w-full mt-1"
                                             readonly :value="$attendee->getComment()" />
                                     </div>
@@ -155,8 +155,8 @@
                 </div>
             @else
                 <div class="space-y-2 my-2 w-full flex-grow">
-                    <h3 class="text-xl font-medium">@lang('Error')</h3>
-                    <p>@lang('This does not look like an encoded email.')</p>
+                    <h3 class="text-xl font-medium">{{ __('Error') }}</h3>
+                    <p>{{ __('This does not look like an encoded email.') }}</p>
                 </div>
             @endif
 
@@ -170,9 +170,7 @@
                             x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Delete') }}'" />
                     </form>
                 @endcan
-                <x-button.secondary href="{{ route('mail.index') }}">
-                    @lang('Back')
-                </x-button.secondary>
+                <x-button.secondary href="{{ route('mail.index') }}" :label="__('Back')" />
             </footer>
         </div>
 

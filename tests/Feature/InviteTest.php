@@ -42,7 +42,7 @@ class InviteTest extends TestCase
                 'Invited',
                 'You have been invited to the following bookings.',
                 $bookingSummary,
-            ], escape: false);
+            ]);
     }
 
     public function test_invite_displays_tentative_booking(): void
@@ -67,7 +67,7 @@ class InviteTest extends TestCase
                 'Maybe',
                 'You have not yet confirmed that you can, or cannot, attend the following bookings.',
                 $bookingSummary,
-            ], escape: false);
+            ]);
     }
 
     public function test_invite_displays_on_dashboard(): void

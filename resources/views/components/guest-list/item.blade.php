@@ -33,6 +33,6 @@
     @endif
 
     @if ($attendee->is($currentUser))
-        <x-badge color="lime" class="text-xs whitespace-nowrap">@lang('You')</x-badge>
+        <x-badge color="lime" class="text-xs whitespace-nowrap">{{ __('You') }}</x-badge>
     @endif
 </div>

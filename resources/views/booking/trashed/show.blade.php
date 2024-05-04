@@ -19,9 +19,7 @@
             @endcan
             @include('booking.partials.force-delete-button')
             @can('viewTrashed', App\Models\Booking::class)
-                <x-button.secondary :href="route('trash.booking.index')">
-                    @lang('Back')
-                </x-button.secondary>
+                <x-button.secondary :href="route('trash.booking.index')" :label="__('Back')" />
             @endcan
         </footer>
     </section>

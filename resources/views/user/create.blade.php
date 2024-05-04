@@ -6,7 +6,7 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Add User')
+                    {{ __('Add User') }}
                 </h1>
             </div>
         </header>
@@ -50,12 +50,12 @@
                 <div>
                     <x-fake-label :value="__('Password')" />
                     <p class="mt-1 text-blue-800 dark:text-blue-200">
-                        @lang('The user will be asked to set their own password.')
+                        {{ __('The user will be asked to set their own password.') }}
                     </p>
                 </div>
 
                 <fieldset>
-                    <legend class="text-lg font-medium mb-2">@lang('Settings')</legend>
+                    <legend class="text-lg font-medium mb-2">{{ __('Settings') }}</legend>
                     <div class="space-y-6">
                         <div>
                             <x-input-label for="section" :value="__('Section')" />
@@ -73,7 +73,7 @@
                                 @foreach (Role::cases() as $option)
                                     <option value="{{ $option->value }}" @selected($option == Role::Guest)
                                         @disabled(auth()->user()->role->compare($option) < 0)>
-                                        @lang('app.user.role.' . $option->value)
+                                        {{ __('app.user.role.' . $option->value) }}
                                     </option>
                                 @endforeach
                             </x-select-input>
@@ -83,18 +83,18 @@
                             <fieldset x-data="checkboxes({{ Js::from(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations"
                                 class="space-y-2">
                                 <legend class="font-medium text-gray-900 dark:text-gray-100">
-                                    @lang('Accreditations')</legend>
+                                    {{ __('Accreditations') }}</legend>
 
                                 <label class="block">
                                     <x-input-checkbox name="all" @change="selectAll" x-effect="indeterminate($el)" />
-                                    @lang('Select all')
+                                    {{ __('Select all') }}
                                 </label>
 
                                 @foreach (Accreditation::cases() as $accreditation)
                                     <label class="block">
                                         <x-input-checkbox value="{{ $accreditation->value }}" name="accreditations[]"
                                             x-model="values" />
-                                        @lang("app.user.accreditation.$accreditation->value")
+                                        {{ __("app.user.accreditation.$accreditation->value") }}
                                     </label>
                                 @endforeach
                                 <x-input-error class="mt-2" :messages="$errors->get('accreditations')" />
@@ -118,9 +118,7 @@
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Create') }}'" />
 
                 @can('viewAny', App\Models\User::class)
-                    <x-button.secondary :href="route('user.index')">
-                        @lang('Back')
-                    </x-button.secondary>
+                    <x-button.secondary :href="route('user.index')" :label="__('Back')" />
                 @endcan
             </footer>
         </form>

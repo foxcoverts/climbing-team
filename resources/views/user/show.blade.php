@@ -51,7 +51,7 @@
                         <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
                             <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
-                            <span>@lang('Contact Details')</span>
+                            <span>{{ __('Contact Details') }}</span>
                             @if ($user->hasVerifiedEmail())
                                 <x-badge color="lime" icon="outline.checkmark" :label="__('Email Verified')" class="text-sm" />
                             @else
@@ -61,15 +61,16 @@
                     </h3>
                     <div class="space-y-2 sm:pl-5" x-show="open" x-cloak x-transition>
                         <div class="space-y-2" :class="gdprContact && 'text-gray-600 dark:text-gray-400'">
-                            <p><strong>@lang('Notice'):</strong>
-                                @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
+                            <p><strong>{{ __('Notice') }}:</strong>
+                                {{ __('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.') }}
                             </p>
                             <p>
                                 <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
                                     <x-icon.outline class="mt-1 w-4 h-4 fill-current" x-show="!gdprContact" />
                                     <x-icon.outline.checkmark class="mt-1 w-4 h-4 fill-current" x-cloak
                                         x-show="gdprContact" />
-                                    <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
+                                    <span
+                                        class="text-left">{{ __('I have a legitimate reason to view these contact details') }}</span>
                                 </button>
                             </p>
                         </div>
@@ -109,20 +110,21 @@
                                 class="flex items-center space-x-1">
                                 <x-icon.cheveron.down aria-hidden="true"
                                     class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
-                                <span>@lang('Emergency Contact')</span>
+                                <span>{{ __('Emergency Contact') }}</span>
                             </button>
                         </h3>
                         <div class="space-y-4 sm:pl-5" x-cloak x-show="open" x-transition>
                             <div class="space-y-2" :class="gdprContact && 'text-gray-600 dark:text-gray-400'">
-                                <p><strong>@lang('Notice'):</strong>
-                                    @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
+                                <p><strong>{{ __('Notice') }}:</strong>
+                                    {{ __('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.') }}
                                 </p>
                                 <p>
                                     <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
                                         <x-icon.outline class="mt-1 w-4 h-4 fill-current" x-show="!gdprContact" />
                                         <x-icon.outline.checkmark class="mt-1 w-4 h-4 fill-current" x-cloak
                                             x-show="gdprContact" />
-                                        <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
+                                        <span
+                                            class="text-left">{{ __('I have a legitimate reason to view these contact details') }}</span>
                                     </button>
                                 </p>
                             </div>
@@ -149,7 +151,7 @@
                         <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
                             <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
-                            <span>@lang('Kit Checks')</span>
+                            <span>{{ __('Kit Checks') }}</span>
                             @isset($user->latestKitCheck)
                                 <x-badge.kit-check-expired :expired="$user->latestKitCheck->isExpired()" class="text-sm" />
                             @else
@@ -175,8 +177,8 @@
                             </div>
                         @else
                             <p>
-                                <strong>@lang('This user has not checked their kit yet.')</strong>
-                                @lang('If this user has any climbing kit of their own they should ask one of the team\'s kit checkers to look over it with them to ensure it is in good condition.')
+                                <strong>{{ __('This user has not checked their kit yet.') }}</strong>
+                                {{ __('If this user has any climbing kit of their own they should ask one of the team\'s kit checkers to look over it with them to ensure it is in good condition.') }}
                             </p>
                         @endisset
                         @can('create', App\Models\KitCheck::class)
@@ -190,13 +192,14 @@
                         <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
                             <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
-                            <span>@lang('Settings')</span>
+                            <span>{{ __('Settings') }}</span>
                         </button>
                     </h3>
                     <div class="space-y-2 sm:pl-5" x-show="open" x-transition>
                         <div>
                             <x-fake-label :value="__('Section')" />
-                            <p class="text-gray-700 dark:text-gray-300">@lang('app.user.section.' . $user->section->value)</p>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                {{ __('app.user.section.' . $user->section->value) }}</p>
                         </div>
 
                         <div>
@@ -209,14 +212,10 @@
 
             <footer class="mt-4 flex flex-wrap items-start gap-4">
                 @can('manage', \App\Models\Booking::class)
-                    <x-button.secondary :href="route('user.booking.index', $user)">
-                        @lang('Bookings')
-                    </x-button.secondary>
+                    <x-button.secondary :href="route('user.booking.index', $user)" :label="__('Bookings')" />
                 @endcan
                 @can('viewAny', [\App\Models\Qualification::class, $user])
-                    <x-button.secondary :href="route('user.qualification.index', $user)">
-                        @lang('Qualifications')
-                    </x-button.secondary>
+                    <x-button.secondary :href="route('user.qualification.index', $user)" :label="__('Qualifications')" />
                 @endcan
 
                 @if (!$user->isActive())

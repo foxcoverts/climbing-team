@@ -31,6 +31,9 @@ use Illuminate\Support\Facades\Gate;
 if (! isset($method) || ! $method instanceof CalendarMethod) {
     $method = CalendarMethod::Publish;
 }
+if (! isset($rsvp) || ! is_bool($rsvp)) {
+    $rsvp = $method === CalendarMethod::Request;
+}
 
 $calendar = new Calendar();
 $calendar->setMethod($method);
@@ -121,11 +124,7 @@ foreach ($bookings as $booking) {
             ->setCalendarUserType(CalendarUserType::INDIVIDUAL())
             ->setDisplayName($attendee->name);
 
-        if (
-            $attendee->hasVerifiedEmail() &&
-            ($method === CalendarMethod::Request) &&
-            $attendee->is($user)
-        ) {
+        if ($rsvp) {
             $evAttendee->setResponseNeededFromAttendee(true);
         }
 

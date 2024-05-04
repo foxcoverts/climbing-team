@@ -3,7 +3,7 @@
 @use('Illuminate\Support\Str')
 <section>
     <div class="border-b border-gray-800 dark:border-gray-200">
-        <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">@lang('Recent Activity')</h3>
+        <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">{{ __('Recent Activity') }}</h3>
     </div>
 
     <div class="space-y-2">
@@ -52,7 +52,7 @@
             <p><span x-data="{{ Js::from(['start_at' => localDate($booking->created_at, $booking->timezone)]) }}" x-bind:title="dateTimeString(start_at)"
                     class="cursor-help">{{ ucfirst(localDate($booking->created_at, $booking->timezone)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS])) }}</span>
             </p>
-            <div class="border-l-2 ml-2 pl-2">@lang('This booking was created.')</div>
+            <div class="border-l-2 ml-2 pl-2">{{ __('This booking was created.') }}</div>
         </div>
     </div>
 </section>

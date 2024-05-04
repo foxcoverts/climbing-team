@@ -5,12 +5,12 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Users')
+                    {{ __('Users') }}
                 </h1>
 
                 @can('create', App\Models\User::class)
                     <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('user.create')">@lang('Add User')</x-button.primary>
+                        <x-button.primary :href="route('user.create')" :label="__('Add User')" />
                     </nav>
                 @endcan
             </div>

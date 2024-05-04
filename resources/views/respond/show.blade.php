@@ -48,7 +48,7 @@
 
     <div
         class="my-4 space-y-4 p-4 border text-black bg-slate-100 border-slate-400 dark:text-white dark:bg-slate-900 dark:border-slate-600">
-        <p class="text-lg text-center">@lang('Can you attend this event?')</p>
+        <p class="text-lg text-center">{{ __('Can you attend this event?') }}</p>
         <form action="{{ route('respond.store', [$booking, $user]) }}" method="POST">
             @csrf
             <input type="hidden" name="invite" value="{{ $user->attendance->token }}" />
@@ -59,6 +59,6 @@
                 <x-button.secondary type="submit" name="status" :value="AttendeeStatus::Tentative->value" :label="__('Maybe')" />
             </div>
         </form>
-        <p class="text-sm text-center">@lang('Replying for :name.', ['name' => $user->name])</p>
+        <p class="text-sm text-center">{{ __('Replying for :name.', ['name' => $user->name]) }}</p>
     </div>
 </x-layout.guest>

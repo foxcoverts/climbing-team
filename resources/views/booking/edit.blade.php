@@ -54,19 +54,19 @@
                     <div class="space-y-6">
                         <h2
                             class="text-xl font-medium text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between">
-                            @lang('Edit Booking')
+                            {{ __('Edit Booking') }}
                         </h2>
 
                         @if ($form->isCancelled())
                             <div class="space-y-1">
                                 <x-fake-label :value="__('Restore Booking')" />
                                 <p>
-                                    @lang('This booking has been cancelled. If you restore this booking you will need to find instructors and confirm the booking again. If you do not want to invite any of the previous attendees you should remove them from the booking first.')
+                                    {{ __('This booking has been cancelled. If you restore this booking you will need to find instructors and confirm the booking again. If you do not want to invite any of the previous attendees you should remove them from the booking first.') }}
                                 </p>
                                 <label class="mt-1 block">
                                     <x-input-checkbox id="status" name="status"
                                         value="{{ BookingStatus::Tentative }}" @change="updateCancelled" />
-                                    <span>@lang('Restore booking')</span>
+                                    <span>{{ __('Restore booking') }}</span>
                                 </label>
                                 <x-input-error :messages="$errors->get('status')" />
                             </div>
@@ -74,15 +74,17 @@
                             <div class="space-y-1">
                                 <x-fake-label :value="__('Confirm Booking')" />
                                 @if ($form->instructors_attending->isEmpty() && !auth()->user()->isTeamLeader())
-                                    <p>@lang('You can only confirm a booking when there is an instructor attending.')</p>
+                                    <p>{{ __('You can only confirm a booking when there is an instructor attending.') }}
+                                    </p>
                                 @else
-                                    <p>@lang('Before you confirm this booking you should ensure that there are enough instructors attending and that you have chosen a ')
-                                        <a href="#lead_instructor_id" class="hover:underline">@lang('Lead Instructor')</a>.
+                                    <p>{{ __('Before you confirm this booking you should ensure that there are enough instructors attending and that you have chosen a ') }}
+                                        <a href="#lead_instructor_id"
+                                            class="hover:underline">{{ __('Lead Instructor') }}</a>.
                                     </p>
                                     <label class="mt-1 block">
                                         <x-input-checkbox id="status" name="status"
                                             value="{{ BookingStatus::Confirmed }}" @change="updateConfirmed" />
-                                        <span>@lang('Confirm booking')</span>
+                                        <span>{{ __('Confirm booking') }}</span>
                                     </label>
                                     <x-input-error :messages="$errors->get('status')" />
                                 @endif
@@ -93,7 +95,7 @@
                                 <x-fake-label :value="__('Confirm Booking')" />
                                 <label class="mt-1 block">
                                     <x-input-checkbox name="_status" checked disabled required />
-                                    @lang('This booking has been confirmed.')
+                                    {{ __('This booking has been confirmed.') }}
                                 </label>
                                 <x-input-error :messages="$errors->get('status')" />
                             </div>
@@ -207,14 +209,14 @@
                         <div class="space-y-1">
                             @if ($form->instructors_attending->isEmpty())
                                 <x-fake-label :value="__('Lead Instructor')" />
-                                <p>@lang('No instructors are going to this booking yet.')</p>
+                                <p>{{ __('No instructors are going to this booking yet.') }}</p>
                             @elseif ($form->isCancelled())
                                 <x-fake-label :value="__('Lead Instructor')" />
                                 <x-fake-input class="mt-1" x-bind:aria-disabled="booking.cancelled ? 'true' : ''">
                                     @if ($form->lead_instructor)
                                         {{ $form->lead_instructor->name }}
                                     @else
-                                        @lang('No lead instructor.')
+                                        {{ __('No lead instructor.') }}
                                     @endif
                                 </x-fake-input>
                             @else
@@ -225,7 +227,7 @@
                                     @if (is_null($form->lead_instructor) || $form->isTentative())
                                         <option value="" @selected(is_null($form->lead_instructor))
                                             @disabled($form->isConfirmed()) x-bind:disabled="booking.confirmed">
-                                            @lang('No lead instructor')
+                                            {{ __('No lead instructor') }}
                                         </option>
                                     @endif
                                     <optgroup label="{{ __('Permit Holders') }}">
@@ -233,7 +235,7 @@
                                     </optgroup>
                                 </x-select-input>
                                 <p class="text-sm">
-                                    @lang('Someone missing? Only instructors who are going to this booking will appear here.')
+                                    {{ __('Someone missing? Only instructors who are going to this booking will appear here.') }}
                                 </p>
                             @endif
                             <x-input-error :messages="$errors->get('location')" />
@@ -241,7 +243,9 @@
 
                         <div class="space-y-1">
                             <x-input-label for="lead_instructor_notes" :value="__('Lead Instructor Notes')" />
-                            <p class="text-sm">@lang('The Lead Instructor Notes will only be visible to the Lead Instructor. You can use these to share access arrangements, gate codes, etc.')</p>
+                            <p class="text-sm">
+                                {{ __('The Lead Instructor Notes will only be visible to the Lead Instructor. You can use these to share access arrangements, gate codes, etc.') }}
+                            </p>
                             <x-textarea id="lead_instructor_notes" name="lead_instructor_notes" class="block w-full"
                                 x-model="booking.lead_instructor_notes" x-bind:disabled="booking.cancelled"
                                 x-meta-enter.prevent="$el.form.requestSubmit()" />
@@ -257,9 +261,7 @@
 
                     @include('booking.partials.delete-button', ['booking' => $form->booking])
 
-                    <x-button.secondary :href="$form->route('booking.show')">
-                        @lang('Back')
-                    </x-button.secondary>
+                    <x-button.secondary :href="$form->route('booking.show')" :label="__('Back')" />
                 </footer>
             </div>
 

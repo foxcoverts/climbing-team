@@ -29,7 +29,7 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    {{ $user->name }} - @lang('Edit Qualification')
+                    {{ $user->name }} - {{ __('Edit Qualification') }}
                 </h1>
             </div>
         </header>
@@ -43,7 +43,7 @@
                 <div>
                     <x-fake-label :value="__('Qualification Type')" />
                     <x-fake-input class="mt-1 block">
-                        @lang('app.qualification.type.' . $qualification->detail_type)
+                        {{ __('app.qualification.type.' . $qualification->detail_type) }}
                     </x-fake-input>
                 </div>
 
@@ -198,7 +198,7 @@
                             <label class="mt-1 block">
                                 <x-input-checkbox name="__no_restrictions" x-model="no_restrictions"
                                     x-on:change='checkRestrictions' />
-                                @lang('No restrictions')
+                                {{ __('No restrictions') }}
                             </label>
                             <x-input-error class="mt-2" :messages="$errors->get('restrictions')" />
                         </div>
@@ -227,9 +227,7 @@
                 </form>
             @endcan
             @can('viewAny', [App\Models\Qualification::class, $user])
-                <x-button.secondary :href="route('user.qualification.index', $user)">
-                    @lang('Back')
-                </x-button.secondary>
+                <x-button.secondary :href="route('user.qualification.index', $user)" :label="__('Back')" />
             @endcan
         </footer>
     </section>

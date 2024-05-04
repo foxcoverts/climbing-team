@@ -26,7 +26,7 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Profile Information')
+                    {{ __('Profile Information') }}
                 </h1>
             </div>
         </header>
@@ -38,7 +38,7 @@
 
             <div class="max-w-prose">
                 <p class="mb-6 text-md text-gray-600 dark:text-gray-400">
-                    @lang("Update this User's profile information.")
+                    {{ __("Update this User's profile information.") }}
                 </p>
 
                 <div class="mb-6">
@@ -54,7 +54,7 @@
                             class="flex items-center space-x-1">
                             <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
-                            <span>@lang('Contact Details')</span>
+                            <span>{{ __('Contact Details') }}</span>
                         </button>
                     </legend>
 
@@ -67,7 +67,7 @@
 
                             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
                                 <div class="text-sm mt-2 text-orange-800 dark:text-orange-200">
-                                    @lang('This email address is unverified.')
+                                    {{ __('This email address is unverified.') }}
                                 </div>
                             @endif
                         </div>
@@ -87,12 +87,13 @@
                             class="flex items-center space-x-1">
                             <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
-                            <span>@lang('Emergency Contact')</span>
+                            <span>{{ __('Emergency Contact') }}</span>
                         </button>
                     </legend>
 
                     <p class="text-md mb-2 text-blue-800 dark:text-blue-200" x-cloak x-show="open" x-transition>
-                        @lang('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.')</p>
+                        {{ __('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.') }}
+                    </p>
 
                     <div class="flex flex-wrap gap-6 mb-6" x-cloak x-show="open" x-transition>
                         <div class="grow shrink">
@@ -118,7 +119,7 @@
                             class="flex items-center space-x-1">
                             <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                                 ::class="open ? '' : '-rotate-90'" />
-                            <span>@lang('Settings')</span>
+                            <span>{{ __('Settings') }}</span>
                         </button>
                     </legend>
 
@@ -139,7 +140,7 @@
                                     x-model="user.role">
                                     @foreach (Role::cases() as $option)
                                         <option value="{{ $option->value }}" @disabled(auth()->user()->role->compare($option) < 0)>
-                                            @lang('app.user.role.' . $option->value)
+                                            {{ __('app.user.role.' . $option->value) }}
                                         </option>
                                     @endforeach
                                 </x-select-input>
@@ -150,18 +151,18 @@
                             <fieldset x-data="checkboxes({{ Js::from(Accreditation::cases()) }})" x-modelable="values" x-model="user.accreditations"
                                 class="space-y-2">
                                 <legend class="font-medium text-gray-900 dark:text-gray-100">
-                                    @lang('Accreditations')</legend>
+                                    {{ __('Accreditations') }}</legend>
 
                                 <label class="block">
                                     <x-input-checkbox name="all" @change="selectAll" x-effect="indeterminate($el)" />
-                                    @lang('Select all')
+                                    {{ __('Select all') }}
                                 </label>
 
                                 @foreach (Accreditation::cases() as $accreditation)
                                     <label class="block">
                                         <x-input-checkbox value="{{ $accreditation->value }}" name="accreditations[]"
                                             x-model="values" />
-                                        @lang("app.user.accreditation.$accreditation->value")
+                                        {{ __("app.user.accreditation.$accreditation->value") }}
                                     </label>
                                 @endforeach
                                 <x-input-error class="mt-2" :messages="$errors->get('user_id')" />

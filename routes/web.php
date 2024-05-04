@@ -6,6 +6,7 @@ use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingAttendeeInviteController;
 use App\Http\Controllers\BookingCommentController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\BookingLinkController;
@@ -62,6 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except('edit');
 
     Route::resource('booking.comment', BookingCommentController::class)->shallow()->only('store', 'update', 'destroy');
+
+    Route::get('booking/{booking}/email', BookingEmailController::class)->name('booking.email');
 
     Route::get('booking/{booking}/share', BookingShareController::class)->name('booking.share');
 
