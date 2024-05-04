@@ -10,7 +10,7 @@
 
                 <div class="space-y-2">
                     <div class="border-b border-gray-800 dark:border-gray-200">
-                        <h2 class="text-xl font-medium text-gray-800 dark:text-gray-200">@lang('Share Booking')</h2>
+                        <h2 class="text-xl font-medium text-gray-800 dark:text-gray-200">{{ __('Share Booking') }}</h2>
                     </div>
 
                     <div class="space-y-2">
@@ -27,7 +27,7 @@
                                 }, 3000);
                             },
                         }">
-                            <x-input-label for="link">@lang('Share link')</x-input-label>
+                            <x-input-label for="link">{{ __('Share link') }}</x-input-label>
                             <div class="flex items-stretch mt-1">
                                 <x-text-input readonly id="link" name="link" x-model.fill="text"
                                     class="flex-grow flex-shrink rounded-r-none" />
@@ -52,7 +52,7 @@
                                 }, 3000);
                             },
                         }">
-                            <x-input-label for="post">@lang('Share post')</x-input-label>
+                            <x-input-label for="post">{{ __('Share post') }}</x-input-label>
                             <div class="flex items-stretch mt-1">
                                 <x-text-input id="post" name="post" x-model.fill="text"
                                     class="flex-grow flex-shrink rounded-r-none " />
@@ -70,14 +70,12 @@
                     @if (config('app.facebook.group'))
                         <x-button.secondary href="{{ config('app.facebook.group') . '?should_open_composer=true' }}"
                             target="_blank" class="order-last ml-auto whitespace-nowrap">
-                            @lang('Open Facebook Group')
+                            {{ __('Open Facebook Group') }}
                             <x-icon.external-link class="ml-1 w-4 h-4 stroke-current"
                                 aria-label="(opens in new window)" />
                         </x-button.secondary>
                     @endif
-                    <x-button.secondary :href="route('booking.show', $booking)">
-                        @lang('Back')
-                    </x-button.secondary>
+                    <x-button.secondary :href="route('booking.show', $booking)" :label="__('Back')" />
                 </footer>
             </div>
         </div>

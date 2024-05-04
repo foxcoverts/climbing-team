@@ -14,23 +14,23 @@
                         @method('PUT')
                         <div
                             class="my-4 space-y-4 p-4 border text-black bg-slate-100 border-slate-400 dark:text-white dark:bg-slate-900 dark:border-slate-600">
-                            <p class="text-lg text-center">@lang('Can you attend this event?')</p>
+                            <p class="text-lg text-center">{{ __('Can you attend this event?') }}</p>
                             <div class="flex justify-center gap-4">
                                 <x-button
                                     color="{{ $attendance?->status == AttendeeStatus::Accepted ? 'primary' : 'secondary' }}"
-                                    type="submit" name="status" x-bind:disabled="submitted"
-                                    :value="AttendeeStatus::Accepted->value">@lang('Yes')</x-button>
+                                    type="submit" name="status" x-bind:disabled="submitted" :value="AttendeeStatus::Accepted->value"
+                                    :label="__('Yes')" />
                                 <x-button
                                     color="{{ $attendance?->status == AttendeeStatus::Declined ? 'danger' : 'secondary' }}"
-                                    type="submit" name="status" x-bind:disabled="submitted"
-                                    :value="AttendeeStatus::Declined->value">@lang('No')</x-button>
+                                    type="submit" name="status" x-bind:disabled="submitted" :value="AttendeeStatus::Declined->value"
+                                    :label="__('No')" />
                                 <x-button
                                     color="{{ $attendance?->status == AttendeeStatus::Tentative ? 'primary' : 'secondary' }}"
-                                    type="submit" name="status" x-bind:disabled="submitted"
-                                    :value="AttendeeStatus::Tentative->value">@lang('Maybe')</x-button>
+                                    type="submit" name="status" x-bind:disabled="submitted" :value="AttendeeStatus::Tentative->value"
+                                    :label="__('Maybe')" />
                             </div>
                             <p class="text-sm text-center">
-                                @lang('Replying for :name.', ['name' => $currentUser->name])
+                                {{ __('Replying for :name.', ['name' => $currentUser->name]) }}
                             </p>
                         </div>
                     </form>

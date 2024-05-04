@@ -4,7 +4,7 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Mail log')
+                    {{ __('Mail log') }}
                 </h1>
             </div>
         </header>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="space-y-2 overflow-hidden">
                         <p class="flex items-center space-x-1">
-                            <dfn class="not-italic font-medium">@lang('To'):</dfn>
+                            <dfn class="not-italic font-medium">{{ __('To') }}:</dfn>
 
                             @if ($mail->booking)
                                 <x-icon.calendar.index class="w-5 h-5 fill-current" />
@@ -40,7 +40,7 @@
                         </p>
 
                         <p class="flex items-center space-x-1">
-                            <dfn class="not-italic font-medium">@lang('From'):</dfn>
+                            <dfn class="not-italic font-medium">{{ __('From') }}:</dfn>
 
                             @if ($mail->user)
                                 <x-icon.user-solid-square class="w-5 h-5 fill-current" />
@@ -52,7 +52,7 @@
                         </p>
 
                         <p class="flex items-center space-x-1">
-                            <dfn class="not-italic font-medium">@lang('Received'):</dfn>
+                            <dfn class="not-italic font-medium">{{ __('Received') }}:</dfn>
 
                             <span x-data="{{ Js::from(['start_at' => localDate($mail->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
                                 class="cursor-help">{{ ucfirst(localDate($mail->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS])) }}</span>
@@ -61,7 +61,7 @@
                     </div>
                 </div>
             @empty
-                <p class="py-2 px-4 sm:px-8">@lang('No mail to see.')</p>
+                <p class="py-2 px-4 sm:px-8">{{ __('No mail to see.') }}</p>
             @endforelse
         </div>
 

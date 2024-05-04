@@ -4,20 +4,18 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang(':Name - Qualifications', ['name' => $user->name])
+                    {{ __(':Name - Qualifications', ['name' => $user->name]) }}
                 </h1>
 
                 <nav class="flex items-center gap-4 justify-end grow">
                     @if ($qualifications->contains(fn($qualification) => $qualification->isExpired()))
                         <label class="block cursor-pointer">
                             <x-input-checkbox name="__show_expired" x-model="showExpired" />
-                            @lang('Show expired')
+                            {{ __('Show expired') }}
                         </label>
                     @endif
                     @can('create', [App\Models\Qualification::class, $user])
-                        <x-button.primary :href="route('user.qualification.create', $user)">
-                            @lang('Add')
-                        </x-button.primary>
+                        <x-button.primary :href="route('user.qualification.create', $user)" :label="__('Add')" />
                     @endcan
                 </nav>
             </div>
@@ -31,13 +29,14 @@
                     <h3 class="font-medium"><a
                             href="{{ route('user.qualification.show', [$user, $qualification]) }}">{{ $qualification->detail->summary }}</a>
                     </h3>
-                    <p><dfn class="not-italic font-medium">@lang('Type'):</dfn> @lang('app.qualification.type.' . $qualification->detail_type)</p>
+                    <p><dfn class="not-italic font-medium">{{ __('Type') }}:</dfn>
+                        {{ __('app.qualification.type.' . $qualification->detail_type) }}</p>
                     @if ($qualification->expires_on)
                         <p><dfn class="not-italic font-medium">
                                 @if ($qualification->isExpired())
-                                    @lang('Expired')
+                                    {{ __('Expired') }}
                                 @else
-                                    @lang('Expires')
+                                    {{ __('Expires') }}
                                 @endif
                             </dfn>
 
@@ -47,7 +46,7 @@
                             ])
                                 title="{{ $qualification->expires_on->toFormattedDayDateString() }}">
                                 @if ($qualification->expires_on->isToday())
-                                    @lang('today')
+                                    {{ __('today') }}
                                 @else
                                     {{ $qualification->expires_on->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}
                                 @endif
@@ -56,7 +55,7 @@
                     @endif
                 </div>
             @empty
-                <p class="p-4 sm:px-8">@lang('This user has no qualifications.')</p>
+                <p class="p-4 sm:px-8">{{ __('This user has no qualifications.') }}</p>
             @endforelse
         </div>
     </section>

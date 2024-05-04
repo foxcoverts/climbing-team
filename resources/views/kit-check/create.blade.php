@@ -4,7 +4,7 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Record Kit Check')
+                    {{ __('Record Kit Check') }}
                 </h1>
             </div>
         </header>
@@ -55,12 +55,12 @@
                 <div>
                     <x-input-label for="comment" :value="__('Comment')" />
                     <x-textarea id="comment" name="comment" class="mt-1 w-full" x-model="kitCheck.comment" />
-                    <p class="text-sm">@lang("This comment will be copied on to each user's kit check entry.")</p>
+                    <p class="text-sm">{{ __("This comment will be copied on to each user's kit check entry.") }}</p>
                     <x-input-error class="mt-2" :messages="$errors->get('comment')" />
                 </div>
 
                 <fieldset id="user_ids">
-                    <legend class="font-bold text-gray-900 dark:text-gray-100">@lang('Users')</legend>
+                    <legend class="font-bold text-gray-900 dark:text-gray-100">{{ __('Users') }}</legend>
 
                     @foreach ($users as $user)
                         <label class="my-2 block">
@@ -78,9 +78,7 @@
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Save') }}'" />
 
                 @can('viewAny', App\Models\KitCheck::class)
-                    <x-button.secondary :href="route('kit-check.index')">
-                        @lang('Back')
-                    </x-button.secondary>
+                    <x-button.secondary :href="route('kit-check.index')" :label="__('Back')" />
                 @endcan
             </footer>
         </form>

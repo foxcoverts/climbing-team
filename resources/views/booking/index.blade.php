@@ -7,22 +7,22 @@
                     @switch ($status)
                         @case(BookingStatus::Confirmed)
                             <x-icon.calendar.check style="height: .75lh" class="fill-current" aria-hidden="true" />
-                            <span>@lang('Confirmed Bookings')</span>
+                            <span>{{ __('Confirmed Bookings') }}</span>
                         @break
 
                         @case(BookingStatus::Tentative)
                             <x-icon.calendar.tee style="height: .75lh" class="fill-current" aria-hidden="true" />
-                            <span>@lang('Tentative Bookings')</span>
+                            <span>{{ __('Tentative Bookings') }}</span>
                         @break
 
                         @case(BookingStatus::Cancelled)
                             <x-icon.calendar.cross style="height: .75lh" class="fill-current" aria-hidden="true" />
-                            <span>@lang('Cancelled Bookings')</span>
+                            <span>{{ __('Cancelled Bookings') }}</span>
                         @break
 
                         @default
                             <x-icon.calendar style="height: .75lh" class="fill-current" aria-hidden="true" />
-                            <span>@lang('Bookings')</span>
+                            <span>{{ __('Bookings') }}</span>
                     @endswitch
                 </h1>
             </div>

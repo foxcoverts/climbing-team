@@ -35,10 +35,9 @@ class ConfirmedBookingsTest extends TestCase
             ->assertSeeInOrder([
                 'Confirmed Bookings',
                 $bookingSummary,
-            ], escape: false)
+            ])
             ->assertDontSee(
-                $otherBookingSummary,
-                escape: false
+                $otherBookingSummary
             );
     }
 
@@ -66,10 +65,9 @@ class ConfirmedBookingsTest extends TestCase
             ->assertSeeInOrder([
                 'Confirmed Bookings',
                 $bookingSummary,
-            ], escape: false)
+            ])
             ->assertDontSee(
-                $otherBookingSummary,
-                escape: false
+                $otherBookingSummary
             );
     }
 

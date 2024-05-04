@@ -43,25 +43,21 @@
         <div
             class="my-4 space-y-4 p-4 border text-black bg-blue-100 border-slate-400 dark:text-white dark:bg-blue-900 dark:border-slate-600">
             <div class="flex justify-center gap-4">
-                <x-button.primary :href="route('login')">
-                    @lang('View full details')
-                </x-button.primary>
+                <x-button.primary :href="route('login')" :label="__('View full details')" />
             </div>
 
-            <p class="text-sm text-center">@lang('Please login to view full details or change your response.')</p>
+            <p class="text-sm text-center">{{ __('Please login to view full details or change your response.') }}</p>
         </div>
     @else
         <div
             class="my-4 space-y-4 p-4 border text-black bg-slate-100 border-slate-400 dark:text-white dark:bg-slate-900 dark:border-slate-600">
-            <p class="text-lg text-center">@lang('Can you attend this event?')</p>
+            <p class="text-lg text-center">{{ __('Can you attend this event?') }}</p>
 
             <div class="flex justify-center gap-4">
-                <x-button.primary :href="route('login')">
-                    @lang('View full details')
-                </x-button.primary>
+                <x-button.primary :href="route('login')" :label="__('View full details')" />
             </div>
 
-            <p class="text-sm text-center">@lang('Please login to view full details and to RSVP.')</p>
+            <p class="text-sm text-center">{{ __('Please login to view full details and to RSVP.') }}</p>
         </div>
     @endif
 </x-layout.guest>

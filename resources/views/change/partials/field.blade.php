@@ -4,7 +4,7 @@
             'booking' => $change->booking,
             'where' => 'start',
         ])
-        @lang('was :status.', ['status' => 'restored'])
+        {{ __('was :status.', ['status' => 'restored']) }}
     </div>
 @elseif ($field->name == 'status')
     <div class="border-l-2 ml-2 pl-2">
@@ -12,6 +12,6 @@
             'booking' => $change->booking,
             'where' => 'start',
         ])
-        @lang('was :status.', ['status' => $field->value])
+        {{ __('was :status.', ['status' => $field->value]) }}
     </div>
 @endif

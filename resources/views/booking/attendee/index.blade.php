@@ -11,13 +11,13 @@
 
                     <h2
                         class="text-xl font-medium text-gray-900 dark:text-gray-100 border-b border-gray-800 dark:border-gray-200">
-                        @lang('Roll call')</h2>
+                        {{ __('Roll call') }}</h2>
 
                     <div class="space-y-2 mt-2">
                         @if ($lead_instructor)
                             <div>
                                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                    @lang('Lead Instructor')
+                                    {{ __('Lead Instructor') }}
                                 </h3>
                                 <ul>
                                     <li>
@@ -33,7 +33,7 @@
                         @if (isset($attendees[AttendeeStatus::Accepted->value]))
                             <div>
                                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                    @lang('app.attendee.status.' . AttendeeStatus::Accepted->value)
+                                    {{ __('app.attendee.status.' . AttendeeStatus::Accepted->value) }}
                                 </h3>
                                 <ul>
                                     @foreach ($attendees[AttendeeStatus::Accepted->value] as $attendee)
@@ -50,14 +50,14 @@
                         @endif
 
                         <p class="text-gray-800 dark:text-gray-200">
-                            @lang('Please select any additional people below who have come to the booking. Their attendance will be recorded and you will then be able to view their qualifications and contact details.')
+                            {{ __('Please select any additional people below who have come to the booking. Their attendance will be recorded and you will then be able to view their qualifications and contact details.') }}
                         </p>
 
                         @foreach ($attendees as $status => $list)
                             @unless ($status == AttendeeStatus::Accepted->value)
                                 <div>
                                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                        @lang("app.attendee.status.$status")
+                                        {{ __("app.attendee.status.$status") }}
                                     </h3>
                                     <ul>
                                         @foreach ($list as $attendee)
@@ -75,7 +75,7 @@
 
                         <div>
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                @lang('Other')
+                                {{ __('Other') }}
                             </h3>
                             <ul>
                                 @foreach ($nonAttendees as $user)
@@ -91,8 +91,8 @@
                     </div>
 
                     <footer class="flex flex-wrap items-center gap-4 mt-6">
-                        <x-button.primary>@lang('Mark Present')</x-button.primary>
-                        <x-button.secondary :href="route('booking.show', $booking)">@lang('Back')</x-button.secondary>
+                        <x-button.primary :label="__('Mark Present')" />
+                        <x-button.secondary :href="route('booking.show', $booking)" :label="__('Back')" />
                     </footer>
                 </form>
             </div>

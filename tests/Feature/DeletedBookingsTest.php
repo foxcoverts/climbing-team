@@ -37,10 +37,9 @@ class DeletedBookingsTest extends TestCase
             ->assertSeeInOrder([
                 'Deleted Bookings',
                 $bookingSummary,
-            ], escape: false)
+            ])
             ->assertDontSee(
-                $otherBookingSummary,
-                escape: false
+                $otherBookingSummary
             );
     }
 

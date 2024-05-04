@@ -13,7 +13,7 @@
     <div class="space-y-2">
         @isset($post->date)
             <p class="m-0 text-gray-700 dark:text-gray-300">
-                @lang('Posted')
+                {{ __('Posted') }}
                 <span x-data="{{ Js::from(['start_at' => localDate($post->date)]) }}" x-bind:title="dateTimeString(start_at)"
                     class="cursor-help">{{ localDate($post->date)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span>
             </p>
@@ -25,11 +25,9 @@
     <div
         class="my-4 space-y-4 p-4 border text-black bg-slate-100 border-slate-400 dark:text-white dark:bg-slate-900 dark:border-slate-600">
         <div class="flex justify-center gap-4">
-            <x-button.primary :href="route('login')">
-                @lang('Read more')
-            </x-button.primary>
+            <x-button.primary :href="route('login')" :label="__('Read more')" />
         </div>
 
-        <p class="text-sm text-center">@lang('Please login to view the full post.')</p>
+        <p class="text-sm text-center">{{ __('Please login to view the full post.') }}</p>
     </div>
 </x-layout.guest>

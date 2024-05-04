@@ -22,15 +22,15 @@
                         @unless ($user->hasVerifiedEmail())
                             <fieldset class="m-0 p-0">
                                 <legend class="text-xl font-medium border-b border-gray-800 dark:border-gray-200 w-full">
-                                    @lang('Email unverified')</legend>
+                                    {{ __('Email unverified') }}</legend>
 
                                 <p class="mt-1 text-md">
-                                    @lang('This user has not verified their email address yet, invitations will not be delivered to them by email. Any bookings you invite this user to will be waiting for them in their invites list when they verify their account.')
+                                    {{ __('This user has not verified their email address yet, invitations will not be delivered to them by email. Any bookings you invite this user to will be waiting for them in their invites list when they verify their account.') }}
                                 </p>
 
                                 <label class="mt-1 block">
                                     <x-input-checkbox name="force" x-model="emailVerified" autofocus />
-                                    @lang('Send invitations with no email')
+                                    {{ __('Send invitations with no email') }}
                                 </label>
                             </fieldset>
                         @endunless
@@ -39,16 +39,16 @@
                             x-show="emailVerified" {{ $user->hasVerifiedEmail() ? '' : 'x-transition x-cloak' }}
                             class="m-0 p-0">
                             <legend class="text-xl font-medium border-b border-gray-800 dark:border-gray-200 w-full">
-                                @lang('Invite to Bookings')</legend>
+                                {{ __('Invite to Bookings') }}</legend>
 
                             <p class="mt-1 text-md text-gray-600 dark:text-gray-400">
-                                @lang('Select the bookings below that you wish to invite this user to.')
+                                {{ __('Select the bookings below that you wish to invite this user to.') }}
                             </p>
 
                             <label class="my-2 block">
                                 <x-input-checkbox name="all" @change="selectAll" x-effect="indeterminate($el)"
                                     autofocus />
-                                @lang('Invite to all')
+                                {{ __('Invite to all') }}
                             </label>
 
                             @foreach ($bookings as $booking)
@@ -69,21 +69,17 @@
                                 x-bind:disabled="submitted || !emailVerified || form.booking_ids.length == 0"
                                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Send Invitations') }}'" />
 
-                            <x-button.secondary :href="route('user.show', $user)">
-                                @lang('Back')
-                            </x-button.secondary>
+                            <x-button.secondary :href="route('user.show', $user)" :label="__('Back')" />
                         </footer>
                     </div>
                 </form>
             @else
                 <div class="max-w-prose">
                     <h2 class="text-xl font-medium border-b border-gray-800 dark:border-gray-200 w-full">
-                        @lang('Invite to Bookings')</h2>
-                    <p class="mt-2">@lang('There are no bookings available to invite this user to.')</p>
+                        {{ __('Invite to Bookings') }}</h2>
+                    <p class="mt-2">{{ __('There are no bookings available to invite this user to.') }}</p>
                     <footer class="flex flex-wrap items-start gap-4 pt-4">
-                        <x-button.secondary :href="route('user.show', $user)">
-                            @lang('Back')
-                        </x-button.secondary>
+                        <x-button.secondary :href="route('user.show', $user)" :label="__('Back')" />
                     </footer>
                 </div>
             @endif

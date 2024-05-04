@@ -8,7 +8,7 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    {{ $user->name }} - @lang('Add Qualification')
+                    {{ $user->name }} - {{ __('Add Qualification') }}
                 </h1>
             </div>
         </header>
@@ -74,7 +74,8 @@
                             <option value="" selected></option>
                         </template>
                         @foreach ([\App\Models\GirlguidingQualification::class, \App\Models\MountainTrainingQualification::class, \App\Models\ScoutPermit::class] as $qualification_type)
-                            <option value="{{ $qualification_type }}">@lang("app.qualification.type.$qualification_type")</option>
+                            <option value="{{ $qualification_type }}">
+                                {{ __("app.qualification.type.$qualification_type") }}</option>
                         @endforeach
                     </x-select-input>
                     <x-input-error class="mt-2" :messages="$errors->get('detail_type')" />
@@ -225,7 +226,7 @@
                             <label class="mt-1 block">
                                 <x-input-checkbox name="__no_restrictions" x-model="no_restrictions"
                                     x-on:change='checkRestrictions' />
-                                @lang('No restrictions')
+                                {{ __('No restrictions') }}
                             </label>
                             <x-input-error class="mt-2" :messages="$errors->get('restrictions')" />
                         </div>
@@ -245,9 +246,7 @@
                     x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Save') }}'" />
 
                 @can('viewAny', [App\Models\Qualification::class, $user])
-                    <x-button.secondary :href="route('user.qualification.index', $user)">
-                        @lang('Back')
-                    </x-button.secondary>
+                    <x-button.secondary :href="route('user.qualification.index', $user)" :label="__('Back')" />
                 @endcan
             </footer>
         </form>

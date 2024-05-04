@@ -3,12 +3,12 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Latest Kit Checks')
+                    {{ __('Latest Kit Checks') }}
                 </h1>
 
                 @can('create', App\Models\KitCheck::class)
                     <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('kit-check.create')">@lang('Log Kit Check')</x-button.primary>
+                        <x-button.primary :href="route('kit-check.create')" :label="__('Log Kit Check')" />
                     </nav>
                 @endcan
             </div>
@@ -36,11 +36,11 @@
                 @else
                     <div class="py-2 px-4 sm:px-8" x-cloak x-show="showExpired" x-transition>
                         <h2 class="text-xl font-medium">{{ $user->name }}</h2>
-                        <p>@lang('This user has not checked their kit yet.')</p>
+                        <p>{{ __('This user has not checked their kit yet.') }}</p>
                     </div>
                 @endisset
             @empty
-                <p class="p-4 sm:px-8">@lang('No kit has been checked yet.')
+                <p class="p-4 sm:px-8">{{ __('No kit has been checked yet.') }}
             @endforelse
         </div>
     </section>

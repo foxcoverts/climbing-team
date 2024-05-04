@@ -42,10 +42,9 @@ class RotaTest extends TestCase
                 'My Rota', // Sidebar
                 'My Rota', // Header
                 $bookingSummary,
-            ], escape: false)
+            ])
             ->assertDontSee(
-                $otherBookingSummary,
-                escape: false
+                $otherBookingSummary
             );
     }
 

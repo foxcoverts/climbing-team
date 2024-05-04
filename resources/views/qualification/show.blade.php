@@ -9,53 +9,56 @@
 
                 @can('update', $qualification)
                     <nav class="grow flex justify-end">
-                        <x-button.primary :href="route('user.qualification.edit', [$user, $qualification])">
-                            @lang('Edit')
-                        </x-button.primary>
+                        <x-button.primary :href="route('user.qualification.edit', [$user, $qualification])" :label="__('Edit')" />
                     </nav>
                 @endcan
             </div>
         </header>
 
         <article class="mt-4 px-4 sm:px-8 space-y-2 max-w-prose">
-            <h2 class="text-lg sm:text-xl font-medium text-gray-900 dark:text-gray-100">@lang('app.qualification.type.' . $qualification->detail_type)</h2>
+            <h2 class="text-lg sm:text-xl font-medium text-gray-900 dark:text-gray-100">
+                {{ __('app.qualification.type.' . $qualification->detail_type) }}</h2>
 
             @if ($qualification->detail instanceof \App\Models\GirlguidingQualification)
                 <div>
                     <x-fake-label :value="__('Scheme')" />
                     <p class="text-gray-700 dark:text-gray-300">
-                        @lang(':scheme - Level :level', [
+                        {{ __(':scheme - Level :level', [
                             'scheme' => __('app.girlguiding.scheme.' . $qualification->detail->scheme->value),
                             'level' => $qualification->detail->level,
-                        ])
+                        ]) }}
                     </p>
                 </div>
             @elseif ($qualification->detail instanceof \App\Models\MountainTrainingQualification)
                 <div>
                     <x-fake-label :value="__('Award')" />
-                    <p class="text-gray-700 dark:text-gray-300">@lang('app.mountain-training.award.' . $qualification->detail->award->value)</p>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        {{ __('app.mountain-training.award.' . $qualification->detail->award->value) }}</p>
                 </div>
             @elseif ($qualification->detail instanceof \App\Models\ScoutPermit)
                 <div>
                     <x-fake-label :value="__('Activity')" />
-                    <p class="text-gray-700 dark:text-gray-300">@lang('app.scout-permit.activity.' . $qualification->detail->activity->value)</p>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        {{ __('app.scout-permit.activity.' . $qualification->detail->activity->value) }}</p>
                 </div>
 
                 <div>
                     <x-fake-label :value="__('Category')" />
-                    <p class="text-gray-700 dark:text-gray-300">@lang('app.scout-permit.category.' . $qualification->detail->category->value)</p>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        {{ __('app.scout-permit.category.' . $qualification->detail->category->value) }}</p>
                 </div>
 
                 <div>
                     <x-fake-label :value="__('Permit Type')" />
-                    <p class="text-gray-700 dark:text-gray-300">@lang('app.scout-permit.permit-type.' . $qualification->detail->permit_type->value)</p>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        {{ __('app.scout-permit.permit-type.' . $qualification->detail->permit_type->value) }}</p>
                 </div>
 
                 <div>
                     <x-fake-label :value="__('Restrictions')" />
                     <p class="text-gray-700 dark:text-gray-300">
                         @if (empty($qualification->detail->restrictions))
-                            <em>@lang('None')</em>
+                            <em>{{ __('None') }}</em>
                         @else
                             {{ $qualification->detail->restrictions }}
                         @endif
@@ -72,7 +75,7 @@
                     ])
                             title="{{ $qualification->expires_on->toFormattedDayDateString() }}">
                             @if ($qualification->expires_on->isToday())
-                                @lang('today')
+                                {{ __('today') }}
                             @else
                                 {{ $qualification->expires_on->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}
                             @endif
@@ -83,9 +86,7 @@
 
         @can('viewAny', [App\Models\Qualification::class, $user])
             <footer class="p-4 sm:px-8 mt-4 flex flex-wrap items-start gap-4">
-                <x-button.secondary :href="route('user.qualification.index', $user)">
-                    @lang('Back')
-                </x-button.secondary>
+                <x-button.secondary :href="route('user.qualification.index', $user)" :label="__('Back')" />
             </footer>
         @endcan
     </section>

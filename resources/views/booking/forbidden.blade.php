@@ -13,7 +13,7 @@
                 <div
                     class="text-lg font-medium text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between">
                     <h2 class="flex items-center">
-                        @lang('Booking Details')
+                        {{ __('Booking Details') }}
                     </h2>
                 </div>
 
@@ -42,14 +42,14 @@
 
                 <div
                     class="my-4 space-y-4 p-4 border text-black bg-red-100 border-red-400 dark:text-white dark:bg-red-900 dark:border-red-600">
-                    <h2 class="text-lg text-center">@lang('Forbidden')</h2>
+                    <h2 class="text-lg text-center">{{ __('Forbidden') }}</h2>
 
                     <p class="text-center">
-                        @lang('You have not been invited to this booking.')
+                        {{ __('You have not been invited to this booking.') }}
                     </p>
 
                     <p class="text-center text-sm">
-                        @lang('Please contact the Team Leader if you believe this is an error.')
+                        {{ __('Please contact the Team Leader if you believe this is an error.') }}
                     </p>
                 </div>
             </div>

@@ -10,14 +10,14 @@
                         x-on:submit="setTimeout(() => submitted = true, 0)">
                         @csrf
                         <h3 class="text-xl font-medium border-b border-gray-800 dark:border-gray-200 w-full">
-                            @lang('Attendance')</h3>
+                            {{ __('Attendance') }}</h3>
 
                         <div class="space-y-1 my-1">
                             <div>
                                 <x-input-label for="user_id" :value="__('Attendee')" />
                                 <x-select-input id="user_id" name="user_id" class="mt-1 block" required autofocus
                                     :value="old('user_id')" x-model.fill="form.user_id">
-                                    <option value="" disabled selected>@lang('-- Select User --')</option>
+                                    <option value="" disabled selected>{{ __('-- Select User --') }}</option>
                                     <x-select-input.collection :options="$users" label_key="name" />
                                 </x-select-input>
                                 <x-input-error class="mt-2" :messages="$errors->get('user_id')" />
@@ -32,10 +32,10 @@
                                 </x-select-input>
                                 <x-input-error class="mt-2" :messages="$errors->get('status')" />
                                 <p class="text-sm pt-2">
-                                    @lang("If you do not know someone's availability you should ")
+                                    {{ __("If you do not know someone's availability you should ") }}
                                     <a class="hover:underline"
-                                        href="{{ route('booking.attendee.invite', $booking) }}">@lang('invite them')</a>
-                                    @lang(' instead.')
+                                        href="{{ route('booking.attendee.invite', $booking) }}">{{ __('invite them') }}</a>
+                                    {{ __(' instead.') }}
                                 </p>
                             </div>
                         </div>
@@ -45,21 +45,17 @@
                                 :label="__('Add Attendee')"
                                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Add Attendee') }}'" />
 
-                            <x-button.secondary :href="route('booking.show', $booking)">
-                                @lang('Back')
-                            </x-button.secondary>
+                            <x-button.secondary :href="route('booking.show', $booking)" :label="__('Back')" />
                         </footer>
                     </form>
                 @else
                     <h3 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
-                        @lang('Attendance')</h3>
+                        {{ __('Attendance') }}</h3>
                     <p class="my-1">
-                        @lang('All users have already been invited to this booking. You may change their response on the guest list.')
+                        {{ __('All users have already been invited to this booking. You may change their response on the guest list.') }}
                     </p>
                     <footer class="flex flex-wrap items-start gap-4 pt-2">
-                        <x-button.secondary :href="route('booking.show', $booking)">
-                            @lang('Back')
-                        </x-button.secondary>
+                        <x-button.secondary :href="route('booking.show', $booking)" :label="__('Back')" />
                     </footer>
                 @endif
             </div>

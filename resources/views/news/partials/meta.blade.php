@@ -4,7 +4,7 @@
         <strong class="text-black dark:text-white">{{ $post->author->name }}</strong>
         •
     @endisset
-    @lang('Posted')
+    {{ __('Posted') }}
     <span x-data="{{ Js::from(['start_at' => localDate($post->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
         class="cursor-help">{{ localDate($post->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}</span>
 </p>

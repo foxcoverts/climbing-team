@@ -4,8 +4,8 @@
 
         <ul class="flex flex-col gap-2 sm:flex-row sm:gap-6">
             <li><a href="{{ route('privacy-policy') }}"
-                    class="hover:text-gray-900 dark:hover:text-gray-50">@lang('Privacy Policy')</a></li>
-            <li><a href="/" class="hover:text-gray-900 dark:hover:text-gray-50">@lang('About Us')</a></li>
+                    class="hover:text-gray-900 dark:hover:text-gray-50">{{ __('Privacy Policy') }}</a></li>
+            <li><a href="/" class="hover:text-gray-900 dark:hover:text-gray-50">{{ __('About Us') }}</a></li>
         </ul>
     </div>
 </footer>

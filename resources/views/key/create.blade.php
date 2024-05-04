@@ -3,7 +3,7 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Add Key')
+                    {{ __('Add Key') }}
                 </h1>
             </div>
         </header>
@@ -36,12 +36,8 @@
                 </div>
 
                 <footer class="flex items-start gap-4">
-                    <x-button.primary>
-                        @lang('Save')
-                    </x-button.primary>
-                    <x-button.secondary :href="route('key.index')">
-                        @lang('Back')
-                    </x-button.secondary>
+                    <x-button.primary :label="__('Save')" />
+                    <x-button.secondary :href="route('key.index')" :label="__('Back')" />
                 </footer>
             </div>
         </form>

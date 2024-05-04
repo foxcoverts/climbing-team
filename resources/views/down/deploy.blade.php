@@ -34,9 +34,10 @@
             <hr style="background-image: repeating-linear-gradient(-55deg, rgba(255, 222, 26, .8), rgba(255, 222, 26, .8) 6px, rgba(0, 0, 0, .8) 6px, rgba(0, 0, 0, .8) 15px); background-position: left;"
                 class="h-12 w-full" />
             <div class="px-6 py-4 space-y-4">
-                <h2 class="text-center font-medium text-lg">@lang('Maintenance')</h2>
+                <h2 class="text-center font-medium text-lg">{{ __('Maintenance') }}</h2>
 
-                <p>@lang('We are performing some essential maintenance right now and should be back up in a few minutes. Please try again soon.')</p>
+                <p>{{ __('We are performing some essential maintenance right now and should be back up in a few minutes. Please try again soon.') }}
+                </p>
             </div>
             <hr style="background-image: repeating-linear-gradient(-55deg, rgba(255, 222, 26, .8), rgba(255, 222, 26, .8) 6px, rgba(0, 0, 0, .8) 6px, rgba(0, 0, 0, .8) 15px); background-position: left;"
                 class="h-12 w-full" />

@@ -3,10 +3,10 @@
     {{ $before }}
     @switch($where)
         @case('start')
-            @lang('This booking'){{ $after }}
+            {{ __('This booking') }}{{ $after }}
         @break
 
         @default
-            @lang('this booking'){{ $after }}
+            {{ __('this booking') }}{{ $after }}
     @endswitch
 @endif

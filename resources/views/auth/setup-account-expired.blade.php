@@ -1,6 +1,6 @@
 <x-layout.guest :title="__('Account Setup')">
     <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        @lang('Something is wrong with your link. Please confirm your email address and we will email you a new account setup link.')
+        {{ __('Something is wrong with your link. Please confirm your email address and we will email you a new account setup link.') }}
     </div>
 
     <form method="POST" action="{{ route('setup-account-link', $user) }}" x-data="{ submitted: false }"

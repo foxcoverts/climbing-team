@@ -3,7 +3,7 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang(':Name - Kit Check', ['name' => $kitCheck->user->name])
+                    {{ __(':Name - Kit Check', ['name' => $kitCheck->user->name]) }}
                 </h1>
             </div>
         </header>
@@ -19,13 +19,13 @@
                 </div>
 
                 <div>
-                    <x-fake-label>@lang('Checked by')</x-fake-label>
+                    <x-fake-label>{{ __('Checked by') }}</x-fake-label>
                     <p>{{ $kitCheck->checked_by->name }}</p>
                 </div>
 
                 @isset($kitCheck->comment)
                     <div>
-                        <x-fake-label>@lang('Comment')</x-fake-label>
+                        <x-fake-label>{{ __('Comment') }}</x-fake-label>
                         <x-markdown :text="$kitCheck->comment" />
                     </div>
                 @endisset
@@ -35,9 +35,7 @@
                 <x-button.primary :href="route('kit-check.edit', $kitCheck)" :label="__('Edit')" />
 
                 @can('viewAny', App\Models\KitCheck::class)
-                    <x-button.secondary :href="route('kit-check.user.index', $kitCheck->user)">
-                        @lang('Back')
-                    </x-button.secondary>
+                    <x-button.secondary :href="route('kit-check.user.index', $kitCheck->user)" :label="__('Back')" />
                 @endcan
             </footer>
         </div>

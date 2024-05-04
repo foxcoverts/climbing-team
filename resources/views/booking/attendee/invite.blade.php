@@ -13,12 +13,12 @@
                         <fieldset x-data="checkboxes({{ Js::from($users->pluck('id')) }})" x-modelable="values" x-model="form.user_ids" class="m-0 p-0">
                             <legend
                                 class="text-xl font-semibold border-b border-gray-800 dark:border-gray-200 w-full mb-1">
-                                @lang('Invite Attendees')</legend>
+                                {{ __('Invite Attendees') }}</legend>
 
                             <label class="my-2 block">
                                 <x-input-checkbox name="all" @change="selectAll" x-effect="indeterminate($el)"
                                     autofocus />
-                                @lang('Invite all')
+                                {{ __('Invite all') }}
                             </label>
 
                             @foreach ($users as $user)
@@ -48,10 +48,10 @@
                             @endforeach
                             <x-input-error class="mt-2" :messages="$errors->get('user_ids')" />
                             <p class="text-sm mt-2">
-                                @lang('Someone missing? Only users who have verified their email address will appear here.')
-                                @lang('If you know their availability you may be able to ')
+                                {{ __('Someone missing? Only users who have verified their email address will appear here.') }}
+                                {{ __('If you know their availability you may be able to ') }}
                                 <a class="hover:underline"
-                                    href="{{ route('booking.attendee.create', $booking) }}">@lang('add them directly')</a>.
+                                    href="{{ route('booking.attendee.create', $booking) }}">{{ __('add them directly') }}</a>.
                             </p>
                         </fieldset>
 
@@ -60,25 +60,21 @@
                                 x-bind:disabled="submitted || form.user_ids.length == 0" :label="__('Send Invitations')"
                                 x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Send Invitations') }}'" />
 
-                            <x-button.secondary :href="route('booking.show', $booking)">
-                                @lang('Back')
-                            </x-button.secondary>
+                            <x-button.secondary :href="route('booking.show', $booking)" :label="__('Back')" />
                         </footer>
                     </form>
                 @else
                     <h3 class="text-lg font-semibold border-b border-gray-800 dark:border-gray-200 w-full">
-                        @lang('Invite Attendees')</h3>
-                    <p class="mt-2">@lang('All eligible users have already been invited to this booking.')</p>
+                        {{ __('Invite Attendees') }}</h3>
+                    <p class="mt-2">{{ __('All eligible users have already been invited to this booking.') }}</p>
                     <p class="text-sm mt-2">
-                        @lang('Someone missing? Only users who have verified their email address will appear here.')
-                        @lang('If you know their availability you may be able to ')
+                        {{ __('Someone missing? Only users who have verified their email address will appear here.') }}
+                        {{ __('If you know their availability you may be able to ') }}
                         <a class="hover:underline"
-                            href="{{ route('booking.attendee.create', $booking) }}">@lang('add them directly')</a>.
+                            href="{{ route('booking.attendee.create', $booking) }}">{{ __('add them directly') }}</a>.
                     </p>
                     <footer class="flex flex-wrap items-start gap-4 pt-4">
-                        <x-button.secondary :href="route('booking.show', $booking)">
-                            @lang('Back')
-                        </x-button.secondary>
+                        <x-button.secondary :href="route('booking.show', $booking)" :label="__('Back')" />
                     </footer>
                 @endif
             </div>

@@ -4,7 +4,7 @@
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100 flex items-center gap-3">
                     <x-icon.news style="height: .75lh" class="fill-current" aria-hidden="true" />
-                    <span>@lang('News')</span>
+                    <span>{{ __('News') }}</span>
                 </h1>
 
                 @can('create', \App\Models\NewsPost::class)
@@ -23,7 +23,8 @@
                     <div class="text-gray-700 dark:text-gray-300">
                         {!! $post->summary !!}
                     </div>
-                    <p><a href="{{ route('news.show', $post) }}" class="underline font-medium">@lang('Read more...')</a></p>
+                    <p><a href="{{ route('news.show', $post) }}" class="underline font-medium">
+                            {{ __('Read more...') }}</a></p>
                 </article>
             @endforeach
         </div>

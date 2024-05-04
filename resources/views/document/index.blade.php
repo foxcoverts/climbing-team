@@ -3,12 +3,12 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Documents')
+                    {{ __('Documents') }}
                 </h1>
 
                 @can('create', App\Models\Document::class)
                     <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('document.create')">@lang('Upload')</x-button.primary>
+                        <x-button.primary :href="route('document.create')" :label="__('Upload')" />
                     </nav>
                 @endcan
             </div>
@@ -29,7 +29,7 @@
                                     <x-markdown :text="$document->description" />
                                 </div>
                             @endif
-                            <p><dfn class="not-italic font-medium">@lang('Updated')</dfn>:
+                            <p><dfn class="not-italic font-medium">{{ __('Updated') }}</dfn>:
                                 <span x-data="{{ Js::from(['updated_at' => localDate($document->updated_at)]) }}"
                                     x-text="dateTimeString(updated_at)">{{ localDate($document->updated_at)->toDayDateTimeString() }}</span>
                             </p>
@@ -42,7 +42,7 @@
             @empty
                 <div class="py-2 px-4 sm:px-8">
                     <div class="max-w-prose">
-                        @lang('No documents have been uploaded yet.')
+                        {{ __('No documents have been uploaded yet.') }}
                     </div>
                 </div>
             @endforelse
@@ -52,7 +52,8 @@
                     <div class="py-2 px-4 sm:px-8 hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                         @click="window.location={{ Js::from(route('trash.document.index')) }}">
                         <div class="max-w-prose text-right">
-                            <a href="{{ route('trash.document.index') }}" class="block">@lang('View deleted documents')</a>
+                            <a href="{{ route('trash.document.index') }}" class="block">
+                                {{ __('View deleted documents') }}</a>
                         </div>
                     </div>
                 @endif

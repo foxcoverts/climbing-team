@@ -44,7 +44,7 @@
                                         class="flex items-center space-x-1">
                                         <x-icon.cheveron.down aria-hidden="true"
                                             class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
-                                        <span>@lang('Qualifications')</span>
+                                        <span>{{ __('Qualifications') }}</span>
                                     </button>
                                 </h3>
                                 <div class="mb-3" x-cloak x-show="open" x-transition>
@@ -57,17 +57,17 @@
                                                         {{ $qualification->detail->summary }}</h4>
                                                     @if ($qualification->detail instanceof \App\Models\ScoutPermit)
                                                         <p><dfn
-                                                                class="not-italic font-medium text-gray-900 dark:text-gray-100">@lang('Restrictions'):</dfn>
+                                                                class="not-italic font-medium text-gray-900 dark:text-gray-100">{{ __('Restrictions') }}:</dfn>
                                                             {{ $qualification->detail->restrictions }}
                                                         </p>
                                                     @endif
                                                     @if ($qualification->expires_on)
                                                         <p><dfn
-                                                                class="not-italic font-medium text-gray-900 dark:text-gray-100">@lang('Expires')</dfn>
+                                                                class="not-italic font-medium text-gray-900 dark:text-gray-100">{{ __('Expires') }}</dfn>
                                                             <span class="cursor-default"
                                                                 title="{{ $qualification->expires_on->toFormattedDayDateString() }}">
                                                                 @if ($qualification->expires_on->isToday())
-                                                                    @lang('today')
+                                                                    {{ __('today') }}
                                                                 @else
                                                                     {{ $qualification->expires_on->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]) }}
                                                                 @endif
@@ -77,7 +77,7 @@
                                                 </div>
                                             </div>
                                         @empty
-                                            <p class="px-3 py-2">@lang('This user has no qualifications.')</p>
+                                            <p class="px-3 py-2">{{ __('This user has no qualifications.') }}</p>
                                         @endforelse
                                     </div>
                                 </div>
@@ -96,25 +96,26 @@
                                         class="flex items-center space-x-1">
                                         <x-icon.cheveron.down aria-hidden="true"
                                             class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
-                                        <span>@lang('Contact Details')</span>
+                                        <span>{{ __('Contact Details') }}</span>
                                     </button>
                                 </h3>
                                 <div class="mb-3 space-y-4" x-cloak x-show="open" x-transition>
                                     <div class="space-y-2" :class="gdprContact && 'text-gray-600 dark:text-gray-400'">
-                                        <p><strong>@lang('Notice'):</strong>
-                                            @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
+                                        <p><strong>{{ __('Notice') }}:</strong>
+                                            {{ __('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.') }}
                                         </p>
                                         <p>
                                             <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
                                                 <x-icon.outline class="mt-1 w-4 h-4 fill-current" x-show="!gdprContact" />
                                                 <x-icon.outline.checkmark class="mt-1 w-4 h-4 fill-current" x-cloak
                                                     x-show="gdprContact" />
-                                                <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
+                                                <span
+                                                    class="text-left">{{ __('I have a legitimate reason to view these contact details') }}</span>
                                             </button>
                                         </p>
                                     </div>
                                     <div x-cloak x-show="gdprContact" class="space-y-2">
-                                        <p>@lang('Phone'): <a
+                                        <p>{{ __('Phone') }}: <a
                                                 class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                                                 href="tel:{{ $attendee->phone?->formatForMobileDialingInCountry('GB') }}">{{ $attendee->phone?->formatForCountry('GB') }}</a>
                                         </p>
@@ -132,31 +133,34 @@
                                     class="flex items-center space-x-1">
                                     <x-icon.cheveron.down aria-hidden="true"
                                         class="w-4 h-4 fill-current transition-transform" ::class="open ? '' : '-rotate-90'" />
-                                    <span>@lang('Emergency Contact')</span>
+                                    <span>{{ __('Emergency Contact') }}</span>
                                 </button>
                             </h3>
                             <div class="mb-3 space-y-4" x-cloak x-show="open" x-transition>
                                 @if (!$booking->isToday())
-                                    <p>@lang('You may only access emergency contact details on the day of the booking. If you need these details now please contact the Team Leader or District Lead Volunteer who will look them up for you.')</p>
+                                    <p>{{ __('You may only access emergency contact details on the day of the booking. If you need these details now please contact the Team Leader or District Lead Volunteer who will look them up for you.') }}
+                                    </p>
                                 @elseif (empty($attendee->emergency_phone))
-                                    <p>@lang('No emergency contact has been provided by this member. If you need these details please contact the Team Leader or District Lead Volunteer who will look them up from the Scouts records.')</p>
+                                    <p>{{ __('No emergency contact has been provided by this member. If you need these details please contact the Team Leader or District Lead Volunteer who will look them up from the Scouts records.') }}
+                                    </p>
                                 @else
                                     <div class="space-y-2" :class="gdprContact && 'text-gray-600 dark:text-gray-400'">
-                                        <p><strong>@lang('Notice'):</strong>
-                                            @lang('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.')
+                                        <p><strong>{{ __('Notice') }}:</strong>
+                                            {{ __('You may only use these details to contact team members regarding legitimate Climbing Team matters. Any other use of these contact details, no matter how well intended, will be in breach of UK data protection laws.') }}
                                         </p>
                                         <p>
                                             <button class="flex items-start pl-1 gap-2" @click="gdprContact = !gdprContact">
                                                 <x-icon.outline class="my-1 w-4 h-4 fill-current" x-show="!gdprContact" />
                                                 <x-icon.outline.checkmark class="my-1 w-4 h-4 fill-current" x-cloak
                                                     x-show="gdprContact" />
-                                                <span class="text-left">@lang('I have a legitimate reason to view these contact details')</span>
+                                                <span
+                                                    class="text-left">{{ __('I have a legitimate reason to view these contact details') }}</span>
                                             </button>
                                         </p>
                                     </div>
                                     <div x-cloak x-show="gdprContact" class="space-y-2">
-                                        <p>@lang('Name'): {{ $attendee->emergency_name }}</p>
-                                        <p>@lang('Phone'): <a
+                                        <p>{{ __('Name') }}: {{ $attendee->emergency_name }}</p>
+                                        <p>{{ __('Phone') }}: <a
                                                 class="underline text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                                                 href="tel:{{ $attendee->emergency_phone?->formatForMobileDialingInCountry('GB') }}">{{ $attendee->emergency_phone?->formatForCountry('GB') }}</a>
                                         </p>
@@ -176,9 +180,7 @@
                         @include('booking.attendee.delete-button')
                     @endcan
 
-                    <x-button.secondary :href="route('booking.show', $booking)">
-                        @lang('Back')
-                    </x-button.secondary>
+                    <x-button.secondary :href="route('booking.show', $booking)" :label="__('Back')" />
                 </footer>
             </div>
 

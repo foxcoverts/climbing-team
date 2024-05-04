@@ -1,11 +1,11 @@
 <section class="max-w-xl">
     <header>
         <h2 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-            @lang('Update Password')
+            {{ __('Update Password') }}
         </h2>
 
         <p class="mt-1 text-md text-gray-600 dark:text-gray-400">
-            @lang('Ensure your account is using a long, random password to stay secure.')
+            {{ __('Ensure your account is using a long, random password to stay secure.') }}
         </p>
     </header>
 
@@ -41,7 +41,7 @@
 
             @if (session('status') === 'password-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400">@lang('Saved.')</p>
+                    class="text-sm text-gray-600 dark:text-gray-400">{{ __('Saved.') }}</p>
             @endif
         </div>
     </form>

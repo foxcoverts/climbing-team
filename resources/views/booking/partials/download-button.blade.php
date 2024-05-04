@@ -15,10 +15,10 @@
             <div class="py-1" role="none">
                 <a href="{{ route('booking.show.ics', $booking) }}"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 active:bg-gray-100 active:text-gray-900 focus:bg-gray-100 focus:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white dark:active:bg-gray-700 dark:active:text-white dark:focus:bg-gray-700 dark:focus:text-white"
-                    role="menuitem">@lang('Add to Calendar')</a>
+                    role="menuitem">{{ __('Add to Calendar') }}</a>
                 <a href="{{ route('booking.email', $booking) }}"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 active:bg-gray-100 active:text-gray-900 focus:bg-gray-100 focus:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white dark:active:bg-gray-700 dark:active:text-white dark:focus:bg-gray-700 dark:focus:text-white"
-                    role="menuitem">@lang('Send to Email')</a>
+                    role="menuitem">{{ __('Send to Email') }}</a>
             </div>
         </div>
     </div>

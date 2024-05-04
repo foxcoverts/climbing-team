@@ -3,7 +3,7 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    @lang('Upload Document')
+                    {{ __('Upload Document') }}
                 </h1>
             </div>
         </header>
@@ -47,7 +47,8 @@
                         <x-text-input id="file_name" name="file_name" required pattern="[\w\-. ]+"
                             title="Letters, numbers, hyphens (-), periods (.), and spaces only" class="block w-3/4"
                             x-model="form.file_name" x-bind:disabled="!form.file_name" />
-                        <p class="text-sm">@lang('This is the filename that a user will see when they download the document.')</p>
+                        <p class="text-sm">
+                            {{ __('This is the filename that a user will see when they download the document.') }}</p>
                         <x-input-error class="mt-2" :messages="$errors->get('file_name')" />
                     </div>
 
@@ -84,9 +85,7 @@
                         x-text="submitted ? {{ Js::from(__('Please wait...')) }} : {{ Js::from(__('Upload')) }}" />
 
                     @can('viewAny', App\Models\Document::class)
-                        <x-button.secondary :href="route('document.index')">
-                            @lang('Back')
-                        </x-button.secondary>
+                        <x-button.secondary :href="route('document.index')" :label="__('Back')" />
                     @endcan
                 </footer>
             </form>

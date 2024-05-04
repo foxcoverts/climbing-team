@@ -4,7 +4,7 @@
             <div class="px-4 sm:px-8">
                 <div class="py-2 flex flex-wrap min-h-16 max-w-prose items-center justify-between gap-2">
                     <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                        @lang('Report Incident')
+                        {{ __('Report Incident') }}
                     </h1>
                 </div>
             </div>
@@ -73,7 +73,7 @@
 
             <div class="space-y-6 max-w-prose">
                 <fieldset class="space-y-4">
-                    <legend class="text-xl font-medium">@lang('When/Where did the incident happened?')</legend>
+                    <legend class="text-xl font-medium">{{ __('When/Where did the incident happened?') }}</legend>
 
                     <div class="flex flex-wrap gap-6">
                         <div>
@@ -100,7 +100,7 @@
 
                     <div>
                         <x-input-label for="location_description" :value="__('Location Description')" />
-                        <p class="text-sm mt-1">@lang('Please tell us where the incident occurred.')</p>
+                        <p class="text-sm mt-1">{{ __('Please tell us where the incident occurred.') }}</p>
                         <x-text-input id="location_description" name="location_description"
                             x-model="form.location_description" class="mt-1 w-full" required
                             :placeholder="__('For example: back steps, warden\'s hut, by the picnic bench.')"></x-textarea>
@@ -109,24 +109,24 @@
                 </fieldset>
 
                 <fieldset class="space-y-2">
-                    <legend class="text-xl font-medium">@lang('Was anyone injured?')</legend>
+                    <legend class="text-xl font-medium">{{ __('Was anyone injured?') }}</legend>
 
                     <x-input-label>
                         <input type="radio" name="injured" value="yes" required x-model="form.injured" />
-                        @lang('Yes')
+                        {{ __('Yes') }}
                     </x-input-label>
                     <x-input-label>
                         <input type="radio" name="injured" value="no" required x-model="form.injured" />
-                        @lang('No')
+                        {{ __('No') }}
                     </x-input-label>
                 </fieldset>
 
                 <fieldset class="space-y-4">
                     <template x-if="form.injured != 'yes'">
-                        <legend class="text-xl font-medium">@lang('Who was involved in this incident?')</legend>
+                        <legend class="text-xl font-medium">{{ __('Who was involved in this incident?') }}</legend>
                     </template>
                     <template x-if="form.injured == 'yes'">
-                        <legend class="text-xl font-medium">@lang('Who was injured?')</legend>
+                        <legend class="text-xl font-medium">{{ __('Who was injured?') }}</legend>
                     </template>
 
                     <template x-if="form.injured == 'yes'">
@@ -168,9 +168,9 @@
                                 <option value="" selected disabled></option>
                             </template>
                             @foreach (App\Enums\Incident\MembershipType::groups() as $label => $options)
-                                <optgroup label="@lang($label)">
+                                <optgroup label="{{ __($label) }}">
                                     @foreach ($options as $option)
-                                        <option value="{{ $option->value }}">@lang($option->value)</option>
+                                        <option value="{{ $option->value }}">{{ __($option->value) }}</option>
                                     @endforeach
                                 </optgroup>
                             @endforeach
@@ -217,12 +217,12 @@
 
                 <template x-if="form.injured == 'yes'">
                     <fieldset id="injuries" class="space-y-2" x-init="checkInjuries(form.injuries)">
-                        <legend class="text-xl font-medium">@lang('What were the injuries?')</legend>
+                        <legend class="text-xl font-medium">{{ __('What were the injuries?') }}</legend>
 
                         @foreach (App\Enums\Incident\Injury::cases() as $option)
                             <x-input-label>
                                 <x-input-checkbox name="injuries[]" :value="$option->value" x-model="form.injuries" />
-                                @lang($option->value)
+                                {{ __($option->value) }}
                             </x-input-label>
                         @endforeach
                     </fieldset>
@@ -230,55 +230,56 @@
 
                 <template x-if="form.injured == 'yes'">
                     <fieldset class="space-y-2">
-                        <legend class="text-xl font-medium">@lang('Did the emergency services attend?')</legend>
+                        <legend class="text-xl font-medium">{{ __('Did the emergency services attend?') }}</legend>
 
                         <x-input-label for="emergency_services_yes">
                             <input type="radio" id="emergency_services_yes" name="emergency_services"
                                 value="yes" x-model="form.emergency_services" />
-                            @lang('Yes')
+                            {{ __('Yes') }}
                         </x-input-label>
                         <x-input-label for="emergency_services_no">
                             <input type="radio" id="emergency_services_no" name="emergency_services"
                                 value="no" x-model="form.emergency_services" />
-                            @lang('No')
+                            {{ __('No') }}
                         </x-input-label>
                     </fieldset>
                 </template>
 
                 <template x-if="form.injured == 'yes'">
                     <fieldset class="space-y-2">
-                        <legend class="text-xl font-medium">@lang('Did the injured person go directly to hospital for treatment?')</legend>
+                        <legend class="text-xl font-medium">
+                            {{ __('Did the injured person go directly to hospital for treatment?') }}</legend>
 
                         <x-input-label for="hospital_yes">
                             <input type="radio" id="hospital_yes" name="hospital" value="yes"
                                 x-model="form.hospital" />
-                            @lang('Yes')
+                            {{ __('Yes') }}
                         </x-input-label>
                         <x-input-label for="hospital_no">
                             <input type="radio" id="hospital_no" name="hospital" value="no"
                                 x-model="form.hospital" />
-                            @lang('No')
+                            {{ __('No') }}
                         </x-input-label>
                     </fieldset>
                 </template>
 
                 <fieldset class="space-y-2">
-                    <legend class="text-xl font-medium">@lang('Was any property or equipment damaged?')</legend>
+                    <legend class="text-xl font-medium">{{ __('Was any property or equipment damaged?') }}</legend>
 
                     <x-input-label for="damaged_yes">
                         <input type="radio" id="damaged_yes" name="damaged" value="yes"
                             x-model="form.damaged" />
-                        @lang('Yes')
+                        {{ __('Yes') }}
                     </x-input-label>
                     <x-input-label for="damaged_no">
                         <input type="radio" id="damaged_no" name="damaged" value="no"
                             x-model="form.damaged" />
-                        @lang('No')
+                        {{ __('No') }}
                     </x-input-label>
                 </fieldset>
 
                 <fieldset class="space-y-4">
-                    <legend class="text-xl font-medium">@lang('Details of accident, injury or near miss')</legend>
+                    <legend class="text-xl font-medium">{{ __('Details of accident, injury or near miss') }}</legend>
 
                     <div>
                         <x-input-label for="details" :value="__('What happened?')" />
@@ -298,7 +299,7 @@
                 </fieldset>
 
                 <fieldset class="space-y-4">
-                    <legend class="text-xl font-medium">@lang('Your contact details')</legend>
+                    <legend class="text-xl font-medium">{{ __('Your contact details') }}</legend>
 
                     <div>
                         <x-input-label for="reporter_name" :value="__('Your Name')" />

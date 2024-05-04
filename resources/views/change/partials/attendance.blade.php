@@ -7,15 +7,15 @@
         ])
         @switch ($attendee->attendee_status)
             @case(AttendeeStatus::Accepted)
-                @lang('will be going to')
+                {{ __('will be going to') }}
             @break
 
             @case(AttendeeStatus::Tentative)
-                @lang('may be able to attend')
+                {{ __('may be able to attend') }}
             @break
 
             @case(AttendeeStatus::Declined)
-                @lang('cannot attend')
+                {{ __('cannot attend') }}
             @break
         @endswitch
         @include($booking_link, [
@@ -29,7 +29,7 @@
                 'booking' => $change->booking,
                 'attendee' => $change->author,
             ])
-            @lang('commented')
+            {{ __('commented') }}
             @include($booking_link, [
                 'booking' => $change->booking,
                 'before' => 'on ',
