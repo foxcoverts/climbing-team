@@ -49,7 +49,7 @@
     [
         'actionText' => __('View Booking'),
     ]
-) <span class="break-all">{{ $booking_url }}</span>
+) <x-mail::url-link>{{ $booking_url }}</x-mail::url-link>
 </x-slot:subcopy>
 
 @lang('Thanks,')<br>
