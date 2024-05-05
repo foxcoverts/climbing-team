@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Symfony\Component\HttpFoundation\Response;
 
 class RespondController extends Controller
@@ -42,7 +43,8 @@ class RespondController extends Controller
      */
     public function accept(Request $request, Booking $booking, User $attendee): RedirectResponse
     {
-        return $this->store($request, $booking, $attendee, AttendeeStatus::Accepted);
+        return $this->avoidBots($request, $booking, $attendee)
+            ?? $this->store($request, $booking, $attendee, AttendeeStatus::Accepted);
     }
 
     /**
@@ -50,7 +52,8 @@ class RespondController extends Controller
      */
     public function tentative(Request $request, Booking $booking, User $attendee): RedirectResponse
     {
-        return $this->store($request, $booking, $attendee, AttendeeStatus::Tentative);
+        return $this->avoidBots($request, $booking, $attendee)
+            ?? $this->store($request, $booking, $attendee, AttendeeStatus::Tentative);
     }
 
     /**
@@ -58,7 +61,8 @@ class RespondController extends Controller
      */
     public function decline(Request $request, Booking $booking, User $attendee): RedirectResponse
     {
-        return $this->store($request, $booking, $attendee, AttendeeStatus::Declined);
+        return $this->avoidBots($request, $booking, $attendee)
+            ?? $this->store($request, $booking, $attendee, AttendeeStatus::Declined);
     }
 
     /**
@@ -69,6 +73,28 @@ class RespondController extends Controller
         $status = AttendeeStatus::tryFrom($request->input('status'));
 
         return $this->store($request, $booking, $attendee, $status);
+    }
+
+    /**
+     * Prevent bots from using the GET links to respond to a booking by
+     * redirecting them to the form and requiring active input from them.
+     *
+     * These GET links are provided in emails, and some email services visit
+     * every link to check they are not suspicious, sometimes causing actions
+     * to be taken.
+     */
+    protected function avoidBots(Request $request, Booking $booking, User $attendee): ?RedirectResponse
+    {
+        $agent = new CrawlerDetect($request->server());
+
+        if ($agent->isCrawler()) {
+            return redirect()->route('respond', [
+                $booking, $attendee,
+                'invite' => $attendee->attendance->token,
+            ]);
+        }
+
+        return null;
     }
 
     /**
