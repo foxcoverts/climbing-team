@@ -36,6 +36,15 @@ return [
 
     'mailers' => [
 
+        'smtp/sendgrid' => [
+            'transport' => 'failover',
+            'mailers' => [
+                'smtp',
+                'sendgrid',
+                'log',
+            ],
+        ],
+
         'smtp' => [
             'transport' => 'smtp',
             'url' => env('MAIL_URL'),
