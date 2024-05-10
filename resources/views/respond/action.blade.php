@@ -49,8 +49,24 @@
     <div
         class="my-4 space-y-4 p-4 border text-black bg-slate-100 border-slate-400 dark:text-white dark:bg-slate-900 dark:border-slate-600">
         <form action="{{ route('respond.store', [$booking, $user]) }}" method="POST" x-data="{
+            start: new Date,
+            message: '',
+            timer: null,
+            tick() {
+                var remaining = 5 - Math.floor((new Date - this.start) / 1000);
+                if (remaining <= 0) {
+                    clearInterval(this.timer);
+                    this.message = {{ Js::from('Saving your response!') }};
+                    this.$root.requestSubmit();
+                } else if (remaining == 1) {
+                    this.message = {{ Js::from('Saving in 1 second') }};
+                } else {
+                    this.message = {{ Js::from('Saving in REMAINING seconds') }}.replace('REMAINING', remaining);
+                }
+            },
             init() {
-                this.$root.requestSubmit();
+                this.timer = setInterval(() => this.tick(), 500);
+                this.tick();
             }
         }">
             @csrf
@@ -59,9 +75,10 @@
             <input type="hidden" name="status" value="{{ $status->value }}" />
 
             <div class="space-y-4">
-                <p class="text-lg text-center" x-text="{{ Js::from(__('Saving your response...')) }}">
+                <h2 class="text-lg text-center">
                     {{ __('Please wait...') }}
-                </p>
+                </h2>
+                <p class="text-md text-center" x-text="message">&nbsp;</p>
             </div>
         </form>
     </div>
