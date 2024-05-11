@@ -35,9 +35,11 @@ body::-webkit-scrollbar {
 :root {
     --fc-list-event-hover-bg-color: rgba(0, 0, 0, 0.15);
 }
+
 @media (prefers-color-scheme: dark) {
     :root {
-        --fc-page-bg-color: #111827; /* grey-900 */
+        /* grey-900 */
+        --fc-page-bg-color: #111827;
         --fc-list-event-hover-bg-color: rgba(255, 255, 255, 0.1);
     }
 }
@@ -47,19 +49,24 @@ body::-webkit-scrollbar {
     padding-right: 1rem;
     margin: 0;
 }
+
 .fc .fc-view-harness {
     padding: 1rem;
 }
+
 @media (min-width: 640px) {
     .fc .fc-toolbar.fc-header-toolbar {
         border-bottom-width: 1px;
         padding-left: 2rem;
         padding-right: 2rem;
     }
+
     .fc .fc-view-harness {
         padding: 2rem;
+        padding-top: 1.5rem;
     }
 }
+
 .fc .fc-toolbar-title {
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -67,14 +74,17 @@ body::-webkit-scrollbar {
     line-height: 2rem;
     font-weight: 500;
 }
+
 .fc .fc-toolbar {
     flex-wrap: wrap;
     column-gap: 0.75em;
 }
-.fc .fc-toolbar > .fc-toolbar-chunk:last-child {
+
+.fc .fc-toolbar>.fc-toolbar-chunk:last-child {
     flex-grow: 1;
     text-align: right;
 }
+
 .fc-event:hover {
     opacity: 1 !important;
 }
