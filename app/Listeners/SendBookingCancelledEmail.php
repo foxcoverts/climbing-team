@@ -19,7 +19,8 @@ class SendBookingCancelledEmail
                 Mail::to($attendee->email)
                     ->send(new MailBookingCancelled(
                         $event->booking,
-                        $attendee
+                        $attendee,
+                        $event->reason
                     ));
             }
         }

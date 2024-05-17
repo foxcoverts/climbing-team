@@ -151,6 +151,26 @@ class BookingController extends Controller
     }
 
     /**
+     * Show the form for cancelling a booking.
+     */
+    public function cancel(Request $request, Booking $booking): View|RedirectResponse
+    {
+        Gate::authorize('update', $booking);
+
+        if ($booking->isCancelled()) {
+            return redirect()->route('booking.edit', $booking)->with('alert', [
+                'message' => __('This booking has already been cancelled.'),
+                'type' => 'error',
+            ]);
+        }
+
+        return view('booking.cancel', [
+            'booking' => $booking,
+            'currentUser' => $request->user(),
+        ]);
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateBookingRequest $request, Booking $booking): RedirectResponse
@@ -158,7 +178,7 @@ class BookingController extends Controller
         Gate::authorize('update', $booking);
 
         $originalStatus = $booking->status;
-        $booking->fill($request->safe()->except('start_date', 'start_time', 'end_time'));
+        $booking->fill($request->safe()->except('start_date', 'start_time', 'end_time', 'reason'));
         if ($request->safe()->has('start_time')) {
             $booking->start_at = Carbon::parse(
                 $request->safe()->start_date.'T'.$request->safe()->start_time,
@@ -211,7 +231,7 @@ class BookingController extends Controller
                     ->where('status', AttendeeStatus::NeedsAction)
                     ->delete();
                 $booking->refresh();
-                event(new BookingCancelled($booking, $request->user(), $booking->getChanges()));
+                event(new BookingCancelled($booking, $request->user(), $request->safe()->reason));
                 $alertMessage = __('Booking cancelled');
             }
         } elseif ($booking->wasChanged(['sequence'])) {
