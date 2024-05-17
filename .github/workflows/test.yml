@@ -38,6 +38,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - run: corepack enable
+
       - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
