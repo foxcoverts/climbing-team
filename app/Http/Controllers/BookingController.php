@@ -176,6 +176,7 @@ class BookingController extends Controller
         }
         $booking->save();
 
+        $alertMessage = __('Booking updated');
         if ($originalStatus != $booking->status) {
             if ($originalStatus == BookingStatus::Cancelled) {
                 // When restoring a cancelled booking, re-invite any 'Going' and 'Maybe' attendees.
@@ -200,8 +201,10 @@ class BookingController extends Controller
                     event(new BookingInvite($booking, $user));
                 }
                 event(new BookingRestored($booking, $request->user(), $booking->getChanges()));
+                $alertMessage = __('Booking restored');
             } elseif ($booking->isConfirmed()) {
                 event(new BookingConfirmed($booking, $request->user(), $booking->getChanges()));
+                $alertMessage = __('Booking confirmed');
             } elseif ($booking->isCancelled()) {
                 // Remove attendees with outstanding invites.
                 Attendance::where('booking_id', $booking->id)
@@ -209,13 +212,13 @@ class BookingController extends Controller
                     ->delete();
                 $booking->refresh();
                 event(new BookingCancelled($booking, $request->user(), $booking->getChanges()));
+                $alertMessage = __('Booking cancelled');
             }
         } elseif ($booking->wasChanged(['sequence'])) {
             event(new BookingChanged($booking, $request->user(), $booking->getChanges()));
         }
 
-        return redirect()->route('booking.show', $booking)
-            ->with('alert.info', __('Booking updated successfully'));
+        return redirect()->route('booking.show', $booking)->with('alert', ['message' => $alertMessage]);
     }
 
     /**
