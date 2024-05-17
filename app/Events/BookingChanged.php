@@ -15,8 +15,8 @@ class BookingChanged
      */
     public function __construct(
         public Booking $booking,
-        public array $changes,
         public User $author,
+        public array $changes,
     ) {
     }
 }

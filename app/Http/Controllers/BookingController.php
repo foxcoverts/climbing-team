@@ -199,19 +199,19 @@ class BookingController extends Controller
                 foreach (User::find($invites) as $user) {
                     event(new BookingInvite($booking, $user));
                 }
-                event(new BookingRestored($booking, $booking->getChanges(), $request->user()));
+                event(new BookingRestored($booking, $request->user(), $booking->getChanges()));
             } elseif ($booking->isConfirmed()) {
-                event(new BookingConfirmed($booking, $booking->getChanges(), $request->user()));
+                event(new BookingConfirmed($booking, $request->user(), $booking->getChanges()));
             } elseif ($booking->isCancelled()) {
                 // Remove attendees with outstanding invites.
                 Attendance::where('booking_id', $booking->id)
                     ->where('status', AttendeeStatus::NeedsAction)
                     ->delete();
                 $booking->refresh();
-                event(new BookingCancelled($booking, $booking->getChanges(), $request->user()));
+                event(new BookingCancelled($booking, $request->user(), $booking->getChanges()));
             }
         } elseif ($booking->wasChanged(['sequence'])) {
-            event(new BookingChanged($booking, $booking->getChanges(), $request->user()));
+            event(new BookingChanged($booking, $request->user(), $booking->getChanges()));
         }
 
         return redirect()->route('booking.show', $booking)
