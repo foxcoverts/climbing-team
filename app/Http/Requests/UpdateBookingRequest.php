@@ -33,6 +33,9 @@ class UpdateBookingRequest extends FormRequest
             ],
             'lead_instructor_notes' => ['sometimes', 'nullable', 'string'],
 
+            // Cancellation Reason, when new status is cancelled
+            'reason' => ['required_if:status,'.BookingStatus::Cancelled->value, 'string'],
+
             'status' => [
                 'sometimes', 'required',
                 Rule::enum(BookingStatus::class)
@@ -62,6 +65,14 @@ class UpdateBookingRequest extends FormRequest
             'lead_instructor_id' => __('Lead Instructor'),
             'lead_instructor_notes' => __('Lead Instructor Notes'),
             'status' => __('Status'),
+            'reason' => __('Reason'),
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'reason.required_if' => __('Please provide the reason for cancelling this booking.'),
         ];
     }
 }

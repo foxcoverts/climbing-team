@@ -3,7 +3,12 @@
 # {{ $title }}
 
 <x-mail::panel>
-@lang('This booking has been cancelled.')
+@empty($reason)
+**@lang('This booking has been cancelled')**
+@else
+**@lang('Reason'):**<br>
+{{ $reason }}
+@endempty
 </x-mail::panel>
 
 **@lang('When')**<br>

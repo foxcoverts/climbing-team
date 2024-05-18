@@ -151,6 +151,27 @@ class BookingController extends Controller
     }
 
     /**
+     * Show the form for cancelling a booking.
+     */
+    public function cancel(Request $request, Booking $booking): View|RedirectResponse
+    {
+        Gate::authorize('update', $booking);
+
+        if ($booking->isCancelled()) {
+            return redirect()->route('booking.edit', $booking)->with('alert', [
+                'message' => __('This booking has already been cancelled.'),
+                'type' => 'error',
+            ]);
+        }
+
+        return view('booking.cancel', [
+            'ajax' => $request->ajax(),
+            'booking' => $booking,
+            'currentUser' => $request->user(),
+        ]);
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateBookingRequest $request, Booking $booking): RedirectResponse
@@ -158,7 +179,7 @@ class BookingController extends Controller
         Gate::authorize('update', $booking);
 
         $originalStatus = $booking->status;
-        $booking->fill($request->safe()->except('start_date', 'start_time', 'end_time'));
+        $booking->fill($request->safe()->except('start_date', 'start_time', 'end_time', 'reason'));
         if ($request->safe()->has('start_time')) {
             $booking->start_at = Carbon::parse(
                 $request->safe()->start_date.'T'.$request->safe()->start_time,
@@ -176,6 +197,7 @@ class BookingController extends Controller
         }
         $booking->save();
 
+        $alertMessage = __('Booking updated');
         if ($originalStatus != $booking->status) {
             if ($originalStatus == BookingStatus::Cancelled) {
                 // When restoring a cancelled booking, re-invite any 'Going' and 'Maybe' attendees.
@@ -199,23 +221,25 @@ class BookingController extends Controller
                 foreach (User::find($invites) as $user) {
                     event(new BookingInvite($booking, $user));
                 }
-                event(new BookingRestored($booking, $booking->getChanges(), $request->user()));
+                event(new BookingRestored($booking, $request->user(), $booking->getChanges()));
+                $alertMessage = __('Booking restored');
             } elseif ($booking->isConfirmed()) {
-                event(new BookingConfirmed($booking, $booking->getChanges(), $request->user()));
+                event(new BookingConfirmed($booking, $request->user(), $booking->getChanges()));
+                $alertMessage = __('Booking confirmed');
             } elseif ($booking->isCancelled()) {
                 // Remove attendees with outstanding invites.
                 Attendance::where('booking_id', $booking->id)
                     ->where('status', AttendeeStatus::NeedsAction)
                     ->delete();
                 $booking->refresh();
-                event(new BookingCancelled($booking, $booking->getChanges(), $request->user()));
+                event(new BookingCancelled($booking, $request->user(), $request->safe()->reason));
+                $alertMessage = __('Booking cancelled');
             }
         } elseif ($booking->wasChanged(['sequence'])) {
-            event(new BookingChanged($booking, $booking->getChanges(), $request->user()));
+            event(new BookingChanged($booking, $request->user(), $booking->getChanges()));
         }
 
-        return redirect()->route('booking.show', $booking)
-            ->with('alert.info', __('Booking updated successfully'));
+        return redirect()->route('booking.show', $booking)->with('alert', ['message' => $alertMessage]);
     }
 
     /**

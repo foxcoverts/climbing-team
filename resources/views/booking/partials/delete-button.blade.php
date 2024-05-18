@@ -13,14 +13,12 @@
     @endcan
 @elseif ($booking->isFuture())
     @can('update', $booking)
-        <form method="post" action="{{ route('booking.update', $booking) }}" x-data="{ submitted: false }"
-            x-on:submit="setTimeout(() => submitted = true, 0)">
-            @csrf
-            @method('patch')
-            <input type="hidden" name="status" value="{{ BookingStatus::Cancelled }}" />
+        <x-button.danger :href="route('booking.cancel', $booking)" :label="__('Cancel')" x-target="cancel-booking"
+            @ajax:before="$dispatch('dialog:open:cancel-booking')" />
 
-            <x-button.danger x-bind:disabled="submitted" :label="__('Cancel')"
-                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Cancel') }}'" />
-        </form>
+        <dialog x-init @dialog:open:cancel-booking.window="$el.showModal()" @ajax:success="$el.close()"
+            @click="if ($event.target === $el) $el.close()" class="bg-white dark:bg-gray-900 p-4">
+            <form id="cancel-booking"></form>
+        </dialog>
     @endcan
 @endif

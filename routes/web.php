@@ -64,6 +64,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('booking.comment', BookingCommentController::class)->shallow()->only('store', 'update', 'destroy');
 
+    Route::get('booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+
     Route::get('booking/{booking}/email', BookingEmailController::class)->name('booking.email');
 
     Route::get('booking/{booking}/share', BookingShareController::class)->name('booking.share');
