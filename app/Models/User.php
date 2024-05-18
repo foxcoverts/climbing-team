@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\AsTimezone;
+use App\Casts\AsUniqueEnumCollection;
 use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Enums\Section;
@@ -15,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
@@ -39,6 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'timezone',
         'section',
         'role',
+        'accreditations',
         'ical_token',
     ];
 
@@ -63,18 +64,22 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'phone' => E164PhoneNumberCast::class.':GB',
-        'emergency_phone' => E164PhoneNumberCast::class.':GB',
-        'email_verified_at' => 'datetime',
-        'timezone' => AsTimezone::class,
-        'role' => Role::class,
-        'section' => Section::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'accreditations' => AsUniqueEnumCollection::of(Accreditation::class),
+            'email_verified_at' => 'datetime',
+            'emergency_phone' => E164PhoneNumberCast::class.':GB',
+            'phone' => E164PhoneNumberCast::class.':GB',
+            'role' => Role::class,
+            'section' => Section::class,
+            'timezone' => AsTimezone::class,
+        ];
+    }
 
     public function bookings(): BelongsToMany
     {
@@ -109,11 +114,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Qualification::class);
     }
 
-    public function user_accreditations(): HasMany
-    {
-        return $this->hasMany(UserAccreditation::class);
-    }
-
     public static function findByEmail(string $email): ?static
     {
         $interchangeable = [
@@ -131,35 +131,6 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return static::whereIn('email', $emails)->first();
-    }
-
-    public function getAccreditationsAttribute(): Collection
-    {
-        return $this->user_accreditations->pluck('accreditation');
-    }
-
-    /**
-     * Sync accreditations to the given list.
-     *
-     * @param  null|array<string|Accreditation>  $newAccreditations
-     * @return void
-     */
-    public function setAccreditationsAttribute($newAccreditations)
-    {
-        $accreditations = $this->accreditations->pluck('value');
-        $accreditationsToRemove = $accreditations->diff($newAccreditations);
-        $accreditationsToAdd = collect($newAccreditations)->diff($accreditations);
-
-        if ($accreditationsToRemove->count() > 0) {
-            $this->user_accreditations()->whereIn('accreditation', $accreditationsToRemove)->delete();
-        }
-        if ($accreditationsToAdd->count() > 0) {
-            $this->user_accreditations()->saveMany(
-                $accreditationsToAdd->map(
-                    fn ($accreditation) => new UserAccreditation(['accreditation' => $accreditation])
-                )
-            );
-        }
     }
 
     /**

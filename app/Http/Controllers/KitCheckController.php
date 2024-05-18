@@ -10,7 +10,6 @@ use App\Models\KitCheck;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -132,7 +131,7 @@ class KitCheckController extends Controller
     protected function getCheckers(User $user): Collection
     {
         if ($user->can('manage', KitCheck::class)) {
-            return User::whereHas('user_accreditations', fn (Builder $query) => $query->where('accreditation', Accreditation::KitChecker))
+            return User::whereRaw('FIND_IN_SET(?, accreditations)', [Accreditation::KitChecker->value])
                 ->orWhere('role', Role::TeamLeader)
                 ->orderBy('name')
                 ->get();
