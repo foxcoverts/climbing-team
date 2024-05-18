@@ -13,6 +13,12 @@
     @endcan
 @elseif ($booking->isFuture())
     @can('update', $booking)
-        <x-button.danger :href="route('booking.cancel', $booking)" :label="__('Cancel')" />
+        <x-button.danger :href="route('booking.cancel', $booking)" :label="__('Cancel')" x-target="cancel-booking"
+            @ajax:before="$dispatch('dialog:open:cancel-booking')" />
+
+        <dialog x-init @dialog:open:cancel-booking.window="$el.showModal()" @ajax:success="$el.close()"
+            @click="if ($event.target === $el) $el.close()" class="bg-white dark:bg-gray-900 p-4">
+            <form id="cancel-booking"></form>
+        </dialog>
     @endcan
 @endif

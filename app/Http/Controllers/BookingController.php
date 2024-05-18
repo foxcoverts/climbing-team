@@ -165,6 +165,7 @@ class BookingController extends Controller
         }
 
         return view('booking.cancel', [
+            'ajax' => $request->ajax(),
             'booking' => $booking,
             'currentUser' => $request->user(),
         ]);
