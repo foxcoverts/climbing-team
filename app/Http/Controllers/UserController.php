@@ -21,7 +21,7 @@ class UserController extends Controller
         Gate::authorize('viewAny', User::class);
 
         return view('user.index', [
-            'users' => User::orderBy('name')->with('keys', 'qualifications', 'user_accreditations')->get(),
+            'users' => User::orderBy('name')->with('keys', 'qualifications')->get(),
         ]);
     }
 
@@ -48,16 +48,10 @@ class UserController extends Controller
 
         $user = User::create(
             array_merge(
-                $request->safe()->except(['accreditations']),
+                $request->validated(),
                 ['password' => '']
             )
         );
-
-        if ($request->safe()->has('accreditations')) {
-            $user->accreditations = $request->safe()->accreditations;
-        } else {
-            $user->accreditations = [];
-        }
 
         event(new Registered($user));
 
@@ -113,7 +107,11 @@ class UserController extends Controller
     {
         Gate::authorize('update', $user);
 
-        $user->fill($request->safe()->except(['accreditations']));
+        if ($request->user()->can('accredit', $user) && ! $request->has('accreditations')) {
+            $user->accreditations = [];
+        }
+
+        $user->fill($request->validated());
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
@@ -122,12 +120,6 @@ class UserController extends Controller
 
         if ($user->wasChanged('email')) {
             $user->sendEmailVerificationNotification();
-        }
-
-        if ($request->safe()->has('accreditations')) {
-            $user->accreditations = $request->safe()->accreditations;
-        } else {
-            $user->accreditations = [];
         }
 
         return redirect()->route('user.show', $user)

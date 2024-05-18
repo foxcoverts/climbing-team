@@ -41,6 +41,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'timezone' => 'UTC',
             'role' => fake()->randomElement(Role::class)->value,
+            'accreditations' => '',
             'section' => fake()->randomElement(Section::class)->value,
             'phone' => fake()->optional()->e164PhoneNumber(),
             'emergency_name' => $emergency_name,

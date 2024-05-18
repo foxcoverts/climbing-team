@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\UserAccreditation;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        UserAccreditation::where('accreditation', 'permit-holder')->delete();
+        DB::table('user_accreditations')->where('accreditation', 'permit-holder')->delete();
 
         Schema::table('user_accreditations', function (Blueprint $table) {
             $table->enum('accreditation', [
