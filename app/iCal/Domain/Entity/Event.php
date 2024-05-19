@@ -13,6 +13,8 @@ class Event extends EluceoEvent
 
     private ?string $comment = null;
 
+    private ?string $htmlDescription = null;
+
     private ?Sequence $sequence = null;
 
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
@@ -70,6 +72,35 @@ class Event extends EluceoEvent
     public function unsetComment(): static
     {
         $this->comment = null;
+
+        return $this;
+    }
+
+    public function getHtmlDescription(): string
+    {
+        return $this->htmlDescription;
+    }
+
+    public function hasHtmlDescription(): bool
+    {
+        return $this->htmlDescription !== null;
+    }
+
+    public function setHtmlDescription(string $html, string $text): static
+    {
+        $this->htmlDescription = $html;
+        $this->setDescription($text);
+
+        return $this;
+    }
+
+    public function unsetHtmlDescription(bool $unsetText = true): static
+    {
+        $this->htmlDescription = null;
+
+        if ($unsetText) {
+            $this->unsetDescription();
+        }
 
         return $this;
     }

@@ -84,4 +84,63 @@ class EventTest extends TestCase
         // hasComment is false when comment is unset
         $this->assertFalse($event->hasComment());
     }
+
+    public function test_set_get_html_description(): void
+    {
+        $html = fake()->randomHtml();
+        $text = fake()->paragraph();
+
+        $event = new Event;
+        // setHtmlDescription is chainable
+        $this->assertEquals($event, $event->setHtmlDescription($html, $text));
+        // hasHtmlDescription is true when a HTML Description is set
+        $this->assertTrue($event->hasHtmlDescription());
+        // getHtmlDescription returns the set HTML Description
+        $this->assertEquals($html, $event->getHtmlDescription());
+        // plain description is set to text version
+        $this->assertTrue($event->hasDescription());
+        $this->assertEquals($text, $event->getDescription());
+    }
+
+    public function test_has_html_description_with_none(): void
+    {
+        $event = new Event;
+        $this->assertFalse($event->hasHtmlDescription());
+    }
+
+    public function test_get_html_description_fails_with_none(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $event = new Event;
+        $event->getHtmlDescription();
+    }
+
+    public function test_unset_html_description(): void
+    {
+        $html = fake()->randomHtml();
+        $text = fake()->paragraph();
+
+        $event = new Event;
+        $event->setHtmlDescription($html, $text);
+        // unsetHtmlDescription is chainable
+        $this->assertEquals($event, $event->unsetHtmlDescription());
+        // hasHtmlDescription is false when unset
+        $this->assertFalse($event->hasHtmlDescription());
+        // plain description is also unset
+        $this->assertFalse($event->hasDescription());
+    }
+
+    public function test_unset_html_description_can_ignore_text(): void
+    {
+        $html = fake()->randomHtml();
+        $text = fake()->paragraph();
+
+        $event = new Event;
+        $event->setHtmlDescription($html, $text);
+        $event->unsetHtmlDescription(false);
+        $this->assertFalse($event->hasHtmlDescription());
+        $this->assertEquals($text, $event->getDescription());
+        $this->assertTrue($event->hasDescription());
+    }
 }

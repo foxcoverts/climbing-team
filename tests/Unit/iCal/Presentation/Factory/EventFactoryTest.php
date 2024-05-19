@@ -43,4 +43,19 @@ class EventFactoryTest extends TestCase
 
         $this->assertStringContainsString("COMMENT:$comment\r\n", (string) $output);
     }
+
+    public function test_html_description_is_rendered(): void
+    {
+        $html = fake()->randomHtml();
+        $text = fake()->paragraph();
+
+        $event = new Event();
+        $event->setHtmlDescription($html, $text);
+
+        $factory = new EventFactory();
+        $output = $factory->createComponent($event);
+
+        $this->assertStringContainsString('X-ALT-DESC;FMTTYPE=text/html:', (string) $output);
+        $this->assertStringContainsString('DESCRIPTION:', (string) $output);
+    }
 }
