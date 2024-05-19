@@ -71,6 +71,7 @@ foreach ($bookings as $booking) {
     if (is_string($booking->notes)) {
         $description .= "\n\n".$booking->notes;
     }
+    $description .= "\n\n".route('booking.show', $booking);
 
     $organiser = new Organizer(
         new EmailAddress($booking->uid),
