@@ -16,6 +16,7 @@ use App\iCal\Domain\Enum\Classification;
 use Eluceo\iCal\Domain\Entity\Event as EluceoEvent;
 use Eluceo\iCal\Presentation\Component;
 use Eluceo\iCal\Presentation\Component\Property;
+use Eluceo\iCal\Presentation\Component\Property\Parameter;
 use Eluceo\iCal\Presentation\Component\Property\Value\IntegerValue;
 use Eluceo\iCal\Presentation\Component\Property\Value\TextValue;
 use Eluceo\iCal\Presentation\Factory\EventFactory as EluceoEventFactory;
@@ -41,6 +42,14 @@ class EventFactory extends EluceoEventFactory
 
             if ($event->hasComment()) {
                 $component = $component->withProperty(new Property('COMMENT', new TextValue($event->getComment())));
+            }
+
+            if ($event->hasHtmlDescription()) {
+                $component = $component->withProperty(
+                    new Property('X-ALT-DESC', new TextValue($event->getHtmlDescription()), [
+                        new Parameter('FMTTYPE', new TextValue('text/html')),
+                    ])
+                );
             }
         }
 

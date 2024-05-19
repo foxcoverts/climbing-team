@@ -27,6 +27,7 @@ use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Domain\ValueObject\Uri;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 if (! isset($method) || ! $method instanceof CalendarMethod) {
     $method = CalendarMethod::Publish;
@@ -67,11 +68,25 @@ foreach ($bookings as $booking) {
         $timeZones[$timeZoneId]['max'] = $booking->end_at->toDateTimeImmutable();
     }
 
-    $description = $booking->group_name;
+    $textDescription = $booking->group_name;
     if (is_string($booking->notes)) {
-        $description .= "\n\n".$booking->notes;
+        $textDescription .= "\n\n".$booking->notes;
     }
-    $description .= "\n\n".route('booking.show', $booking);
+    $textDescription .= "\n\n".route('booking.show', $booking);
+
+    $doc = new DOMDocument();
+    $doc->preserveWhiteSpace = false;
+    $doc->formatOutput = false;
+    $doc->loadHTML('<!DOCTYPE html>'.Str::markdown($textDescription, [
+        'renderer' => [
+            'block_separator' => "\n",
+            'inner_separator' => "\n",
+            'soft_break' => '<br \\>',
+        ],
+        'html_input' => 'strip',
+        'allow_unsafe_links' => false,
+    ]));
+    $htmlDescription = $doc->saveHTML();
 
     $organiser = new Organizer(
         new EmailAddress($booking->uid),
@@ -81,6 +96,7 @@ foreach ($bookings as $booking) {
     $event = new Event(new UniqueIdentifier($booking->uid));
     $event
         ->setClassification(Classification::Private)
+        ->setHtmlDescription($htmlDescription, $textDescription)
         ->setSequence(new Sequence($booking->sequence));
     $event
         ->setOccurrence(
@@ -90,7 +106,6 @@ foreach ($bookings as $booking) {
             )
         )
         ->setSummary($booking->activity)
-        ->setDescription($description)
         ->setLocation(
             new Location($booking->location)
         )
