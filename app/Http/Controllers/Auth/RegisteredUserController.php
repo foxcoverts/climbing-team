@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Events\Registered;
 use App\Http\Controllers\Controller;
@@ -35,7 +34,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'phone' => ['nullable', 'phone:INTERNATIONAL,GB'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'emergency_name' => ['nullable', 'required_with:emergency_phone', 'string', 'max:100'],
@@ -47,7 +46,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->string('password')),
             'emergency_name' => $request->emergency_name,
             'emergency_phone' => $request->emergency_phone,
             'timezone' => $request->timezone,
@@ -66,7 +65,7 @@ class RegisteredUserController extends Controller
         if ($user->password != '') {
             return redirect()->route('profile');
         }
-        if (!$request->hasValidSignature()) {
+        if (! $request->hasValidSignature()) {
             return response()->view('auth.setup-account-expired', [
                 'user' => $user,
             ], Response::HTTP_FORBIDDEN);
@@ -82,7 +81,7 @@ class RegisteredUserController extends Controller
         if ($user->password != '') {
             abort(Response::HTTP_FORBIDDEN, 'Invitation expired');
         }
-        if (!$request->hasValidSignature()) {
+        if (! $request->hasValidSignature()) {
             abort(Response::HTTP_FORBIDDEN, 'Invitation expired');
         }
 
@@ -100,7 +99,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->string('password')),
             'emergency_name' => $request->emergency_name,
             'emergency_phone' => $request->emergency_phone,
             'timezone' => $request->timezone,
