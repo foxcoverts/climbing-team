@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
@@ -93,6 +94,12 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function related(): MorphToMany
+    {
+        return $this->morphedByMany(Booking::class, 'bookable', 'bookables')
+            ->using(Bookable::class);
+    }
+
     public function isPast(): bool
     {
         if (is_null($this->end_at)) {
@@ -150,20 +157,16 @@ class Booking extends Model
 
     /**
      * Sort bookings by start & end.
-     *
-     * @return void
      */
-    public function scopeOrdered(Builder $bookings)
+    public function scopeOrdered(Builder $bookings): void
     {
         $bookings->orderBy('start_at')->orderBy('end_at');
     }
 
     /**
      * Bookings that are not cancelled.
-     *
-     * @return void
      */
-    public function scopeNotCancelled(Builder $bookings)
+    public function scopeNotCancelled(Builder $bookings): void
     {
         $bookings->whereNot('bookings.status', BookingStatus::Cancelled);
     }

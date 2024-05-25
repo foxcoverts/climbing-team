@@ -11,6 +11,7 @@ use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\BookingLinkController;
 use App\Http\Controllers\BookingPreviewController;
+use App\Http\Controllers\BookingRelatedController;
 use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\ChangeController;
@@ -61,6 +62,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::patch('booking/{booking}/attendee', [BookingAttendeeController::class, 'updateMany'])->name('booking.attendee.updateMany');
     Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except('edit');
+
+    Route::resource('booking.related', BookingRelatedController::class)->scoped(['bookings'])->except('show', 'edit', 'update');
 
     Route::resource('booking.comment', BookingCommentController::class)->shallow()->only('store', 'update', 'destroy');
 
