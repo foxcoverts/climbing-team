@@ -151,33 +151,33 @@
   integrity sha512-N49X4lJX27+l9jbLKSqZ6bKNjzQvHaT8IIFUy+YIqmXQdjYCToGWwOItDrfby14c78aDd5NHQl29xingXfCdLQ==
 
 "@fullcalendar/core@^6.1":
-  version "6.1.11"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-6.1.11.tgz#f9630e83ae977e774992507635b1e7af4c339d37"
-  integrity sha512-TjG7c8sUz+Vkui2FyCNJ+xqyu0nq653Ibe99A66LoW95oBo6tVhhKIaG1Wh0GVKymYiqAQN/OEdYTuj4ay27kA==
+  version "6.1.13"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-6.1.13.tgz#f1167e614ed3bdafe5281149b01d1f7f3bbbdbcf"
+  integrity sha512-Cps/hMQan4kwnsBhFf2+m2mijbGoWs6r18ZzxBnAAOkkNHtPmHU8EdR6lF+ZLsiVvb7nsC4H/ZKqnxXWwgpoPw==
   dependencies:
     preact "~10.12.1"
 
-"@fullcalendar/daygrid@^6.1", "@fullcalendar/daygrid@~6.1.11":
-  version "6.1.11"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-6.1.11.tgz#83a5d4a94c314cf3a14b06bebba03b1b40e6d2ba"
-  integrity sha512-hF5jJB7cgUIxWD5MVjj8IU407HISyLu7BWXcEIuTytkfr8oolOXeCazqnnjmRbnFOncoJQVstTtq6SIhaT32Xg==
+"@fullcalendar/daygrid@^6.1", "@fullcalendar/daygrid@~6.1.13":
+  version "6.1.13"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-6.1.13.tgz#bd3b1a6cc98964c658f37e917be6683de8ad4015"
+  integrity sha512-0I0hL1kgGjkZuc7Qt8mu4jjrqIL5PZzd58bEpTxoXRKI5UBZ9KbshGVMryQSXYANlrRtkPnXVt90VIDrxZbDrA==
 
 "@fullcalendar/list@^6.1":
-  version "6.1.11"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/list/-/list-6.1.11.tgz#4cd23700ea48b382b37387e29a706f2da692e174"
-  integrity sha512-9Qx8uvik9pXD12u50FiHwNzlHv4wkhfsr+r03ycahW7vEeIAKCsIZGTkUfFP+96I5wHihrfLazu1cFQG4MPiuw==
+  version "6.1.13"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/list/-/list-6.1.13.tgz#6eb50b1eff322a97ea9efe97a113382a839e2f9f"
+  integrity sha512-bPW4EsgGNwDZh91NtD+q4hqGfS6jEvCXQo7+MNy4JLMwFtdenEURRrzsb6CW3l97L3Vp0E2mSqiXaNESOmXEcQ==
 
 "@fullcalendar/moment@^6.1":
-  version "6.1.11"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/moment/-/moment-6.1.11.tgz#89023f6a56fe2528dd410f96108d43eebbde3850"
-  integrity sha512-hBZtrP1C1IPrmEg26pY7Gdlp6iyKF8WekVnXkZ4esL9ZwpmFDdrt1ATWzE+21/qycE5h+/hWIzaoPnag+qUKrQ==
+  version "6.1.13"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/moment/-/moment-6.1.13.tgz#c65f12b264adf7ace97e800190d1d9e25d149874"
+  integrity sha512-BsARqA7PZFosrCZHneX3xB9DdLr7XQ08seSpE9Q9fUtNkj3FLcUBkn+Hx4DlNs6E3YjbiKqKh0nBPjI0QQQd/w==
 
 "@fullcalendar/timegrid@^6.1":
-  version "6.1.11"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-6.1.11.tgz#76b2fc4446d1e97819a4395dab4f3a7e44c7a9eb"
-  integrity sha512-0seUHK/ferH89IeuCvV4Bib0zWjgK0nsptNdmAc9wDBxD/d9hm5Mdti0URJX6bDoRtsSfRDu5XsRcrzwoc+AUQ==
+  version "6.1.13"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-6.1.13.tgz#9c596409c27a8b96232bdaeb86548f0d1ac9dcbf"
+  integrity sha512-8Ub2mSV+6Mh8WWDKuyCYbj5PKYpmyjSctpJ/21fDBJduE9QFS0WfG9CZZxSJT7CT+srnyk4mX2/5gYN9gYZjUg==
   dependencies:
-    "@fullcalendar/daygrid" "~6.1.11"
+    "@fullcalendar/daygrid" "~6.1.13"
 
 "@imacrayon/alpine-ajax@^0.6.0":
   version "0.6.0"
