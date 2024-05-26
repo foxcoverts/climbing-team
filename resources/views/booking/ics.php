@@ -74,19 +74,18 @@ foreach ($bookings as $booking) {
     }
     $textDescription .= "\n\n".route('booking.show', $booking);
 
-    $doc = new DOMDocument();
-    $doc->preserveWhiteSpace = false;
-    $doc->formatOutput = false;
-    $doc->loadHTML('<!DOCTYPE html>'.Str::markdown($textDescription, [
-        'renderer' => [
-            'block_separator' => "\n",
-            'inner_separator' => "\n",
-            'soft_break' => '<br \\>',
-        ],
-        'html_input' => 'strip',
-        'allow_unsafe_links' => false,
-    ]));
-    $htmlDescription = $doc->saveHTML();
+    $htmlDescription =
+        '<!DOCTYPE html><html lang="en"><body>'.
+        Str::markdown($textDescription, [
+            'renderer' => [
+                'block_separator' => "\n",
+                'inner_separator' => "\n",
+                'soft_break' => '<br \\>',
+            ],
+            'html_input' => 'strip',
+            'allow_unsafe_links' => false,
+        ])
+        .'</body></html>';
 
     $organiser = new Organizer(
         new EmailAddress($booking->uid),
