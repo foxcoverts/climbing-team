@@ -37,7 +37,11 @@
                 @endif
             </div>
 
-            <x-guest-list :$booking :$currentUser :showTools="false" />
+            <div class="flex flex-col gap-4">
+                <x-guest-list :$booking :$currentUser :showTools="false" />
+
+                <x-related-bookings-list :$booking :$currentUser />
+            </div>
         </div>
     </section>
 </x-layout.app>

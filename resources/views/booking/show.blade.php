@@ -13,12 +13,17 @@
                 @can('update', $booking)
                     <footer class="flex flex-wrap items-start gap-4 mt-4 w-full max-w-prose">
                         <x-button.primary :href="route('booking.edit', $booking)" :label="__('Edit')" />
+                        <x-button.secondary :href="route('booking.related.index', $booking)" :label="__('Related')" />
                         <x-button.secondary :href="route('booking.share', $booking)" :label="__('Share')" />
                     </footer>
                 @endcan
             </div>
 
-            <x-guest-list :$booking :$currentUser class="row-span-2" />
+            <div class="row-span-2 flex flex-col gap-4">
+                <x-guest-list :$booking :$currentUser />
+
+                <x-related-bookings-list :$booking :$currentUser />
+            </div>
 
             @include('booking.partials.recent-activity')
         </div>
