@@ -6,6 +6,7 @@ use App\iCal\Domain\Entity\Calendar;
 use App\iCal\Domain\Entity\Event;
 use App\iCal\Domain\Enum\CalendarMethod;
 use App\iCal\Domain\Enum\Classification;
+use App\iCal\Domain\Enum\Transparency;
 use App\iCal\Domain\ValueObject\Sequence;
 use App\iCal\Presentation\Factory\CalendarFactory;
 use App\iCal\Presentation\Factory\EventFactory;
@@ -96,7 +97,8 @@ foreach ($bookings as $booking) {
     $event
         ->setClassification(Classification::Private)
         ->setHtmlDescription($htmlDescription, $textDescription)
-        ->setSequence(new Sequence($booking->sequence));
+        ->setSequence(new Sequence($booking->sequence))
+        ->setTransparency(Transparency::Opaque);
     $event
         ->setOccurrence(
             new TimeSpan(
