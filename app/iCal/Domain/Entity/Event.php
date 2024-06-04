@@ -3,6 +3,7 @@
 namespace App\iCal\Domain\Entity;
 
 use App\iCal\Domain\Enum\Classification;
+use App\iCal\Domain\Enum\Transparency;
 use App\iCal\Domain\ValueObject\Sequence;
 use Eluceo\iCal\Domain\Entity\Event as EluceoEvent;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
@@ -16,6 +17,8 @@ class Event extends EluceoEvent
     private ?string $htmlDescription = null;
 
     private ?Sequence $sequence = null;
+
+    private ?Transparency $transparency = null;
 
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
@@ -127,6 +130,30 @@ class Event extends EluceoEvent
     public function unsetSequence(): static
     {
         $this->sequence = null;
+
+        return $this;
+    }
+
+    public function setTransparency(Transparency $transparency): static
+    {
+        $this->transparency = $transparency;
+
+        return $this;
+    }
+
+    public function getTransparency(): Transparency
+    {
+        return $this->transparency;
+    }
+
+    public function hasTransparency(): bool
+    {
+        return $this->transparency !== null;
+    }
+
+    public function unsetTransparency(): static
+    {
+        $this->transparency = null;
 
         return $this;
     }

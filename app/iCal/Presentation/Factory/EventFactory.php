@@ -13,6 +13,7 @@ namespace App\iCal\Presentation\Factory;
 
 use App\iCal\Domain\Entity\Event;
 use App\iCal\Domain\Enum\Classification;
+use App\iCal\Domain\Enum\Transparency;
 use Eluceo\iCal\Domain\Entity\Event as EluceoEvent;
 use Eluceo\iCal\Presentation\Component;
 use Eluceo\iCal\Presentation\Component\Property;
@@ -40,6 +41,10 @@ class EventFactory extends EluceoEventFactory
                 $component = $component->withProperty(new Property('CLASS', $this->getEventClassificationTextValue($event->getClassification())));
             }
 
+            if ($event->hasTransparency()) {
+                $component = $component->withProperty(new Property('TRANSP', $this->getEventTransparencyTextValue($event->getTransparency())));
+            }
+
             if ($event->hasComment()) {
                 $component = $component->withProperty(new Property('COMMENT', new TextValue($event->getComment())));
             }
@@ -63,6 +68,15 @@ class EventFactory extends EluceoEventFactory
             Classification::Private => 'PRIVATE',
             Classification::Public => 'PUBLIC',
             default => throw new UnexpectedValueException(sprintf('The enum %s resulted in an unknown classification value that is not yet implemented.', Classification::class))
+        });
+    }
+
+    private function getEventTransparencyTextValue(Transparency $transparency): TextValue
+    {
+        return new TextValue(match ($transparency) {
+            Transparency::Opaque => 'OPAQUE',
+            Transparency::Transparent => 'TRANSPARENT',
+            default => throw new UnexpectedValueException(sprintf('The enum %s resulted in an unknown transparency value that is not yet implemented.', Transparency::class))
         });
     }
 }

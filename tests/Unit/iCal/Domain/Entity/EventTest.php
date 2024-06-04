@@ -4,6 +4,7 @@ namespace Tests\Unit\iCal\Domain\Entity;
 
 use App\iCal\Domain\Entity\Event;
 use App\iCal\Domain\Enum\Classification;
+use App\iCal\Domain\Enum\Transparency;
 use Tests\TestCase;
 use TypeError;
 
@@ -142,5 +143,42 @@ class EventTest extends TestCase
         $this->assertFalse($event->hasHtmlDescription());
         $this->assertEquals($text, $event->getDescription());
         $this->assertTrue($event->hasDescription());
+    }
+
+    public function test_set_get_transparency(): void
+    {
+        $transparency = fake()->randomElement(Transparency::class);
+
+        $event = new Event;
+        // setClassification is chainable
+        $this->assertEquals($event, $event->setTransparency($transparency));
+        // hasClassification is true when any Classification is set
+        $this->assertTrue($event->hasTransparency());
+        // getClassification returns the set classification
+        $this->assertEquals($transparency, $event->getTransparency());
+    }
+
+    public function test_get_transparency_fails_with_no_transparency(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $event = new Event;
+        $event->getTransparency();
+    }
+
+    public function test_has_transparency_with_no_transparency(): void
+    {
+        $event = new Event;
+        $this->assertFalse($event->hasTransparency());
+    }
+
+    public function test_unset_transparency(): void
+    {
+        $transparency = fake()->randomElement(Transparency::class);
+
+        $event = new Event;
+        $event->setTransparency($transparency);
+        $this->assertEquals($event, $event->unsetTransparency());
+        $this->assertFalse($event->hasTransparency());
     }
 }
