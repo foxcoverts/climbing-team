@@ -45,6 +45,14 @@ class TodoFactory
         if ($todo->hasOrganizer()) {
             yield $this->getOrganizerProperty($todo->getOrganizer());
         }
+
+        if ($todo->hasSummary()) {
+            yield new Property('SUMMARY', new TextValue($todo->getSummary()));
+        }
+
+        if ($todo->hasDescription()) {
+            yield new Property('DESCRIPTION', new TextValue($todo->getDescription()));
+        }
     }
 
     private function getOrganizerProperty(Organizer $organizer): Property

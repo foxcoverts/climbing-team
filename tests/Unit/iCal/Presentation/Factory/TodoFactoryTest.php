@@ -37,4 +37,30 @@ class TodoFactoryTest extends TestCase
 
         $this->assertStringContainsString("ORGANIZER;CN=$name:", $output);
     }
+
+    public function test_summary_is_rendered(): void
+    {
+        $summary = fake()->sentence();
+
+        $todo = new Todo();
+        $todo->setSummary($summary);
+
+        $factory = new TodoFactory();
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("SUMMARY:$summary\r\n", $output);
+    }
+
+    public function test_description_is_rendered(): void
+    {
+        $description = fake()->sentence();
+
+        $todo = new Todo();
+        $todo->setDescription($description);
+
+        $factory = new TodoFactory();
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("DESCRIPTION:$description\r\n", $output);
+    }
 }
