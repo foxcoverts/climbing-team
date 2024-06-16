@@ -61,6 +61,10 @@ class TodoFactory
         if ($todo->hasLocation()) {
             yield from $this->getLocationProperties($todo->getLocation());
         }
+
+        if ($todo->hasPriority()) {
+            yield new Property('PRIORITY', new IntegerValue($todo->getPriority()));
+        }
     }
 
     private function getOrganizerProperty(Organizer $organizer): Property
