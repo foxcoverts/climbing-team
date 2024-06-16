@@ -10,9 +10,19 @@ use Eluceo\iCal\Presentation\Component\Property;
 use Eluceo\iCal\Presentation\Component\Property\Value\DurationValue;
 use Eluceo\iCal\Presentation\Component\Property\Value\TextValue;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory as EluceoCalendarFactory;
+use Eluceo\iCal\Presentation\Factory\TimeZoneFactory;
 
 class CalendarFactory extends EluceoCalendarFactory
 {
+    private TodoFactory $todoFactory;
+
+    public function __construct(?EventFactory $eventFactory = null, ?TimeZoneFactory $timeZoneFactory = null, ?TodoFactory $todoFactory = null)
+    {
+        parent::__construct($eventFactory, $timeZoneFactory);
+
+        $this->todoFactory = $todoFactory ?? new TodoFactory();
+    }
+
     public function createCalendar(EluceoCalendar $calendar): Component
     {
         $component = parent::createCalendar($calendar);
@@ -65,5 +75,17 @@ class CalendarFactory extends EluceoCalendarFactory
             CalendarMethod::Reply => 'REPLY',
             CalendarMethod::Request => 'REQUEST',
         });
+    }
+
+    /**
+     * @return iterable<Component>
+     */
+    protected function createCalendarComponents(EluceoCalendar $calendar): iterable
+    {
+        yield from parent::createCalendarComponents($calendar);
+
+        if ($calendar instanceof Calendar) {
+            yield from $this->todoFactory->createComponents($calendar->getTodos());
+        }
     }
 }

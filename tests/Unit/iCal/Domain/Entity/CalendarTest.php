@@ -3,6 +3,7 @@
 namespace Tests\Unit\iCal\Domain\Entity;
 
 use App\iCal\Domain\Entity\Calendar;
+use App\iCal\Domain\Entity\Todo;
 use App\iCal\Domain\Enum\CalendarMethod;
 use DateInterval;
 use Eluceo\iCal\Domain\Entity\TimeZone;
@@ -206,5 +207,28 @@ class CalendarTest extends TestCase
         $this->assertEquals($calendar, $calendar->unsetTimeZone());
         // hasTimeZone is false when time zone is unset
         $this->assertFalse($calendar->hasTimeZone());
+    }
+
+    public function test_new_calendar_with_todos(): void
+    {
+        $vtodo = new Todo();
+
+        $calendar = new Calendar(todos: [$vtodo]);
+
+        $vtodos = $calendar->getTodos();
+        $this->assertEquals([$vtodo], iterator_to_array($vtodos));
+    }
+
+    public function test_add_todo(): void
+    {
+        $vtodo = new Todo();
+        $calendar = new Calendar();
+
+        $this->assertCount(0, $calendar->getTodos());
+        // addTodo is chainable
+        $this->assertEquals($calendar, $calendar->addTodo($vtodo));
+        // todo is added
+        $vtodos = $calendar->getTodos();
+        $this->assertEquals([$vtodo], iterator_to_array($vtodos));
     }
 }
