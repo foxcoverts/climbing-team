@@ -24,6 +24,11 @@ foreach ($todos as $todo) {
 
     $vtodo = new Todo(new UniqueIdentifier($todo->uid));
     $vtodo->setOrganizer($organiser);
+    $vtodo->setSummary($todo->summary);
+
+    if (! empty($todo->description)) {
+        $vtodo->setDescription($todo->description);
+    }
 
     // $table->ulid('id')->primary(); // VTODO: UID
     // $table->string('summary'); // VTODO: SUMMARY

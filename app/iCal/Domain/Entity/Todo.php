@@ -11,6 +11,10 @@ class Todo
 
     private ?Organizer $organizer = null;
 
+    private ?string $summary = null;
+
+    private ?string $description = null;
+
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
         $this->uniqueIdentifier = $uniqueIdentifier ?? UniqueIdentifier::createRandom();
@@ -38,5 +42,59 @@ class Todo
     public function hasOrganizer(): bool
     {
         return $this->organizer !== null;
+    }
+
+    /**
+     * @throws TypeError when summary is not set.
+     */
+    public function getSummary(): string
+    {
+        return $this->summary;
+    }
+
+    public function hasSummary(): bool
+    {
+        return $this->summary !== null;
+    }
+
+    public function setSummary(string $summary): static
+    {
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    public function unsetSummary(): static
+    {
+        $this->summary = null;
+
+        return $this;
+    }
+
+    /**
+     * @throws TypeError when description is not set.
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function hasDescription(): bool
+    {
+        return $this->description !== null;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function unsetDescription(): static
+    {
+        $this->description = null;
+
+        return $this;
     }
 }
