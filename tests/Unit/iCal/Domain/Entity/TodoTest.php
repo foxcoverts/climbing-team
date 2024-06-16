@@ -7,6 +7,7 @@ use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
+use InvalidArgumentException;
 use Tests\TestCase;
 use TypeError;
 
@@ -174,5 +175,62 @@ class TodoTest extends TestCase
         $this->assertEquals($todo, $todo->unsetLocation());
         // hasLocation is false when location is unset
         $this->assertFalse($todo->hasLocation());
+    }
+
+    public function test_set_get_priority(): void
+    {
+        $priority = fake()->randomDigitNotZero();
+
+        $todo = new Todo;
+        // setPriority is chainable
+        $this->assertEquals($todo, $todo->setPriority($priority));
+        // hasPriority is true when any priority is set
+        $this->assertTrue($todo->hasPriority());
+        // getPriority returns the set priority
+        $this->assertEquals($priority, $todo->getPriority());
+    }
+
+    public function test_has_priority_with_no_priority(): void
+    {
+        $todo = new Todo;
+        $this->assertFalse($todo->hasPriority());
+    }
+
+    public function test_get_priority_fails_with_no_priority(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $todo = new Todo;
+        $todo->getPriority();
+    }
+
+    public function test_unset_priority(): void
+    {
+        $priority = fake()->randomDigitNotZero();
+
+        $todo = new Todo;
+        $todo->setPriority($priority);
+        // unsetPriority is chainable
+        $this->assertEquals($todo, $todo->unsetPriority());
+        // hasPriority is false when priority is unset
+        $this->assertFalse($todo->hasPriority());
+    }
+
+    public function test_set_priority_fails_with_large_number(): void
+    {
+        $todo = new Todo();
+
+        $this->expectException(InvalidArgumentException::class);
+        $big_priority = fake()->numberBetween(10, 2147483647);
+        $todo->setPriority($big_priority);
+    }
+
+    public function test_set_priority_fails_with_negative_number(): void
+    {
+        $todo = new Todo();
+
+        $this->expectException(InvalidArgumentException::class);
+        $negative_number = 0 - fake()->numberBetween();
+        $todo->setPriority($negative_number);
     }
 }

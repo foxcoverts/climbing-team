@@ -77,4 +77,17 @@ class TodoFactoryTest extends TestCase
 
         $this->assertStringContainsString("LOCATION:$location\r\n", $output);
     }
+
+    public function test_priority_is_rendered(): void
+    {
+        $priority = fake()->randomDigitNotZero();
+
+        $todo = new Todo();
+        $todo->setPriority($priority);
+
+        $factory = new TodoFactory();
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("PRIORITY:$priority\r\n", $output);
+    }
 }

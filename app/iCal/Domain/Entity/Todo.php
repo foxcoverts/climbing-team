@@ -5,6 +5,7 @@ namespace App\iCal\Domain\Entity;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
+use InvalidArgumentException;
 
 class Todo
 {
@@ -17,6 +18,8 @@ class Todo
     private ?string $description = null;
 
     private ?Location $location = null;
+
+    private ?int $priority = null;
 
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
@@ -124,6 +127,37 @@ class Todo
     public function unsetLocation(): static
     {
         $this->location = null;
+
+        return $this;
+    }
+
+    /**
+     * @throws TypeError when priority is not set.
+     */
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
+    public function hasPriority(): bool
+    {
+        return $this->priority !== null;
+    }
+
+    public function setPriority(int $priority): static
+    {
+        if ($priority < 1 || $priority > 9) {
+            throw new InvalidArgumentException('$priority must be a value between 1 and 9.');
+        }
+
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    public function unsetPriority(): static
+    {
+        $this->priority = null;
 
         return $this;
     }

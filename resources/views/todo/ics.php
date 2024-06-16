@@ -35,6 +35,8 @@ foreach ($todos as $todo) {
         $vtodo->setLocation(new Location($todo->location));
     }
 
+    $vtodo->setPriority($todo->priority);
+
     // $table->ulid('id')->primary(); // VTODO: UID
     // $table->string('summary'); // VTODO: SUMMARY
     // $table->text('description'); // VTODO: DESCRIPTION
