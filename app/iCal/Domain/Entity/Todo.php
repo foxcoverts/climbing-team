@@ -2,6 +2,7 @@
 
 namespace App\iCal\Domain\Entity;
 
+use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 
@@ -14,6 +15,8 @@ class Todo
     private ?string $summary = null;
 
     private ?string $description = null;
+
+    private ?Location $location = null;
 
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
@@ -94,6 +97,33 @@ class Todo
     public function unsetDescription(): static
     {
         $this->description = null;
+
+        return $this;
+    }
+
+    /**
+     * @throws TypeError when location is not set.
+     */
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    public function hasLocation(): bool
+    {
+        return $this->location !== null;
+    }
+
+    public function setLocation(Location $location): static
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    public function unsetLocation(): static
+    {
+        $this->location = null;
 
         return $this;
     }

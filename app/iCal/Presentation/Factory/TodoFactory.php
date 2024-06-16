@@ -4,10 +4,14 @@ namespace App\iCal\Presentation\Factory;
 
 use App\iCal\Domain\Collection\Todos;
 use App\iCal\Domain\Entity\Todo;
+use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Presentation\Component;
 use Eluceo\iCal\Presentation\Component\Property;
 use Eluceo\iCal\Presentation\Component\Property\Parameter;
+use Eluceo\iCal\Presentation\Component\Property\Value\AppleLocationGeoValue;
+use Eluceo\iCal\Presentation\Component\Property\Value\GeoValue;
+use Eluceo\iCal\Presentation\Component\Property\Value\IntegerValue;
 use Eluceo\iCal\Presentation\Component\Property\Value\TextValue;
 use Eluceo\iCal\Presentation\Component\Property\Value\UriValue;
 use Generator;
@@ -53,6 +57,10 @@ class TodoFactory
         if ($todo->hasDescription()) {
             yield new Property('DESCRIPTION', new TextValue($todo->getDescription()));
         }
+
+        if ($todo->hasLocation()) {
+            yield from $this->getLocationProperties($todo->getLocation());
+        }
     }
 
     private function getOrganizerProperty(Organizer $organizer): Property
@@ -72,5 +80,27 @@ class TodoFactory
         }
 
         return new Property('ORGANIZER', new UriValue($organizer->getEmailAddress()->toUri()), $parameters);
+    }
+
+    /**
+     * @return Generator<Property>
+     */
+    private function getLocationProperties(Location $location): Generator
+    {
+        yield new Property('LOCATION', new TextValue((string) $location));
+
+        if ($location->hasGeographicalPosition()) {
+            yield new Property('GEO', new GeoValue($location->getGeographicPosition()));
+            yield new Property(
+                'X-APPLE-STRUCTURED-LOCATION',
+                new AppleLocationGeoValue($location->getGeographicPosition()),
+                [
+                    new Parameter('VALUE', new TextValue('URI')),
+                    new Parameter('X-ADDRESS', new TextValue((string) $location)),
+                    new Parameter('X-APPLE-RADIUS', new IntegerValue(49)),
+                    new Parameter('X-TITLE', new TextValue($location->getTitle())),
+                ]
+            );
+        }
     }
 }

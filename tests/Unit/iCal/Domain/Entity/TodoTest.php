@@ -4,6 +4,7 @@ namespace Tests\Unit\iCal\Domain\Entity;
 
 use App\iCal\Domain\Entity\Todo;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
+use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Tests\TestCase;
@@ -134,5 +135,44 @@ class TodoTest extends TestCase
         $this->assertEquals($todo, $todo->unsetDescription());
         // hasDescription is false when description is unset
         $this->assertFalse($todo->hasDescription());
+    }
+
+    public function test_set_get_location(): void
+    {
+        $location = new Location(fake()->sentence());
+
+        $todo = new Todo;
+        // setLocation is chainable
+        $this->assertEquals($todo, $todo->setLocation($location));
+        // hasLocation is true when any location is set
+        $this->assertTrue($todo->hasLocation());
+        // getLocation returns the set location
+        $this->assertEquals($location, $todo->getLocation());
+    }
+
+    public function test_has_location_with_no_location(): void
+    {
+        $todo = new Todo;
+        $this->assertFalse($todo->hasLocation());
+    }
+
+    public function test_get_location_fails_with_no_location(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $todo = new Todo;
+        $todo->getLocation();
+    }
+
+    public function test_unset_location(): void
+    {
+        $location = new Location(fake()->sentence());
+
+        $todo = new Todo;
+        $todo->setLocation($location);
+        // unsetLocation is chainable
+        $this->assertEquals($todo, $todo->unsetLocation());
+        // hasLocation is false when location is unset
+        $this->assertFalse($todo->hasLocation());
     }
 }

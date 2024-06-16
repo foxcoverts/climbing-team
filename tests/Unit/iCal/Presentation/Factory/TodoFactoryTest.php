@@ -5,6 +5,7 @@ namespace Tests\Unit\iCal\Presentation\Factory;
 use App\iCal\Domain\Entity\Todo;
 use App\iCal\Presentation\Factory\TodoFactory;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
+use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Tests\TestCase;
@@ -62,5 +63,18 @@ class TodoFactoryTest extends TestCase
         $output = (string) $factory->createComponent($todo);
 
         $this->assertStringContainsString("DESCRIPTION:$description\r\n", $output);
+    }
+
+    public function test_location_is_rendered(): void
+    {
+        $location = fake()->sentence(3);
+
+        $todo = new Todo();
+        $todo->setLocation(new Location($location));
+
+        $factory = new TodoFactory();
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("LOCATION:$location\r\n", $output);
     }
 }

@@ -6,6 +6,7 @@ use App\iCal\Domain\Enum\CalendarMethod;
 use App\iCal\Presentation\Factory\CalendarFactory;
 use App\iCal\Presentation\Factory\EventFactory;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
+use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 
@@ -28,6 +29,10 @@ foreach ($todos as $todo) {
 
     if (! empty($todo->description)) {
         $vtodo->setDescription($todo->description);
+    }
+
+    if (! empty($todo->location)) {
+        $vtodo->setLocation(new Location($todo->location));
     }
 
     // $table->ulid('id')->primary(); // VTODO: UID
