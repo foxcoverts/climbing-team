@@ -23,6 +23,7 @@ foreach ($todos as $todo) {
     );
 
     $vtodo = new Todo(new UniqueIdentifier($todo->uid));
+    $vtodo->setOrganizer($organiser);
 
     // $table->ulid('id')->primary(); // VTODO: UID
     // $table->string('summary'); // VTODO: SUMMARY
