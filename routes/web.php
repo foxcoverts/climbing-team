@@ -27,6 +27,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\TodoIcsController;
 use App\Http\Controllers\TransferKeyController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\TrashedDocumentController;
@@ -109,6 +110,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('news', NewsPostController::class)
         ->except('show')
         ->parameters(['news' => 'post']);
+
+    Route::get('todo/{todo}.ics', [TodoIcsController::class, 'show'])->name('todo.show.ics');
 
     Route::resource('todo', TodoController::class);
 
