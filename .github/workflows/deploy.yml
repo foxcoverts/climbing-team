@@ -83,7 +83,7 @@ jobs:
           rm -rf .devcontainer .editorconfig .prettierrc DOCKER_ENV docker_tag docker-compose.yml node_modules output.log tests
 
       - name: Put site into maintenance mode
-        uses: easingthemes/ssh-deploy@v5.0.3
+        uses: easingthemes/ssh-deploy@v5.1.1
         with:
           REMOTE_HOST: ${{ vars.SSH_HOST }}
           REMOTE_USER: ${{ vars.SSH_USERNAME }}
@@ -94,7 +94,7 @@ jobs:
           EXCLUDE: ".git,.github,.gitattributes,.gitignore"
 
       - name: Deploy to server
-        uses: easingthemes/ssh-deploy@v5.0.3
+        uses: easingthemes/ssh-deploy@v5.1.1
         with:
           REMOTE_HOST: ${{ vars.SSH_HOST }}
           REMOTE_USER: ${{ vars.SSH_USERNAME }}
