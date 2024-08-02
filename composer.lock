@@ -1973,16 +1973,16 @@
         },
         {
             "name": "league/flysystem-read-only",
-            "version": "3.23.1",
+            "version": "3.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-read-only.git",
-                "reference": "618029ddb7176ea99004f2c2dc46c1b6a1339a72"
+                "reference": "94f3f6d80c12ade1274996e665f4b963f53d6a11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-read-only/zipball/618029ddb7176ea99004f2c2dc46c1b6a1339a72",
-                "reference": "618029ddb7176ea99004f2c2dc46c1b6a1339a72",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-read-only/zipball/94f3f6d80c12ade1274996e665f4b963f53d6a11",
+                "reference": "94f3f6d80c12ade1274996e665f4b963f53d6a11",
                 "shasum": ""
             },
             "require": {
@@ -2014,20 +2014,9 @@
                 "read"
             ],
             "support": {
-                "issues": "https://github.com/thephpleague/flysystem-read-only/issues",
-                "source": "https://github.com/thephpleague/flysystem-read-only/tree/3.23.1"
+                "source": "https://github.com/thephpleague/flysystem-read-only/tree/3.28.0"
             },
-            "funding": [
-                {
-                    "url": "https://ecologi.com/frankdejonge",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/frankdejonge",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-01-26T18:25:23+00:00"
+            "time": "2024-05-06T20:05:52+00:00"
         },
         {
             "name": "league/mime-type-detection",
