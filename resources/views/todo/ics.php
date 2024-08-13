@@ -7,6 +7,7 @@ use App\iCal\Domain\Enum\CalendarMethod;
 use App\iCal\Domain\Enum\TodoStatus as VTodoStatus;
 use App\iCal\Presentation\Factory\CalendarFactory;
 use App\iCal\Presentation\Factory\EventFactory;
+use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
@@ -46,6 +47,10 @@ foreach ($todos as $todo) {
         TodoStatus::Cancelled => VTodoStatus::Cancelled,
     });
 
+    if (! empty($todo->due_at)) {
+        $vtodo->setDue(new DateTime($todo->due_at, true));
+    }
+
     /*
     - [x] $table->ulid('id')->primary(); // VTODO: UID
     - [x] $table->string('summary'); // VTODO: SUMMARY
@@ -53,7 +58,7 @@ foreach ($todos as $todo) {
     - [x] $table->string('location')->nullable(); // VTODO: LOCATION
     - [x] $table->unsignedTinyInteger('priority')->default(5); // VTODO: PRIORITY (HIGH = 1, MEDIUM = 5, LOW = 9)
     - [x] $table->enum('status', ['needs-action', 'in-process', 'completed', 'cancelled'])->default('needs-action'); // VTODO: STATUS
-    - [ ] $table->timestamp('due_at', 6)->nullable(); // VTODO: DUE
+    - [x] $table->timestamp('due_at', 6)->nullable(); // VTODO: DUE
     - [ ] $table->timestamp('started_at', 6)->nullable(); // VTODO: DTSTART
     - [ ] $table->timestamp('completed_at', 6)->nullable(); // VTODO: COMPLETED
     - [ ] $table->unsignedInteger('sequence')->default(0); // VTODO: SEQUENCE

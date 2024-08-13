@@ -4,6 +4,7 @@ namespace Tests\Unit\iCal\Domain\Entity;
 
 use App\iCal\Domain\Entity\Todo;
 use App\iCal\Domain\Enum\TodoStatus;
+use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
@@ -248,5 +249,46 @@ class TodoTest extends TestCase
         $this->assertEquals($todo, $todo->setStatus($status));
         // getStatus returns the set status
         $this->assertEquals($status, $todo->getStatus());
+    }
+
+    public function test_set_get_due(): void
+    {
+        $due = fake()->dateTime();
+
+        $todo = new Todo;
+
+        // setDue is chainable
+        $this->assertEquals($todo, $todo->setDue(new DateTime($due, true)));
+        // hasDue is true when due is set
+        $this->assertTrue($todo->hasDue());
+        // getDue returns the set due
+        $this->assertEquals($due, $todo->getDue()->getDateTime());
+    }
+
+    public function test_unset_due(): void
+    {
+        $due = fake()->dateTime();
+
+        $todo = new Todo;
+        $todo->setDue(new DateTime($due, true));
+
+        // unsetDue is chainable
+        $this->assertEquals($todo, $todo->unsetDue());
+        // hasDue is false when due is unset
+        $this->assertFalse($todo->hasDue());
+    }
+
+    public function test_get_fails_with_no_due(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $todo = new Todo;
+        $todo->getDue();
+    }
+
+    public function test_has_organizer_with_no_due(): void
+    {
+        $todo = new Todo;
+        $this->assertFalse($todo->hasDue());
     }
 }

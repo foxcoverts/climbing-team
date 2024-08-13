@@ -11,6 +11,7 @@ use Eluceo\iCal\Presentation\Component;
 use Eluceo\iCal\Presentation\Component\Property;
 use Eluceo\iCal\Presentation\Component\Property\Parameter;
 use Eluceo\iCal\Presentation\Component\Property\Value\AppleLocationGeoValue;
+use Eluceo\iCal\Presentation\Component\Property\Value\DateTimeValue;
 use Eluceo\iCal\Presentation\Component\Property\Value\GeoValue;
 use Eluceo\iCal\Presentation\Component\Property\Value\IntegerValue;
 use Eluceo\iCal\Presentation\Component\Property\Value\TextValue;
@@ -68,6 +69,10 @@ class TodoFactory
         }
 
         yield $this->getStatusProperty($todo->getStatus());
+
+        if ($todo->hasDue()) {
+            yield new Property('DUE', new DateTimeValue($todo->getDue()));
+        }
     }
 
     private function getOrganizerProperty(Organizer $organizer): Property

@@ -3,6 +3,7 @@
 namespace App\iCal\Domain\Entity;
 
 use App\iCal\Domain\Enum\TodoStatus;
+use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
@@ -23,6 +24,8 @@ class Todo
     private ?int $priority = null;
 
     private TodoStatus $status;
+
+    private ?DateTime $due = null;
 
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
@@ -176,5 +179,29 @@ class Todo
     public function getStatus(): TodoStatus
     {
         return $this->status;
+    }
+
+    public function setDue(DateTime $due): static
+    {
+        $this->due = $due;
+
+        return $this;
+    }
+
+    public function hasDue(): bool
+    {
+        return $this->due !== null;
+    }
+
+    public function getDue(): DateTime
+    {
+        return $this->due;
+    }
+
+    public function unsetDue(): static
+    {
+        $this->due = null;
+
+        return $this;
     }
 }
