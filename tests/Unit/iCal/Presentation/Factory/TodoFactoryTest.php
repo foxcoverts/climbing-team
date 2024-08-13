@@ -129,4 +129,19 @@ class TodoFactoryTest extends TestCase
 
         $this->assertStringContainsString("DUE:$due_at_ical\r\n", $output);
     }
+
+    public function test_start_is_rendered(): void
+    {
+        $start_at = fake()->dateTime();
+        $start_at_ical = $start_at->format('Ymd\THis\Z');
+
+        $todo = new Todo;
+        $todo->setStart(new DateTime($start_at, true));
+
+        $factory = new TodoFactory;
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("DTSTART:$start_at_ical\r\n", $output);
+
+    }
 }

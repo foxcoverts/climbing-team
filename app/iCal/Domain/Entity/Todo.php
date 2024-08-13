@@ -27,6 +27,8 @@ class Todo
 
     private ?DateTime $due = null;
 
+    private ?DateTime $start = null;
+
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
         $this->uniqueIdentifier = $uniqueIdentifier ?? UniqueIdentifier::createRandom();
@@ -204,6 +206,33 @@ class Todo
     public function unsetDue(): static
     {
         $this->due = null;
+
+        return $this;
+    }
+
+    public function setStart(DateTime $start): static
+    {
+        $this->start = $start;
+
+        return $this;
+    }
+
+    public function hasStart(): bool
+    {
+        return $this->start !== null;
+    }
+
+    /**
+     * @throws TypeError when start is not set.
+     */
+    public function getStart(): DateTime
+    {
+        return $this->start;
+    }
+
+    public function unsetStart(): static
+    {
+        $this->start = null;
 
         return $this;
     }

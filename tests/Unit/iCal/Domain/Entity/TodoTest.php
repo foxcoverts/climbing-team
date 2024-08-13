@@ -291,4 +291,46 @@ class TodoTest extends TestCase
         $todo = new Todo;
         $this->assertFalse($todo->hasDue());
     }
+
+    public function test_set_get_start(): void
+    {
+        $start = fake()->dateTime();
+
+        $todo = new Todo;
+
+        // setStart is chainable
+        $this->assertEquals($todo, $todo->setStart(new DateTime($start, true)));
+        // hasStart is true when start is set
+        $this->assertTrue($todo->hasStart());
+        // getStart is start that was set
+        $this->assertEquals($start, $todo->getStart()->getDateTime());
+    }
+
+    public function test_get_fails_with_no_start(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $todo = new Todo;
+        $todo->getStart();
+    }
+
+    public function test_has_with_no_start(): void
+    {
+        $todo = new Todo;
+
+        $this->assertFalse($todo->hasStart());
+    }
+
+    public function test_unset_start(): void
+    {
+        $start = fake()->dateTime();
+
+        $todo = new Todo;
+        $todo->setStart(new DateTime($start, true));
+
+        // unsetStart is chainable
+        $this->assertEquals($todo, $todo->unsetStart());
+        // hasStart is false when start is unset
+        $this->assertFalse($todo->hasStart());
+    }
 }
