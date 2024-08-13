@@ -17,6 +17,7 @@
                     'priority' => old('priority', $todo->priority),
                     'status' => old('status', $todo->status),
                     'due_at' => old('due_at', $todo->due_at->toDateTimeLocalString()),
+                    'started_at' => $todo->started_at->toDateTimeLocalString(),
                 ]) }},
             }" x-on:submit="setTimeout(() => submitted = 'update-todo', 0)">
             @csrf @method('PATCH')
@@ -67,6 +68,14 @@
                     </x-select-input>
                     <x-input-error class="mt-2" :messages="$errors->get('status')" />
                 </div>
+
+                <template x-if="todo.started_at">
+                    <div>
+                        <x-input-label for="started_at" :value="__('Started on')" />
+                        <x-text-input id="started_at" name="started_at" type="datetime-local" x-model="todo.started_at"
+                            readonly class="mt-1" />
+                    </div>
+                </template>
             </div>
         </form>
 
