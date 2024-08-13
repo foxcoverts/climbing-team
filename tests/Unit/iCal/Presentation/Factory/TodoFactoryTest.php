@@ -4,6 +4,7 @@ namespace Tests\Unit\iCal\Presentation\Factory;
 
 use App\iCal\Domain\Entity\Todo;
 use App\iCal\Domain\Enum\TodoStatus;
+use App\iCal\Domain\ValueObject\Sequence;
 use App\iCal\Presentation\Factory\TodoFactory;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
@@ -156,5 +157,18 @@ class TodoFactoryTest extends TestCase
         $output = (string) $factory->createComponent($todo);
 
         $this->assertStringContainsString("COMPLETED:$completed_at_ical\r\n", $output);
+    }
+
+    public function test_sequence_is_rendered(): void
+    {
+        $sequence = fake()->numberBetween();
+
+        $todo = new Todo;
+        $todo->setSequence(new Sequence($sequence));
+
+        $factory = new TodoFactory;
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("SEQUENCE:$sequence\r\n", $output);
     }
 }

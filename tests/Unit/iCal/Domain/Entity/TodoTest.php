@@ -4,6 +4,7 @@ namespace Tests\Unit\iCal\Domain\Entity;
 
 use App\iCal\Domain\Entity\Todo;
 use App\iCal\Domain\Enum\TodoStatus;
+use App\iCal\Domain\ValueObject\Sequence;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
@@ -374,5 +375,47 @@ class TodoTest extends TestCase
         $this->assertEquals($todo, $todo->unsetCompleted());
         // hasCompleted is false when completed is unset
         $this->assertFalse($todo->hasCompleted());
+    }
+
+    public function test_set_get_sequence(): void
+    {
+        $sequence = fake()->numberBetween();
+
+        $todo = new Todo;
+
+        // setSequence is chainable
+        $this->assertEquals($todo, $todo->setSequence(new Sequence($sequence)));
+        // hasSequence is true with sequence
+        $this->assertTrue($todo->hasSequence());
+        // getSequence is the set sequence
+        $this->assertEquals($sequence, $todo->getSequence()->getSequence());
+    }
+
+    public function test_get_fails_with_no_sequence(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $todo = new Todo;
+        $todo->getSequence();
+    }
+
+    public function test_has_with_no_sequence(): void
+    {
+        $todo = new Todo;
+
+        $this->assertFalse($todo->hasSequence());
+    }
+
+    public function test_unset_sequence(): void
+    {
+        $sequence = fake()->numberBetween();
+
+        $todo = new Todo;
+        $todo->setSequence(new Sequence($sequence));
+
+        // unsetSequence is chainable
+        $this->assertEquals($todo, $todo->unsetSequence());
+        // hasSequence is false when sequence is unset
+        $this->assertFalse($todo->hasSequence());
     }
 }

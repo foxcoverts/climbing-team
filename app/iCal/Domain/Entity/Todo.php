@@ -3,6 +3,7 @@
 namespace App\iCal\Domain\Entity;
 
 use App\iCal\Domain\Enum\TodoStatus;
+use App\iCal\Domain\ValueObject\Sequence;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
@@ -30,6 +31,8 @@ class Todo
     private ?DateTime $start = null;
 
     private ?DateTime $completed = null;
+
+    private ?Sequence $sequence = null;
 
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
@@ -262,6 +265,33 @@ class Todo
     public function unsetCompleted(): static
     {
         $this->completed = null;
+
+        return $this;
+    }
+
+    public function setSequence(Sequence $sequence): static
+    {
+        $this->sequence = $sequence;
+
+        return $this;
+    }
+
+    public function hasSequence(): bool
+    {
+        return $this->sequence !== null;
+    }
+
+    /**
+     * @throws TypeError when sequence is not set.
+     */
+    public function getSequence(): Sequence
+    {
+        return $this->sequence;
+    }
+
+    public function unsetSequence(): static
+    {
+        $this->sequence = null;
 
         return $this;
     }
