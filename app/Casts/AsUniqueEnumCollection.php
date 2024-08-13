@@ -40,7 +40,7 @@ class AsUniqueEnumCollection implements Castable
             public function get($model, $key, $value, $attributes): ?Collection
             {
                 if (! isset($attributes[$key])) {
-                    return null;
+                    return collect([]);
                 }
                 if (empty($attributes[$key])) {
                     return collect([]);
