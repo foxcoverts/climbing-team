@@ -73,6 +73,10 @@ class TodoFactory
         if ($todo->hasDue()) {
             yield new Property('DUE', new DateTimeValue($todo->getDue()));
         }
+
+        if ($todo->hasStart()) {
+            yield new Property('DTSTART', new DateTimeValue($todo->getStart()));
+        }
     }
 
     private function getOrganizerProperty(Organizer $organizer): Property
