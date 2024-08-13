@@ -13,7 +13,7 @@
             'timezone' => old('timezone', $user->timezone?->getName()),
             'section' => old('section', $user->section),
             'role' => old('role', $user->role),
-            'accreditations' => old('accreditations', $user->accreditations->all()),
+            'accreditations' => old('accreditations', $user->accreditations->pluck('value')->all()),
         ]) }},
         init() {
             $nextTick(() => {
