@@ -193,6 +193,9 @@ class Todo
         return $this->due !== null;
     }
 
+    /**
+     * @throws TypeError when due is not set.
+     */
     public function getDue(): DateTime
     {
         return $this->due;

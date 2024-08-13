@@ -286,7 +286,7 @@ class TodoTest extends TestCase
         $todo->getDue();
     }
 
-    public function test_has_organizer_with_no_due(): void
+    public function test_has_due_with_no_due(): void
     {
         $todo = new Todo;
         $this->assertFalse($todo->hasDue());
