@@ -29,6 +29,8 @@ class Todo
 
     private ?DateTime $start = null;
 
+    private ?DateTime $completed = null;
+
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
         $this->uniqueIdentifier = $uniqueIdentifier ?? UniqueIdentifier::createRandom();
@@ -233,6 +235,33 @@ class Todo
     public function unsetStart(): static
     {
         $this->start = null;
+
+        return $this;
+    }
+
+    public function setCompleted(DateTime $completed): static
+    {
+        $this->completed = $completed;
+
+        return $this;
+    }
+
+    public function hasCompleted(): bool
+    {
+        return $this->completed !== null;
+    }
+
+    /**
+     * @throws TypeError when completed is not set.
+     */
+    public function getCompleted(): DateTime
+    {
+        return $this->completed;
+    }
+
+    public function unsetCompleted(): static
+    {
+        $this->completed = null;
 
         return $this;
     }

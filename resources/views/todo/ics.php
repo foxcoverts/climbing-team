@@ -55,6 +55,10 @@ foreach ($todos as $todo) {
         $vtodo->setStart(new DateTime($todo->started_at, true));
     }
 
+    if (! empty($todo->completed_at)) {
+        $vtodo->setCompleted(new DateTime($todo->completed_at, true));
+    }
+
     /*
     - [x] $table->ulid('id')->primary(); // VTODO: UID
     - [x] $table->string('summary'); // VTODO: SUMMARY
@@ -64,7 +68,7 @@ foreach ($todos as $todo) {
     - [x] $table->enum('status', ['needs-action', 'in-process', 'completed', 'cancelled'])->default('needs-action'); // VTODO: STATUS
     - [x] $table->timestamp('due_at', 6)->nullable(); // VTODO: DUE
     - [x] $table->timestamp('started_at', 6)->nullable(); // VTODO: DTSTART
-    - [ ] $table->timestamp('completed_at', 6)->nullable(); // VTODO: COMPLETED
+    - [x] $table->timestamp('completed_at', 6)->nullable(); // VTODO: COMPLETED
     - [ ] $table->unsignedInteger('sequence')->default(0); // VTODO: SEQUENCE
     - [ ] $table->timestamps(6); // VTODO: CREATED, LAST-MODIFIED
 
