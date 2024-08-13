@@ -5,6 +5,7 @@ namespace Tests\Unit\iCal\Presentation\Factory;
 use App\iCal\Domain\Entity\Todo;
 use App\iCal\Domain\Enum\TodoStatus;
 use App\iCal\Presentation\Factory\TodoFactory;
+use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
@@ -113,5 +114,19 @@ class TodoFactoryTest extends TestCase
             [TodoStatus::InProcess, 'IN-PROCESS'],
             [TodoStatus::Cancelled, 'CANCELLED'],
         ];
+    }
+
+    public function test_due_is_rendered(): void
+    {
+        $due_at = fake()->dateTime();
+        $due_at_ical = $due_at->format('Ymd\THis\Z');
+
+        $todo = new Todo;
+        $todo->setDue(new DateTime($due_at, true));
+
+        $factory = new TodoFactory;
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("DUE:$due_at_ical\r\n", $output);
     }
 }
