@@ -3,6 +3,7 @@
 namespace Tests\Unit\iCal\Domain\Entity;
 
 use App\iCal\Domain\Entity\Todo;
+use App\iCal\Domain\Enum\TodoStatus;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
@@ -33,7 +34,7 @@ class TodoTest extends TestCase
     {
         $name = fake()->name();
         $email = fake()->email();
-        $todo = new Todo();
+        $todo = new Todo;
 
         // setOrganizer is chainable
         $this->assertEquals($todo, $todo->setOrganizer(new Organizer(new EmailAddress($email), $name)));
@@ -50,13 +51,13 @@ class TodoTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $todo = new Todo();
+        $todo = new Todo;
         $todo->getOrganizer();
     }
 
     public function test_has_organizer_with_no_organizer(): void
     {
-        $todo = new Todo();
+        $todo = new Todo;
         $this->assertFalse($todo->hasOrganizer());
     }
 
@@ -218,7 +219,7 @@ class TodoTest extends TestCase
 
     public function test_set_priority_fails_with_large_number(): void
     {
-        $todo = new Todo();
+        $todo = new Todo;
 
         $this->expectException(InvalidArgumentException::class);
         $big_priority = fake()->numberBetween(10, 2147483647);
@@ -227,10 +228,25 @@ class TodoTest extends TestCase
 
     public function test_set_priority_fails_with_negative_number(): void
     {
-        $todo = new Todo();
+        $todo = new Todo;
 
         $this->expectException(InvalidArgumentException::class);
         $negative_number = 0 - fake()->numberBetween();
         $todo->setPriority($negative_number);
+    }
+
+    public function test_set_get_status(): void
+    {
+        $status = fake()->randomElement(TodoStatus::class);
+
+        $todo = new Todo;
+
+        // default status is NeedsAction
+        $this->assertEquals(TodoStatus::NeedsAction, $todo->getStatus());
+
+        // setStatus is chainable
+        $this->assertEquals($todo, $todo->setStatus($status));
+        // getStatus returns the set status
+        $this->assertEquals($status, $todo->getStatus());
     }
 }
