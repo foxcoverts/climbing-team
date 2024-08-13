@@ -333,4 +333,46 @@ class TodoTest extends TestCase
         // hasStart is false when start is unset
         $this->assertFalse($todo->hasStart());
     }
+
+    public function test_set_get_completed(): void
+    {
+        $completed = fake()->dateTime();
+
+        $todo = new Todo;
+
+        // setCompleted is chainable
+        $this->assertEquals($todo, $todo->setCompleted(new DateTime($completed, true)));
+        // hasCompleted is true with completed
+        $this->assertTrue($todo->hasCompleted());
+        // getCompleted is completed that was set
+        $this->assertEquals($completed, $todo->getCompleted()->getDateTime());
+    }
+
+    public function test_get_fails_with_no_completed(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $todo = new Todo;
+        $todo->getCompleted();
+    }
+
+    public function test_has_with_no_completed(): void
+    {
+        $todo = new Todo;
+
+        $this->assertFalse($todo->hasCompleted());
+    }
+
+    public function test_unset_completed(): void
+    {
+        $completed = fake()->dateTime();
+
+        $todo = new Todo;
+        $todo->setCompleted(new DateTime($completed, true));
+
+        // unsetCompleted is chainable
+        $this->assertEquals($todo, $todo->unsetCompleted());
+        // hasCompleted is false when completed is unset
+        $this->assertFalse($todo->hasCompleted());
+    }
 }

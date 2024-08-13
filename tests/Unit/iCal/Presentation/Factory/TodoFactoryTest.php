@@ -142,6 +142,19 @@ class TodoFactoryTest extends TestCase
         $output = (string) $factory->createComponent($todo);
 
         $this->assertStringContainsString("DTSTART:$start_at_ical\r\n", $output);
+    }
 
+    public function test_completed_is_rendered(): void
+    {
+        $completed_at = fake()->dateTime();
+        $completed_at_ical = $completed_at->format('Ymd\This\Z');
+
+        $todo = new Todo;
+        $todo->setCompleted(new DateTime($completed_at, true));
+
+        $factory = new TodoFactory;
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("COMPLETED:$completed_at_ical\r\n", $output);
     }
 }
