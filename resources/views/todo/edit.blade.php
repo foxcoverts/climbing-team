@@ -16,7 +16,7 @@
                     'location' => old('location', $todo->location),
                     'priority' => old('priority', $todo->priority),
                     'status' => old('status', $todo->status),
-                    'due_at' => old('due_at', $todo->due_at),
+                    'due_at' => old('due_at', $todo->due_at->toDateTimeLocalString()),
                 ]) }},
             }" x-on:submit="setTimeout(() => submitted = 'update-todo', 0)">
             @csrf @method('PATCH')
