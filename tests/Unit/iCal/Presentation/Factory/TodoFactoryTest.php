@@ -3,11 +3,13 @@
 namespace Tests\Unit\iCal\Presentation\Factory;
 
 use App\iCal\Domain\Entity\Todo;
+use App\iCal\Domain\Enum\TodoStatus;
 use App\iCal\Presentation\Factory\TodoFactory;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class TodoFactoryTest extends TestCase
@@ -17,7 +19,7 @@ class TodoFactoryTest extends TestCase
         $uid = fake()->word();
         $todo = new Todo(new UniqueIdentifier($uid));
 
-        $factory = new TodoFactory();
+        $factory = new TodoFactory;
         $output = (string) $factory->createComponent($todo);
 
         $this->assertStringContainsString("BEGIN:VTODO\r\n", $output);
@@ -30,10 +32,10 @@ class TodoFactoryTest extends TestCase
         $email = fake()->email();
         $name = fake()->name();
 
-        $todo = new Todo();
+        $todo = new Todo;
         $todo->setOrganizer(new Organizer(new EmailAddress($email), $name));
 
-        $factory = new TodoFactory();
+        $factory = new TodoFactory;
         $output = (string) $factory->createComponent($todo);
 
         $this->assertStringContainsString("ORGANIZER;CN=$name:", $output);
@@ -43,10 +45,10 @@ class TodoFactoryTest extends TestCase
     {
         $summary = fake()->sentence();
 
-        $todo = new Todo();
+        $todo = new Todo;
         $todo->setSummary($summary);
 
-        $factory = new TodoFactory();
+        $factory = new TodoFactory;
         $output = (string) $factory->createComponent($todo);
 
         $this->assertStringContainsString("SUMMARY:$summary\r\n", $output);
@@ -56,10 +58,10 @@ class TodoFactoryTest extends TestCase
     {
         $description = fake()->sentence();
 
-        $todo = new Todo();
+        $todo = new Todo;
         $todo->setDescription($description);
 
-        $factory = new TodoFactory();
+        $factory = new TodoFactory;
         $output = (string) $factory->createComponent($todo);
 
         $this->assertStringContainsString("DESCRIPTION:$description\r\n", $output);
@@ -69,10 +71,10 @@ class TodoFactoryTest extends TestCase
     {
         $location = fake()->sentence(3);
 
-        $todo = new Todo();
+        $todo = new Todo;
         $todo->setLocation(new Location($location));
 
-        $factory = new TodoFactory();
+        $factory = new TodoFactory;
         $output = (string) $factory->createComponent($todo);
 
         $this->assertStringContainsString("LOCATION:$location\r\n", $output);
@@ -82,12 +84,34 @@ class TodoFactoryTest extends TestCase
     {
         $priority = fake()->randomDigitNotZero();
 
-        $todo = new Todo();
+        $todo = new Todo;
         $todo->setPriority($priority);
 
-        $factory = new TodoFactory();
+        $factory = new TodoFactory;
         $output = (string) $factory->createComponent($todo);
 
         $this->assertStringContainsString("PRIORITY:$priority\r\n", $output);
+    }
+
+    #[DataProvider('status_output_provider')]
+    public function test_status_is_rendered(TodoStatus $status, string $expected): void
+    {
+        $todo = new Todo;
+        $todo->setStatus($status);
+
+        $factory = new TodoFactory;
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("STATUS:$expected\r\n", $output);
+    }
+
+    public static function status_output_provider(): array
+    {
+        return [
+            [TodoStatus::NeedsAction, 'NEEDS-ACTION'],
+            [TodoStatus::Completed, 'COMPLETED'],
+            [TodoStatus::InProcess, 'IN-PROCESS'],
+            [TodoStatus::Cancelled, 'CANCELLED'],
+        ];
     }
 }

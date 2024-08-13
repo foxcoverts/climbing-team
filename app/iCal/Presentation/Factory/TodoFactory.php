@@ -4,6 +4,7 @@ namespace App\iCal\Presentation\Factory;
 
 use App\iCal\Domain\Collection\Todos;
 use App\iCal\Domain\Entity\Todo;
+use App\iCal\Domain\Enum\TodoStatus;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Presentation\Component;
@@ -65,6 +66,8 @@ class TodoFactory
         if ($todo->hasPriority()) {
             yield new Property('PRIORITY', new IntegerValue($todo->getPriority()));
         }
+
+        yield $this->getStatusProperty($todo->getStatus());
     }
 
     private function getOrganizerProperty(Organizer $organizer): Property
@@ -106,5 +109,15 @@ class TodoFactory
                 ]
             );
         }
+    }
+
+    private function getStatusProperty(TodoStatus $status): Property
+    {
+        return new Property('STATUS', new TextValue(match ($status) {
+            TodoStatus::NeedsAction => 'NEEDS-ACTION',
+            TodoStatus::Completed => 'COMPLETED',
+            TodoStatus::InProcess => 'IN-PROCESS',
+            TodoStatus::Cancelled => 'CANCELLED',
+        }));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\iCal\Domain\Entity;
 
+use App\iCal\Domain\Enum\TodoStatus;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
@@ -21,9 +22,12 @@ class Todo
 
     private ?int $priority = null;
 
+    private TodoStatus $status;
+
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
         $this->uniqueIdentifier = $uniqueIdentifier ?? UniqueIdentifier::createRandom();
+        $this->status = TodoStatus::NeedsAction;
     }
 
     public function getUniqueIdentifier(): UniqueIdentifier
@@ -160,5 +164,17 @@ class Todo
         $this->priority = null;
 
         return $this;
+    }
+
+    public function setStatus(TodoStatus $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getStatus(): TodoStatus
+    {
+        return $this->status;
     }
 }
