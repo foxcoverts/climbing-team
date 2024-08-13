@@ -5,6 +5,7 @@ use App\iCal\Domain\Entity\Calendar;
 use App\iCal\Domain\Entity\Todo;
 use App\iCal\Domain\Enum\CalendarMethod;
 use App\iCal\Domain\Enum\TodoStatus as VTodoStatus;
+use App\iCal\Domain\ValueObject\Sequence;
 use App\iCal\Presentation\Factory\CalendarFactory;
 use App\iCal\Presentation\Factory\EventFactory;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
@@ -27,6 +28,7 @@ foreach ($todos as $todo) {
     );
 
     $vtodo = new Todo(new UniqueIdentifier($todo->uid));
+    $vtodo->setSequence(new Sequence($todo->sequence));
     $vtodo->setOrganizer($organiser);
     $vtodo->setSummary($todo->summary);
 
@@ -69,7 +71,7 @@ foreach ($todos as $todo) {
     - [x] $table->timestamp('due_at', 6)->nullable(); // VTODO: DUE
     - [x] $table->timestamp('started_at', 6)->nullable(); // VTODO: DTSTART
     - [x] $table->timestamp('completed_at', 6)->nullable(); // VTODO: COMPLETED
-    - [ ] $table->unsignedInteger('sequence')->default(0); // VTODO: SEQUENCE
+    - [x] $table->unsignedInteger('sequence')->default(0); // VTODO: SEQUENCE
     - [ ] $table->timestamps(6); // VTODO: CREATED, LAST-MODIFIED
 
     - [x] VTODO:ORGANIZER
