@@ -186,4 +186,18 @@ class TodoFactoryTest extends TestCase
 
         $this->assertStringContainsString("LAST-MODIFIED:$last_modified_ical\r\n", $output);
     }
+
+    public function test_touched_at_is_rendered(): void
+    {
+        $touched_at = fake()->dateTime(timezone: 'UTC');
+        $touched_at_ical = $touched_at->format('Ymd\This\Z');
+
+        $todo = new Todo;
+        $todo->touch(new Timestamp($touched_at));
+
+        $factory = new TodoFactory;
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("DTSTAMP:$touched_at_ical\r\n", $output);
+    }
 }

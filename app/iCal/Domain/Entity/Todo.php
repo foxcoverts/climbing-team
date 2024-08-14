@@ -15,6 +15,8 @@ class Todo
 {
     private UniqueIdentifier $uniqueIdentifier;
 
+    private Timestamp $touchedAt;
+
     private ?Organizer $organizer = null;
 
     private ?string $summary = null;
@@ -40,12 +42,25 @@ class Todo
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
         $this->uniqueIdentifier = $uniqueIdentifier ?? UniqueIdentifier::createRandom();
+        $this->touchedAt = new Timestamp;
         $this->status = TodoStatus::NeedsAction;
     }
 
     public function getUniqueIdentifier(): UniqueIdentifier
     {
         return $this->uniqueIdentifier;
+    }
+
+    public function getTouchedAt(): Timestamp
+    {
+        return $this->touchedAt;
+    }
+
+    public function touch(?Timestamp $dateTime = null): self
+    {
+        $this->touchedAt = $dateTime ?? new Timestamp;
+
+        return $this;
     }
 
     public function getOrganizer(): Organizer
