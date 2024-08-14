@@ -47,6 +47,7 @@ class TodoFactory
     protected function getProperties(Todo $todo): Generator
     {
         yield new Property('UID', new TextValue((string) $todo->getUniqueIdentifier()));
+        yield new Property('DTSTAMP', new DateTimeValue($todo->getTouchedAt()));
 
         if ($todo->hasLastModified()) {
             yield new Property('LAST-MODIFIED', new DateTimeValue($todo->getLastModified()));

@@ -461,4 +461,16 @@ class TodoTest extends TestCase
         // hasLastModified is false when unset
         $this->assertFalse($todo->hasLastModified());
     }
+
+    public function test_set_get_touched_at(): void
+    {
+        $touched_at = fake()->dateTime();
+
+        $todo = new Todo;
+
+        // touch is chainable
+        $this->assertEquals($todo, $todo->touch(new Timestamp($touched_at)));
+        // get returns set value
+        $this->assertEquals($touched_at, $todo->getTouchedAt()->getDateTime());
+    }
 }
