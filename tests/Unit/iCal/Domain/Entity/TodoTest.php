@@ -9,6 +9,7 @@ use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
+use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use InvalidArgumentException;
 use Tests\TestCase;
@@ -417,5 +418,47 @@ class TodoTest extends TestCase
         $this->assertEquals($todo, $todo->unsetSequence());
         // hasSequence is false when sequence is unset
         $this->assertFalse($todo->hasSequence());
+    }
+
+    public function test_set_get_last_modified(): void
+    {
+        $last_modified = fake()->dateTime();
+
+        $todo = new Todo;
+
+        // setLastModified is chainable
+        $this->assertEquals($todo, $todo->setLastModified(new Timestamp($last_modified)));
+        // hasLastModified is true when set
+        $this->assertTrue($todo->hasLastModified());
+        // getLastModified is set value
+        $this->assertEquals($last_modified, $todo->getLastModified()->getDateTime());
+    }
+
+    public function test_get_with_no_last_modified(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $todo = new Todo;
+        $todo->getLastModified();
+    }
+
+    public function test_has_with_no_last_modified(): void
+    {
+        $todo = new Todo;
+
+        $this->assertFalse($todo->hasLastModified());
+    }
+
+    public function test_unset_last_modified(): void
+    {
+        $last_modified = fake()->dateTime();
+
+        $todo = new Todo;
+        $todo->setLastModified(new Timestamp($last_modified));
+
+        // unsetLastModified is chainable
+        $this->assertEquals($todo, $todo->unsetLastModified());
+        // hasLastModified is false when unset
+        $this->assertFalse($todo->hasLastModified());
     }
 }

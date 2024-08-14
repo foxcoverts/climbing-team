@@ -12,6 +12,7 @@ use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
+use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 
 if (! isset($method) || ! $method instanceof CalendarMethod) {
@@ -31,6 +32,7 @@ foreach ($todos as $todo) {
     $vtodo->setSequence(new Sequence($todo->sequence));
     $vtodo->setOrganizer($organiser);
     $vtodo->setSummary($todo->summary);
+    $vtodo->setLastModified(new Timestamp($todo->updated_at));
 
     if (! empty($todo->description)) {
         $vtodo->setDescription($todo->description);

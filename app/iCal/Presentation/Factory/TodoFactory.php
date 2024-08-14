@@ -48,6 +48,10 @@ class TodoFactory
     {
         yield new Property('UID', new TextValue((string) $todo->getUniqueIdentifier()));
 
+        if ($todo->hasLastModified()) {
+            yield new Property('LAST-MODIFIED', new DateTimeValue($todo->getLastModified()));
+        }
+
         if ($todo->hasSequence()) {
             yield new Property('SEQUENCE', new IntegerValue($todo->getSequence()->getSequence()));
         }

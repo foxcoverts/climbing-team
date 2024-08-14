@@ -10,6 +10,7 @@ use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
+use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -170,5 +171,19 @@ class TodoFactoryTest extends TestCase
         $output = (string) $factory->createComponent($todo);
 
         $this->assertStringContainsString("SEQUENCE:$sequence\r\n", $output);
+    }
+
+    public function test_last_modified_is_rendered(): void
+    {
+        $last_modified = fake()->dateTime(timezone: 'UTC');
+        $last_modified_ical = $last_modified->format('Ymd\This\Z');
+
+        $todo = new Todo;
+        $todo->setLastModified(new Timestamp($last_modified));
+
+        $factory = new TodoFactory;
+        $output = (string) $factory->createComponent($todo);
+
+        $this->assertStringContainsString("LAST-MODIFIED:$last_modified_ical\r\n", $output);
     }
 }
