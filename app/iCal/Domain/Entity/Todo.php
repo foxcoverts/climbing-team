@@ -7,6 +7,7 @@ use App\iCal\Domain\ValueObject\Sequence;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
+use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use InvalidArgumentException;
 
@@ -33,6 +34,8 @@ class Todo
     private ?DateTime $completed = null;
 
     private ?Sequence $sequence = null;
+
+    private ?Timestamp $lastModified = null;
 
     public function __construct(?UniqueIdentifier $uniqueIdentifier = null)
     {
@@ -292,6 +295,33 @@ class Todo
     public function unsetSequence(): static
     {
         $this->sequence = null;
+
+        return $this;
+    }
+
+    public function setLastModified(Timestamp $lastModified): static
+    {
+        $this->lastModified = $lastModified;
+
+        return $this;
+    }
+
+    public function hasLastModified(): bool
+    {
+        return $this->lastModified !== null;
+    }
+
+    /**
+     * @throws TypeError when last modified is not set.
+     */
+    public function getLastModified(): Timestamp
+    {
+        return $this->lastModified;
+    }
+
+    public function unsetLastModified(): static
+    {
+        $this->lastModified = null;
 
         return $this;
     }
