@@ -63,22 +63,6 @@ foreach ($todos as $todo) {
         $vtodo->setCompleted(new DateTime($todo->completed_at, true));
     }
 
-    /*
-    - [x] $table->ulid('id')->primary(); // VTODO: UID
-    - [x] $table->string('summary'); // VTODO: SUMMARY
-    - [x] $table->text('description'); // VTODO: DESCRIPTION
-    - [x] $table->string('location')->nullable(); // VTODO: LOCATION
-    - [x] $table->unsignedTinyInteger('priority')->default(5); // VTODO: PRIORITY (HIGH = 1, MEDIUM = 5, LOW = 9)
-    - [x] $table->enum('status', ['needs-action', 'in-process', 'completed', 'cancelled'])->default('needs-action'); // VTODO: STATUS
-    - [x] $table->timestamp('due_at', 6)->nullable(); // VTODO: DUE
-    - [x] $table->timestamp('started_at', 6)->nullable(); // VTODO: DTSTART
-    - [x] $table->timestamp('completed_at', 6)->nullable(); // VTODO: COMPLETED
-    - [x] $table->unsignedInteger('sequence')->default(0); // VTODO: SEQUENCE
-    - [ ] $table->timestamps(6); // VTODO: CREATED, LAST-MODIFIED
-
-    - [x] VTODO:ORGANIZER
-    */
-
     $calendar->addTodo($vtodo);
 }
 
