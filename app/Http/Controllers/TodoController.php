@@ -20,7 +20,10 @@ class TodoController extends Controller
         Gate::authorize('viewAny', Todo::class);
 
         return view('todo.index', [
-            'todos' => Todo::orderBy('status')->orderBy('priority')->get(),
+            'todos' => Todo::orderBy('status')
+                ->orderBy('priority')
+                ->orderByRaw('-due_at DESC')
+                ->get(),
         ]);
     }
 
