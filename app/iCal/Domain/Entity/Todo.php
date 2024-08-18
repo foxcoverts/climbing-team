@@ -65,8 +65,6 @@ class Todo
 
     public function getOrganizer(): Organizer
     {
-        assert($this->organizer !== null);
-
         return $this->organizer;
     }
 
