@@ -149,7 +149,7 @@ class TodoFactoryTest extends TestCase
     public function test_completed_is_rendered(): void
     {
         $completed_at = fake()->dateTime();
-        $completed_at_ical = $completed_at->format('Ymd\This\Z');
+        $completed_at_ical = $completed_at->format('Ymd\THis\Z');
 
         $todo = new Todo;
         $todo->setCompleted(new DateTime($completed_at, true));
@@ -176,7 +176,7 @@ class TodoFactoryTest extends TestCase
     public function test_last_modified_is_rendered(): void
     {
         $last_modified = fake()->dateTime(timezone: 'UTC');
-        $last_modified_ical = $last_modified->format('Ymd\This\Z');
+        $last_modified_ical = $last_modified->format('Ymd\THis\Z');
 
         $todo = new Todo;
         $todo->setLastModified(new Timestamp($last_modified));
@@ -190,7 +190,7 @@ class TodoFactoryTest extends TestCase
     public function test_touched_at_is_rendered(): void
     {
         $touched_at = fake()->dateTime(timezone: 'UTC');
-        $touched_at_ical = $touched_at->format('Ymd\This\Z');
+        $touched_at_ical = $touched_at->format('Ymd\THis\Z');
 
         $todo = new Todo;
         $todo->touch(new Timestamp($touched_at));
