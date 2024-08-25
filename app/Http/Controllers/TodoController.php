@@ -83,6 +83,7 @@ class TodoController extends Controller
     public function update(UpdateTodoRequest $request, Todo $todo)
     {
         Gate::authorize('update', $todo);
+        $alertMessage = __('Task updated.');
 
         $todo->fill($request->validated());
         if ($todo->isDirty('status')) {
@@ -90,16 +91,23 @@ class TodoController extends Controller
                 case TodoStatus::NeedsAction:
                     $todo->started_at = null;
                     $todo->completed_at = null;
+                    $alertMessage = __('Task reset.');
                     break;
 
                 case TodoStatus::InProcess:
                     $todo->started_at ??= $todo->freshTimestamp();
                     $todo->completed_at = null;
+                    $alertMessage = __('Task started.');
                     break;
 
                 case TodoStatus::Completed:
+                    $todo->completed_at = $todo->freshTimestamp();
+                    $alertMessage = __('Task completed.');
+                    break;
+
                 case TodoStatus::Cancelled:
                     $todo->completed_at = $todo->freshTimestamp();
+                    $alertMessage = __('Task cancelled.');
                     break;
             }
         }
@@ -107,7 +115,7 @@ class TodoController extends Controller
 
         return redirect()->route('todo.index')
             ->withFragment($todo->id)
-            ->with('alert.message', __('Task updated.'));
+            ->with('alert.message', $alertMessage);
     }
 
     /**
