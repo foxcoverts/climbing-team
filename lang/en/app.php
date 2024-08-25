@@ -61,6 +61,8 @@ return [
         ],
     ],
     'todo' => [
+        'due_ago' => 'Due :ago',
+        'due_date' => 'Due on :date',
         'priority' => [
             '1' => 'High',
             '2' => 'High (2)',

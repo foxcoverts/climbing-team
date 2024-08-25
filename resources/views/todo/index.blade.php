@@ -56,11 +56,7 @@
                     @if ($todo->priority != 5)
                         <x-badge.todo-priority :priority="$todo->priority" class="text-xs" />
                     @endif
-                    @if (!empty($todo->due_at))
-                        <x-badge class="text-xs" :title="$todo->due_at->toDayDateTimeString()">
-                            Due {{ $todo->due_at->ago() }}
-                        </x-badge>
-                    @endif
+                    <x-badge.todo-due :todo="$todo" class="text-xs" />
                 </li>
             @endforeach
         </ul>

@@ -71,6 +71,9 @@
                         <p class="text-gray-700 dark:text-gray-300">
                             <span x-data="{{ Js::from(['due_at' => localDate($todo->due_at)]) }}"
                                 x-text="dateTimeString(due_at)">{{ localDate($todo->due_at)->toDayDateTimeString() }}</span>
+                            @if ($todo->isOverdue())
+                                <x-badge :label="__('Overdue')" color="pink" icon="outline.exclamation" class="text-sm" />
+                            @endif
                         </p>
                     </div>
                 @endisset
