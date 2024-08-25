@@ -62,4 +62,16 @@ class Todo extends Model
             'started_at',
         ];
     }
+
+    /**
+     * Is this Todo overdue?
+     */
+    public function isOverdue(): bool
+    {
+        if (empty($this->due_at)) {
+            return false;
+        }
+
+        return $this->due_at->isPast();
+    }
 }
