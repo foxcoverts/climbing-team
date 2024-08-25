@@ -15,7 +15,7 @@
             </div>
         </header>
 
-        <ul class="divide-y border-b">
+        <ul class="divide-y border-b" id="todos">
             @foreach ($todos as $todo)
                 <li @class([
                     'pl-4 sm:pl-8 py-2 flex items-center gap-2 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-900 dark:hover:text-gray-100 cursor-pointer',
@@ -61,5 +61,23 @@
                 </li>
             @endforeach
         </ul>
+
+        <footer class="p-4 sm:pl-8">
+            <form action="{{ route('todo.index') }}" method="GET" id="filter" x-target.replace="todos filter">
+                <fieldset class="md:inline">
+                    <legend>{{ __('Show:') }}</legend>
+                    @foreach (\App\Enums\TodoStatus::cases() as $case)
+                        <label class="mt-1 block md:inline md:mr-2">
+                            <x-input-checkbox name="status[]" :value="$case->value" :checked="$statuses->contains($case)" />
+                            <span>{{ __("app.todo.status.$case->value") }}</span>
+                        </label>
+                    @endforeach
+                </fieldset>
+                <div class="mt-2 md:inline">
+                    <x-button.primary type="submit">{{ __('Filter') }}</x-button.primary>
+                    <x-button :href="route('todo.index')" x-target.replace="todos filter">{{ __('Reset') }}</x-button>
+                </div>
+            </form>
+        </footer>
     </section>
 </x-layout.app>
