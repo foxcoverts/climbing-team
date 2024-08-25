@@ -18,10 +18,11 @@
         <ul class="divide-y border-b">
             @foreach ($todos as $todo)
                 <li @class([
-                    'pl-4 sm:pl-8 py-2 flex items-center gap-2 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-900 dark:hover:text-gray-100',
+                    'pl-4 sm:pl-8 py-2 flex items-center gap-2 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-900 dark:hover:text-gray-100 cursor-pointer',
                     'text-gray-500 dark:text-gray-400' =>
                         $todo->status == TodoStatus::Cancelled,
-                ]) id="{{ $todo->id }}">
+                ]) id="{{ $todo->id }}"
+                    @click="window.location={{ Js::from(route('todo.show', $todo)) }}">
                     <form action="{{ route('todo.update', $todo) }}" method="POST" class="flex items-center">
                         @csrf
                         @method('PATCH')
