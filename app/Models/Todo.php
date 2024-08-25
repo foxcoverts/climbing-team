@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\AsSequence;
 use App\Enums\TodoStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -73,5 +74,29 @@ class Todo extends Model
         }
 
         return $this->due_at->isPast();
+    }
+
+    /**
+     * Filter by status.
+     *
+     * @param  mixed  $status
+     */
+    public function scopeWithStatus(Builder $todos, $status = []): void
+    {
+        if (empty($status)) {
+            $status = [TodoStatus::NeedsAction, TodoStatus::InProcess];
+        }
+        $todos->whereIn('status', $status);
+    }
+
+    /**
+     * Sort by status, priority, and due_at.
+     */
+    public function scopeOrdered(Builder $todos): void
+    {
+        $todos
+            ->orderBy('status')
+            ->orderBy('priority')
+            ->orderByRaw('-due_at DESC');
     }
 }

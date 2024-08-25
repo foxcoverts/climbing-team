@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateTodoRequest;
 use App\Models\Todo;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
 class TodoController extends Controller
@@ -15,15 +17,22 @@ class TodoController extends Controller
     /**
      * Display a listing of the todos.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         Gate::authorize('viewAny', Todo::class);
 
+        $statuses = collect($request->get('status'))
+            ->map(fn ($value) => TodoStatus::tryFrom($value))
+            ->filter()
+            ->whenEmpty(function (Collection $collection): Collection {
+                return $collection->push(TodoStatus::NeedsAction, TodoStatus::InProcess);
+            });
+
         return view('todo.index', [
-            'todos' => Todo::orderBy('status')
-                ->orderBy('priority')
-                ->orderByRaw('-due_at DESC')
+            'todos' => Todo::withStatus($statuses->all())
+                ->ordered()
                 ->get(),
+            'statuses' => $statuses,
         ]);
     }
 
