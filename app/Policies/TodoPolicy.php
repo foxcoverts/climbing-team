@@ -20,7 +20,7 @@ class TodoPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('manage', Todo::class);
+        return $user->can('manage', Todo::class) || ! $user->isGuest();
     }
 
     /**
@@ -28,7 +28,7 @@ class TodoPolicy
      */
     public function view(User $user, Todo $todo): bool
     {
-        return $user->can('manage', $todo);
+        return $user->can('manage', Todo::class) || ! $user->isGuest();
     }
 
     /**
