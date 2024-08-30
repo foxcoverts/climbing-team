@@ -9,6 +9,6 @@ class ChangeFieldPolicy
 {
     public function view(User $user, ChangeField $field)
     {
-        return $user->can('view', $field->change->booking);
+        return $user->can('view', $field->change->changeable);
     }
 }

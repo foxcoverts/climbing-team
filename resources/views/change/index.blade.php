@@ -11,8 +11,17 @@
 
         <div class="px-4 sm:px-8 max-w-3xl space-y-2 my-4">
             <div class="space-y-2" id="changes" x-merge="append">
-                @php($booking_link = 'change.partials.booking-link')
                 @foreach ($changes as $change)
+                    @switch ($change->changeable_type)
+                        @case (App\Models\Booking::class)
+                            @php($changeable_link = 'change.partials.booking.link')
+                            @php($attendee_link = 'change.partials.booking.attendee-link')
+                        @break
+
+                        @default
+                            @continue(2)
+                    @endswitch
+
                     <x-recent-activity.item :id="$change->id">
                         <x-slot:time>
                             <p><span x-data="{{ Js::from(['start_at' => localDate($change->created_at)]) }}" x-bind:title="dateTimeString(start_at)"

@@ -1,13 +1,13 @@
 @props(['comment', 'change'])
 <div class="border-l-2 ml-2 pl-2" id="{{ $comment->id }}" x-data="{ menu: false, editing: false, deleting: false, submitted: false }">
     <div>
-        @include('change.partials.attendee-link', [
-            'booking' => $change->booking,
+        @include($attendee_link, [
+            'changeable' => $change->changeable,
             'attendee' => $change->author,
         ])
         {{ __('commented') }}
-        @include($booking_link, [
-            'booking' => $change->booking,
+        @include($changeable_link, [
+            'changeable' => $change->changeable,
             'show' => 'link',
             'before' => __('on '),
             'after' => ':',

@@ -9,11 +9,12 @@
     <div class="space-y-2">
         @include('booking.partials.comment-form')
 
-        @php($booking_link = 'change.partials.this-booking')
+        @php($changeable_link = 'change.partials.booking.this')
+        @php($attendee_link = 'change.partials.booking.attendee-link')
         @php($changed_attendees = [])
         @php($changed_fields = [])
         @foreach ($booking->changes as $change)
-            @php($change->booking = $booking)
+            @php($change->changeable = $booking)
             <x-recent-activity.item :id="$change->id">
                 <x-slot:time>
                     <p><span x-data="{{ Js::from(['start_at' => localDate($change->created_at)]) }}" x-bind:title="dateTimeString(start_at)"
