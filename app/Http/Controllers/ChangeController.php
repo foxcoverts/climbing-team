@@ -15,8 +15,8 @@ class ChangeController extends Controller
     {
         Gate::authorize('viewAny', Change::class);
 
-        $changes = Change::with('booking', 'booking.attendees', 'author', 'attendees', 'comments', 'fields')
-            ->has('booking')
+        $changes = Change::with('changeable', 'changeable.attendees', 'author', 'attendees', 'comments', 'fields')
+            ->has('changeable')
             ->orderByDesc('created_at')
             ->cursorPaginate(10);
 

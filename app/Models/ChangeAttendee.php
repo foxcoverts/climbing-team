@@ -51,18 +51,6 @@ class ChangeAttendee extends Model
         );
     }
 
-    public function booking(): HasOneThrough
-    {
-        return $this->hasOneThrough(
-            Booking::class,
-            Change::class,
-            'id', // changes.id
-            'id', // bookings.id
-            'change_id', // change_attendees.change_id
-            'booking_id' // changes.booking_id
-        );
-    }
-
     public function getCreatedAtAttribute()
     {
         return $this->change->created_at;

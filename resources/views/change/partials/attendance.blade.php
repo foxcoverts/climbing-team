@@ -1,8 +1,8 @@
 @use('App\Enums\AttendeeStatus')
 <div class="border-l-2 ml-2 pl-2" id="{{ $attendee->id }}">
     <p>
-        @include('change.partials.attendee-link', [
-            'booking' => $change->booking,
+        @include($attendee_link, [
+            'changeable' => $change->changeable,
             'attendee' => $attendee->attendee,
         ])
         @switch ($attendee->attendee_status)
@@ -18,20 +18,20 @@
                 {{ __('cannot attend') }}
             @break
         @endswitch
-        @include($booking_link, [
-            'booking' => $change->booking,
+        @include($changeable_link, [
+            'changeable' => $change->changeable,
             'after' => '.',
         ])
     </p>
     @if ($attendee->attendee_comment)
         <div>
-            @include('change.partials.attendee-link', [
-                'booking' => $change->booking,
+            @include($attendee_link, [
+                'changeable' => $change->changeable,
                 'attendee' => $change->author,
             ])
             {{ __('commented') }}
-            @include($booking_link, [
-                'booking' => $change->booking,
+            @include($changeable_link, [
+                'changeable' => $change->changeable,
                 'before' => 'on ',
                 'after' => ':',
                 'show' => 'link',

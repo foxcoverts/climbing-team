@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Change extends Model
 {
-    use HasUlids, HasTimestamps;
+    use HasTimestamps, HasUlids;
 
     protected $with = [
         'author',
@@ -20,9 +21,9 @@ class Change extends Model
         'fields',
     ];
 
-    public function booking(): BelongsTo
+    public function changeable(): MorphTo
     {
-        return $this->belongsTo(Booking::class);
+        return $this->morphTo();
     }
 
     public function author(): BelongsTo

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Change;
 use App\Models\ChangeComment;
-use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -23,14 +23,14 @@ class BookingCommentController extends Controller
 
         $change = new Change;
         $change->author()->associate($request->user());
-        $change->booking()->associate($booking);
+        $change->changeable()->associate($booking);
         $change->push();
 
         $comment = new ChangeComment;
         $comment->body = $request->body;
         $change->comments()->save($comment);
 
-        return redirect()->route('booking.show', $booking)->withFragment('#' . $change->id);
+        return redirect()->route('booking.show', $booking)->withFragment('#'.$change->id);
     }
 
     public function update(Request $request, ChangeComment $comment)
@@ -46,7 +46,7 @@ class BookingCommentController extends Controller
 
         $comment->change->touch();
 
-        return redirect()->route('booking.show', $comment->change->booking)
+        return redirect()->route('booking.show', $comment->change->changeable)
             ->with('alert.info', __('Comment saved.'));
     }
 
@@ -56,7 +56,7 @@ class BookingCommentController extends Controller
 
         $comment->change->delete();
 
-        return redirect()->route('booking.show', $comment->change->booking)
+        return redirect()->route('booking.show', $comment->change->changeable)
             ->with('alert.info', __('Comment deleted.'));
     }
 }
