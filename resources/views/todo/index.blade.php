@@ -18,7 +18,7 @@
         <ul class="divide-y border-b" id="todos">
             @foreach ($todos as $todo)
                 <li @class([
-                    'pl-4 sm:pl-8 py-2 flex items-center gap-2 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-900 dark:hover:text-gray-100 cursor-pointer',
+                    'px-4 sm:px-8 py-2 flex items-center gap-2 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-900 dark:hover:text-gray-100 cursor-pointer',
                     'text-gray-500 dark:text-gray-400' =>
                         $todo->status == TodoStatus::Cancelled,
                 ]) id="{{ $todo->id }}"
@@ -53,7 +53,12 @@
                             @break
                         @endswitch
                     </form>
-                    <a href="{{ route('todo.show', $todo) }}">{{ $todo->summary }}</a>
+                    <a href="{{ route('todo.show', $todo) }}" class="truncate">{{ $todo->summary }}</a>
+                    @isset($todo->description)
+                        <div class="text-gray-500">
+                            <x-icon.document class="w-3 h-3 fill-current" />
+                        </div>
+                    @endisset
                     @if ($todo->priority != 5)
                         <x-badge.todo-priority :priority="$todo->priority" class="text-xs" />
                     @endif
