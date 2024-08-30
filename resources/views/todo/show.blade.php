@@ -55,7 +55,10 @@
 
                 @isset($todo->description)
                     <div class="prose dark:prose-invert prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0">
-                        <x-fake-label :value="__('Notes')" />
+                        <x-fake-label>
+                            {{ __('Notes') }}
+                            <x-icon.document class="w-3 h-3 fill-gray-600 inline-block" />
+                        </x-fake-label>
                         <x-markdown :text="$todo->description" />
                     </div>
                 @endisset
