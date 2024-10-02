@@ -93,7 +93,8 @@
                     <legend>{{ __('Show:') }}</legend>
                     @foreach (\App\Enums\TodoStatus::cases() as $case)
                         <label class="mt-1 block md:inline md:mr-2">
-                            <x-input-checkbox name="status[]" :value="$case->value" :checked="$statuses->contains($case)" />
+                            <x-input-checkbox name="status[]" :value="$case->value" :checked="$statuses->contains($case)"
+                                @input.debounce="$el.form.requestSubmit()" />
                             <span>{{ __("app.todo.status.$case->value") }}</span>
                         </label>
                     @endforeach
