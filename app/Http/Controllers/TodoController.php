@@ -91,10 +91,17 @@ class TodoController extends Controller
      */
     public function update(UpdateTodoRequest $request, Todo $todo)
     {
-        Gate::authorize('update', $todo);
+        Gate::authorize('complete', $todo);
+
         $alertMessage = __('Task updated.');
 
-        $todo->fill($request->validated());
+        if (Gate::check('update')) {
+            $validated = $request->validated();
+        } else {
+            $validated = $request->safe()->only('status');
+        }
+        $todo->fill($validated);
+
         if ($todo->isDirty('status')) {
             switch ($todo->status) {
                 case TodoStatus::NeedsAction:

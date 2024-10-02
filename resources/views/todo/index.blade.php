@@ -23,15 +23,41 @@
                         $todo->status == TodoStatus::Cancelled,
                 ]) id="{{ $todo->id }}"
                     @click="window.location={{ Js::from(route('todo.show', $todo)) }}">
-                    <form action="{{ route('todo.update', $todo) }}" method="POST" class="flex items-center">
-                        @csrf
-                        @method('PATCH')
+                    @can('complete', $todo)
+                        <form action="{{ route('todo.update', $todo) }}" method="POST" class="flex items-center">
+                            @csrf
+                            @method('PATCH')
+                            @switch($todo->status)
+                                @case(TodoStatus::Completed)
+                                    <button name="status" value="{{ TodoStatus::NeedsAction->value }}"
+                                        title="{{ __('Reset task') }}">
+                                        <x-icon.outline.checkmark class="w-4 h-4 fill-current" />
+                                    </button>
+                                @break
+
+                                @case(TodoStatus::Cancelled)
+                                    <x-icon.outline.close class="w-4 h-4 fill-current" />
+                                @break
+
+                                @case(TodoStatus::InProcess)
+                                    <button name="status" value="{{ TodoStatus::Completed->value }}"
+                                        title="{{ __('Complete task') }}">
+                                        <x-icon.outline.dot class="w-4 h-4 fill-current" />
+                                    </button>
+                                @break
+
+                                @case(TodoStatus::NeedsAction)
+                                    <button name="status" value="{{ TodoStatus::Completed->value }}"
+                                        title="{{ __('Complete task') }}">
+                                        <x-icon.outline class="w-4 h-4 fill-current" />
+                                    </button>
+                                @break
+                            @endswitch
+                        </form>
+                    @else
                         @switch($todo->status)
                             @case(TodoStatus::Completed)
-                                <button name="status" value="{{ TodoStatus::NeedsAction->value }}"
-                                    title="{{ __('Reset task') }}">
-                                    <x-icon.outline.checkmark class="w-4 h-4 fill-current" />
-                                </button>
+                                <x-icon.outline.checkmark class="w-4 h-4 fill-current" />
                             @break
 
                             @case(TodoStatus::Cancelled)
@@ -39,20 +65,14 @@
                             @break
 
                             @case(TodoStatus::InProcess)
-                                <button name="status" value="{{ TodoStatus::Completed->value }}"
-                                    title="{{ __('Complete task') }}">
-                                    <x-icon.outline.dot class="w-4 h-4 fill-current" />
-                                </button>
+                                <x-icon.outline.dot class="w-4 h-4 fill-current" />
                             @break
 
                             @case(TodoStatus::NeedsAction)
-                                <button name="status" value="{{ TodoStatus::Completed->value }}"
-                                    title="{{ __('Complete task') }}">
-                                    <x-icon.outline class="w-4 h-4 fill-current" />
-                                </button>
+                                <x-icon.outline class="w-4 h-4 fill-current" />
                             @break
                         @endswitch
-                    </form>
+                    @endcan
                     <a href="{{ route('todo.show', $todo) }}" class="truncate">{{ $todo->summary }}</a>
                     @isset($todo->description)
                         <div class="text-gray-500">

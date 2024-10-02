@@ -4,14 +4,40 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                    <form action="{{ route('todo.update', $todo) }}" method="POST" class="flex items-center">
-                        @csrf
-                        @method('PATCH')
+                    @can('complete', $todo)
+                        <form action="{{ route('todo.update', $todo) }}" method="POST" class="flex items-center">
+                            @csrf
+                            @method('PATCH')
+                            @switch($todo->status)
+                                @case(TodoStatus::Completed)
+                                    <button name="status" value="{{ TodoStatus::NeedsAction->value }}" title="{{ __('Reset task') }}">
+                                        <x-icon.outline.checkmark class="w-4 h-4 fill-current" />
+                                    </button>
+                                @break
+
+                                @case(TodoStatus::Cancelled)
+                                    <x-icon.outline.close class="w-4 h-4 fill-current" />
+                                @break
+
+                                @case(TodoStatus::InProcess)
+                                    <button name="status" value="{{ TodoStatus::Completed->value }}"
+                                        title="{{ __('Complete task') }}">
+                                        <x-icon.outline.dot class="w-4 h-4 fill-current" />
+                                    </button>
+                                @break
+
+                                @case(TodoStatus::NeedsAction)
+                                    <button name="status" value="{{ TodoStatus::Completed->value }}"
+                                        title="{{ __('Complete task') }}">
+                                        <x-icon.outline class="w-4 h-4 fill-current" />
+                                    </button>
+                                @break
+                            @endswitch
+                        </form>
+                    @else
                         @switch($todo->status)
                             @case(TodoStatus::Completed)
-                                <button name="status" value="{{ TodoStatus::NeedsAction->value }}" title="{{ __('Reset task') }}">
-                                    <x-icon.outline.checkmark class="w-4 h-4 fill-current" />
-                                </button>
+                                <x-icon.outline.checkmark class="w-4 h-4 fill-current" />
                             @break
 
                             @case(TodoStatus::Cancelled)
@@ -19,20 +45,14 @@
                             @break
 
                             @case(TodoStatus::InProcess)
-                                <button name="status" value="{{ TodoStatus::Completed->value }}"
-                                    title="{{ __('Complete task') }}">
-                                    <x-icon.outline.dot class="w-4 h-4 fill-current" />
-                                </button>
+                                <x-icon.outline.dot class="w-4 h-4 fill-current" />
                             @break
 
                             @case(TodoStatus::NeedsAction)
-                                <button name="status" value="{{ TodoStatus::Completed->value }}"
-                                    title="{{ __('Complete task') }}">
-                                    <x-icon.outline class="w-4 h-4 fill-current" />
-                                </button>
+                                <x-icon.outline class="w-4 h-4 fill-current" />
                             @break
                         @endswitch
-                    </form>
+                    @endcan
                     <span>{{ $todo->summary }}</span>
                 </h1>
 
