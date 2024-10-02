@@ -40,6 +40,14 @@ class TodoPolicy
     }
 
     /**
+     * Determine whether the user can complete tasks.
+     */
+    public function complete(User $user, Todo $todo): bool
+    {
+        return ! $user->isGuest() || $this->update($user, $todo);
+    }
+
+    /**
      * Determine whether the user can update the task.
      */
     public function update(User $user, Todo $todo): bool
