@@ -82,6 +82,9 @@
                 </x-slot:icon>
             </x-sidebar.link>
         @endcan
+        @can('viewAny', App\Models\Todo::class)
+            <x-sidebar.link route='todo.index' match-routes='todo.*' :label="__('Tasks')" icon="outline.checkmark" />
+        @endcan
         @can('viewAny', App\Models\User::class)
             <x-sidebar.link route='user.index' :match-routes="['user.*', 'user.booking.*', 'user.qualification.*']" :label="__('Users')">
                 <x-slot:icon>
