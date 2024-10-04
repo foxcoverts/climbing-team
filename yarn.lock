@@ -179,10 +179,10 @@
   dependencies:
     "@fullcalendar/daygrid" "~6.1.15"
 
-"@imacrayon/alpine-ajax@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@imacrayon/alpine-ajax/-/alpine-ajax-0.9.0.tgz#f76839c089951e8737d13d7cd7d019c00bf3cfd0"
-  integrity sha512-qeatMIzdTKrnhpJQAADkd0IUMMuDkQjyb89ouPHYA2aAmBTVCnK+ODF2hPdwq88KLNV+yGcV08Vdy/0pDm5HuQ==
+"@imacrayon/alpine-ajax@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@imacrayon/alpine-ajax/-/alpine-ajax-0.9.1.tgz#46ea408718b00965f37261c083c9262588969cf4"
+  integrity sha512-mOI290oB03ird8UradPcuhGq5jmSfknbm8A3Wr5wsIDK8n5xZuYf5oN2HmhI/BD0OVGdMrUssiNB4//8FZTdIQ==
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
