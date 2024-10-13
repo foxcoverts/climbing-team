@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TodoStatus;
+use App\Events\TodoChanged;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
 use App\Models\Todo;
@@ -128,6 +129,10 @@ class TodoController extends Controller
             }
         }
         $todo->save();
+
+        if ($todo->wasChanged('sequence')) {
+            event(new TodoChanged($todo, $request->user(), $todo->getChanges()));
+        }
 
         return redirect()->route('todo.index')
             ->withFragment($todo->id)

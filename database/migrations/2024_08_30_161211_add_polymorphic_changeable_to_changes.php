@@ -14,11 +14,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('changes', function (Blueprint $table) {
-            $table->foreignUlid('booking_id')->change(); // no constrained or cascade
-        });
-        Schema::table('changes', function (Blueprint $table) {
             $table->renameColumn('booking_id', 'changeable_id');
             $table->string('changeable_type')->after('changeable_id');
+            $table->dropForeign(['booking_id']);
         });
 
         DB::table('changes')

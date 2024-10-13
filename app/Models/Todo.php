@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Todo extends Model
 {
@@ -62,6 +63,12 @@ class Todo extends Model
             'due_at',
             'started_at',
         ];
+    }
+
+    public function changes(): MorphMany
+    {
+        return $this->morphMany(Change::class, 'changeable')
+            ->orderByDesc('created_at');
     }
 
     /**

@@ -18,6 +18,10 @@
                             @php($attendee_link = 'change.partials.booking.attendee-link')
                         @break
 
+                        @case (App\Models\Todo::class)
+                            @php($changeable_link = 'change.partials.todo.link')
+                        @break
+
                         @default
                             @continue(2)
                     @endswitch

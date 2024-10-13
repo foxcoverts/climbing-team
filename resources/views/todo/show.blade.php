@@ -64,7 +64,7 @@
             </div>
         </header>
 
-        <div class="p-4 sm:px-8">
+        <div class="p-4 sm:px-8 space-y-4">
             <div class="space-y-2 max-w-prose">
                 @isset($todo->location)
                     <div>
@@ -126,5 +126,8 @@
                     </div>
                 @endisset
             </div>
+
+            @include('todo.partials.recent-activity')
+        </div>
     </section>
 </x-layout.app>
