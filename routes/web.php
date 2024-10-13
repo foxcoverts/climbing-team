@@ -4,7 +4,6 @@ use App\Enums\BookingStatus;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingAttendeeInviteController;
-use App\Http\Controllers\BookingCommentController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
@@ -15,6 +14,7 @@ use App\Http\Controllers\BookingRelatedController;
 use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\ChangeController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\IncidentController;
@@ -67,8 +67,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('booking.related', BookingRelatedController::class)->scoped(['bookings'])->except('show', 'edit', 'update');
 
-    Route::resource('booking.comment', BookingCommentController::class)->shallow()->only('store', 'update', 'destroy');
-
     Route::get('booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
     Route::get('booking/{booking}/email', BookingEmailController::class)->name('booking.email');
@@ -86,6 +84,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('rota', BookingRotaController::class)->name('booking.rota');
 
     Route::get('change', ChangeController::class)->name('change.index');
+
+    Route::resource('comment', CommentController::class)->shallow()->only('store', 'update', 'destroy');
 
     Route::resource('document', DocumentController::class);
 
