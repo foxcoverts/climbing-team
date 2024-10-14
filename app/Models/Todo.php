@@ -111,7 +111,7 @@ class Todo extends Model
     public function scopeOrdered(Builder $todos): void
     {
         $todos
-            ->orderBy('status')
+            ->orderByRaw('-completed_at ASC')
             ->orderBy('priority')
             ->orderByRaw('-due_at DESC');
     }
