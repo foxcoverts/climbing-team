@@ -88,6 +88,21 @@
                     <x-badge.todo-priority :priority="$todo->priority" />
                 </div>
 
+                <div>
+                    <x-fake-label :value="__('Status')" />
+                    <p><x-badge.todo-status :status="$todo->status" /></p>
+                </div>
+
+                @isset($todo->started_at)
+                    <div>
+                        <x-fake-label :value="__('Started on')" />
+                        <p class="text-gray-700 dark:text-gray-300">
+                            <span x-data="{{ Js::from(['started_at' => localDate($todo->started_at)]) }}"
+                                x-text="dateTimeString(started_at)">{{ localDate($todo->started_at)->toDayDateTimeString() }}</span>
+                        </p>
+                    </div>
+                @endisset
+
                 @isset($todo->due_at)
                     <div>
                         <x-fake-label :value="__('Due')" />
@@ -97,21 +112,6 @@
                             @if ($todo->isOverdue())
                                 <x-badge :label="__('Overdue')" color="pink" icon="outline.exclamation" class="text-sm" />
                             @endif
-                        </p>
-                    </div>
-                @endisset
-
-                <div>
-                    <x-fake-label :value="__('Status')" />
-                    <p class="text-gray-700 dark:text-gray-300">@lang("app.todo.status.{$todo->status->value}")</p>
-                </div>
-
-                @isset($todo->started_at)
-                    <div>
-                        <x-fake-label :value="__('Started on')" />
-                        <p class="text-gray-700 dark:text-gray-300">
-                            <span x-data="{{ Js::from(['started_at' => localDate($todo->started_at)]) }}"
-                                x-text="dateTimeString(started_at)">{{ localDate($todo->started_at)->toDayDateTimeString() }}</span>
                         </p>
                     </div>
                 @endisset

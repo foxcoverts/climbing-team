@@ -82,7 +82,9 @@
                     @if ($todo->priority != 5)
                         <x-badge.todo-priority :priority="$todo->priority" class="text-xs" />
                     @endif
-                    <x-badge.todo-due :todo="$todo" class="text-xs" />
+                    @if (!$todo->isComplete())
+                        <x-badge.todo-due :todo="$todo" class="text-xs" />
+                    @endif
                 </li>
             @endforeach
         </ul>

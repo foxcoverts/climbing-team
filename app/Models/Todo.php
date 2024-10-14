@@ -85,11 +85,26 @@ class Todo extends Model
      */
     public function isOverdue(): bool
     {
+        if ($this->isComplete()) {
+            return false;
+        }
+
         if (empty($this->due_at)) {
             return false;
         }
 
         return $this->due_at->isPast();
+    }
+
+    /**
+     * Has this Todo been completed?
+     */
+    public function isComplete(): bool
+    {
+        return ! empty($this->completed_at) || in_array($this->status, [
+            TodoStatus::Completed,
+            TodoStatus::Cancelled,
+        ]);
     }
 
     /**
