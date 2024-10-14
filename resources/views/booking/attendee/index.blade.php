@@ -1,4 +1,4 @@
-@use('App\Enums\AttendeeStatus')
+@use('App\Enums\BookingAttendeeStatus')
 <x-layout.app :title="__('Roll call')">
     <section>
         @include('booking.partials.header')
@@ -30,13 +30,13 @@
                             </div>
                         @endif
 
-                        @if (isset($attendees[AttendeeStatus::Accepted->value]))
+                        @if (isset($attendees[BookingAttendeeStatus::Accepted->value]))
                             <div>
                                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                    {{ __('app.attendee.status.' . AttendeeStatus::Accepted->value) }}
+                                    {{ __('app.attendee.status.' . BookingAttendeeStatus::Accepted->value) }}
                                 </h3>
                                 <ul>
-                                    @foreach ($attendees[AttendeeStatus::Accepted->value] as $attendee)
+                                    @foreach ($attendees[BookingAttendeeStatus::Accepted->value] as $attendee)
                                         <li>
                                             <label class="block my-2 text-gray-800 dark:text-gray-200">
                                                 <x-input-checkbox name="attendee_ids[]" value="{{ $attendee->id }}"
@@ -54,7 +54,7 @@
                         </p>
 
                         @foreach ($attendees as $status => $list)
-                            @unless ($status == AttendeeStatus::Accepted->value)
+                            @unless ($status == BookingAttendeeStatus::Accepted->value)
                                 <div>
                                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                                         {{ __("app.attendee.status.$status") }}

@@ -2,10 +2,10 @@
 
 namespace App\Mail;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\iCal\Domain\Enum\CalendarMethod;
-use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\BookingAttendance;
 use App\Models\User;
 use Carbon\Factory as CarbonFactory;
 use Illuminate\Bus\Queueable;
@@ -23,7 +23,7 @@ class BookingInvite extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public Attendance $attendance;
+    public BookingAttendance $attendance;
 
     protected CarbonFactory $dateFactory;
 
@@ -229,10 +229,10 @@ class BookingInvite extends Mailable implements ShouldQueue
     public function isResponseNeededFromAttendee(): bool
     {
         return match ($this->attendance->status) {
-            AttendeeStatus::NeedsAction,
-            AttendeeStatus::Tentative => true,
-            AttendeeStatus::Declined => false,
-            AttendeeStatus::Accepted => $this->hasImportantChanges()
+            BookingAttendeeStatus::NeedsAction,
+            BookingAttendeeStatus::Tentative => true,
+            BookingAttendeeStatus::Declined => false,
+            BookingAttendeeStatus::Accepted => $this->hasImportantChanges()
         };
     }
 

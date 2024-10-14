@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -16,7 +16,7 @@ class UpdateBookingAttendanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', Rule::enum(AttendeeStatus::class)],
+            'status' => ['required', Rule::enum(BookingAttendeeStatus::class)],
         ];
     }
 

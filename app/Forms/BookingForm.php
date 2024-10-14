@@ -2,7 +2,7 @@
 
 namespace App\Forms;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
 use Carbon\Carbon;
 use Carbon\CarbonTimeZone;
@@ -65,7 +65,7 @@ class BookingForm
     protected function getInstructorsAttending(): Collection
     {
         return $this->booking->attendees()
-            ->wherePivot('status', AttendeeStatus::Accepted)
+            ->wherePivot('status', BookingAttendeeStatus::Accepted)
             ->whereHas('qualifications')
             ->orderBy('users.name')
             ->get();

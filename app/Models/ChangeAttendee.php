@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,7 +26,7 @@ class ChangeAttendee extends Model
     ];
 
     public $casts = [
-        'attendee_status' => AttendeeStatus::class,
+        'attendee_status' => BookingAttendeeStatus::class,
     ];
 
     public function change(): BelongsTo

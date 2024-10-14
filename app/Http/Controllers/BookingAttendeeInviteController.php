@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Events\BookingInvite;
 use App\Http\Requests\InviteBookingAttendeeRequest;
-use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\BookingAttendance;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,7 +21,7 @@ class BookingAttendeeInviteController extends Controller
      */
     public function create(Booking $booking): View
     {
-        Gate::authorize('create', [Attendance::class, $booking]);
+        Gate::authorize('create', [BookingAttendance::class, $booking]);
 
         if ($booking->isPast() || $booking->isCancelled()) {
             abort(Response::HTTP_NOT_FOUND);
@@ -42,7 +42,7 @@ class BookingAttendeeInviteController extends Controller
      */
     public function store(InviteBookingAttendeeRequest $request, Booking $booking): RedirectResponse
     {
-        Gate::authorize('create', [Attendance::class, $booking]);
+        Gate::authorize('create', [BookingAttendance::class, $booking]);
 
         if ($booking->isPast()) {
             return redirect()->back()
@@ -60,8 +60,8 @@ class BookingAttendeeInviteController extends Controller
             )->flatMap(
                 fn ($id) => [
                     $id => [
-                        'status' => AttendeeStatus::NeedsAction,
-                        'token' => Attendance::generateToken(),
+                        'status' => BookingAttendeeStatus::NeedsAction,
+                        'token' => BookingAttendance::generateToken(),
                     ],
                 ]
             );

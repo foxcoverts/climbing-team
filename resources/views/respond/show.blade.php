@@ -1,4 +1,4 @@
-@use('App\Enums\AttendeeStatus')
+@use('App\Enums\BookingAttendeeStatus')
 @php($localStartAt = localDate($booking->start_at, $booking->timezone))
 @php($localEndAt = localDate($booking->end_at, $booking->timezone))
 <x-layout.guest :title="__('Invitation')">
@@ -54,9 +54,9 @@
             <input type="hidden" name="invite" value="{{ $user->attendance->token }}" />
             <input type="hidden" name="sequence" value="{{ $booking->sequence }}" />
             <div class="flex justify-center gap-4">
-                <x-button.primary type="submit" name="status" :value="AttendeeStatus::Accepted->value" :label="__('Yes')" />
-                <x-button.danger type="submit" name="status" :value="AttendeeStatus::Declined->value" :label="__('No')" />
-                <x-button.secondary type="submit" name="status" :value="AttendeeStatus::Tentative->value" :label="__('Maybe')" />
+                <x-button.primary type="submit" name="status" :value="BookingAttendeeStatus::Accepted->value" :label="__('Yes')" />
+                <x-button.danger type="submit" name="status" :value="BookingAttendeeStatus::Declined->value" :label="__('No')" />
+                <x-button.secondary type="submit" name="status" :value="BookingAttendeeStatus::Tentative->value" :label="__('Maybe')" />
             </div>
         </form>
         <p class="text-sm text-center">{{ __('Replying for :name.', ['name' => $user->name]) }}</p>

@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum AttendeeStatus: string
+enum BookingAttendeeStatus: string
 {
     /**
      * Person has confirmed they are available to help with a booking.
@@ -25,9 +25,9 @@ enum AttendeeStatus: string
     case NeedsAction = 'needs-action';
 
     /**
-     * Compare with another AttendeeStatus.
+     * Compare with another BookingAttendeeStatus.
      */
-    public function compare(AttendeeStatus $other): int
+    public function compare(BookingAttendeeStatus $other): int
     {
         return $this->rank() <=> $other->rank();
     }

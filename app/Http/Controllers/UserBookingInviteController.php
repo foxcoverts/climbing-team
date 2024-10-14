@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Events\BookingInvite;
 use App\Http\Requests\InviteUserBookingRequest;
-use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\BookingAttendance;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -48,8 +48,8 @@ class UserBookingInviteController extends Controller
             )->flatMap(
                 fn ($id) => [
                     $id => [
-                        'status' => AttendeeStatus::NeedsAction,
-                        'token' => $user->hasVerifiedEmail() ? Attendance::generateToken() : null,
+                        'status' => BookingAttendeeStatus::NeedsAction,
+                        'token' => $user->hasVerifiedEmail() ? BookingAttendance::generateToken() : null,
                     ],
                 ]
             );
@@ -57,7 +57,7 @@ class UserBookingInviteController extends Controller
         $user->bookings()->syncWithoutDetaching($invites);
         $user->refresh();
 
-        if (!($user instanceof MustVerifyEmail) || $user->hasVerifiedEmail()) {
+        if (! ($user instanceof MustVerifyEmail) || $user->hasVerifiedEmail()) {
             foreach (Booking::findMany($invites->keys()) as $booking) {
                 event(new BookingInvite($booking, $user));
             }

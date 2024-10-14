@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Actions\RespondToBookingAction;
 use App\Http\Requests\UpdateBookingAttendanceRequest;
-use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\BookingAttendance;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -33,7 +33,7 @@ class BookingAttendanceController extends Controller
             $request->session()->flash('url.referer', route('booking.invite'));
         }
 
-        $attendance = Attendance::where([
+        $attendance = BookingAttendance::where([
             'booking_id' => $booking->id,
             'user_id' => $request->user()->id,
         ])->first();
@@ -72,7 +72,7 @@ class BookingAttendanceController extends Controller
         if ($attendee = $booking->attendees()->find($user)) {
             $attendance = $attendee->attendance;
         } else {
-            $attendance = Attendance::build($booking, $user);
+            $attendance = BookingAttendance::build($booking, $user);
         }
         Gate::authorize($action, $attendance);
     }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
 use App\Models\User;
 use DateInterval;
@@ -42,7 +42,7 @@ class BookingIcsController extends Controller
         Gate::authorize('viewOwn', Booking::class);
 
         $bookings = Booking::attendeeStatus($request->user(), [
-            AttendeeStatus::Accepted, AttendeeStatus::Tentative,
+            BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative,
         ]);
 
         return $this->ics(

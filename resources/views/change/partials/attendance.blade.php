@@ -1,4 +1,4 @@
-@use('App\Enums\AttendeeStatus')
+@use('App\Enums\BookingAttendeeStatus')
 <div class="border-l-2 ml-2 pl-2" id="{{ $attendee->id }}">
     <p>
         @include($attendee_link, [
@@ -6,15 +6,15 @@
             'attendee' => $attendee->attendee,
         ])
         @switch ($attendee->attendee_status)
-            @case(AttendeeStatus::Accepted)
+            @case(BookingAttendeeStatus::Accepted)
                 {{ __('will be going to') }}
             @break
 
-            @case(AttendeeStatus::Tentative)
+            @case(BookingAttendeeStatus::Tentative)
                 {{ __('may be able to attend') }}
             @break
 
-            @case(AttendeeStatus::Declined)
+            @case(BookingAttendeeStatus::Declined)
                 {{ __('cannot attend') }}
             @break
         @endswitch

@@ -2,27 +2,24 @@
 
 namespace App\Models;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Str;
 
-class Attendance extends Pivot
+class BookingAttendance extends Pivot
 {
     protected $table = 'booking_user';
 
     /**
      * Create a new instance from a User and a Booking.
-     *
-     * @param User $user
-     * @param Booking $booking
-     * @return Attendance
      */
-    public static function build(Booking $booking, User $user)
+    public static function build(Booking $booking, User $user): static
     {
         $attendance = new static;
         $attendance->booking = $booking;
         $attendance->user = $user;
+
         return $attendance;
     }
 
@@ -43,14 +40,12 @@ class Attendance extends Pivot
      * @var array
      */
     protected $attributes = [
-        'status' => AttendeeStatus::NeedsAction,
+        'status' => BookingAttendeeStatus::NeedsAction,
         'comment' => null,
     ];
 
     /**
-     * Make a new token for an Attendance.
-     *
-     * @return string
+     * Make a new token for an BookingAttendance.
      */
     public static function generateToken(): string
     {
@@ -68,7 +63,7 @@ class Attendance extends Pivot
      * @var array<string, string>
      */
     protected $casts = [
-        'status' => AttendeeStatus::class,
+        'status' => BookingAttendeeStatus::class,
     ];
 
     public function booking(): BelongsTo
@@ -83,17 +78,17 @@ class Attendance extends Pivot
 
     public function isAccepted(): bool
     {
-        return $this->status == AttendeeStatus::Accepted;
+        return $this->status == BookingAttendeeStatus::Accepted;
     }
 
     public function isDeclined(): bool
     {
-        return $this->status == AttendeeStatus::Declined;
+        return $this->status == BookingAttendeeStatus::Declined;
     }
 
     public function needsAction(): bool
     {
-        return $this->status == AttendeeStatus::NeedsAction;
+        return $this->status == BookingAttendeeStatus::NeedsAction;
     }
 
     public function isLeadInstructor(): bool

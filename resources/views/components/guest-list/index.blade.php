@@ -1,4 +1,4 @@
-@use('App\Models\Attendance')
+@use('App\Models\BookingAttendance')
 <aside {{ $attributes }}>
     <h2 class="text-xl font-medium border-b border-gray-800 dark:border-gray-200">
         {{ __('Guest list') }}
@@ -68,14 +68,14 @@
             </div>
             <div class="flex flex-wrap gap-4">{{-- flex-group --}}
                 @if ($booking->isFuture() && !$booking->isCancelled())
-                    @can('create', [Attendance::class, $booking])
+                    @can('create', [BookingAttendance::class, $booking])
                         <x-button.primary :href="route('booking.attendee.invite', $booking)" :label="__('Invite')" />
 
                         <x-button.primary :href="route('booking.attendee.create', $booking)" :label="__('Add')" />
                     @endcan
                 @endif
 
-                @can('rollcall', [Attendance::class, $booking])
+                @can('rollcall', [BookingAttendance::class, $booking])
                     <x-button.primary :href="route('booking.attendee.index', $booking)" :label="__('Roll call')" />
                 @endcan
             </div>

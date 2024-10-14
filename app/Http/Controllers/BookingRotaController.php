@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -19,7 +19,7 @@ class BookingRotaController extends Controller
 
         $bookings = Booking::future()->notCancelled()
             ->attendeeStatus($request->user(), [
-                AttendeeStatus::Accepted, AttendeeStatus::Tentative
+                BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative
             ])
             ->with('attendees')
             ->ordered()->get()

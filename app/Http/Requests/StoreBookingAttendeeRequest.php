@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -18,7 +18,7 @@ class StoreBookingAttendeeRequest extends FormRequest
     {
         return [
             'user_id' => ['required', Rule::exists(User::class, 'id')],
-            'status' => ['required', Rule::enum(AttendeeStatus::class)->except(AttendeeStatus::NeedsAction)]
+            'status' => ['required', Rule::enum(BookingAttendeeStatus::class)->except(BookingAttendeeStatus::NeedsAction)],
         ];
     }
 

@@ -1,4 +1,3 @@
-@use('App\Enums\AttendeeStatus')
 @use('Carbon\Carbon')
 @use('Illuminate\Support\Str')
 <section>

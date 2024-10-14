@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Events\BookingChanged;
 use App\Mail\BookingChanged as MailBookingChanged;
 use Illuminate\Support\Facades\Mail;
@@ -15,7 +15,7 @@ class SendBookingChangedEmail
     public function handle(BookingChanged $event): void
     {
         foreach ($event->booking->attendees as $attendee) {
-            if ($attendee->attendance->status !== AttendeeStatus::Declined) {
+            if ($attendee->attendance->status !== BookingAttendeeStatus::Declined) {
                 Mail::to($attendee->email)
                     ->send(new MailBookingChanged(
                         $event->booking,
