@@ -75,18 +75,18 @@ class Booking extends Model
         ];
     }
 
-    public function changes(): MorphMany
-    {
-        return $this->morphMany(Change::class, 'changeable')
-            ->orderByDesc('created_at');
-    }
-
     public function attendees(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
             ->withTimestamps()
             ->withPivot('comment', 'status', 'token')->as('attendance')
             ->using(BookingAttendance::class);
+    }
+
+    public function changes(): MorphMany
+    {
+        return $this->morphMany(Change::class, 'changeable')
+            ->orderByDesc('created_at');
     }
 
     public function lead_instructor(): BelongsTo

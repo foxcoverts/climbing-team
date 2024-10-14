@@ -15,8 +15,7 @@ class ChangeController extends Controller
     {
         Gate::authorize('viewAny', Change::class);
 
-        // @todo include 'changeable.attendees'
-        $changes = Change::with('changeable', 'author', 'attendees', 'comments', 'fields')
+        $changes = Change::with('changeable', 'changeable.attendees', 'author', 'attendees', 'comments', 'fields')
             ->has('changeable')
             ->orderByDesc('created_at')
             ->cursorPaginate(10);

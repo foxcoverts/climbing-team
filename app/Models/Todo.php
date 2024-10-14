@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Todo extends Model
@@ -63,6 +64,14 @@ class Todo extends Model
             'due_at',
             'started_at',
         ];
+    }
+
+    public function attendees(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)
+            ->withTimestamps()
+            ->withPivot('comment', 'status', 'token')->as('attendance')
+            ->using(TodoAttendance::class);
     }
 
     public function changes(): MorphMany
