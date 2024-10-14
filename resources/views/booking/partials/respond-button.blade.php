@@ -1,4 +1,4 @@
-@use('App\Enums\AttendeeStatus')
+@use('App\Enums\BookingAttendeeStatus')
 @use('Illuminate\Contracts\Auth\Access\Gate')
 @props(['booking', 'attendance'])
 @if ($booking->isFuture() && !$booking->isCancelled() && app(Gate::class)->check('respond', [$booking, $currentUser]))
@@ -33,7 +33,7 @@
                     </form>
                 @endcan
                 <div class="divide-y divide-gray-300 dark:divide-gray-500">
-                    @foreach ([AttendeeStatus::Accepted, AttendeeStatus::Tentative, AttendeeStatus::Declined] as $status)
+                    @foreach ([BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative, BookingAttendeeStatus::Declined] as $status)
                         @if ($status != $attendance?->status)
                             <button name="status" value="{{ $status->value }}" type="submit" form="update-attendee"
                                 x-bind:disabled="submitted" :class="submitted ? 'cursor-progress' : ''"

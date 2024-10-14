@@ -1,4 +1,4 @@
-@use('App\Enums\AttendeeStatus')
+@use('App\Enums\BookingAttendeeStatus')
 <x-layout.app :title="__('Add Attendee')">
     <section>
         @include('booking.partials.header')
@@ -26,8 +26,8 @@
                             <div>
                                 <x-input-label for="status" :value="__('Availability')" />
                                 <x-select-input id="status" name="status" class="mt-1 block" required
-                                    :value="old('status', AttendeeStatus::Accepted)" x-model.fill="form.status">
-                                    <x-select-input.enum :options="AttendeeStatus::class" :except="AttendeeStatus::NeedsAction"
+                                    :value="old('status', BookingAttendeeStatus::Accepted)" x-model.fill="form.status">
+                                    <x-select-input.enum :options="BookingAttendeeStatus::class" :except="BookingAttendeeStatus::NeedsAction"
                                         lang="app.attendee.status.:value" />
                                 </x-select-input>
                                 <x-input-error class="mt-2" :messages="$errors->get('status')" />

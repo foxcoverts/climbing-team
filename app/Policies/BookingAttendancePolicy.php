@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Enums\AttendeeStatus;
-use App\Models\Attendance;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
+use App\Models\BookingAttendance;
 use App\Models\User;
 
-class AttendancePolicy
+class BookingAttendancePolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -40,7 +40,7 @@ class AttendancePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Attendance $attendance): bool
+    public function view(User $user, BookingAttendance $attendance): bool
     {
         return
             $user->can('contact', $attendance) ||
@@ -51,7 +51,7 @@ class AttendancePolicy
     /**
      * Determine whether the user can contact the attendee.
      */
-    public function contact(User $user, Attendance $attendance): bool
+    public function contact(User $user, BookingAttendance $attendance): bool
     {
         $booking = $attendance->booking;
         if ($booking->isCancelled() || $booking->isBeforeToday()) {
@@ -67,7 +67,7 @@ class AttendancePolicy
 
         $user_attendance = $booking->attendees->where('id', $user->id)->first();
         if (! in_array($user_attendance?->attendance?->status,
-            [AttendeeStatus::Accepted, AttendeeStatus::NeedsAction]
+            [BookingAttendeeStatus::Accepted, BookingAttendeeStatus::NeedsAction]
         )) {
             // Only people attending the event can get contact details
             return false;
@@ -80,7 +80,7 @@ class AttendancePolicy
 
         if ($user->id === $booking->lead_instructor_id) {
             // The lead instructors can contact attendees
-            return in_array($attendance->status, [AttendeeStatus::Accepted, AttendeeStatus::Tentative]);
+            return in_array($attendance->status, [BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative]);
         }
 
         return false;
@@ -89,7 +89,7 @@ class AttendancePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Attendance $attendance): bool
+    public function update(User $user, BookingAttendance $attendance): bool
     {
         $booking = $attendance->booking;
         if ($booking->isPast() || $booking->isCancelled()) {
@@ -123,7 +123,7 @@ class AttendancePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Attendance $attendance): bool
+    public function delete(User $user, BookingAttendance $attendance): bool
     {
         if ($attendance->isLeadInstructor() && $attendance->isAccepted()) {
             // The Lead Instructor cannot resign from a Booking.

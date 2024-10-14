@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\RespondToBookingAction;
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -43,7 +43,7 @@ class RespondController extends Controller
      */
     public function accept(Request $request, Booking $booking, User $attendee): View
     {
-        return $this->viewAction($request, $booking, $attendee, AttendeeStatus::Accepted);
+        return $this->viewAction($request, $booking, $attendee, BookingAttendeeStatus::Accepted);
     }
 
     /**
@@ -51,7 +51,7 @@ class RespondController extends Controller
      */
     public function tentative(Request $request, Booking $booking, User $attendee): View
     {
-        return $this->viewAction($request, $booking, $attendee, AttendeeStatus::Tentative);
+        return $this->viewAction($request, $booking, $attendee, BookingAttendeeStatus::Tentative);
     }
 
     /**
@@ -59,7 +59,7 @@ class RespondController extends Controller
      */
     public function decline(Request $request, Booking $booking, User $attendee): View
     {
-        return $this->viewAction($request, $booking, $attendee, AttendeeStatus::Declined);
+        return $this->viewAction($request, $booking, $attendee, BookingAttendeeStatus::Declined);
     }
 
     /**
@@ -93,7 +93,7 @@ class RespondController extends Controller
 
         $respondToBooking(
             $attendee,
-            AttendeeStatus::tryFrom($request->input('status')),
+            BookingAttendeeStatus::tryFrom($request->input('status')),
         );
 
         $request->session()->put('alert', [
@@ -107,7 +107,7 @@ class RespondController extends Controller
     /**
      * View the action form that will auto-submit the response.
      */
-    protected function viewAction(Request $request, Booking $booking, User $attendee, AttendeeStatus $status): View
+    protected function viewAction(Request $request, Booking $booking, User $attendee, BookingAttendeeStatus $status): View
     {
         Gate::authorize('update', $attendee->attendance);
 

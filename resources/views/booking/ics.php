@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
 use App\iCal\Domain\Entity\Calendar;
 use App\iCal\Domain\Entity\Event;
@@ -37,7 +37,7 @@ if (! isset($rsvp) || ! is_bool($rsvp)) {
     $rsvp = $method === CalendarMethod::Request;
 }
 
-$calendar = new Calendar();
+$calendar = new Calendar;
 $calendar->setMethod($method);
 
 if (! empty($name)) {
@@ -153,10 +153,10 @@ foreach ($bookings as $booking) {
 
         $evAttendee->setParticipationStatus(
             match ($attendee->attendance->status) {
-                AttendeeStatus::NeedsAction => ParticipationStatus::NEEDS_ACTION(),
-                AttendeeStatus::Accepted => ParticipationStatus::ACCEPTED(),
-                AttendeeStatus::Tentative => ParticipationStatus::TENTATIVE(),
-                AttendeeStatus::Declined => ParticipationStatus::DECLINED(),
+                BookingAttendeeStatus::NeedsAction => ParticipationStatus::NEEDS_ACTION(),
+                BookingAttendeeStatus::Accepted => ParticipationStatus::ACCEPTED(),
+                BookingAttendeeStatus::Tentative => ParticipationStatus::TENTATIVE(),
+                BookingAttendeeStatus::Declined => ParticipationStatus::DECLINED(),
             }
         );
 
@@ -180,6 +180,6 @@ foreach ($timeZones as $timeZoneId => $dates) {
     $calendar->setTimeZone($timeZone);
 }
 
-$eventFactory = new EventFactory();
+$eventFactory = new EventFactory;
 $calendarFactory = new CalendarFactory(eventFactory: $eventFactory);
 echo $calendarFactory->createCalendar($calendar);

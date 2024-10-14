@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
 use App\Events\BookingCancelled;
 use App\Events\BookingChanged;
@@ -12,8 +12,8 @@ use App\Events\BookingRestored;
 use App\Forms\BookingForm;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
-use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\BookingAttendance;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
@@ -202,11 +202,11 @@ class BookingController extends Controller
             if ($originalStatus == BookingStatus::Cancelled) {
                 // When restoring a cancelled booking, re-invite any 'Going' and 'Maybe' attendees.
                 $attendees = $booking->attendees->mapWithKeys(function ($attendee) {
-                    if ($attendee->attendance->status == AttendeeStatus::Declined) {
-                        return [$attendee->id => ['status' => AttendeeStatus::Declined]];
+                    if ($attendee->attendance->status == BookingAttendeeStatus::Declined) {
+                        return [$attendee->id => ['status' => BookingAttendeeStatus::Declined]];
                     }
                     if ($attendee->hasVerifiedEmail()) {
-                        return [$attendee->id => ['status' => AttendeeStatus::NeedsAction]];
+                        return [$attendee->id => ['status' => BookingAttendeeStatus::NeedsAction]];
                     }
 
                     return [];
@@ -216,7 +216,7 @@ class BookingController extends Controller
                 );
                 $booking->refresh();
                 $invites = $attendees->filter(function ($meta) {
-                    return $meta['status'] == AttendeeStatus::NeedsAction;
+                    return $meta['status'] == BookingAttendeeStatus::NeedsAction;
                 })->keys()->all();
                 foreach (User::find($invites) as $user) {
                     event(new BookingInvite($booking, $user));
@@ -228,8 +228,8 @@ class BookingController extends Controller
                 $alertMessage = __('Booking confirmed');
             } elseif ($booking->isCancelled()) {
                 // Remove attendees with outstanding invites.
-                Attendance::where('booking_id', $booking->id)
-                    ->where('status', AttendeeStatus::NeedsAction)
+                BookingAttendance::where('booking_id', $booking->id)
+                    ->where('status', BookingAttendeeStatus::NeedsAction)
                     ->delete();
                 $booking->refresh();
                 event(new BookingCancelled($booking, $request->user(), $request->safe()->reason));

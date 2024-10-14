@@ -4,7 +4,6 @@ use App\Enums\BookingStatus;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingAttendeeInviteController;
-use App\Http\Controllers\BookingCommentController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
@@ -15,6 +14,7 @@ use App\Http\Controllers\BookingRelatedController;
 use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\ChangeController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\IncidentController;
@@ -26,6 +26,8 @@ use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
+use App\Http\Controllers\TodoController;
+use App\Http\Controllers\TodoIcsController;
 use App\Http\Controllers\TransferKeyController;
 use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\TrashedDocumentController;
@@ -65,8 +67,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('booking.related', BookingRelatedController::class)->scoped(['bookings'])->except('show', 'edit', 'update');
 
-    Route::resource('booking.comment', BookingCommentController::class)->shallow()->only('store', 'update', 'destroy');
-
     Route::get('booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
     Route::get('booking/{booking}/email', BookingEmailController::class)->name('booking.email');
@@ -84,6 +84,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('rota', BookingRotaController::class)->name('booking.rota');
 
     Route::get('change', ChangeController::class)->name('change.index');
+
+    Route::resource('comment', CommentController::class)->shallow()->only('store', 'update', 'destroy');
 
     Route::resource('document', DocumentController::class);
 
@@ -108,6 +110,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('news', NewsPostController::class)
         ->except('show')
         ->parameters(['news' => 'post']);
+
+    Route::get('todo/{todo}.ics', [TodoIcsController::class, 'show'])->name('todo.show.ics');
+
+    Route::resource('todo', TodoController::class);
 
     Route::middleware('password.confirm')->group(function () {
         Route::controller(ProfileController::class)->group(function () {

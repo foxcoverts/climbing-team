@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
 use App\Models\NewsPost;
 use Illuminate\Http\Request;
@@ -17,13 +17,13 @@ class DashboardController extends Controller
 
         $nextBooking = Booking::future()->notCancelled()
             ->attendeeStatus($request->user(), [
-                AttendeeStatus::Accepted, AttendeeStatus::Tentative,
+                BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative,
             ])
             ->ordered()->first();
 
         $invite = Booking::future()->notCancelled()
             ->attendeeStatus($request->user(), [
-                AttendeeStatus::NeedsAction, AttendeeStatus::Tentative,
+                BookingAttendeeStatus::NeedsAction, BookingAttendeeStatus::Tentative,
             ])
             ->ordered()->first();
 

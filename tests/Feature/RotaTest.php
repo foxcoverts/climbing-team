@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,7 +18,7 @@ class RotaTest extends TestCase
         $booking = Booking::factory()->create();
         $booking->attendees()->syncWithPivotValues(
             $user,
-            ['status' => AttendeeStatus::Accepted],
+            ['status' => BookingAttendeeStatus::Accepted],
         );
         $bookingSummary = __(':activity for :group at :location', [
             'activity' => $booking->activity,
@@ -63,7 +63,7 @@ class RotaTest extends TestCase
         $booking = Booking::factory()->create();
         $booking->attendees()->syncWithPivotValues(
             $user,
-            ['status' => AttendeeStatus::Accepted],
+            ['status' => BookingAttendeeStatus::Accepted],
         );
         $bookingSummary = __(':activity for :group', [
             'activity' => $booking->activity,

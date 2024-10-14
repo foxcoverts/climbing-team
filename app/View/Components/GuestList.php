@@ -2,8 +2,8 @@
 
 namespace App\View\Components;
 
-use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\BookingAttendance;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,7 +38,7 @@ class GuestList extends Component
         return view('components.guest-list.index');
     }
 
-    public function attendance(): ?Attendance
+    public function attendance(): ?BookingAttendance
     {
         return $this->booking->attendees->find($this->currentUser)?->attendance;
     }

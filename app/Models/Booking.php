@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Casts\AsSequence;
 use App\Casts\AsTimezone;
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -75,18 +75,18 @@ class Booking extends Model
         ];
     }
 
-    public function changes(): MorphMany
-    {
-        return $this->morphMany(Change::class, 'changeable')
-            ->orderByDesc('created_at');
-    }
-
     public function attendees(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
             ->withTimestamps()
             ->withPivot('comment', 'status', 'token')->as('attendance')
-            ->using(Attendance::class);
+            ->using(BookingAttendance::class);
+    }
+
+    public function changes(): MorphMany
+    {
+        return $this->morphMany(Change::class, 'changeable')
+            ->orderByDesc('created_at');
     }
 
     public function lead_instructor(): BelongsTo
@@ -192,14 +192,14 @@ class Booking extends Model
     /**
      * Bookings having the given attendee.
      *
-     * @param  AttendeeStatus[]  $status  (default excludes `Declined`)
+     * @param  BookingAttendeeStatus[]  $status  (default excludes `Declined`)
      */
     public function scopeAttendeeStatus(Builder $bookings, User $attendee, array $status = []): void
     {
         $bookings->whereHas('attendees', function (Builder $query) use ($attendee, $status) {
             $query->where('user_id', $attendee->id);
             if (empty($status)) {
-                $query->whereNot('status', AttendeeStatus::Declined);
+                $query->whereNot('status', BookingAttendeeStatus::Declined);
             } else {
                 $query->whereIn('status', $status);
             }

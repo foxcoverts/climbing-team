@@ -1,4 +1,4 @@
-@use('App\Enums\AttendeeStatus')
+@use('App\Enums\BookingAttendeeStatus')
 @use('Illuminate\Contracts\Auth\Access\Gate')
 <x-layout.app :title="__('Edit Attendance')">
     <section>
@@ -17,16 +17,16 @@
                             <p class="text-lg text-center">{{ __('Can you attend this event?') }}</p>
                             <div class="flex justify-center gap-4">
                                 <x-button
-                                    color="{{ $attendance?->status == AttendeeStatus::Accepted ? 'primary' : 'secondary' }}"
-                                    type="submit" name="status" x-bind:disabled="submitted" :value="AttendeeStatus::Accepted->value"
+                                    color="{{ $attendance?->status == BookingAttendeeStatus::Accepted ? 'primary' : 'secondary' }}"
+                                    type="submit" name="status" x-bind:disabled="submitted" :value="BookingAttendeeStatus::Accepted->value"
                                     :label="__('Yes')" />
                                 <x-button
-                                    color="{{ $attendance?->status == AttendeeStatus::Declined ? 'danger' : 'secondary' }}"
-                                    type="submit" name="status" x-bind:disabled="submitted" :value="AttendeeStatus::Declined->value"
+                                    color="{{ $attendance?->status == BookingAttendeeStatus::Declined ? 'danger' : 'secondary' }}"
+                                    type="submit" name="status" x-bind:disabled="submitted" :value="BookingAttendeeStatus::Declined->value"
                                     :label="__('No')" />
                                 <x-button
-                                    color="{{ $attendance?->status == AttendeeStatus::Tentative ? 'primary' : 'secondary' }}"
-                                    type="submit" name="status" x-bind:disabled="submitted" :value="AttendeeStatus::Tentative->value"
+                                    color="{{ $attendance?->status == BookingAttendeeStatus::Tentative ? 'primary' : 'secondary' }}"
+                                    type="submit" name="status" x-bind:disabled="submitted" :value="BookingAttendeeStatus::Tentative->value"
                                     :label="__('Maybe')" />
                             </div>
                             <p class="text-sm text-center">

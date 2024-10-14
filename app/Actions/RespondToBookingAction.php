@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
 use App\Models\Change;
 use App\Models\ChangeAttendee;
@@ -27,12 +27,12 @@ class RespondToBookingAction
 
     public function __invoke(
         User|string $attendee,
-        AttendeeStatus|string $status,
+        BookingAttendeeStatus|string $status,
         ?string $comment = null
     ): ?Change {
         // Prepare data
         $attendee_id = is_string($attendee) ? $attendee : $attendee->id;
-        $status = is_string($status) ? AttendeeStatus::tryFrom($status) : $status;
+        $status = is_string($status) ? BookingAttendeeStatus::tryFrom($status) : $status;
         $author = $this->user ?? $attendee;
         $author_id = is_string($author) ? $author : $author->id;
 

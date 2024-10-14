@@ -3,8 +3,8 @@
 namespace App\Policies;
 
 use App\Enums\BookingStatus;
-use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\BookingAttendance;
 use App\Models\User;
 
 class BookingPolicy
@@ -89,7 +89,7 @@ class BookingPolicy
         if ($attendee = $booking->attendees->find($model)) {
             $attendance = $attendee->attendance;
         } else {
-            $attendance = Attendance::build($booking, $model);
+            $attendance = BookingAttendance::build($booking, $model);
         }
 
         return $user->can('update', $attendance);

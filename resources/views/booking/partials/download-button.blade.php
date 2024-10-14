@@ -1,9 +1,9 @@
-@use('App\Enums\AttendeeStatus')
+@use('App\Enums\BookingAttendeeStatus')
 @props(['booking', 'attendance'])
 @if (
     $booking->isFuture() &&
         !$booking->isCancelled() &&
-        in_array($attendance?->status, [AttendeeStatus::Accepted, AttendeeStatus::Tentative]))
+        in_array($attendance?->status, [BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative]))
     <div class="relative inline-block text-left" x-data="{ show: false }">
         <x-button.secondary id="calendar-download" x-bind:aria-expanded="show" aria-haspopup="true" @click="show = !show">
             <x-icon.download class="h-4 w-4 fill-current" />

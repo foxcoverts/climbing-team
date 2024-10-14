@@ -1,4 +1,3 @@
-@use('App\Enums\AttendeeStatus')
 @php($localStartAt = localDate($booking->start_at, $booking->timezone))
 @php($localEndAt = localDate($booking->end_at, $booking->timezone))
 <x-layout.guest :title="__('Invitation')">

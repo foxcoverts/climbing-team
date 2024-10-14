@@ -2,27 +2,24 @@
 
 namespace App\Models;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\TodoAttendeeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Str;
 
-class Attendance extends Pivot
+class TodoAttendance extends Pivot
 {
-    protected $table = 'booking_user';
+    protected $table = 'todo_user';
 
     /**
-     * Create a new instance from a User and a Booking.
-     *
-     * @param User $user
-     * @param Booking $booking
-     * @return Attendance
+     * Create a new instance from a User and a Todo.
      */
-    public static function build(Booking $booking, User $user)
+    public static function build(Todo $todo, User $user): static
     {
         $attendance = new static;
-        $attendance->booking = $booking;
+        $attendance->todo = $todo;
         $attendance->user = $user;
+
         return $attendance;
     }
 
@@ -43,14 +40,12 @@ class Attendance extends Pivot
      * @var array
      */
     protected $attributes = [
-        'status' => AttendeeStatus::NeedsAction,
+        'status' => TodoAttendeeStatus::NeedsAction,
         'comment' => null,
     ];
 
     /**
-     * Make a new token for an Attendance.
-     *
-     * @return string
+     * Make a new token for a BookingAttendance.
      */
     public static function generateToken(): string
     {
@@ -68,41 +63,16 @@ class Attendance extends Pivot
      * @var array<string, string>
      */
     protected $casts = [
-        'status' => AttendeeStatus::class,
+        'status' => TodoAttendeeStatus::class,
     ];
 
-    public function booking(): BelongsTo
+    public function todo(): BelongsTo
     {
-        return $this->belongsTo(Booking::class);
+        return $this->belongsTo(Todo::class);
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function isAccepted(): bool
-    {
-        return $this->status == AttendeeStatus::Accepted;
-    }
-
-    public function isDeclined(): bool
-    {
-        return $this->status == AttendeeStatus::Declined;
-    }
-
-    public function needsAction(): bool
-    {
-        return $this->status == AttendeeStatus::NeedsAction;
-    }
-
-    public function isLeadInstructor(): bool
-    {
-        return $this->user_id === $this->booking->lead_instructor_id;
-    }
-
-    public function isTeamLeader(): bool
-    {
-        return $this->user->isTeamLeader();
     }
 }

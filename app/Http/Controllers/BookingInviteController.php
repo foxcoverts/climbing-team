@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,8 +19,8 @@ class BookingInviteController extends Controller
     {
         Gate::authorize('viewOwn', Booking::class);
 
-        $invites = $this->futureBookingsWithAttendeeStatus($request->user(), AttendeeStatus::NeedsAction);
-        $maybes = $this->futureBookingsWithAttendeeStatus($request->user(), AttendeeStatus::Tentative);
+        $invites = $this->futureBookingsWithAttendeeStatus($request->user(), BookingAttendeeStatus::NeedsAction);
+        $maybes = $this->futureBookingsWithAttendeeStatus($request->user(), BookingAttendeeStatus::Tentative);
 
         return view('booking.invite.index', [
             'user' => $request->user(),
@@ -29,7 +29,7 @@ class BookingInviteController extends Controller
         ]);
     }
 
-    protected function futureBookingsWithAttendeeStatus(User $user, AttendeeStatus $status): Collection
+    protected function futureBookingsWithAttendeeStatus(User $user, BookingAttendeeStatus $status): Collection
     {
         return Booking::future()->notCancelled()
             ->attendeeStatus($user, [$status])

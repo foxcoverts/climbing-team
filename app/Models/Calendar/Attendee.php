@@ -2,7 +2,7 @@
 
 namespace App\Models\Calendar;
 
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\User;
 use Sabre\VObject\Property;
 
@@ -23,13 +23,13 @@ class Attendee
         return str_replace('mailto:', '', $this->vattendee->getValue());
     }
 
-    public function getStatus(): ?AttendeeStatus
+    public function getStatus(): ?BookingAttendeeStatus
     {
         return match ((string) $this->vattendee['PARTSTAT']) {
-            'ACCEPTED' => AttendeeStatus::Accepted,
-            'DECLINED' => AttendeeStatus::Declined,
-            'NEEDS-ACTION' => AttendeeStatus::NeedsAction,
-            'TENTATIVE' => AttendeeStatus::Tentative,
+            'ACCEPTED' => BookingAttendeeStatus::Accepted,
+            'DECLINED' => BookingAttendeeStatus::Declined,
+            'NEEDS-ACTION' => BookingAttendeeStatus::NeedsAction,
+            'TENTATIVE' => BookingAttendeeStatus::Tentative,
             default => null, // Unsupported: 'DELEGATED'
         };
     }

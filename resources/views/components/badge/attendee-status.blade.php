@@ -1,15 +1,15 @@
-@use('App\Enums\AttendeeStatus')
+@use('App\Enums\BookingAttendeeStatus')
 @props([
     'status',
     'color' => match ($status) {
-        AttendeeStatus::NeedsAction => 'sky',
-        AttendeeStatus::Tentative => 'yellow',
-        AttendeeStatus::Accepted => 'lime',
+        BookingAttendeeStatus::NeedsAction => 'sky',
+        BookingAttendeeStatus::Tentative => 'yellow',
+        BookingAttendeeStatus::Accepted => 'lime',
         default => 'pink',
     },
     'icon' => match ($status) {
-        AttendeeStatus::NeedsAction, AttendeeStatus::Tentative => 'inbox',
-        AttendeeStatus::Accepted => 'inbox.check',
+        BookingAttendeeStatus::NeedsAction, BookingAttendeeStatus::Tentative => 'inbox',
+        BookingAttendeeStatus::Accepted => 'inbox.check',
         default => 'inbox.cross',
     },
     'label',

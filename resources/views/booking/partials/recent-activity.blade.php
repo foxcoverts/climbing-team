@@ -1,4 +1,3 @@
-@use('App\Enums\AttendeeStatus')
 @use('Carbon\Carbon')
 @use('Illuminate\Support\Str')
 <section>
@@ -6,7 +5,7 @@
         <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">{{ __('Recent Activity') }}</h3>
     </div>
 
-    <div class="space-y-2">
+    <div class="space-y-2 mt-2">
         @include('booking.partials.comment-form')
 
         @php($changeable_link = 'change.partials.booking.this')

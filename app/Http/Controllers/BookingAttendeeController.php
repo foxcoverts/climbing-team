@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Actions\RespondToBookingAction;
-use App\Enums\AttendeeStatus;
+use App\Enums\BookingAttendeeStatus;
 use App\Http\Requests\StoreBookingAttendeeRequest;
 use App\Http\Requests\UpdateBookingAttendeeRequest;
-use App\Models\Attendance;
 use App\Models\Booking;
+use App\Models\BookingAttendance;
 use App\Models\ChangeAttendee;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -25,7 +25,7 @@ class BookingAttendeeController extends Controller
      */
     public function index(Booking $booking): View
     {
-        Gate::authorize('rollcall', [Attendance::class, $booking]);
+        Gate::authorize('rollcall', [BookingAttendance::class, $booking]);
 
         $attendees = $booking->attendees
             ->where('id', '!=', $booking->lead_instructor_id)
@@ -48,7 +48,7 @@ class BookingAttendeeController extends Controller
 
     public function updateMany(Request $request, Booking $booking): RedirectResponse
     {
-        Gate::authorize('rollcall', [Attendance::class, $booking]);
+        Gate::authorize('rollcall', [BookingAttendance::class, $booking]);
 
         $validated = $request->validate([
             'attendee_ids' => ['required', 'list'],
@@ -57,7 +57,7 @@ class BookingAttendeeController extends Controller
 
         $respondToBooking = new RespondToBookingAction($booking, $request->user());
         foreach ($validated['attendee_ids'] as $id) {
-            $respondToBooking($id, AttendeeStatus::Accepted);
+            $respondToBooking($id, BookingAttendeeStatus::Accepted);
         }
 
         return redirect()->route('booking.show', $booking)
@@ -69,7 +69,7 @@ class BookingAttendeeController extends Controller
      */
     public function create(Booking $booking): View
     {
-        Gate::authorize('create', [Attendance::class, $booking]);
+        Gate::authorize('create', [BookingAttendance::class, $booking]);
 
         if ($booking->isPast() || $booking->isCancelled()) {
             abort(Response::HTTP_NOT_FOUND);
@@ -90,7 +90,7 @@ class BookingAttendeeController extends Controller
      */
     public function store(StoreBookingAttendeeRequest $request, Booking $booking): RedirectResponse
     {
-        Gate::authorize('create', [Attendance::class, $booking]);
+        Gate::authorize('create', [BookingAttendance::class, $booking]);
 
         $user_id = $request->safe()->user_id;
         $options = $request->safe()->except(['user_id']);
