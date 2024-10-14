@@ -46,7 +46,7 @@ class TodoFactoryTest extends TestCase
 
     public function test_summary_is_rendered(): void
     {
-        $summary = fake()->sentence();
+        $summary = fake()->sentence(5);
 
         $todo = new Todo;
         $todo->setSummary($summary);
@@ -59,7 +59,7 @@ class TodoFactoryTest extends TestCase
 
     public function test_description_is_rendered(): void
     {
-        $description = fake()->sentence();
+        $description = fake()->sentence(5);
 
         $todo = new Todo;
         $todo->setDescription($description);
