@@ -56,6 +56,21 @@ class TodoPolicy
     }
 
     /**
+     * Determine whether the user can comment on the task.
+     */
+    public function comment(User $user, Todo $todo): bool
+    {
+        if ($todo->isComplete() || $user->isGuest()) {
+            return false;
+        }
+        if ($this->manage($user)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Determine whether the user can delete the task.
      */
     public function delete(User $user, Todo $todo): bool

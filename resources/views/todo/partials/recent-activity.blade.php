@@ -6,6 +6,8 @@
     </div>
 
     <div class="space-y-2 mt-2">
+        @include('todo.partials.comment-form')
+
         @php($changeable_link = 'change.partials.todo.this')
         @php($changed_fields = [])
         @foreach ($todo->changes as $change)
