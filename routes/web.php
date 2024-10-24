@@ -9,6 +9,7 @@ use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\BookingLinkController;
+use App\Http\Controllers\BookingNotificationsController;
 use App\Http\Controllers\BookingPreviewController;
 use App\Http\Controllers\BookingRelatedController;
 use App\Http\Controllers\BookingRotaController;
@@ -70,6 +71,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
     Route::get('booking/{booking}/email', BookingEmailController::class)->name('booking.email');
+
+    Route::singleton('booking.notifications', BookingNotificationsController::class)->destroyable()->except('edit');
 
     Route::get('booking/{booking}/share', BookingShareController::class)->name('booking.share');
 

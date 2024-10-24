@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booking_settings', function (Blueprint $table) {
-            $table->ulid('id')->primary();
+        Schema::create('notification_settings', function (Blueprint $table) {
             $table->foreignUlid('user_id');
-            $table->foreignUlid('booking_id')->nullable();
-            $table->enum('comment_mail', ['all', 'leader', 'none'])->nullable();
+            $table->string('notifiable_type')->nullable();
+            $table->foreignUlid('notifiable_id')->nullable();
+            $table->enum('comment_mail', ['all', 'reply', 'leader', 'none'])->nullable();
             $table->boolean('invite_mail')->nullable();
             $table->boolean('change_mail')->nullable();
             $table->boolean('confirm_mail')->nullable();
             $table->boolean('cancel_mail')->nullable();
             $table->timestamps(6);
+
+            $table->unique(['user_id', 'notifiable_type', 'notifiable_id'], 'unique_user_notifiable');
         });
     }
 
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('booking_settings');
+        Schema::dropIfExists('notification_settings');
     }
 };
