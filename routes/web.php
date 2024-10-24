@@ -25,6 +25,7 @@ use App\Http\Controllers\KitCheckUserController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileNotificationsController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
@@ -123,6 +124,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('profile', 'edit')->name('profile.edit');
             Route::patch('profile', 'update')->name('profile.update');
             Route::delete('profile', 'destroy')->name('profile.destroy');
+        });
+
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::singleton('notifications', ProfileNotificationsController::class)
+                ->destroyable();
         });
 
         Route::prefix('trash')->name('trash.')->group(function () {
