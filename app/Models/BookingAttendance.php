@@ -11,6 +11,8 @@ class BookingAttendance extends Pivot
 {
     protected $table = 'booking_user';
 
+    protected $primaryKey = null;
+
     /**
      * Create a new instance from a User and a Booking.
      */
