@@ -158,7 +158,10 @@ class BookingAttendeeController extends Controller
         // Remove any attendance changes connected with this attendee.
         ChangeAttendee::where('attendee_id', $attendee->id)
             ->whereHas('change', function (Builder $query) use ($booking) {
-                $query->where('booking_id', $booking->id);
+                $query->where([
+                    'changeable_type' => $booking::class,
+                    'changeable_id' => $booking->id,
+                ]);
             })->delete();
 
         return redirect()->route('booking.show', $booking)
