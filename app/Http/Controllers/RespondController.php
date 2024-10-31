@@ -6,8 +6,6 @@ use App\Actions\RespondToBookingAction;
 use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
 use App\Models\User;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
@@ -18,7 +16,7 @@ class RespondController extends Controller
     /**
      * Display the invitation.
      */
-    public function show(Request $request, Booking $booking, User $attendee): View
+    public function show(Request $request, Booking $booking, User $attendee)
     {
         Gate::authorize('update', $attendee->attendance);
 
@@ -41,7 +39,7 @@ class RespondController extends Controller
     /**
      * Accept the invitation.
      */
-    public function accept(Request $request, Booking $booking, User $attendee): View
+    public function accept(Request $request, Booking $booking, User $attendee)
     {
         return $this->viewAction($request, $booking, $attendee, BookingAttendeeStatus::Accepted);
     }
@@ -49,7 +47,7 @@ class RespondController extends Controller
     /**
      * Respond tentatively to the invitation.
      */
-    public function tentative(Request $request, Booking $booking, User $attendee): View
+    public function tentative(Request $request, Booking $booking, User $attendee)
     {
         return $this->viewAction($request, $booking, $attendee, BookingAttendeeStatus::Tentative);
     }
@@ -57,7 +55,7 @@ class RespondController extends Controller
     /**
      * Decline the invitation.
      */
-    public function decline(Request $request, Booking $booking, User $attendee): View
+    public function decline(Request $request, Booking $booking, User $attendee)
     {
         return $this->viewAction($request, $booking, $attendee, BookingAttendeeStatus::Declined);
     }
@@ -65,7 +63,7 @@ class RespondController extends Controller
     /**
      * Record the attendee's response.
      */
-    public function store(Request $request, Booking $booking, User $attendee): RedirectResponse
+    public function store(Request $request, Booking $booking, User $attendee)
     {
         Gate::authorize('update', $attendee->attendance);
 
@@ -107,7 +105,7 @@ class RespondController extends Controller
     /**
      * View the action form that will auto-submit the response.
      */
-    protected function viewAction(Request $request, Booking $booking, User $attendee, BookingAttendeeStatus $status): View
+    protected function viewAction(Request $request, Booking $booking, User $attendee, BookingAttendeeStatus $status)
     {
         Gate::authorize('update', $attendee->attendance);
 
