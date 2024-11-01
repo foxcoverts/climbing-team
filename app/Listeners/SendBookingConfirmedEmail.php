@@ -5,6 +5,9 @@ namespace App\Listeners;
 use App\Enums\BookingAttendeeStatus;
 use App\Events\BookingConfirmed;
 use App\Mail\BookingConfirmed as MailBookingConfirmed;
+use App\Models\Booking;
+use App\Models\NotificationSettings;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 class SendBookingConfirmedEmail
@@ -15,14 +18,24 @@ class SendBookingConfirmedEmail
     public function handle(BookingConfirmed $event): void
     {
         foreach ($event->booking->attendees as $attendee) {
-            if (in_array($attendee->attendance->status, [BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative])) {
-                Mail::to($attendee->email)
-                    ->send(new MailBookingConfirmed(
-                        $event->booking,
-                        $attendee,
-                        $event->changes
-                    ));
-            }
+            $this->sendMail($attendee, $event->booking, $event->changes);
         }
+    }
+
+    private function sendMail(User $attendee, Booking $booking, array $changes = []): void
+    {
+        if (! in_array($attendee->attendance->status, [BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative])) {
+            return;
+        }
+        if (! NotificationSettings::check($attendee, $booking, 'confirm_mail')) {
+            return;
+        }
+
+        Mail::to($attendee->email)
+            ->send(new MailBookingConfirmed(
+                $booking,
+                $attendee,
+                $changes
+            ));
     }
 }

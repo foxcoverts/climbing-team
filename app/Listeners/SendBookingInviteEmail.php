@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\BookingInvite;
 use App\Mail\BookingInvite as MailBookingInvite;
+use App\Models\NotificationSettings;
 use Illuminate\Support\Facades\Mail;
 
 class SendBookingInviteEmail
@@ -14,6 +15,9 @@ class SendBookingInviteEmail
     public function handle(BookingInvite $event): void
     {
         if ($event->booking->isCancelled() || $event->booking->isPast()) {
+            return;
+        }
+        if (! NotificationSettings::check($event->attendee, $event->booking, 'invite_mail')) {
             return;
         }
 

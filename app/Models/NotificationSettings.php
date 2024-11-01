@@ -6,6 +6,7 @@ use App\Enums\CommentNotificationOption;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use InvalidArgumentException;
 
 /**
  * This model acts similar to a Pivot table, with no primary key it is instead unique by `user_id`, `notifiable_type` and `notifiable_id`.
@@ -55,6 +56,41 @@ class NotificationSettings extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function default(string $setting): bool|CommentNotificationOption
+    {
+        return match ($setting) {
+            'comment_mail' => CommentNotificationOption::All,
+            'invite_mail' => true,
+            'change_mail' => true,
+            'confirm_mail' => true,
+            'cancel_mail' => true,
+            default => throw new InvalidArgumentException("Unknown setting: $setting"),
+        };
+    }
+
+    public static function check(User $user, Model $notifiable, string $setting): bool|CommentNotificationOption
+    {
+        $notifiable_setting = static::where([
+            'user_id' => $user->id,
+            'notifiable_type' => $notifiable::class,
+            'notifiable_id' => $notifiable->id,
+        ])->value($setting);
+        if (! is_null($notifiable_setting)) {
+            return $notifiable_setting;
+        }
+
+        $global_setting = static::where([
+            'user_id' => $user->id,
+            'notifiable_type' => null,
+            'notifiable_id' => null,
+        ])->value($setting);
+        if (! is_null($global_setting)) {
+            return $global_setting;
+        }
+
+        return static::default($setting);
     }
 
     /**
