@@ -10,17 +10,21 @@
             'cancel_mail' => old('cancel_mail', $settings->cancel_mail),
         ]) }},
     }">
+        <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
+            <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
+                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                    <x-icon.notifications style="height: .75lh" class="fill-current" aria-hidden="true" />
+                    <span>{{ __('Notification Settings') }}</span>
+                </h1>
+            </div>
+        </header>
+
         <form method="post" action="{{ route('profile.notifications.update') }}" id="update-settings"
             x-on:submit="setTimeout(() => submitted = true, 0)" class="p-4 sm:px-8">
             @csrf
             @method('PUT')
 
             <div class="space-y-6">
-                <h2
-                    class="text-xl font-medium text-gray-800 dark:text-gray-200 border-b border-gray-800 dark:border-gray-200 flex items-center justify-between">
-                    {{ __('Notification Settings') }}
-                </h2>
-
                 <div class="space-y-1">
                     <x-fake-label :value="__('Invites')" />
                     <p class="text-sm">
