@@ -71,6 +71,7 @@ class Booking extends Model
         return [
             'start_at',
             'end_at',
+            'location',
             'status',
         ];
     }
