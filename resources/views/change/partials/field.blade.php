@@ -1,5 +1,9 @@
 @if ($field->name == 'status')
     @switch ($field->value)
+        @case('needs-action')
+            @php($status = 'paused')
+        @break
+
         @case('tentative')
             @php($status = 'restored')
         @break
