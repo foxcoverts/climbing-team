@@ -24,6 +24,7 @@ class BookingNotificationsController extends Controller
 
         return view('booking.notifications.show', [
             'settings' => $settings,
+            'inherited' => $this->inheritNotificationSettings($request->user()),
         ]);
     }
 
@@ -77,6 +78,28 @@ class BookingNotificationsController extends Controller
         $settings = new NotificationSettings;
         $settings->notifiable()->associate($booking);
         $settings->user()->associate($user);
+
+        return $settings;
+    }
+
+    protected function inheritNotificationSettings(User $user): NotificationSettings
+    {
+        $settings = NotificationSettings::where([
+            'notifiable_id' => null,
+            'notifiable_type' => null,
+            'user_id' => $user->id,
+        ])->firstOr(function () use ($user): NotificationSettings {
+            $settings = new NotificationSettings;
+            $settings->user()->associate($user);
+
+            return $settings;
+        });
+
+        $settings->invite_mail ??= $settings::default('invite_mail');
+        $settings->change_mail ??= $settings::default('change_mail');
+        $settings->confirm_mail ??= $settings::default('confirm_mail');
+        $settings->cancel_mail ??= $settings::default('cancel_mail');
+        $settings->comment_mail ??= $settings::default('comment_mail');
 
         return $settings;
     }

@@ -29,7 +29,10 @@
                         {{ __('Get an e-mail when you are invited to this booking.') }}
                     </p>
                     <x-select-input id="invite_mail" name="invite_mail" class="mt-1 block">
-                        <option value="" @selected(!is_bool($settings->invite_mail))>{{ __('Inherit') }}</option>
+                        <option value="" @selected(!is_bool($settings->invite_mail))>
+                            {{ __('Inherit') }} ({{ $inherited->invite_mail ? __('On') : __('Off') }})
+                        </option>
+                        <hr>
                         <option value="1" @selected($settings->invite_mail === true)>{{ __('On') }}</option>
                         <option value="0" @selected($settings->invite_mail === false)>{{ __('Off') }}</option>
                     </x-select-input>
@@ -42,7 +45,10 @@
                         {{ __('Get an e-mail when this booking is changed.') }}
                     </p>
                     <x-select-input id="change_mail" name="change_mail" class="mt-1 block">
-                        <option value="" @selected(!is_bool($settings->change_mail))>{{ __('Inherit') }}</option>
+                        <option value="" @selected(!is_bool($settings->change_mail))>
+                            {{ __('Inherit') }} ({{ $inherited->change_mail ? __('On') : __('Off') }})
+                        </option>
+                        <hr>
                         <option value="1" @selected($settings->change_mail === true)>{{ __('On') }}</option>
                         <option value="0" @selected($settings->change_mail === false)>{{ __('Off') }}</option>
                     </x-select-input>
@@ -55,10 +61,12 @@
                         {{ __('Get an e-mail when this booking is confirmed.') }}
                     </p>
                     <x-select-input id="confirm_mail" name="confirm_mail" class="mt-1 block">
-                        <option value="" @selected(!is_bool($settings->confirm_mail))>{{ __('Inherit') }}</option>
+                        <option value="" @selected(!is_bool($settings->confirm_mail))>
+                            {{ __('Inherit') }} ({{ $inherited->confirm_mail ? __('On') : __('Off') }})
+                        </option>
+                        <hr>
                         <option value="1" @selected($settings->confirm_mail === true)>{{ __('On') }}</option>
                         <option value="0" @selected($settings->confirm_mail === false)>{{ __('Off') }}</option>
-
                     </x-select-input>
                     <x-input-error :messages="$errors->get('status')" />
                 </div>
@@ -69,10 +77,12 @@
                         {{ __('Get an e-mail when this booking is cancelled.') }}
                     </p>
                     <x-select-input id="cancel_mail" name="cancel_mail" class="mt-1 block">
-                        <option value="" @selected(!is_bool($settings->cancel_mail))>{{ __('Inherit') }}</option>
+                        <option value="" @selected(!is_bool($settings->cancel_mail))>
+                            {{ __('Inherit') }} ({{ $inherited->change_mail ? __('On') : __('Off') }})
+                        </option>
+                        <hr>
                         <option value="1" @selected($settings->cancel_mail === true)>{{ __('On') }}</option>
                         <option value="0" @selected($settings->cancel_mail === false)>{{ __('Off') }}</option>
-
                     </x-select-input>
                     <x-input-error :messages="$errors->get('status')" />
                 </div>
@@ -84,7 +94,11 @@
                     </p>
                     <x-select-input id="comment_mail" name="comment_mail" class="mt-1 block"
                         x-model.fill="settings.comment_mail">
-                        <option value="" selected>{{ __('Inherit') }}</option>
+                        <option value="" selected>
+                            {{ __('Inherit') }}
+                            ({{ __('app.notification.comment-option.' . $inherited->comment_mail->value) }})
+                        </option>
+                        <hr>
                         <x-select-input.enum :options="CommentNotificationOption::class" lang="app.notification.comment-option.:value" />
                     </x-select-input>
                     <x-input-error :messages="$errors->get('status')" />
