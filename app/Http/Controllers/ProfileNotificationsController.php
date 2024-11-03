@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\CommentNotificationOption;
 use App\Http\Requests\UpdateNotificationSettingsRequest;
 use App\Models\NotificationSettings;
 use App\Models\User;
@@ -33,7 +32,7 @@ class ProfileNotificationsController extends Controller
         $settings->fill($request->validated());
         $settings->save();
 
-        return redirect()->route('profile.edit')
+        return redirect()->route('profile.notifications.show')
             ->with('alert.info', __('Notification Settings saved.'));
     }
 
@@ -45,7 +44,7 @@ class ProfileNotificationsController extends Controller
 
         $settings->delete();
 
-        return redirect()->route('profile.edit')
+        return redirect()->route('profile.notifications.show')
             ->with('alert.info', __('Notification Settings cleared.'));
     }
 
@@ -67,11 +66,6 @@ class ProfileNotificationsController extends Controller
     {
         $settings = new NotificationSettings;
         $settings->user()->associate($user);
-        $settings->comment_mail = CommentNotificationOption::All;
-        $settings->invite_mail = true;
-        $settings->change_mail = true;
-        $settings->confirm_mail = true;
-        $settings->cancel_mail = true;
 
         return $settings;
     }
