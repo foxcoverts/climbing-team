@@ -119,16 +119,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('todo', TodoController::class);
 
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::singleton('notifications', ProfileNotificationsController::class)
+            ->destroyable();
+    });
+
     Route::middleware('password.confirm')->group(function () {
         Route::controller(ProfileController::class)->group(function () {
             Route::get('profile', 'edit')->name('profile.edit');
             Route::patch('profile', 'update')->name('profile.update');
             Route::delete('profile', 'destroy')->name('profile.destroy');
-        });
-
-        Route::prefix('profile')->name('profile.')->group(function () {
-            Route::singleton('notifications', ProfileNotificationsController::class)
-                ->destroyable();
         });
 
         Route::prefix('trash')->name('trash.')->group(function () {
