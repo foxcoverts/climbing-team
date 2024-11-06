@@ -98,6 +98,7 @@
     <x-sidebar.group :heading="__('Account')">
         @auth
             <x-sidebar.link route='profile.edit' :label="__('Profile')" icon="user-solid-square" />
+            <x-sidebar.link route='profile.notifications.show' :label="__('Notification Settings')" icon="notifications" />
             <x-sidebar.link route='booking.links' :label="__('Calendar Links')" icon="calendar.download" />
             <x-sidebar.button route='logout' method="POST" :label="__('Logout')">
                 <x-slot:icon>

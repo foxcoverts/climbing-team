@@ -9,6 +9,7 @@ use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\BookingLinkController;
+use App\Http\Controllers\BookingNotificationsController;
 use App\Http\Controllers\BookingPreviewController;
 use App\Http\Controllers\BookingRelatedController;
 use App\Http\Controllers\BookingRotaController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\KitCheckUserController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileNotificationsController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
@@ -71,6 +73,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('booking/{booking}/email', BookingEmailController::class)->name('booking.email');
 
+    Route::singleton('booking.notifications', BookingNotificationsController::class)->destroyable()->except('edit');
+
     Route::get('booking/{booking}/share', BookingShareController::class)->name('booking.share');
 
     Route::get('booking/{booking}.ics', [BookingIcsController::class, 'show'])->name('booking.show.ics');
@@ -114,6 +118,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('todo/{todo}.ics', [TodoIcsController::class, 'show'])->name('todo.show.ics');
 
     Route::resource('todo', TodoController::class);
+
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::singleton('notifications', ProfileNotificationsController::class)
+            ->destroyable();
+    });
 
     Route::middleware('password.confirm')->group(function () {
         Route::controller(ProfileController::class)->group(function () {

@@ -37,6 +37,14 @@ return [
             MountainTrainingAward::RockClimbingDevelopmentInstructor->value => 'Rock Climbing Development Instructor',
         ],
     ],
+    'notification' => [
+        'comment-option' => [
+            'all' => 'All',
+            'reply' => 'Replies',
+            'leader' => 'Lead Instructor',
+            'none' => 'None',
+        ],
+    ],
     'qualification' => [
         'type' => [
             App\Models\GirlguidingQualification::class => 'Girlguiding',

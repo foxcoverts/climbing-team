@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentCreated;
 use App\Models\Booking;
 use App\Models\Change;
 use App\Models\ChangeComment;
+use App\Models\Todo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +21,7 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'parent_type' => ['required', 'string', Rule::in([Booking::class])],
+            'parent_type' => ['required', 'string', Rule::in([Booking::class, Todo::class])],
             'parent_id' => ['required', 'ulid'],
             'body' => ['required', 'string'],
         ]);
@@ -37,6 +39,8 @@ class CommentController extends Controller
         $comment = new ChangeComment;
         $comment->body = $request->body;
         $change->comments()->save($comment);
+
+        event(new CommentCreated($parent, $comment));
 
         return $this->redirectFor($parent)->withFragment('#'.$change->id);
     }
