@@ -71,7 +71,7 @@ class BookingInvite extends Mailable implements ShouldQueue
             replyTo: [
                 new Address($this->booking->uid),
             ],
-            tags: ['invite'],
+            tags: $this->getTags(),
             metadata: [
                 'booking_id' => $this->booking->id,
             ],
@@ -87,6 +87,14 @@ class BookingInvite extends Mailable implements ShouldQueue
     public function getTitle(): string
     {
         return 'Invitation';
+    }
+
+    /**
+     * The tags used for reporting on emails sent.
+     */
+    public function getTags(): array
+    {
+        return ['invite'];
     }
 
     /**

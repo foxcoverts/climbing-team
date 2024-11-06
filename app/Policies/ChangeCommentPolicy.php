@@ -8,17 +8,21 @@ use App\Models\User;
 
 class ChangeCommentPolicy
 {
-    function view(User $user, ChangeComment $comment)
+    public function view(User $user, ChangeComment $comment)
     {
-        return !$user->isGuest();
+        if ($comment->author->is($user)) {
+            return true;
+        }
+
+        return ! $user->isGuest();
     }
 
-    function update(User $user, ChangeComment $comment)
+    public function update(User $user, ChangeComment $comment)
     {
-        return $comment->author->is($user);
+        return $comment->author->is($user) || $user->can('manage', Booking::class);
     }
 
-    function delete(User $user, ChangeComment $comment)
+    public function delete(User $user, ChangeComment $comment)
     {
         return $comment->author->is($user) || $user->can('manage', Booking::class);
     }
