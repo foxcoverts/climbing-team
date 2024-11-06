@@ -45,8 +45,10 @@ class SendCommentCreatedEmail
         if (! Gate::forUser($attendee)->check('view', $comment)) {
             return;
         }
-        if ($attendee->attendance->status === BookingAttendeeStatus::Declined) {
-            return;
+        if (! $attendee->isTeamLeader()) {
+            if ($attendee->attendance->status === BookingAttendeeStatus::Declined) {
+                return;
+            }
         }
         if ($attendee->id === $comment->author->id) {
             return;
