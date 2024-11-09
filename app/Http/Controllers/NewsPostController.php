@@ -36,7 +36,7 @@ class NewsPostController extends Controller
 
         return view('news.create', [
             'currentUser' => $request->user(),
-            'authors' => User::orderBy('name')->select('id', 'name')->get(),
+            'authors' => User::ordered()->select('id', 'name')->get(),
         ]);
     }
 
@@ -80,7 +80,7 @@ class NewsPostController extends Controller
 
         return view('news.edit', [
             'post' => $post,
-            'authors' => User::orderBy('name')->select(['id', 'name'])->get(),
+            'authors' => User::ordered()->select(['id', 'name'])->get(),
         ]);
     }
 

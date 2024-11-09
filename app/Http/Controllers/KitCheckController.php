@@ -25,7 +25,7 @@ class KitCheckController extends Controller
         Gate::authorize('viewAny', KitCheck::class);
 
         return view('kit-check.index', [
-            'users' => User::orderBy('name')
+            'users' => User::ordered()
                 ->has('latestKitCheck')
                 ->with('latestKitCheck', 'latestKitCheck.checked_by')
                 ->get(),
@@ -47,7 +47,7 @@ class KitCheckController extends Controller
         return view('kit-check.create', [
             'kitCheck' => $kitCheck,
             'checkers' => $this->getCheckers($request->user()),
-            'users' => User::orderBy('name')->get(),
+            'users' => User::ordered()->get(),
             'user_ids' => (array) $request->get('users'),
         ]);
     }
@@ -59,7 +59,7 @@ class KitCheckController extends Controller
     {
         Gate::authorize('create', KitCheck::class);
 
-        $factory = new KitCheck();
+        $factory = new KitCheck;
 
         $created_at = $factory->freshTimestamp();
         $attributes = $request->safe()->except('user_ids');
