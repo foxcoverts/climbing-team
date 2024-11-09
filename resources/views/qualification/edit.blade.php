@@ -3,7 +3,7 @@
 @use('App\Enums\ScoutPermitActivity')
 @use('App\Enums\ScoutPermitCategory')
 @use('App\Enums\ScoutPermitType')
-<x-layout.app :title="__('Edit Qualification') . ' - ' . $user->name">
+<x-layout.app :title="__('Edit Qualification - :Name', ['name' => $qualification->user->name])">
     <section x-data="{
         submitted: false,
         qualification: {{ Js::from([
@@ -29,12 +29,12 @@
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8 sm:z-10">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    {{ $user->name }} - {{ __('Edit Qualification') }}
+                    {{ __(':Name - Edit Qualification', ['name' => $qualification->user->name]) }}
                 </h1>
             </div>
         </header>
 
-        <form method="post" id="update-form" action="{{ route('user.qualification.update', [$user, $qualification]) }}"
+        <form method="post" id="update-form" action="{{ route('qualification.update', $qualification) }}"
             x-on:submit="setTimeout(() => submitted = true, 0)">
             @csrf
             @method('PATCH')
@@ -218,7 +218,7 @@
             <x-button.primary class="whitespace-nowrap" form="update-form" x-bind:disabled="submitted"
                 :label="__('Save')" x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Save') }}'" />
             @can('delete', $qualification)
-                <form method="post" action="{{ route('user.qualification.destroy', [$user, $qualification]) }}"
+                <form method="post" action="{{ route('qualification.destroy', $qualification) }}"
                     x-data="{ submitted: false }" x-on:submit="setTimeout(() => submitted = true, 0)">
                     @csrf
                     @method('delete')
@@ -226,8 +226,8 @@
                         x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Remove') }}'" />
                 </form>
             @endcan
-            @can('viewAny', [App\Models\Qualification::class, $user])
-                <x-button.secondary :href="route('user.qualification.index', $user)" :label="__('Back')" />
+            @can('viewAny', [App\Models\Qualification::class, $qualification->user])
+                <x-button.secondary :href="route('user.qualification.index', $qualification->user)" :label="__('Back')" />
             @endcan
         </footer>
     </section>

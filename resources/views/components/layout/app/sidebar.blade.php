@@ -85,6 +85,9 @@
         @can('viewAny', App\Models\Todo::class)
             <x-sidebar.link route='todo.index' match-routes='todo.*' :label="__('Tasks')" icon="outline.checkmark" />
         @endcan
+        @can('viewAny', App\Models\Qualification::class)
+            <x-sidebar.link route='qualification.index' :label="__('Qualifications')" icon="qualification" />
+        @endcan
         @can('viewAny', App\Models\User::class)
             <x-sidebar.link route='user.index' :match-routes="['user.*', 'user.booking.*', 'user.qualification.*']" :label="__('Users')">
                 <x-slot:icon>
@@ -99,7 +102,7 @@
         @auth
             <x-sidebar.link route='profile.edit' :label="__('Profile')" icon="user-solid-square" />
             <x-sidebar.link route='profile.notifications.show' :label="__('Notification Settings')" icon="notifications" />
-            <x-sidebar.link route='profile.qualification.index' :label="__('My Qualifications')" icon="qualification" />
+            <x-sidebar.link route='qualification.own.show' :label="__('My Qualifications')" icon="qualification" />
             <x-sidebar.link route='booking.links' :label="__('Calendar Links')" icon="calendar.download" />
             <x-sidebar.button route='logout' method="POST" :label="__('Logout')">
                 <x-slot:icon>

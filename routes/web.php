@@ -37,6 +37,7 @@ use App\Http\Controllers\TrashedDocumentController;
 use App\Http\Controllers\UserBookingController;
 use App\Http\Controllers\UserBookingInviteController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserQualificationController;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
@@ -123,8 +124,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::singleton('notifications', ProfileNotificationsController::class)
             ->destroyable();
-        Route::resource('qualification', ProfileQualificationController::class)->only(['index', 'show']);
     });
+
+    Route::get('profile/qualifications', [ProfileQualificationController::class, 'show'])->name('qualification.own.show');
+    Route::resource('qualification', QualificationController::class)->except('store');
+    Route::resource('user.qualification', UserQualificationController::class)->shallow()->only(['index', 'create', 'store']);
 
     Route::middleware('password.confirm')->group(function () {
         Route::controller(ProfileController::class)->group(function () {
@@ -149,7 +153,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
         Route::get('user/{user}/booking', UserBookingController::class)->name('user.booking.index');
         Route::post('user/{user}/invite', [UserController::class, 'sendInvite'])->name('user.invite');
-        Route::resource('user.qualification', QualificationController::class);
         Route::resource('user', UserController::class);
     });
 });
