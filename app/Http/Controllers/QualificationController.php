@@ -18,7 +18,7 @@ class QualificationController extends Controller
     {
         Gate::authorize('viewAny', Qualification::class);
 
-        $qualifications = Qualification::ordered()->with('detail');
+        $qualifications = Qualification::ordered()->with('detail', 'user');
 
         return view('qualification.index', [
             'currentUser' => $request->user(),

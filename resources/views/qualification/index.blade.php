@@ -1,4 +1,5 @@
 @use('Carbon\Carbon')
+@props(['currentUser', 'user' => null, 'qualifications'])
 <x-layout.app :title="__('Qualifications')">
     <section x-data="{ showExpired: false }">
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
@@ -64,6 +65,10 @@
                                 @endif
                             </span>
                         </p>
+                    @endif
+                    @if (empty($user))
+                        <p><dfn class="not-italic font-medium">{{ __('User') }}:</dfn>
+                            {{ $qualification->user->name }}</p>
                     @endif
                 </div>
             @empty
