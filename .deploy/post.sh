@@ -19,6 +19,7 @@ php8.2-cli artisan migrate --force -n
 php8.2-cli artisan storage:link --force -n
 
 # Recreate cache
+php8.2-cli artisan filament:optimize
 php8.2-cli artisan optimize
 
 # Exit maintenance mode
