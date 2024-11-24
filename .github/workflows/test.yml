@@ -49,6 +49,7 @@ jobs:
       - uses: php-actions/composer@v6
         with:
           php_version: ${{ matrix.php-version }}
+          php_extensions: intl zip mbstring dom fileinfo pdo_mysql
 
       - uses: actions/setup-node@v4
         with:
@@ -63,5 +64,5 @@ jobs:
       - uses: php-actions/phpunit@v4
         with:
           php_version: ${{ matrix.php-version }}
-          php_extensions: mbstring dom fileinfo pdo_mysql
+          php_extensions: intl zip mbstring dom fileinfo pdo_mysql
           test_suffix: ""
