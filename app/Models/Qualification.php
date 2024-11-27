@@ -54,7 +54,7 @@ class Qualification extends Model
 
     public function scopeOrdered(Builder $qualifications): void
     {
-        $qualifications->orderBy('expires_on');
+        $qualifications->orderByRaw('-expires_on DESC');
     }
 
     public function isExpired(): bool
@@ -64,5 +64,14 @@ class Qualification extends Model
         }
 
         return $this->expires_on->endOfDay()->isPast();
+    }
+
+    public function expiresSoon(): bool
+    {
+        if (is_null($this->expires_on)) {
+            return false;
+        }
+
+        return $this->expires_on->endOfDay()->addMonths(-3)->isPast();
     }
 }
