@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-enum MountainTrainingAward: string
+use Filament\Support\Contracts\HasLabel;
+
+enum MountainTrainingAward: string implements HasLabel
 {
     case IndoorClimbingAssistant = 'ICA';
     case ClimbingWallInstructor = 'CWI';
@@ -10,4 +12,9 @@ enum MountainTrainingAward: string
     case ClimbingWallDevelopmentInstructor = 'CWDI';
     case RockClimbingInstructor = 'RCI';
     case RockClimbingDevelopmentInstructor = 'RCDI';
+
+    public function getLabel(): ?string
+    {
+        return __('app.mountain-training.award.'.$this->value);
+    }
 }
