@@ -15,8 +15,12 @@ use App\Models\ScoutPermit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Tables;
+use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class QualificationResource extends Resource
 {
@@ -101,20 +105,65 @@ class QualificationResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('detail_type')
-                    ->label('Qualification Type')
+                    ->label('Type')
                     ->state(fn (Qualification $record) => __('app.qualification.type.'.$record->detail_type)),
+                Tables\Columns\TextColumn::make('detail.summary')
+                    ->label('Summary'),
                 Tables\Columns\TextColumn::make('expires_on')
-                    ->date()
-                    ->sortable(),
+                    ->label('Expires')
+                    ->since()->dateTooltip()
+                    ->placeholder('Never')
+                    ->badge()->color(fn (Qualification $record): array => match (true) {
+                        $record->isExpired() => Color::Red,
+                        $record->expiresSoon() => Color::Amber,
+                        default => Color::Sky,
+                    })
+                    ->sortable(query: fn (Builder $query, string $direction): Builder => match ($direction) {
+                        'asc' => $query->orderByRaw('-expires_on DESC'),
+                        'desc' => $query->orderByRaw('-expires_on ASC'),
+                        default => $query,
+                    }),
             ])
+            ->defaultSort('expires_on')
             ->filters([
                 Tables\Filters\SelectFilter::make('detail_type')
-                    ->label('Qualification Type')
+                    ->label('Type')
+                    ->multiple()
                     ->options([
                         GirlguidingQualification::class => __('app.qualification.type.App\Models\GirlguidingQualification'),
                         MountainTrainingQualification::class => __('app.qualification.type.App\Models\MountainTrainingQualification'),
                         ScoutPermit::class => __('app.qualification.type.App\Models\ScoutPermit'),
                     ]),
+                Tables\Filters\SelectFilter::make('expires')
+                    ->label('Expires')
+                    ->default('future')
+                    ->options([
+                        'future' => 'Not expired',
+                        'someday' => 'Someday',
+                        'never' => 'Never',
+                        'soon' => 'Soon',
+                        'expired' => 'Expired',
+                    ])
+                    ->query(fn (Builder $query, array $data): Builder => match ($data['value']) {
+                        'future' => $query->where(function (Builder $query): void {
+                            $query->whereNull('expires_on')
+                                ->orWhereDate('expires_on', '>=', Carbon::now());
+                        }),
+                        'someday' => $query->whereDate('expires_on', '>=', Carbon::now()),
+                        'never' => $query->whereNull('expires_on'),
+                        'soon' => $query->whereDate('expires_on', '>=', Carbon::now())->whereDate('expires_on', '<', Carbon::now()->addMonths(3)),
+                        'expired' => $query->whereDate('expires_on', '<', Carbon::now()),
+                        default => $query
+                    })
+                    ->indicateUsing(fn (array $data): null|string|Indicator => match ($data['value']) {
+                        'future' => Indicator::make('Not expired')->color(Color::Sky),
+                        'someday' => Indicator::make('Expires: Someday')->color(Color::Sky),
+                        'never' => Indicator::make('Expires: Never'),
+                        'soon' => Indicator::make('Expires: Soon')->color(Color::Amber),
+                        'expired' => Indicator::make('Expired')->color(Color::Red),
+                        default => null,
+
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
