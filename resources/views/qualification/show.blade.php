@@ -1,15 +1,20 @@
 @use('Carbon\Carbon')
-<x-layout.app :title="__('Qualification - :name', ['name' => $user->name])">
+<x-layout.app :title="__('Qualification - :Name', ['name' => $qualification->user->name])">
     <section>
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
             <div class="py-2 min-h-16 flex flex-wrap items-center justify-between gap-2 max-w-prose">
-                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
-                    {{ $user->name }}
+                <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                    <x-icon.qualification style="height: .75lh" class="fill-current" aria-hidden="true" />
+                    @if ($qualification->user->is($currentUser))
+                        <span>{{ __('My Qualifications') }}</span>
+                    @else
+                        <span>{{ __(':Name - Qualifications', ['name' => $qualification->user->name]) }}</span>
+                    @endif
                 </h1>
 
                 @can('update', $qualification)
                     <nav class="grow flex justify-end">
-                        <x-button.primary :href="route('user.qualification.edit', [$user, $qualification])" :label="__('Edit')" />
+                        <x-button.primary :href="route('qualification.edit', $qualification)" :label="__('Edit')" />
                     </nav>
                 @endcan
             </div>
@@ -84,9 +89,13 @@
             @endif
         </article>
 
-        @can('viewAny', [App\Models\Qualification::class, $user])
+        @can('viewAny', [App\Models\Qualification::class, $qualification->user])
             <footer class="p-4 sm:px-8 mt-4 flex flex-wrap items-start gap-4">
-                <x-button.secondary :href="route('user.qualification.index', $user)" :label="__('Back')" />
+                @if ($qualification->user->is($currentUser))
+                    <x-button.secondary :href="route('qualification.own.show')" :label="__('Back')" />
+                @else
+                    <x-button.secondary :href="route('user.qualification.index', $qualification->user)" :label="__('Back')" />
+                @endif
             </footer>
         @endcan
     </section>
