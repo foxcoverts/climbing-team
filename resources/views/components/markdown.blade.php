@@ -1,5 +1,5 @@
 @props(['text' => $slot])
-{!! Str::markdown($text, [
+{!! str($text)->markdown([
     'renderer' => [
         'block_separator' => "\n",
         'inner_separator' => "\n",
@@ -7,4 +7,4 @@
     ],
     'html_input' => 'strip',
     'allow_unsafe_links' => false,
-]) !!}
+])->sanitizeHtml() !!}
