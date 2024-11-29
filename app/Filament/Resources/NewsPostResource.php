@@ -6,7 +6,10 @@ use App\Filament\Resources\NewsPostResource\Pages;
 use App\Models\NewsPost;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Carbon;
@@ -36,6 +39,7 @@ class NewsPostResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('slug')
+                    ->prefix('/')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->rules(['alpha_dash'])
@@ -45,6 +49,9 @@ class NewsPostResource extends Resource
                     ->preload()
                     ->searchable()
                     ->required(),
+                Forms\Components\DateTimePicker::make('created_at')
+                    ->readonly()
+                    ->visibleOn('edit'),
                 Forms\Components\MarkdownEditor::make('body')
                     ->required()
                     ->columnSpanFull(),
@@ -69,12 +76,43 @@ class NewsPostResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\Split::make([
+                    Infolists\Components\Section::make()
+                        ->schema([
+                            Infolists\Components\TextEntry::make('title')
+                                ->hiddenLabel(true)
+                                ->size('text-2xl')
+                                ->weight(FontWeight::Medium),
+                            Infolists\Components\TextEntry::make('body')
+                                ->hiddenLabel(true)
+                                ->markdown()->prose()
+                                ->columnSpanFull(),
+                        ])->grow(true),
+                    Infolists\Components\Section::make()
+                        ->schema([
+                            Infolists\Components\TextEntry::make('slug')
+                                ->prefix('/'),
+                            Infolists\Components\TextEntry::make('created_at')
+                                ->label('Created')
+                                ->since()
+                                ->dateTimeTooltip(),
+                            Infolists\Components\TextEntry::make('author.name'),
+                        ])->grow(false),
+                ])->from('md')->columnSpanFull(),
             ]);
     }
 
@@ -90,6 +128,7 @@ class NewsPostResource extends Resource
         return [
             'index' => Pages\ListNewsPosts::route('/'),
             'create' => Pages\CreateNewsPost::route('/create'),
+            'view' => Pages\ViewNewsPost::route('/{record}'),
             'edit' => Pages\EditNewsPost::route('/{record}/edit'),
         ];
     }
