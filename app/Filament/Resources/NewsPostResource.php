@@ -27,14 +27,19 @@ class NewsPostResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('title')
                     ->live(onBlur: true)
-                    ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $old, ?string $state) {
-                        $date = Carbon::now()->format('Y-m-d ');
+                    ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?NewsPost $record, ?string $old, ?string $state) {
+                        $date = ($record?->created_at ?? Carbon::now())->format('Y-m-d ');
 
-                        if (($get('slug') ?? Str::slug($date)) !== Str::slug($date.$old)) {
+                        $dictionary = [
+                            '@' => 'at',
+                            '&' => 'and',
+                        ];
+
+                        if (filled($get('slug')) && $get('slug') !== Str::slug($date.$old, dictionary: $dictionary)) {
                             return;
                         }
 
-                        $set('slug', Str::slug($date.$state));
+                        $set('slug', Str::slug($date.$state, dictionary: $dictionary));
                     })
                     ->required()
                     ->maxLength(255),
