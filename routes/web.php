@@ -26,6 +26,7 @@ use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileNotificationsController;
+use App\Http\Controllers\ProfileQualificationController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
@@ -122,6 +123,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::singleton('notifications', ProfileNotificationsController::class)
             ->destroyable();
+        Route::resource('qualification', ProfileQualificationController::class)->only(['index', 'show']);
     });
 
     Route::middleware('password.confirm')->group(function () {
