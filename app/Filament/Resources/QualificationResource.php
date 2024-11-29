@@ -14,6 +14,8 @@ use App\Models\Qualification;
 use App\Models\ScoutPermit;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
@@ -98,6 +100,48 @@ class QualificationResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist->schema([
+            Infolists\Components\Section::make()->schema([
+                Infolists\Components\TextEntry::make('user.name'),
+                Infolists\Components\TextEntry::make('detail_type')
+                    ->label('Type')
+                    ->formatStateUsing(fn (string $state): string => __("app.qualification.type.{$state}")),
+                Infolists\Components\Group::make()
+                    ->relationship('detail')
+                    ->schema(fn (?Qualification $record): array => match ($record?->detail_type) {
+                        GirlguidingQualification::class => [
+                            Infolists\Components\TextEntry::make('scheme'),
+                            Infolists\Components\TextEntry::make('level'),
+                        ],
+                        MountainTrainingQualification::class => [
+                            Infolists\Components\TextEntry::make('award'),
+                        ],
+                        ScoutPermit::class => [
+                            Infolists\Components\TextEntry::make('activity'),
+                            Infolists\Components\TextEntry::make('category'),
+                            Infolists\Components\TextEntry::make('permit_type'),
+                            Infolists\Components\TextEntry::make('restrictions')
+                                ->placeholder('None'),
+                        ],
+                        default => [
+                            Infolists\Components\TextEntry::make('summary'),
+                        ],
+                    }),
+                Infolists\Components\TextEntry::make('expires_on')
+                    ->label('Expires')
+                    ->since()->dateTooltip()
+                    ->placeholder('Never')
+                    ->badge()->color(fn (Qualification $record): array => match (true) {
+                        $record->isExpired() => Color::Red,
+                        $record->expiresSoon() => Color::Amber,
+                        default => Color::Sky,
+                    }),
+            ]),
+        ]);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -166,6 +210,7 @@ class QualificationResource extends Resource
                     }),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -187,6 +232,7 @@ class QualificationResource extends Resource
         return [
             'index' => Pages\ListQualifications::route('/'),
             'create' => Pages\CreateQualification::route('/create'),
+            'view' => Pages\ViewQualification::route('/{record}'),
             'edit' => Pages\EditQualification::route('/{record}/edit'),
         ];
     }
