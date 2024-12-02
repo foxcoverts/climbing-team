@@ -6,7 +6,6 @@ use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Filament\Resources\KitCheckResource\Pages;
 use App\Models\KitCheck;
-use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class KitCheckResource extends Resource
 {
@@ -26,11 +26,9 @@ class KitCheckResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required()
-                    ->preload()
-                    ->searchable(),
+                Forms\Components\DatePicker::make('checked_on')
+                    ->default(Carbon::now())
+                    ->required(),
                 Forms\Components\Select::make('checked_by_id')
                     ->relationship(
                         name: 'checked_by', titleAttribute: 'name',
@@ -41,11 +39,13 @@ class KitCheckResource extends Resource
                     ->default(fn (Request $request) => $request->user()->id)
                     ->preload()
                     ->searchable(),
-                Forms\Components\DatePicker::make('checked_on')
-                    ->default(Carbon::now())
-                    ->required(),
                 Forms\Components\Textarea::make('comment')
                     ->columnSpanFull(),
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->required()
+                    ->preload()
+                    ->searchable(),
             ]);
     }
 
@@ -72,6 +72,7 @@ class KitCheckResource extends Resource
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('checked_on', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
