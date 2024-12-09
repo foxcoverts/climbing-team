@@ -81,7 +81,7 @@ class UserResource extends Resource
                             ->maxLength(100)
                             ->requiredWith('emergency_phone')
                             ->nullable(),
-                        PhoneInput::make('phone')
+                        PhoneInput::make('emergency_phone')
                             ->defaultCountry('GB')
                             ->validateFor(['INTERNATIONAL', 'GB'])
                             ->requiredWith('emergency_name')
