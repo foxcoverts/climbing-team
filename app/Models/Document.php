@@ -22,7 +22,5 @@ class Document extends Model
         'description',
         'file_name',
         'file_path',
-        'file_size',
-        'file_type',
     ];
 }
