@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TodoStatus;
-use App\Events\TodoChanged;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
 use App\Models\Todo;
@@ -94,49 +93,16 @@ class TodoController extends Controller
     {
         Gate::authorize('complete', $todo);
 
-        $alertMessage = __('Task updated.');
-
         if (Gate::check('update')) {
             $validated = $request->validated();
         } else {
             $validated = $request->safe()->only('status');
         }
-        $todo->fill($validated);
-
-        if ($todo->isDirty('status')) {
-            switch ($todo->status) {
-                case TodoStatus::NeedsAction:
-                    $todo->started_at = null;
-                    $todo->completed_at = null;
-                    $alertMessage = __('Task reset.');
-                    break;
-
-                case TodoStatus::InProcess:
-                    $todo->started_at ??= $todo->freshTimestamp();
-                    $todo->completed_at = null;
-                    $alertMessage = __('Task started.');
-                    break;
-
-                case TodoStatus::Completed:
-                    $todo->completed_at = $todo->freshTimestamp();
-                    $alertMessage = __('Task completed.');
-                    break;
-
-                case TodoStatus::Cancelled:
-                    $todo->completed_at = $todo->freshTimestamp();
-                    $alertMessage = __('Task cancelled.');
-                    break;
-            }
-        }
-        $todo->save();
-
-        if ($todo->wasChanged('sequence')) {
-            event(new TodoChanged($todo, $request->user(), $todo->getChanges()));
-        }
+        $todo->update($validated);
 
         return redirect()->route('todo.index')
             ->withFragment($todo->id)
-            ->with('alert.message', $alertMessage);
+            ->with('alert.message', __('Task updated.'));
     }
 
     /**
