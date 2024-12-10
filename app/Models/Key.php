@@ -13,8 +13,6 @@ class Key extends Model
 {
     use HasFactory, HasUlids;
 
-    protected ?string $last_holder_id = null;
-
     protected $fillable = [
         'name',
         'holder_id',
@@ -31,16 +29,12 @@ class Key extends Model
 
     protected static function booted(): void
     {
-        static::updating(function (Key $model): void {
-            if ($model->isDirty('holder_id')) {
-                $model->last_holder_id = $model->getOriginal('holder_id');
-            }
-        });
-
         static::updated(function (Key $model): void {
-            if ($model->wasChanged('holder_id') && $model->last_holder_id) {
-                $model->load('holder');
-                event(new KeyTransferred($model, from: User::find($model->last_holder_id)));
+            if ($model->wasChanged('holder_id')) {
+                if ($model->holder->id != $model->holder_id) {
+                    $model->load('holder');
+                }
+                event(new KeyTransferred($model, from: User::find($model->getOriginal('holder_id'))));
             }
         });
     }
