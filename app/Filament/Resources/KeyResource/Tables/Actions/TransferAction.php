@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\KeyResource\Tables\Actions;
 
-use App\Events\KeyTransferred;
 use App\Models\Key;
 use App\Models\User;
 use Filament\Actions\Concerns\CanCustomizeProcess;
@@ -57,16 +56,8 @@ class TransferAction extends Action
                     return;
                 }
 
-                $lastHolder = $record->holder;
-
-                $record->update([
-                    'holder_id' => $data['to'],
-                ]);
-
-                if ($record->wasChanged('holder_id')) {
-                    $record->refresh();
-                    event(new KeyTransferred($record, from: $lastHolder));
-                }
+                $record->holder()->associate($data['to']);
+                $record->save();
             });
 
             $this->success();
