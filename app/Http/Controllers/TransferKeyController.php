@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\KeyTransferred;
 use App\Http\Requests\UpdateKeyTransferRequest;
 use App\Models\Key;
 use App\Models\User;
@@ -31,13 +30,10 @@ class TransferKeyController extends Controller
     {
         Gate::authorize('transfer', $key);
 
-        $lastHolder = $key->holder;
-        $key->update($request->validated());
+        $key->holder()->associate($request->holder_id);
+        $key->save();
 
         if ($key->wasChanged('holder_id')) {
-            $key->refresh();
-            event(new KeyTransferred($key, from: $lastHolder));
-
             return redirect()->route('key.index')
                 ->with('alert', [
                     'message' => __('Key transferred to :name.', ['name' => $key->holder->name]),
