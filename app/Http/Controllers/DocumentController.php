@@ -92,17 +92,12 @@ class DocumentController extends Controller
         Gate::authorize('update', $document);
 
         $file = $request->file('file');
-        $old_file = $document->file_path;
 
         $document->fill($request->safe()->except('file'));
         if (! is_null($file)) {
             $document->file_path = $file->store('upload/document');
         }
         $document->save();
-
-        if (! is_null($file)) {
-            Storage::delete($old_file);
-        }
 
         return redirect()->route('document.index')
             ->with('alert.message', __('Document updated.'));
