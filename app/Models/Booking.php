@@ -8,6 +8,7 @@ use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -73,6 +74,13 @@ class Booking extends Model
             'location',
             'status',
         ];
+    }
+
+    public function summary(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->activity.' - '.localDate($this->start_at, $this->timezone)->toFormattedDayDateString()
+        );
     }
 
     public function attendees(): BelongsToMany

@@ -3,41 +3,87 @@
 namespace App\Models\Calendar;
 
 use App\Models\Booking;
+use App\Models\Concerns\HasNoDatabase;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Sabre\VObject\Component\VEvent;
 
-class Event
+class Event extends Model
 {
-    public function __construct(
-        protected VEvent $vevent
-    ) {
+    use HasNoDatabase;
+
+    protected VEvent $vevent;
+
+    public static function fromVEvent(VEvent $vevent): static
+    {
+        $event = new static;
+        $event->vevent = $vevent;
+
+        return $event;
     }
 
-    public function getSentAt(): Carbon
+    protected function sentAt(): Attribute
     {
-        return Carbon::parse($this->vevent->DTSTAMP);
-    }
-
-    public function getBooking(): Booking|null
-    {
-        return Booking::findByUid($this->getUid());
-    }
-
-    public function getUid(): string
-    {
-        return $this->vevent->UID;
+        return Attribute::make(
+            get: fn () => Carbon::parse($this->vevent->DTSTAMP),
+        );
     }
 
     /**
-     * @return array<Attendee>
+     * @deprecated use `sent_at` attribute instead
+     */
+    public function getSentAt(): Carbon
+    {
+        return $this->sent_at;
+    }
+
+    protected function booking(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Booking::findByUid($this->uid)
+        );
+    }
+
+    /**
+     * @deprecated use `booking` attribute instead
+     */
+    public function getBooking(): ?Booking
+    {
+        return $this->booking;
+    }
+
+    protected function uid(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->vevent->UID
+        );
+    }
+
+    /**
+     * @deprecated use `uid` attribute instead.
+     */
+    public function getUid(): string
+    {
+        return $this->uid;
+    }
+
+    public function attendees(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => collect($this->vevent->ATTENDEE)
+                ->map(fn ($vattendee) => Attendee::fromVAttendee($vattendee))
+        );
+    }
+
+    /**
+     * @deprecated use `attendees` attribute instead
+     *
+     * @return Collection<Attendee>
      */
     public function getAttendees(): Collection
     {
-        $attendees = [];
-        foreach ($this->vevent->ATTENDEE as $vattendee) {
-            $attendees[] = new Attendee($vattendee);
-        }
-        return collect($attendees);
+        return $this->attendees;
     }
 }

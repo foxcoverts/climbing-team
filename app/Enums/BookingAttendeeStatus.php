@@ -2,7 +2,10 @@
 
 namespace App\Enums;
 
-enum BookingAttendeeStatus: string
+use Filament\Support\Contracts\HasIcon;
+use Filament\Support\Contracts\HasLabel;
+
+enum BookingAttendeeStatus: string implements HasIcon, HasLabel
 {
     /**
      * Person has confirmed they are available to help with a booking.
@@ -23,6 +26,21 @@ enum BookingAttendeeStatus: string
      * Person has been invited to the booking but has not responded.
      */
     case NeedsAction = 'needs-action';
+
+    public function getIcon(): ?string
+    {
+        return match ($this) {
+            self::Accepted,
+            self::Tentative => 'heroicon-o-check-circle',
+            self::Declined => 'heroicon-o-x-circle',
+            self::NeedsAction => 'heroicon-o-question-mark-circle',
+        };
+    }
+
+    public function getLabel(): ?string
+    {
+        return __('app.attendee.status.'.$this->value);
+    }
 
     /**
      * Compare with another BookingAttendeeStatus.
