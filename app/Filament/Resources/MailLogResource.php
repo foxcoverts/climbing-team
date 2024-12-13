@@ -82,7 +82,7 @@ class MailLogResource extends Resource
                                                 : null
                                             )
                                             ->url(fn (Attendee $record) => $record->user
-                                                ? UserResource::getUrl('edit', ['record' => $record->user])
+                                                ? UserResource::getUrl('view', ['record' => $record->user])
                                                 : null
                                             ),
                                         Infolists\Components\TextEntry::make('status'),
@@ -128,7 +128,7 @@ class MailLogResource extends Resource
                                 : null
                             )
                             ->url(fn (MailLog $record) => $record->fromUser
-                                ? UserResource::getUrl('edit', ['record' => $record->fromUser])
+                                ? UserResource::getUrl('view', ['record' => $record->fromUser])
                                 : null
                             ),
                         Infolists\Components\TextEntry::make('subject')
