@@ -6,6 +6,7 @@ use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Enums\Section;
 use App\Filament\Forms\Components as AppComponents;
+use App\Filament\Infolists\Components\GDPRSection;
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms\Components;
@@ -118,7 +119,8 @@ class UserResource extends Resource
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
-            Infolists\Components\Section::make('Contact Details')
+            GDPRSection::make('Contact Details')
+                ->collapsed()
                 ->schema([
                     Infolists\Components\TextEntry::make('email')
                         ->url(fn (string $state): string => 'mailto:'.$state),
@@ -126,7 +128,8 @@ class UserResource extends Resource
                         ->visible(fn ($state): bool => filled($state))
                         ->formatStateUsing(fn (PhoneNumber $state): string => $state->formatForCountry('GB')),
                 ]),
-            Infolists\Components\Section::make('Emergency Contact')
+            GDPRSection::make('Emergency Contact')
+                ->collapsed()
                 ->schema([
                     Infolists\Components\TextEntry::make('emergency_name')
                         ->visible(fn ($state): bool => filled($state)),
@@ -135,6 +138,7 @@ class UserResource extends Resource
                         ->placeholder('This user has not provided an emergency contact. Please contact the Team Leader or Lead Volunteer if you need this information.'),
                 ]),
             Infolists\Components\Section::make('Settings')
+                ->collapsed()
                 ->schema([
                     Infolists\Components\TextEntry::make('section')->badge(),
                     Infolists\Components\TextEntry::make('role')->badge(),
