@@ -10,12 +10,16 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Propaganistas\LaravelPhone\PhoneNumber;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
+use Ysfkaya\FilamentPhoneInput\Infolists\PhoneEntry;
 
 class UserResource extends Resource
 {
@@ -42,7 +46,7 @@ class UserResource extends Resource
                         'create' => 'The user will be asked to set their own password.',
                         'edit' => 'Only the user can change their own password.',
                     })
-                    ->hidden(fn (string $operation) => $operation === 'view'),
+                    ->hiddenOn('view'),
                 Components\Section::make('Contact Details')
                     ->collapsed(fn (string $operation) => $operation === 'edit')
                     ->schema([
@@ -68,14 +72,15 @@ class UserResource extends Resource
                             ->maxLength(255),
                         PhoneInput::make('phone')
                             ->defaultCountry('GB')
+                            ->initialCountry('GB')
                             ->validateFor(['INTERNATIONAL', 'GB'])
-                            ->visible(fn (string $operation) => $operation === 'edit')
+                            ->visibleOn('edit')
                             ->nullable(),
                     ]),
                 Components\Section::make('Emergency Contact')
                     ->description('The lead instructor for a booking will be able to access these details should the need arise. If no details are provided then there may be a delay in contacting someone.')
                     ->collapsed()
-                    ->visible(fn (string $operation) => $operation === 'edit')
+                    ->visibleOn('edit')
                     ->schema([
                         Components\TextInput::make('emergency_name')
                             ->maxLength(100)
@@ -83,6 +88,7 @@ class UserResource extends Resource
                             ->nullable(),
                         PhoneInput::make('emergency_phone')
                             ->defaultCountry('GB')
+                            ->initialCountry('GB')
                             ->validateFor(['INTERNATIONAL', 'GB'])
                             ->requiredWith('emergency_name')
                             ->nullable(),
@@ -107,6 +113,37 @@ class UserResource extends Resource
                             ->defaultByBrowser(),
                     ]),
             ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist->schema([
+            Infolists\Components\Section::make('Contact Details')
+                ->schema([
+                    Infolists\Components\TextEntry::make('email')
+                        ->url(fn (string $state): string => 'mailto:'.$state),
+                    PhoneEntry::make('phone')
+                        ->visible(fn ($state): bool => filled($state))
+                        ->formatStateUsing(fn (PhoneNumber $state): string => $state->formatForCountry('GB')),
+                ]),
+            Infolists\Components\Section::make('Emergency Contact')
+                ->schema([
+                    Infolists\Components\TextEntry::make('emergency_name')
+                        ->visible(fn ($state): bool => filled($state)),
+                    PhoneEntry::make('emergency_phone')
+                        ->formatStateUsing(fn (PhoneNumber $state): string => $state->formatForCountry('GB'))
+                        ->placeholder('This user has not provided an emergency contact. Please contact the Team Leader or Lead Volunteer if you need this information.'),
+                ]),
+            Infolists\Components\Section::make('Settings')
+                ->schema([
+                    Infolists\Components\TextEntry::make('section')->badge(),
+                    Infolists\Components\TextEntry::make('role')->badge(),
+                    Infolists\Components\TextEntry::make('accreditations')
+                        ->badge()
+                        ->placeholder('None'),
+                    Infolists\Components\TextEntry::make('timezone'),
+                ]),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -140,6 +177,7 @@ class UserResource extends Resource
                     ),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -161,6 +199,7 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
+            'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
