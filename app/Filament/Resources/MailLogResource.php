@@ -134,7 +134,7 @@ class MailLogResource extends Resource
                         Infolists\Components\TextEntry::make('subject')
                             ->columnSpanFull(),
                         Infolists\Components\ViewEntry::make('bodyHtml')
-                            ->view('filament.infolists.entries.iframe')
+                            ->view('filament.infolists.components.iframe')
                             ->label('Message')
                             ->columnSpanFull(),
                     ]),
