@@ -8,6 +8,7 @@ use App\Enums\Section;
 use App\Filament\Forms\Components as AppComponents;
 use App\Filament\Infolists\Components\GDPRSection;
 use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
@@ -194,7 +195,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\KeysRelationManager::class,
         ];
     }
 
