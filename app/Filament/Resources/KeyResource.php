@@ -46,6 +46,7 @@ class KeyResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('holder.name')
+                    ->url(fn (Key $record) => UserResource::getUrl('view', ['record' => $record->holder_id]))
                     ->searchable(),
             ])
             ->filters([
