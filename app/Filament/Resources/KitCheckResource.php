@@ -57,14 +57,14 @@ class KitCheckResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
-                    ->url(fn (KitCheck $record) => UserResource::getUrl('view', ['record' => $record->user_id]))
+                    ->url(fn (KitCheck $record) => UserResource::getUrl('view', ['record' => $record->user_id, 'activeRelationManager' => 'kitChecks']))
                     ->searchable()
                     ->hiddenOn(UserResource\RelationManagers\KitChecksRelationManager::class),
                 Tables\Columns\TextColumn::make('checked_on')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('checked_by.name')
-                    ->url(fn (KitCheck $record) => UserResource::getUrl('view', ['record' => $record->checked_by_id]))
+                    ->url(fn (KitCheck $record) => UserResource::getUrl('view', ['record' => $record->checked_by_id, 'activeRelationManager' => 'kitChecks']))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->state(fn (KitCheck $record): string => match ($record->isExpired()) {
