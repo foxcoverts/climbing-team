@@ -28,6 +28,7 @@ class KitCheckResource extends Resource
             ->schema([
                 Forms\Components\DatePicker::make('checked_on')
                     ->default(Carbon::now())
+                    ->maxDate(Carbon::now())
                     ->required(),
                 Forms\Components\Select::make('checked_by_id')
                     ->relationship(
@@ -38,14 +39,16 @@ class KitCheckResource extends Resource
                     )
                     ->default(fn (Request $request) => $request->user()->id)
                     ->preload()
-                    ->searchable(),
+                    ->searchable()
+                    ->required(),
                 Forms\Components\Textarea::make('comment')
                     ->columnSpanFull(),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->required()
                     ->preload()
-                    ->searchable(),
+                    ->searchable()
+                    ->hiddenOn(UserResource\RelationManagers\KitChecksRelationManager::class),
             ]);
     }
 
@@ -54,10 +57,15 @@ class KitCheckResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
-                    ->searchable(),
+                    ->url(fn (KitCheck $record) => UserResource::getUrl('view', ['record' => $record->user_id]))
+                    ->searchable()
+                    ->hiddenOn(UserResource\RelationManagers\KitChecksRelationManager::class),
                 Tables\Columns\TextColumn::make('checked_on')
                     ->date()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('checked_by.name')
+                    ->url(fn (KitCheck $record) => UserResource::getUrl('view', ['record' => $record->checked_by_id]))
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->state(fn (KitCheck $record): string => match ($record->isExpired()) {
                         true => 'Expired',
@@ -68,9 +76,6 @@ class KitCheckResource extends Resource
                         true => 'danger',
                         false => Color::Lime,
                     }),
-                Tables\Columns\TextColumn::make('checked_by.name')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('checked_on', 'desc')
             ->filters([
@@ -87,6 +92,7 @@ class KitCheckResource extends Resource
                     }),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

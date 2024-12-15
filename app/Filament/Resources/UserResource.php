@@ -196,6 +196,7 @@ class UserResource extends Resource
     {
         return [
             RelationManagers\KeysRelationManager::class,
+            RelationManagers\KitChecksRelationManager::class,
         ];
     }
 
