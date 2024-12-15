@@ -21,7 +21,8 @@ class KeysRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\AssociateAction::make()
-                    ->label('Give Key')
+                    ->label('Give key')
+                    ->color('primary')
                     ->modalHeading('Give Key')
                     ->modalSubmitActionLabel('Give')
                     ->associateAnother(false),
