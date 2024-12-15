@@ -195,8 +195,9 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\KeysRelationManager::class,
-            RelationManagers\KitChecksRelationManager::class,
+            'keys' => RelationManagers\KeysRelationManager::class,
+            'kitChecks' => RelationManagers\KitChecksRelationManager::class,
+            'qualifications' => RelationManagers\QualificationsRelationManager::class,
         ];
     }
 

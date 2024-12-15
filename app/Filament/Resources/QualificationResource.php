@@ -37,7 +37,8 @@ class QualificationResource extends Resource
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\Placeholder::make('user')
-                            ->content(fn (Qualification $record) => $record->user->name),
+                            ->content(fn (Qualification $record) => $record->user->name)
+                            ->hiddenOn(UserResource\RelationManagers\QualificationsRelationManager::class),
                         Forms\Components\Placeholder::make('detail_type')
                             ->label('Qualification type')
                             ->content(fn (Qualification $record) => match ($record->detail_type) {
@@ -104,7 +105,9 @@ class QualificationResource extends Resource
     {
         return $infolist->schema([
             Infolists\Components\Section::make()->schema([
-                Infolists\Components\TextEntry::make('user.name'),
+                Infolists\Components\TextEntry::make('user.name')
+                    ->url(fn (Qualification $record) => UserResource::getUrl('view', ['record' => $record->user_id, 'activeRelationManager' => 'qualifications']))
+                    ->hidden(fn ($component): bool => $component->getLivewire() instanceof UserResource\RelationManagers\QualificationsRelationManager),
                 Infolists\Components\TextEntry::make('detail_type')
                     ->label('Type')
                     ->formatStateUsing(fn (string $state): string => __("app.qualification.type.{$state}")),
@@ -147,7 +150,9 @@ class QualificationResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
-                    ->searchable(),
+                    ->url(fn (Qualification $record) => UserResource::getUrl('view', ['record' => $record->user_id, 'activeRelationManager' => 'qualifications']))
+                    ->searchable()
+                    ->hiddenOn(UserResource\RelationManagers\QualificationsRelationManager::class),
                 Tables\Columns\TextColumn::make('detail_type')
                     ->label('Type')
                     ->state(fn (Qualification $record) => __('app.qualification.type.'.$record->detail_type)),
