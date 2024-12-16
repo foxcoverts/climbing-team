@@ -5,12 +5,6 @@
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ __('Documents') }}
                 </h1>
-
-                @can('create', App\Models\Document::class)
-                    <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('document.create')" :label="__('Upload')" />
-                    </nav>
-                @endcan
             </div>
         </header>
 
@@ -34,9 +28,6 @@
                                     x-text="dateTimeString(updated_at)">{{ localDate($document->updated_at)->toDayDateTimeString() }}</span>
                             </p>
                         </div>
-                        @can('update', $document)
-                            <x-button.primary :href="route('document.edit', $document)" :label="__('Edit')" class="self-start" />
-                        @endcan
                     </div>
                 </div>
             @empty
@@ -46,18 +37,6 @@
                     </div>
                 </div>
             @endforelse
-
-            @can('viewTrashed', App\Models\Document::class)
-                @if (App\Models\Document::onlyTrashed()->exists())
-                    <div class="py-2 px-4 sm:px-8 hover:bg-gray-100 hover:dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                        @click="window.location={{ Js::from(route('trash.document.index')) }}">
-                        <div class="max-w-prose text-right">
-                            <a href="{{ route('trash.document.index') }}" class="block">
-                                {{ __('View deleted documents') }}</a>
-                        </div>
-                    </div>
-                @endif
-            @endcan
         </div>
     </section>
 </x-layout.app>
