@@ -31,7 +31,6 @@ use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TodoIcsController;
 use App\Http\Controllers\TransferKeyController;
-use App\Http\Controllers\TrashedDocumentController;
 use App\Http\Controllers\UserBookingController;
 use App\Http\Controllers\UserBookingInviteController;
 use App\Http\Controllers\UserController;
@@ -90,7 +89,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('comment', CommentController::class)->shallow()->only('store', 'update', 'destroy');
 
-    Route::resource('document', DocumentController::class);
+    Route::resource('document', DocumentController::class)->only('index', 'show');
 
     Route::controller(IncidentController::class)->group(function () {
         Route::get('incident', 'create')->name('incident.create');
@@ -128,12 +127,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('profile', 'edit')->name('profile.edit');
             Route::patch('profile', 'update')->name('profile.update');
             Route::delete('profile', 'destroy')->name('profile.destroy');
-        });
-
-        Route::prefix('trash')->name('trash.')->group(function () {
-            Route::resource('document', TrashedDocumentController::class)
-                ->only(['index', 'show', 'update', 'destroy'])
-                ->withTrashed(['show', 'update', 'destroy']);
         });
 
         Route::controller(UserBookingInviteController::class)->group(function () {
