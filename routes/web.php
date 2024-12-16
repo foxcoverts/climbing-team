@@ -109,8 +109,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
 
-    Route::resource('news', NewsPostController::class)
-        ->except('show')
+    Route::resource('news', NewsPostController::class)->only('index')
         ->parameters(['news' => 'post']);
 
     Route::get('todo/{todo}.ics', [TodoIcsController::class, 'show'])->name('todo.show.ics');
@@ -150,7 +149,8 @@ Route::controller(BookingIcsController::class)
         Route::get('ical/{user:ical_token}/rota.ics', 'rota')->name('booking.rota.ics');
     });
 
-Route::get('news/{post}', [NewsPostController::class, 'show'])->name('news.show');
+Route::resource('news', NewsPostController::class)->only('show')
+    ->parameters(['news' => 'post']);
 
 Route::controller(RespondController::class)
     ->middleware(Authenticate::fromParam('attendee'))
