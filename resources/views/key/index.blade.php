@@ -5,12 +5,6 @@
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ __('Keys') }}
                 </h1>
-
-                @can('create', App\Models\Key::class)
-                    <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('key.create')" :label="__('Add Key')" />
-                    </nav>
-                @endcan
             </div>
         </header>
 
@@ -18,25 +12,16 @@
             @forelse ($keys as $key)
                 <div class="p-4 sm:px-8 border-b space-y-2">
                     <h2 class="text-lg font-medium leading-normal" id="{{ sprintf('key-%s-name', $key->id) }}">
-                        @can('update', $key)
-                            <a href="{{ route('key.edit', $key) }}"
-                                x-target="{{ sprintf('key-%s-name', $key->id) }}">{{ $key->name }}</a>
-                        @else
-                            {{ $key->name }}
-                        @endcan
+                        {{ $key->name }}
                     </h2>
 
                     <p class="text-gray-900 dark:text-gray-100"><dfn
-                            class="not-italic font-medium text-black dark:text-white">{{ __('Held by') }}:</dfn>
-                        @can('view', $key->holder)
-                            <a href="{{ route('user.show', $key->holder) }}">{{ $key->holder->name }}</a>
-                        @else
-                            {{ $key->holder->name }}
-                        @endcan
+                        class="not-italic font-medium text-black dark:text-white">{{ __('Held by') }}:</dfn>
+                        {{ $key->holder->name }}
                     </p>
 
                     @can('transfer', $key)
-                        <x-button.primary class="gap-2 group" :href="route('key.transfer', $key)" x-target="transfer-key"
+                        <x-button.primary class="gap-2 group" :href="route('key.edit', $key)" x-target="edit-key"
                             @ajax:before="$dispatch('dialog:open')">
                             <x-icon.transfer class="w-4 h-4 fill-current" />
                             <span class="hidden group-hover:block">{{ __('Transfer Key') }}</span>
@@ -52,7 +37,7 @@
 
         <dialog x-init @dialog:open.window="$el.showModal()" @ajax:success="$el.close()"
             @click="if ($event.target === $el) $el.close()" class="bg-white dark:bg-gray-900">
-            <form id="transfer-key"></form>
+            <form id="edit-key"></form>
         </dialog>
     </section>
 </x-layout.app>

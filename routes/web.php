@@ -30,7 +30,6 @@ use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TodoIcsController;
-use App\Http\Controllers\TransferKeyController;
 use App\Http\Controllers\UserBookingController;
 use App\Http\Controllers\UserBookingInviteController;
 use App\Http\Controllers\UserController;
@@ -96,12 +95,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('incident', 'store');
     });
 
-    Route::controller(TransferKeyController::class)->group(function () {
-        Route::get('key/{key}/transfer', 'edit')->name('key.transfer');
-        Route::put('key/{key}/transfer', 'update');
-        Route::patch('key/{key}/transfer', 'update');
-    });
-    Route::resource('key', KeyController::class);
+    Route::resource('key', KeyController::class)->only('index', 'edit', 'update');
 
     Route::get('kit-check/user/{user}', [KitCheckUserController::class, 'index'])->name('kit-check.user.index');
     Route::resource('kit-check', KitCheckController::class);
