@@ -6,12 +6,6 @@
                     <x-icon.news style="height: .75lh" class="fill-current" aria-hidden="true" />
                     <span>{{ __('News') }}</span>
                 </h1>
-
-                @can('create', \App\Models\NewsPost::class)
-                    <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('news.create')" :label="__('New')" />
-                    </nav>
-                @endcan
             </div>
         </header>
         <div class="p-4 sm:px-8 space-y-6">

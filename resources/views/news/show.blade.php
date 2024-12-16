@@ -5,12 +5,6 @@
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ $post->title }}
                 </h1>
-
-                @can('update', $post)
-                    <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('news.edit', $post)" :label="__('Edit')" />
-                    </nav>
-                @endcan
             </div>
         </header>
 
