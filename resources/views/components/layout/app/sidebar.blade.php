@@ -54,9 +54,6 @@
         @can('create', App\Models\Booking::class)
             <x-sidebar.link route='booking.create' :label="__('Add Booking')" icon="calendar.plus" />
         @endcan
-        @can('viewTrashed', App\Models\Booking::class)
-            <x-sidebar.link route='trash.booking.index' match-routes='trash.booking.*' :label="__('Deleted')" icon="trash" />
-        @endcan
     </x-sidebar.group>
 
     <x-sidebar.group :heading="__('Manage')">

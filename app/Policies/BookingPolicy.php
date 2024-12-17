@@ -48,9 +48,7 @@ class BookingPolicy
      */
     public function view(User $user, Booking $booking): bool
     {
-        if ($booking->trashed()) {
-            return $this->manage($user);
-        } elseif ($booking->attendees->find($user)) {
+        if ($booking->attendees->find($user)) {
             return true;
         } else {
             return $this->viewAny($user, $booking->status);
@@ -117,30 +115,6 @@ class BookingPolicy
      * Determine whether the user can delete the booking.
      */
     public function delete(User $user, Booking $booking): bool
-    {
-        return $this->manage($user);
-    }
-
-    /**
-     * Determine whether the user can view trashed bookings.
-     */
-    public function viewTrashed(User $user): bool
-    {
-        return $this->manage($user);
-    }
-
-    /**
-     * Determine whether the user can restore the booking.
-     */
-    public function restore(User $user, Booking $booking): bool
-    {
-        return $this->manage($user);
-    }
-
-    /**
-     * Determine whether the user can permanently delete the booking.
-     */
-    public function forceDelete(User $user, Booking $booking): bool
     {
         return $user->isTeamLeader() &&
             $this->manage($user);
