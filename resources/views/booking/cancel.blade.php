@@ -37,7 +37,7 @@
                         {{ __('Cancel Booking') }}
                     </h2>
 
-                    <div class="space-y-1">
+                    <div class="space-y-1 text-gray-800 dark:text-gray-200">
                         <p>{{ __('When you cancel a booking all attendees will be notified by email, and anyone who has not yet responded will be removed from the guest list. You will not be able to make any changes to the booking once it has been cancelled.') }}
                         </p>
                     </div>

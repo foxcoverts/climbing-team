@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroyTrashedBookingRequest extends FormRequest
+class DestroyBookingRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,8 +14,9 @@ class DestroyTrashedBookingRequest extends FormRequest
     public function rules(): array
     {
         $this->errorBag = 'bookingDeletion';
+
         return [
-            'confirm' => ['bail', 'required', 'string', 'uppercase', 'in:DELETE']
+            'confirm' => ['bail', 'required', 'string', 'uppercase', 'in:DELETE'],
         ];
     }
 

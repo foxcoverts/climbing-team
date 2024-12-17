@@ -15,11 +15,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
 {
-    use Concerns\HasSequence, Concerns\HasUid, HasFactory, HasUlids, SoftDeletes;
+    use Concerns\HasSequence, Concerns\HasUid, HasFactory, HasUlids;
 
     /**
      * The attributes that are mass assignable.

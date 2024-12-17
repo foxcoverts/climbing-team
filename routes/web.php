@@ -31,7 +31,6 @@ use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TodoIcsController;
 use App\Http\Controllers\TransferKeyController;
-use App\Http\Controllers\TrashedBookingController;
 use App\Http\Controllers\TrashedDocumentController;
 use App\Http\Controllers\UserBookingController;
 use App\Http\Controllers\UserBookingInviteController;
@@ -132,10 +131,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
         Route::prefix('trash')->name('trash.')->group(function () {
-            Route::resource('booking', TrashedBookingController::class)
-                ->only(['index', 'show', 'update', 'destroy'])
-                ->withTrashed(['show', 'update', 'destroy']);
-
             Route::resource('document', TrashedDocumentController::class)
                 ->only(['index', 'show', 'update', 'destroy'])
                 ->withTrashed(['show', 'update', 'destroy']);

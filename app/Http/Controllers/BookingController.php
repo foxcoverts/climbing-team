@@ -10,6 +10,7 @@ use App\Events\BookingConfirmed;
 use App\Events\BookingInvite;
 use App\Events\BookingRestored;
 use App\Forms\BookingForm;
+use App\Http\Requests\DestroyBookingRequest;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
@@ -20,6 +21,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class BookingController extends Controller
@@ -125,7 +127,7 @@ class BookingController extends Controller
                 'booking' => $booking->load('changes'),
                 'currentUser' => $request->user(),
             ]);
-        } elseif (auth()->guest()) {
+        } elseif (Auth::guest()) {
             return view('booking.preview', [
                 'booking' => $booking,
                 'responded' => $request->get('responded'),
@@ -245,7 +247,7 @@ class BookingController extends Controller
     /**
      * Mark the specified resource as deleted.
      */
-    public function destroy(Booking $booking): RedirectResponse
+    public function destroy(DestroyBookingRequest $request, Booking $booking): RedirectResponse
     {
         Gate::authorize('delete', $booking);
 
@@ -259,7 +261,6 @@ class BookingController extends Controller
         return redirect()->route('booking.calendar')
             ->with('alert', [
                 'info' => __('Booking deleted.'),
-                'restore' => route('trash.booking.update', $booking),
             ]);
     }
 }
