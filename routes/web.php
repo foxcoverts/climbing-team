@@ -30,8 +30,6 @@ use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TodoIcsController;
-use App\Http\Controllers\TransferKeyController;
-use App\Http\Controllers\TrashedDocumentController;
 use App\Http\Controllers\UserBookingController;
 use App\Http\Controllers\UserBookingInviteController;
 use App\Http\Controllers\UserController;
@@ -90,19 +88,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('comment', CommentController::class)->shallow()->only('store', 'update', 'destroy');
 
-    Route::resource('document', DocumentController::class);
+    Route::resource('document', DocumentController::class)->only('index', 'show');
 
     Route::controller(IncidentController::class)->group(function () {
         Route::get('incident', 'create')->name('incident.create');
         Route::post('incident', 'store');
     });
 
-    Route::controller(TransferKeyController::class)->group(function () {
-        Route::get('key/{key}/transfer', 'edit')->name('key.transfer');
-        Route::put('key/{key}/transfer', 'update');
-        Route::patch('key/{key}/transfer', 'update');
-    });
-    Route::resource('key', KeyController::class);
+    Route::resource('key', KeyController::class)->only('index', 'edit', 'update');
 
     Route::get('kit-check/user/{user}', [KitCheckUserController::class, 'index'])->name('kit-check.user.index');
     Route::resource('kit-check', KitCheckController::class);
@@ -110,8 +103,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
 
-    Route::resource('news', NewsPostController::class)
-        ->except('show')
+    Route::resource('news', NewsPostController::class)->only('index')
         ->parameters(['news' => 'post']);
 
     Route::get('todo/{todo}.ics', [TodoIcsController::class, 'show'])->name('todo.show.ics');
@@ -128,12 +120,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('profile', 'edit')->name('profile.edit');
             Route::patch('profile', 'update')->name('profile.update');
             Route::delete('profile', 'destroy')->name('profile.destroy');
-        });
-
-        Route::prefix('trash')->name('trash.')->group(function () {
-            Route::resource('document', TrashedDocumentController::class)
-                ->only(['index', 'show', 'update', 'destroy'])
-                ->withTrashed(['show', 'update', 'destroy']);
         });
 
         Route::controller(UserBookingInviteController::class)->group(function () {
@@ -157,7 +143,8 @@ Route::controller(BookingIcsController::class)
         Route::get('ical/{user:ical_token}/rota.ics', 'rota')->name('booking.rota.ics');
     });
 
-Route::get('news/{post}', [NewsPostController::class, 'show'])->name('news.show');
+Route::resource('news', NewsPostController::class)->only('show')
+    ->parameters(['news' => 'post']);
 
 Route::controller(RespondController::class)
     ->middleware(Authenticate::fromParam('attendee'))
