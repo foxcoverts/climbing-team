@@ -162,6 +162,7 @@ class UserResource extends Resource
                 Tables\Columns\ViewColumn::make('badges')
                     ->view('filament.resources.user-resource.columns.badges'),
             ])
+            ->defaultSort('name')
             ->filters([
                 Tables\Filters\SelectFilter::make('accreditations')
                     ->options(Accreditation::class)

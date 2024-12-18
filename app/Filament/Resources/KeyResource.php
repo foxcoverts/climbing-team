@@ -44,11 +44,13 @@ class KeyResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('holder.name')
                     ->url(fn (Key $record) => UserResource::getUrl('view', ['record' => $record->holder_id, 'activeRelationManager' => 'keys']))
                     ->searchable(),
             ])
+            ->defaultSort('name')
             ->filters([
                 //
             ])
