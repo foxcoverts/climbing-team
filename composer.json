@@ -14,6 +14,7 @@
         "league/flysystem-read-only": "^3.23",
         "propaganistas/laravel-phone": "^5.3",
         "sabre/vobject": "^4.5",
+        "spatie/laravel-activitylog": "^4.9",
         "symfony/http-client": "^7.0",
         "symfony/sendgrid-mailer": "^7.0",
         "symfony/yaml": "^7.0",

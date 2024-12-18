@@ -21,10 +21,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
+use Spatie\Activitylog\Traits\CausesActivity;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
-    use Concerns\HasUid, HasApiTokens, HasFactory, HasUlids, Notifiable;
+    use CausesActivity, Concerns\HasUid, HasApiTokens, HasFactory, HasUlids, Notifiable;
 
     /**
      * The attributes that are mass assignable.
