@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use RalphJSmit\Filament\Activitylog\Infolists\Components\Timeline;
 use Spatie\Activitylog\Contracts\Activity;
 
@@ -21,15 +22,40 @@ class TimelineProvider extends ServiceProvider
                 'created' => 'heroicon-o-plus-circle',
                 'updated' => 'heroicon-o-pencil',
                 'deleted' => 'heroicon-o-trash',
+                'kitChecked' => 'heroicon-o-document-check',
                 'transferred' => 'heroicon-o-arrows-right-left',
             ])
             ->itemIconColors([
                 'created' => 'success',
                 'deleted' => 'danger',
+                'kitChecked' => 'info',
                 'transferred' => 'info',
             ])
             ->attributeValue('holder_id', fn (string $value) => User::find($value)?->getFilamentName(), Key::class)
             ->eventDescription('*', $this->generateEventDescriptionCallback($timeline))
+            ->eventDescription('kitChecked', function (Activity $activity, ?string $causerName): string|HtmlString {
+                $replace = [];
+                $replace['causerName'] = $this->getRecordLink($activity->causer, $causerName);
+                $possessiveSubjectName = Str::possessive($this->getRecordTitle($activity->subject));
+                $replace['subjectName'] = $this->getRecordLink($activity->subject, $possessiveSubjectName);
+
+                $message = 'Some kit was checked';
+                if (data_get($replace, 'causerName') && data_get($replace, 'subjectName')) {
+                    $message = '**:causerName** checked **:subjectName** kit';
+                } elseif (data_get($replace, 'causerName')) {
+                    $message = '**:causerName** checked some kit';
+                } elseif (data_get($replace, 'subjectName')) {
+                    $message = '**:subjectName** kit was checked';
+                }
+
+                $wrap = '';
+                if ($activity->subject_id && ! $activity->subject && $activity->event != 'deleted') {
+                    // The subject no longer exists
+                    $wrap = '~~';
+                }
+
+                return str(__($wrap.trim($message).$wrap.'.', $replace))->inlineMarkdown()->toHtmlString();
+            })
             ->eventDescription('transferred', function (Activity $activity) use ($timeline): HtmlString {
                 $replace = [];
                 $changes = [];
@@ -92,9 +118,9 @@ class TimelineProvider extends ServiceProvider
         return str(__($wrap.trim($message).$wrap.'.', $replace))->inlineMarkdown()->toHtmlString();
     }
 
-    protected function getRecordLink(?Model $record): ?string
+    protected function getRecordLink(?Model $record, ?string $title = null): ?string
     {
-        if (! $title = $this->getRecordTitle($record)) {
+        if (! $title ??= $this->getRecordTitle($record)) {
             return null;
         }
 

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\Facades\LogBatch;
 
 class CreateKitCheck extends CreateRecord
 {
@@ -73,12 +74,20 @@ class CreateKitCheck extends CreateRecord
             $user_ids = [$user_ids];
         }
 
+        if (count($user_ids) > 1) {
+            LogBatch::startBatch();
+        }
+
         foreach ($user_ids as $user_id) {
             $record = new KitCheck([
                 ...$attributes,
                 'user_id' => $user_id,
             ]);
             $record->save();
+        }
+
+        if (count($user_ids) > 1) {
+            LogBatch::endBatch();
         }
 
         return $record;
