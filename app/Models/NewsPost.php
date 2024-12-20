@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class NewsPost extends Model
 {
-    use HasFactory, HasUlids;
+    use HasFactory, HasUlids, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +26,13 @@ class NewsPost extends Model
         'author_id',
         'body',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty();
+    }
 
     public function author(): BelongsTo
     {
@@ -43,7 +52,7 @@ class NewsPost extends Model
                     return '';
                 }
 
-                $doc = new \DOMDocument();
+                $doc = new \DOMDocument;
                 $doc->loadHTML($this->markdown);
 
                 return $doc->saveHTML($doc->getElementsByTagName('p')->item(0));
