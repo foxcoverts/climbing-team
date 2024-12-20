@@ -2,8 +2,17 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "Management website for an activity team",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://satis.ralphjsmit.com"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "eluceo/ical": "^2.13",
@@ -13,6 +22,7 @@
         "laravel/tinker": "^2.9",
         "league/flysystem-read-only": "^3.23",
         "propaganistas/laravel-phone": "^5.3",
+        "ralphjsmit/laravel-filament-activitylog": "^1.8",
         "sabre/vobject": "^4.5",
         "spatie/laravel-activitylog": "^4.9",
         "symfony/http-client": "^7.0",
@@ -75,7 +85,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "ralphjsmit/packages": true
         }
     },
     "minimum-stability": "stable",

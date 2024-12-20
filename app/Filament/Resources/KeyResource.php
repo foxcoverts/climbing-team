@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Http\Request;
+use RalphJSmit\Filament\Activitylog;
 
 class KeyResource extends Resource
 {
@@ -55,6 +56,9 @@ class KeyResource extends Resource
                 //
             ])
             ->actions([
+                Activitylog\Tables\Actions\TimelineAction::make()
+                    ->label('Log')
+                    ->color('info'),
                 Tables\Actions\EditAction::make(),
                 TransferAction::make(),
             ])
