@@ -9,6 +9,7 @@ use App\Enums\Role;
 use App\Enums\Section;
 use App\Notifications\SetupAccount;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -23,7 +24,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 use Spatie\Activitylog\Traits\CausesActivity;
 
-class User extends Authenticatable implements FilamentUser, MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail
 {
     use CausesActivity, Concerns\HasUid, HasApiTokens, HasFactory, HasUlids, Notifiable;
 
@@ -65,6 +66,11 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'role' => Role::Guest->value,
         'section' => Section::Adult->value,
     ];
+
+    public function getFilamentName(): string
+    {
+        return $this->name;
+    }
 
     /**
      * Control access to admin panels.
