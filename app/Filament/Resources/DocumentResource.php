@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use RalphJSmit\Filament\Activitylog;
 
 class DocumentResource extends Resource
 {
@@ -104,6 +105,9 @@ class DocumentResource extends Resource
                     ),
             ])
             ->actions([
+                Activitylog\Tables\Actions\TimelineAction::make()
+                    ->label('Log')
+                    ->color('info'),
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\RestoreAction::make(),
@@ -120,13 +124,18 @@ class DocumentResource extends Resource
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
-            ->schema([Infolists\Components\Section::make()->schema([
-                Infolists\Components\TextEntry::make('title'),
-                Infolists\Components\TextEntry::make('category'),
-                Infolists\Components\TextEntry::make('description')
-                    ->markdown()
+            ->schema([
+                Infolists\Components\Section::make()->schema([
+                    Infolists\Components\TextEntry::make('title'),
+                    Infolists\Components\TextEntry::make('category'),
+                    Infolists\Components\TextEntry::make('description')
+                        ->markdown()
+                        ->columnSpanFull(),
+                ]),
+                Activitylog\Infolists\Components\Timeline::make()
+                    ->label('Activity Log')
                     ->columnSpanFull(),
-            ])]);
+            ]);
     }
 
     public static function getEloquentQuery(): Builder
