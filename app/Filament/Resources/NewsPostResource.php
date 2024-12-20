@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use RalphJSmit\Filament\Activitylog;
 
 class NewsPostResource extends Resource
 {
@@ -57,7 +58,7 @@ class NewsPostResource extends Resource
                     ->searchable()
                     ->required(),
                 Forms\Components\DateTimePicker::make('created_at')
-                    ->readonly()
+                    ->disabled()
                     ->visibleOn('edit'),
                 Forms\Components\MarkdownEditor::make('body')
                     ->required()
@@ -83,6 +84,9 @@ class NewsPostResource extends Resource
                 //
             ])
             ->actions([
+                ActivityLog\Tables\Actions\TimelineAction::make()
+                    ->label('Log')
+                    ->color('info'),
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
