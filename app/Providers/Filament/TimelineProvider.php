@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Models\Key;
+use App\Models\NewsPost;
 use App\Models\User;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +33,9 @@ class TimelineProvider extends ServiceProvider
                 'transferred' => 'info',
             ])
             ->attributeValue('holder_id', fn (string $value) => User::find($value)?->getFilamentName(), Key::class)
+            ->attributeLabel('holder_id', 'holder', Key::class)
+            ->attributeValue('author_id', fn (string $value) => User::find($value)?->getFilamentName(), NewsPost::class)
+            ->attributeLabel('author_id', 'author', NewsPost::class)
             ->eventDescription('*', $this->generateEventDescriptionCallback($timeline))
             ->eventDescription('kitChecked', function (Activity $activity, ?string $causerName): string|HtmlString {
                 $replace = [];
