@@ -41,6 +41,8 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader --no-dev
+        env:
+          COMPOSER_AUTH: '{"http-basic": {"${{ secrets.RJS_DOMAIN }}": {"username": "${{ secrets.RJS_EMAIL }}", "password": "${{ secrets.RJS_KEY }}"}}}'
 
       - name: Generate dotenv file
         uses: iamsauravsharma/create-dotenv@v3.1.1
