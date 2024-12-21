@@ -8,6 +8,9 @@ use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Enums\Section;
 use App\Notifications\SetupAccount;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,10 +22,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
+use Spatie\Activitylog\Traits\CausesActivity;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail
 {
-    use Concerns\HasUid, HasApiTokens, HasFactory, HasUlids, Notifiable;
+    use CausesActivity, Concerns\HasUid, HasApiTokens, HasFactory, HasUlids, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -62,6 +66,19 @@ class User extends Authenticatable implements MustVerifyEmail
         'role' => Role::Guest->value,
         'section' => Section::Adult->value,
     ];
+
+    public function getFilamentName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Control access to admin panels.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->isTeamLeader();
+    }
 
     /**
      * Get the attributes that should be cast.
