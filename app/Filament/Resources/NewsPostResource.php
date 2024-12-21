@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use RalphJSmit\Filament\Activitylog;
@@ -54,6 +55,7 @@ class NewsPostResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Select::make('author_id')
                     ->relationship('author', 'name')
+                    ->default(fn (Request $request) => $request->user()->id)
                     ->preload()
                     ->searchable()
                     ->required(),
