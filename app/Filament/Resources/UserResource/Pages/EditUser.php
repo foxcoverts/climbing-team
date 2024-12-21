@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
+use App\Models\User;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditUser extends EditRecord
@@ -13,6 +15,18 @@ class EditUser extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('re-send-invite')
+                ->label('Re-send Invite')
+                ->hidden(fn (User $record) => $record->isActive())
+                ->requiresConfirmation()
+                ->action(function (User $record) {
+                    $record->sendAccountSetupNotification();
+
+                    Notification::make()
+                        ->title('Invite sent')
+                        ->success()
+                        ->send();
+                }),
             Actions\DeleteAction::make(),
         ];
     }
