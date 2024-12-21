@@ -10,9 +10,14 @@ class RecentNews extends Widget
 {
     protected static string $view = 'filament.widgets.recent-news';
 
+    public static function canView(): bool
+    {
+        return filled(static::getMostRecentPost());
+    }
+
     protected function getViewData(): array
     {
-        $post = NewsPost::orderByDesc('created_at')->first();
+        $post = static::getMostRecentPost();
 
         return [
             'title' => $post->title,
@@ -22,5 +27,10 @@ class RecentNews extends Widget
             'body' => $post->body,
             'link' => route('news.show', $post),
         ];
+    }
+
+    protected static function getMostRecentPost(): ?NewsPost
+    {
+        return NewsPost::orderByDesc('created_at')->first();
     }
 }
