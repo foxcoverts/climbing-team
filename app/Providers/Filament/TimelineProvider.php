@@ -32,9 +32,9 @@ class TimelineProvider extends ServiceProvider
                 'kitChecked' => 'info',
                 'transferred' => 'info',
             ])
-            ->attributeValue('holder_id', fn (string $value) => User::find($value)?->getFilamentName(), Key::class)
+            ->attributeValue('holder_id', fn ($value) => User::find($value)?->getFilamentName(), Key::class)
             ->attributeLabel('holder_id', 'holder', Key::class)
-            ->attributeValue('author_id', fn (string $value) => User::find($value)?->getFilamentName(), NewsPost::class)
+            ->attributeValue('author_id', fn ($value) => User::find($value)?->getFilamentName(), NewsPost::class)
             ->attributeLabel('author_id', 'author', NewsPost::class)
             ->eventDescription('*', $this->generateEventDescriptionCallback($timeline))
             ->eventDescription('kitChecked', function (Activity $activity, ?string $causerName): string|HtmlString {
