@@ -2,12 +2,14 @@
 
 namespace App\Providers\Filament;
 
+use App\Enums\Accreditation;
 use App\Models\Key;
 use App\Models\NewsPost;
 use App\Models\User;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -23,33 +25,40 @@ class TimelineProvider extends ServiceProvider
                 'created' => 'heroicon-o-plus-circle',
                 'updated' => 'heroicon-o-pencil',
                 'deleted' => 'heroicon-o-trash',
+                'activated' => 'heroicon-o-check',
                 'kitChecked' => 'heroicon-o-document-check',
                 'transferred' => 'heroicon-o-arrows-right-left',
             ])
             ->itemIconColors([
-                'created' => 'success',
                 'deleted' => 'danger',
+                'activated' => 'success',
                 'kitChecked' => 'info',
                 'transferred' => 'info',
             ])
-            ->attributeValue('holder_id', fn ($value) => User::find($value)?->getFilamentName(), Key::class)
-            ->attributeLabel('holder_id', 'holder', Key::class)
+            ->attributeValue('accreditations', function (Collection $value) {
+                if ($value->isEmpty()) {
+                    return null;
+
+                    return '*none*';
+                }
+
+                return $value
+                    ->sort(fn (Accreditation $a, Accreditation $b) => $a->compare($b))
+                    ->map(fn (Accreditation $accreditation) => $accreditation->getLabel())
+                    ->join(', ', ' and ');
+            })
             ->attributeValue('author_id', fn ($value) => User::find($value)?->getFilamentName(), NewsPost::class)
             ->attributeLabel('author_id', 'author', NewsPost::class)
+            ->attributeValue('holder_id', fn ($value) => User::find($value)?->getFilamentName(), Key::class)
+            ->attributeLabel('holder_id', 'holder', Key::class)
             ->eventDescription('*', $this->generateEventDescriptionCallback($timeline))
-            ->eventDescription('kitChecked', function (Activity $activity, ?string $causerName): string|HtmlString {
+            ->eventDescription('activated', function (Activity $activity, ?string $causerName): string|HtmlString {
                 $replace = [];
                 $replace['causerName'] = $this->getRecordLink($activity->causer, $causerName);
-                $possessiveSubjectName = Str::possessive($this->getRecordTitle($activity->subject));
-                $replace['subjectName'] = $this->getRecordLink($activity->subject, $possessiveSubjectName);
 
-                $message = 'Some kit was checked';
-                if (data_get($replace, 'causerName') && data_get($replace, 'subjectName')) {
-                    $message = '**:causerName** checked **:subjectName** kit';
-                } elseif (data_get($replace, 'causerName')) {
-                    $message = '**:causerName** checked some kit';
-                } elseif (data_get($replace, 'subjectName')) {
-                    $message = '**:subjectName** kit was checked';
+                $message = 'Activated their account.';
+                if (data_get($replace, 'causerName')) {
+                    $message = '**:causerName** activated their account.';
                 }
 
                 $wrap = '';
@@ -58,7 +67,30 @@ class TimelineProvider extends ServiceProvider
                     $wrap = '~~';
                 }
 
-                return str(__($wrap.trim($message).$wrap.'.', $replace))->inlineMarkdown()->toHtmlString();
+                return str($wrap.__($message, $replace).$wrap)->inlineMarkdown()->toHtmlString();
+            }, User::class)
+            ->eventDescription('kitChecked', function (Activity $activity, ?string $causerName): string|HtmlString {
+                $replace = [];
+                $replace['causerName'] = $this->getRecordLink($activity->causer, $causerName);
+                $possessiveSubjectName = Str::possessive($this->getRecordTitle($activity->subject));
+                $replace['subjectName'] = $this->getRecordLink($activity->subject, $possessiveSubjectName);
+
+                $message = 'Some kit was checked.';
+                if (data_get($replace, 'causerName') && data_get($replace, 'subjectName')) {
+                    $message = '**:causerName** checked **:subjectName** kit.';
+                } elseif (data_get($replace, 'causerName')) {
+                    $message = '**:causerName** checked some kit.';
+                } elseif (data_get($replace, 'subjectName')) {
+                    $message = '**:subjectName** kit was checked.';
+                }
+
+                $wrap = '';
+                if ($activity->subject_id && ! $activity->subject && $activity->event != 'deleted') {
+                    // The subject no longer exists
+                    $wrap = '~~';
+                }
+
+                return str($wrap.__(trim($message), $replace).$wrap)->inlineMarkdown()->toHtmlString();
             })
             ->eventDescription('transferred', function (Activity $activity) use ($timeline): HtmlString {
                 $replace = [];
@@ -119,7 +151,7 @@ class TimelineProvider extends ServiceProvider
             $wrap = '~~';
         }
 
-        return str(__($wrap.trim($message).$wrap.'.', $replace))->inlineMarkdown()->toHtmlString();
+        return str($wrap.__(trim($message).'.', $replace).$wrap)->inlineMarkdown()->toHtmlString();
     }
 
     protected function getRecordLink(?Model $record, ?string $title = null): ?string

@@ -7,6 +7,7 @@ use App\Models\User;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use RalphJSmit\Filament\Activitylog;
 
 class EditUser extends EditRecord
 {
@@ -27,6 +28,9 @@ class EditUser extends EditRecord
                         ->success()
                         ->send();
                 }),
+
+            Activitylog\Actions\TimelineAction::make()
+                ->label('Log')->color('info'),
             Actions\DeleteAction::make(),
         ];
     }

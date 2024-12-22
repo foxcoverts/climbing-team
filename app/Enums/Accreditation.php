@@ -22,4 +22,19 @@ enum Accreditation: string implements HasColor, HasLabel
     {
         return __('app.user.accreditation.'.$this->value);
     }
+
+    protected function getRank(): int
+    {
+        return match ($this) {
+            self::KitChecker => 0,
+            self::ManageBookings => 1,
+            self::ManageQualifications => 2,
+            self::ManageUsers => 3,
+        };
+    }
+
+    public function compare(Accreditation $other): int
+    {
+        return $this->getRank() <=> $other->getRank();
+    }
 }

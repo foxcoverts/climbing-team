@@ -22,11 +22,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\CausesActivity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail
 {
-    use CausesActivity, Concerns\HasUid, HasApiTokens, HasFactory, HasUlids, Notifiable;
+    use CausesActivity, Concerns\HasUid, HasApiTokens, HasFactory, HasUlids, LogsActivity, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -67,19 +69,6 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
         'section' => Section::Adult->value,
     ];
 
-    public function getFilamentName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Control access to admin panels.
-     */
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return $this->isTeamLeader();
-    }
-
     /**
      * Get the attributes that should be cast.
      *
@@ -96,6 +85,42 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
             'section' => Section::class,
             'timezone' => AsTimezone::class,
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['accreditations', 'role', 'section'])
+            ->useAttributeRawValues(['accreditations'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    protected static function booted(): void
+    {
+        static::updated(function (User $model): void {
+            if ($model->wasChanged('password') && ($model->getOriginal('password') == '')) {
+                activity()
+                    ->event('activated')
+                    ->on($model)
+                    ->by($model)
+                    ->createdAt($model->updated_at)
+                    ->log('activated');
+            }
+        });
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Control access to admin panels.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->isTeamLeader();
     }
 
     public function bookings(): BelongsToMany
