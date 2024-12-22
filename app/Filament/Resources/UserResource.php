@@ -20,6 +20,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Propaganistas\LaravelPhone\PhoneNumber;
+use RalphJSmit\Filament\Activitylog\Infolists\Components\Timeline;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 use Ysfkaya\FilamentPhoneInput\Infolists\PhoneEntry;
 
@@ -147,6 +148,12 @@ class UserResource extends Resource
                         ->badge()
                         ->placeholder('None'),
                     Infolists\Components\TextEntry::make('timezone'),
+                ]),
+            Infolists\Components\Section::make('Log')
+                ->collapsed()
+                ->schema([
+                    Timeline::make()
+                        ->hiddenLabel(),
                 ]),
         ]);
     }

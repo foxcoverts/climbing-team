@@ -31,7 +31,8 @@ class NewsPost extends Model
     {
         return LogOptions::defaults()
             ->logFillable()
-            ->logOnlyDirty();
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
     public function author(): BelongsTo
