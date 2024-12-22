@@ -31,7 +31,8 @@ class Document extends Model
     {
         return LogOptions::defaults()
             ->logFillable()
-            ->logOnlyDirty();
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
     protected static function booted(): void
