@@ -32,8 +32,6 @@
             </div>
 
             <footer class="mt-6 flex flex-wrap items-center gap-4">
-                <x-button.primary :href="route('kit-check.edit', $kitCheck)" :label="__('Edit')" />
-
                 @can('viewAny', App\Models\KitCheck::class)
                     <x-button.secondary :href="route('kit-check.user.index', $kitCheck->user)" :label="__('Back')" />
                 @endcan
