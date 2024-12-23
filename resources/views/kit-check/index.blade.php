@@ -5,12 +5,6 @@
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ __('Latest Kit Checks') }}
                 </h1>
-
-                @can('create', App\Models\KitCheck::class)
-                    <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('kit-check.create')" :label="__('Log Kit Check')" />
-                    </nav>
-                @endcan
             </div>
         </header>
 

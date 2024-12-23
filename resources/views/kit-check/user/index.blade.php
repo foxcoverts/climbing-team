@@ -5,12 +5,6 @@
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ __(':Name - Kit Checks', ['name' => $user->name]) }}
                 </h1>
-
-                @can('create', App\Models\KitCheck::class)
-                    <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('kit-check.create', ['users' => $user->id])" :label="__('Log Kit Check')" />
-                    </nav>
-                @endcan
             </div>
         </header>
 
@@ -37,12 +31,6 @@
                                 <x-markdown :text="$kitCheck->comment" />
                             </div>
                         @endisset
-
-                        @can('update', $kitCheck)
-                            <div class="mt-4">
-                                <x-button.primary :href="route('kit-check.edit', $kitCheck)" :label="__('Edit')" />
-                            </div>
-                        @endcan
                     </div>
                 </div>
             @empty
