@@ -18,8 +18,11 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent;
+use Illuminate\Database\Query;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\Unique;
 
 class QualificationsRelationManager extends RelationManager
 {
@@ -39,7 +42,7 @@ class QualificationsRelationManager extends RelationManager
     {
         return QualificationResource::table($table)
             ->recordTitleAttribute('detail.summary')
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('user'))
+            ->modifyQueryUsing(fn (Eloquent\Builder $query) => $query->with('user'))
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->steps([
@@ -64,7 +67,7 @@ class QualificationsRelationManager extends RelationManager
                                             ->options(GirlguidingScheme::class)
                                             ->default(GirlguidingScheme::Climbing)
                                             ->required()
-                                            ->selectablePlaceholder(false),
+                                            ->selectablePlaceholder(fn (?string $state) => empty($state)),
                                         Forms\Components\TextInput::make('level')
                                             ->integer()
                                             ->minValue(1)
@@ -79,9 +82,22 @@ class QualificationsRelationManager extends RelationManager
                                     ->schema([
                                         Forms\Components\Select::make('award')
                                             ->options(MountainTrainingAward::class)
-                                            ->default(MountainTrainingAward::ClimbingWallInstructor)
+                                            ->disableOptionWhen(fn ($value, RelationManager $livewire): bool => Qualification::query()
+                                                ->where('user_id', $livewire->getOwnerRecord()->id)
+                                                ->whereHasMorph('detail', MountainTrainingQualification::class, fn (Eloquent\Builder $query) => $query->where('award', $value))
+                                                ->exists()
+                                            )
+                                            ->unique(table: MountainTrainingQualification::class, modifyRuleUsing: fn (Unique $rule, RelationManager $livewire) => $rule->where(fn (Query\Builder $query) => $query
+                                                ->whereExists(fn (Query\Builder $where) => $where
+                                                    ->select(DB::raw(1))
+                                                    ->from('qualifications')
+                                                    ->where('qualifications.detail_type', MountainTrainingQualification::class)
+                                                    ->whereColumn('mountain_training_qualifications.id', 'qualifications.detail_id')
+                                                    ->where('qualifications.user_id', $livewire->getOwnerRecord()->id)
+                                                )
+                                            ))
                                             ->required()
-                                            ->selectablePlaceholder(false),
+                                            ->selectablePlaceholder(fn (?string $state) => empty($state)),
                                     ]),
                                 Forms\Components\Group::make()
                                     ->visible(fn (Forms\Get $get) => $get('detail_type') === ScoutPermit::class)
@@ -89,18 +105,18 @@ class QualificationsRelationManager extends RelationManager
                                         Forms\Components\Select::make('activity')
                                             ->options(ScoutPermitActivity::class)
                                             ->default(ScoutPermitActivity::ClimbingAndAbseiling)
-                                            ->selectablePlaceholder(false)
-                                            ->required(),
+                                            ->required()
+                                            ->selectablePlaceholder(fn (?string $state) => empty($state)),
                                         Forms\Components\Select::make('category')
                                             ->options(ScoutPermitCategory::class)
                                             ->default(ScoutPermitCategory::ArtificialTopRope)
-                                            ->selectablePlaceholder(false)
-                                            ->required(),
+                                            ->required()
+                                            ->selectablePlaceholder(fn (?string $state) => empty($state)),
                                         Forms\Components\Select::make('permit_type')
                                             ->options(ScoutPermitType::class)
                                             ->default(ScoutPermitType::Leadership)
-                                            ->selectablePlaceholder(false)
-                                            ->required(),
+                                            ->required()
+                                            ->selectablePlaceholder(fn (?string $state) => empty($state)),
                                         Forms\Components\Textarea::make('restrictions')
                                             ->placeholder('None')
                                             ->autosize()
@@ -110,7 +126,7 @@ class QualificationsRelationManager extends RelationManager
                                     ]),
                             ]),
                     ])
-                    ->using(function (array $data, string $model): Qualification {
+                    ->using(function (array $data): Qualification {
                         $record = new Qualification;
                         $record->fill(Arr::only($data, 'expires_on'));
 
