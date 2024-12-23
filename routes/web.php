@@ -98,7 +98,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('key', KeyController::class)->only('index', 'edit', 'update');
 
     Route::get('kit-check/user/{user}', [KitCheckUserController::class, 'index'])->name('kit-check.user.index');
-    Route::resource('kit-check', KitCheckController::class);
+    Route::resource('kit-check', KitCheckController::class)->only('index', 'show');
 
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);

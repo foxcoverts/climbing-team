@@ -175,9 +175,6 @@
                                 {{ __('If this user has any climbing kit of their own they should ask one of the team\'s kit checkers to look over it with them to ensure it is in good condition.') }}
                             </p>
                         @endisset
-                        @can('create', App\Models\KitCheck::class)
-                            <x-button.primary :href="route('kit-check.create', ['users' => $user->id])" :label="__('Log Kit Check')" />
-                        @endcan
                     </div>
                 </div>
 
