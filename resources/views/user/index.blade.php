@@ -7,12 +7,6 @@
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ __('Users') }}
                 </h1>
-
-                @can('create', App\Models\User::class)
-                    <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('user.create')" :label="__('Add User')" />
-                    </nav>
-                @endcan
             </div>
         </header>
 
