@@ -14,9 +14,6 @@
                             {{ __('Show expired') }}
                         </label>
                     @endif
-                    @can('create', [App\Models\Qualification::class, $user])
-                        <x-button.primary :href="route('user.qualification.create', $user)" :label="__('Add')" />
-                    @endcan
                 </nav>
             </div>
         </header>
