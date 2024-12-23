@@ -161,7 +161,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('keys', 'qualifications'))
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('keys', 'scoutPermits'))
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->sortable()
@@ -198,6 +198,13 @@ class UserResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            UserResource\Widgets\UserOverview::class,
+        ];
     }
 
     public static function getRelations(): array

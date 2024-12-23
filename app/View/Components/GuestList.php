@@ -19,7 +19,7 @@ class GuestList extends Component
         public Booking $booking,
         public bool $showTools = true,
     ) {
-        $booking->attendees->load('keys', 'qualifications');
+        $booking->attendees->load('keys', 'scoutPermits');
     }
 
     /**
