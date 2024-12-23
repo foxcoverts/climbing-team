@@ -15,7 +15,11 @@ use App\Models\ScoutPermit;
 use Filament\Forms;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent;
+use Illuminate\Database\Query;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\Unique;
 
 class CreateQualification extends CreateRecord
 {
@@ -55,7 +59,7 @@ class CreateQualification extends CreateRecord
                                 ->options(GirlguidingScheme::class)
                                 ->default(GirlguidingScheme::Climbing)
                                 ->required()
-                                ->selectablePlaceholder(false),
+                                ->selectablePlaceholder(fn (?string $state) => empty($state)),
                             Forms\Components\TextInput::make('level')
                                 ->integer()
                                 ->minValue(1)
@@ -70,9 +74,22 @@ class CreateQualification extends CreateRecord
                         ->schema([
                             Forms\Components\Select::make('award')
                                 ->options(MountainTrainingAward::class)
-                                ->default(MountainTrainingAward::ClimbingWallInstructor)
+                                ->disableOptionWhen(fn ($value, Forms\Get $get): bool => Qualification::query()
+                                    ->where('user_id', $get('user_id'))
+                                    ->whereHasMorph('detail', MountainTrainingQualification::class, fn (Eloquent\Builder $query) => $query->where('award', $value))
+                                    ->exists()
+                                )
+                                ->unique(table: MountainTrainingQualification::class, modifyRuleUsing: fn (Unique $rule, Forms\Get $get) => $rule->where(fn (Query\Builder $query) => $query
+                                    ->whereExists(fn (Query\Builder $where) => $where
+                                        ->select(DB::raw(1))
+                                        ->from('qualifications')
+                                        ->where('qualifications.detail_type', MountainTrainingQualification::class)
+                                        ->whereColumn('mountain_training_qualifications.id', 'qualifications.detail_id')
+                                        ->where('qualifications.user_id', $get('user_id'))
+                                    )
+                                ))
                                 ->required()
-                                ->selectablePlaceholder(false),
+                                ->selectablePlaceholder(fn (?string $state) => empty($state)),
                         ]),
                     Forms\Components\Group::make()
                         ->visible(fn (Forms\Get $get) => $get('detail_type') === ScoutPermit::class)
@@ -80,18 +97,18 @@ class CreateQualification extends CreateRecord
                             Forms\Components\Select::make('activity')
                                 ->options(ScoutPermitActivity::class)
                                 ->default(ScoutPermitActivity::ClimbingAndAbseiling)
-                                ->selectablePlaceholder(false)
-                                ->required(),
+                                ->required()
+                                ->selectablePlaceholder(fn (?string $state) => empty($state)),
                             Forms\Components\Select::make('category')
                                 ->options(ScoutPermitCategory::class)
                                 ->default(ScoutPermitCategory::ArtificialTopRope)
-                                ->selectablePlaceholder(false)
-                                ->required(),
+                                ->required()
+                                ->selectablePlaceholder(fn (?string $state) => empty($state)),
                             Forms\Components\Select::make('permit_type')
                                 ->options(ScoutPermitType::class)
                                 ->default(ScoutPermitType::Leadership)
-                                ->selectablePlaceholder(false)
-                                ->required(),
+                                ->required()
+                                ->selectablePlaceholder(fn (?string $state) => empty($state)),
                             Forms\Components\Textarea::make('restrictions')
                                 ->placeholder('None')
                                 ->autosize()
