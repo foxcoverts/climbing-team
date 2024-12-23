@@ -127,9 +127,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('user/{user}/booking/invite', 'store')->name('user.booking.invite.store');
         });
         Route::get('user/{user}/booking', UserBookingController::class)->name('user.booking.index');
-        Route::post('user/{user}/invite', [UserController::class, 'sendInvite'])->name('user.invite');
         Route::resource('user.qualification', QualificationController::class)->only('index', 'show');
-        Route::resource('user', UserController::class);
+        Route::resource('user', UserController::class)->only('index', 'show');
     });
 });
 

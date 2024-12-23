@@ -5,12 +5,6 @@
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ $user->name }}
                 </h1>
-
-                @can('update', $user)
-                    <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('user.edit', $user)" :label="__('Edit')" />
-                    </nav>
-                @endcan
             </div>
         </header>
 
@@ -217,18 +211,6 @@
                 @can('viewAny', [\App\Models\Qualification::class, $user])
                     <x-button.secondary :href="route('user.qualification.index', $user)" :label="__('Qualifications')" />
                 @endcan
-
-                @if (!$user->isActive())
-                    @can('update', $user)
-                        <form method="post" action="{{ route('user.invite', $user) }}" x-data="{ submitted: false }"
-                            x-on:submit="setTimeout(() => submitted = true, 0)">
-                            @csrf
-                            <x-button.secondary type="submit" class="whitespace-nowrap" x-bind:disabled="submitted"
-                                :label="__('Re-send Invite')"
-                                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Re-send Invite') }}'" />
-                        </form>
-                    @endcan
-                @endif
             </footer>
         </div>
     </section>
