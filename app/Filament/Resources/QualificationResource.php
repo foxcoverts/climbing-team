@@ -21,8 +21,11 @@ use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Table;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent;
+use Illuminate\Database\Query;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\Unique;
 
 class QualificationResource extends Resource
 {
@@ -49,13 +52,13 @@ class QualificationResource extends Resource
                             }),
                         Forms\Components\Group::make()
                             ->relationship('detail')
-                            ->schema(fn (Forms\Get $get) => match ($get('detail_type')) {
+                            ->schema(fn (Forms\Get $get, Qualification $qualification) => match ($get('detail_type')) {
                                 GirlguidingQualification::class => [
                                     Forms\Components\Select::make('scheme')
                                         ->options(GirlguidingScheme::class)
                                         ->default(GirlguidingScheme::Climbing)
                                         ->required()
-                                        ->selectablePlaceholder(false),
+                                        ->selectablePlaceholder(fn (?string $state) => empty($state)),
                                     Forms\Components\TextInput::make('level')
                                         ->integer()
                                         ->minValue(1)
@@ -67,25 +70,42 @@ class QualificationResource extends Resource
                                     Forms\Components\Select::make('award')
                                         ->options(MountainTrainingAward::class)
                                         ->default(MountainTrainingAward::ClimbingWallInstructor)
+                                        ->disableOptionWhen(fn (MountainTrainingQualification $record, $value): bool => Qualification::query()
+                                            ->where('user_id', $qualification->user_id)
+                                            ->whereHasMorph('detail', MountainTrainingQualification::class, fn (Eloquent\Builder $query) => $query
+                                                ->whereNot('id', $record->id)
+                                                ->where('award', $value)
+                                            )
+                                            ->exists()
+                                        )
+                                        ->unique(ignoreRecord: true, table: MountainTrainingQualification::class, modifyRuleUsing: fn (Unique $rule) => $rule->where(fn (Query\Builder $query) => $query
+                                            ->whereExists(fn (Query\Builder $where) => $where
+                                                ->select(DB::raw(1))
+                                                ->from('qualifications')
+                                                ->where('qualifications.detail_type', MountainTrainingQualification::class)
+                                                ->whereColumn('mountain_training_qualifications.id', 'qualifications.detail_id')
+                                                ->where('qualifications.user_id', $qualification->user_id)
+                                            )
+                                        ))
                                         ->required()
-                                        ->selectablePlaceholder(false),
+                                        ->selectablePlaceholder(fn (?string $state) => empty($state)),
                                 ],
                                 ScoutPermit::class => [
                                     Forms\Components\Select::make('activity')
                                         ->options(ScoutPermitActivity::class)
                                         ->default(ScoutPermitActivity::ClimbingAndAbseiling)
                                         ->required()
-                                        ->selectablePlaceholder(false),
+                                        ->selectablePlaceholder(fn (?string $state) => empty($state)),
                                     Forms\Components\Select::make('category')
                                         ->options(ScoutPermitCategory::class)
                                         ->default(ScoutPermitCategory::ArtificialTopRope)
                                         ->required()
-                                        ->selectablePlaceholder(false),
+                                        ->selectablePlaceholder(fn (?string $state) => empty($state)),
                                     Forms\Components\Select::make('permit_type')
                                         ->options(ScoutPermitType::class)
                                         ->default(ScoutPermitType::Leadership)
                                         ->required()
-                                        ->selectablePlaceholder(false),
+                                        ->selectablePlaceholder(fn (?string $state) => empty($state)),
                                     Forms\Components\Textarea::make('restrictions')
                                         ->placeholder('None')
                                         ->autosize()
@@ -167,7 +187,7 @@ class QualificationResource extends Resource
                         $record->expiresSoon() => Color::Amber,
                         default => Color::Sky,
                     })
-                    ->sortable(query: fn (Builder $query, string $direction): Builder => match ($direction) {
+                    ->sortable(query: fn (Eloquent\Builder $query, string $direction): Eloquent\Builder => match ($direction) {
                         'asc' => $query->orderByRaw('-expires_on DESC'),
                         'desc' => $query->orderByRaw('-expires_on ASC'),
                         default => $query,
@@ -193,8 +213,8 @@ class QualificationResource extends Resource
                         'soon' => 'Soon',
                         'expired' => 'Expired',
                     ])
-                    ->query(fn (Builder $query, array $data): Builder => match ($data['value']) {
-                        'future' => $query->where(function (Builder $query): void {
+                    ->query(fn (Eloquent\Builder $query, array $data): Eloquent\Builder => match ($data['value']) {
+                        'future' => $query->where(function (Eloquent\Builder $query): void {
                             $query->whereNull('expires_on')
                                 ->orWhereDate('expires_on', '>=', Carbon::now());
                         }),
