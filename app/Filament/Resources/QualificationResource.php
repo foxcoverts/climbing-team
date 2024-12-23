@@ -58,7 +58,7 @@ class QualificationResource extends Resource
                                         ->options(GirlguidingScheme::class)
                                         ->default(GirlguidingScheme::Climbing)
                                         ->required()
-                                        ->selectablePlaceholder(fn (?string $state) => empty($state)),
+                                        ->selectablePlaceholder(fn (?GirlguidingScheme $state) => empty($state)),
                                     Forms\Components\TextInput::make('level')
                                         ->integer()
                                         ->minValue(1)
@@ -88,24 +88,24 @@ class QualificationResource extends Resource
                                             )
                                         ))
                                         ->required()
-                                        ->selectablePlaceholder(fn (?string $state) => empty($state)),
+                                        ->selectablePlaceholder(fn (?MountainTrainingAward $state) => empty($state)),
                                 ],
                                 ScoutPermit::class => [
                                     Forms\Components\Select::make('activity')
                                         ->options(ScoutPermitActivity::class)
                                         ->default(ScoutPermitActivity::ClimbingAndAbseiling)
                                         ->required()
-                                        ->selectablePlaceholder(fn (?string $state) => empty($state)),
+                                        ->selectablePlaceholder(fn (?ScoutPermitActivity $state) => empty($state)),
                                     Forms\Components\Select::make('category')
                                         ->options(ScoutPermitCategory::class)
                                         ->default(ScoutPermitCategory::ArtificialTopRope)
                                         ->required()
-                                        ->selectablePlaceholder(fn (?string $state) => empty($state)),
+                                        ->selectablePlaceholder(fn (?ScoutPermitCategory $state) => empty($state)),
                                     Forms\Components\Select::make('permit_type')
                                         ->options(ScoutPermitType::class)
                                         ->default(ScoutPermitType::Leadership)
                                         ->required()
-                                        ->selectablePlaceholder(fn (?string $state) => empty($state)),
+                                        ->selectablePlaceholder(fn (?ScoutPermitType $state) => empty($state)),
                                     Forms\Components\Textarea::make('restrictions')
                                         ->placeholder('None')
                                         ->autosize()
