@@ -245,6 +245,13 @@ class QualificationResource extends Resource
             ]);
     }
 
+    public static function getWidgets(): array
+    {
+        return [
+            QualificationResource\Widgets\QualificationTypeChart::class,
+        ];
+    }
+
     public static function getRelations(): array
     {
         return [
