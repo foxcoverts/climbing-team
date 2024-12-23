@@ -16,4 +16,11 @@ class ListQualifications extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            QualificationResource\Widgets\QualificationTypeChart::make(),
+        ];
+    }
 }
