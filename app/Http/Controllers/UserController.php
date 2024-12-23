@@ -21,7 +21,7 @@ class UserController extends Controller
         Gate::authorize('viewAny', User::class);
 
         return view('user.index', [
-            'users' => User::orderBy('name')->with('keys', 'qualifications')->get(),
+            'users' => User::orderBy('name')->with('keys', 'scoutPermits')->get(),
         ]);
     }
 

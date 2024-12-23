@@ -151,6 +151,12 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
         return $this->hasMany(Qualification::class)->notExpired()->ordered();
     }
 
+    public function scoutPermits(): HasMany
+    {
+        return $this->qualifications()
+            ->where('detail_type', ScoutPermit::class);
+    }
+
     public function allQualifications(): HasMany
     {
         return $this->hasMany(Qualification::class);
@@ -218,7 +224,7 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
 
     public function isPermitHolder(): bool
     {
-        return $this->qualifications->where('detail_type', ScoutPermit::class)->count() > 0;
+        return $this->scoutPermits->count() > 0;
     }
 
     public function isBookingManager(): bool
