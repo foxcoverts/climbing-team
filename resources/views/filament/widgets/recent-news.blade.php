@@ -1,4 +1,4 @@
-@use(App\Filament\Resources\NewsPostResource)
+@use(App\Filament\Admin\Resources\NewsPostResource)
 @use(App\Models\NewsPost)
 <x-filament-widgets::widget>
     <x-filament::section icon="heroicon-o-newspaper">
