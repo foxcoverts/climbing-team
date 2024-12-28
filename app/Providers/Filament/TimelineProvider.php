@@ -6,15 +6,14 @@ use App\Enums\Accreditation;
 use App\Models\Key;
 use App\Models\NewsPost;
 use App\Models\User;
-use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use RalphJSmit\Filament\Activitylog\Infolists\Components\Timeline;
 use Spatie\Activitylog\Contracts\Activity;
+use Spatie\Activitylog\Models\Activity as ActivityModel;
 
 class TimelineProvider extends ServiceProvider
 {
@@ -38,8 +37,6 @@ class TimelineProvider extends ServiceProvider
             ->attributeValue('accreditations', function (Collection $value) {
                 if ($value->isEmpty()) {
                     return null;
-
-                    return '*none*';
                 }
 
                 return $value
@@ -51,107 +48,62 @@ class TimelineProvider extends ServiceProvider
             ->attributeLabel('author_id', 'author', NewsPost::class)
             ->attributeValue('holder_id', fn ($value) => User::find($value)?->getFilamentName(), Key::class)
             ->attributeLabel('holder_id', 'holder', Key::class)
-            ->eventDescription('*', $this->generateEventDescriptionCallback($timeline))
-            ->eventDescription('activated', function (Activity $activity, ?string $causerName): string|HtmlString {
-                $replace = [];
-                $replace['causerName'] = $this->getRecordLink($activity->causer, $causerName);
-
-                $message = 'Activated their account.';
-                if (data_get($replace, 'causerName')) {
-                    $message = '**:causerName** activated their account.';
+            ->causerUrl(fn (?User $causer) => $this->getRecordUrl($causer))
+            ->eventDescription('activated', function (Activity|ActivityModel $activity, ?string $causerName): string|HtmlString {
+                if (! $activity->causer || $activity->subject->is($activity->causer)) {
+                    return __('Activated their account.');
                 }
 
-                $wrap = '';
-                if ($activity->subject_id && ! $activity->subject && $activity->event != 'deleted') {
-                    // The subject no longer exists
-                    $wrap = '~~';
-                }
-
-                return str($wrap.__($message, $replace).$wrap)->inlineMarkdown()->toHtmlString();
+                return __('**:causerName** activated the account.', [
+                    'causerName' => $this->getRecordLink($activity->causer, $causerName),
+                ]);
             }, User::class)
-            ->eventDescription('kitChecked', function (Activity $activity, ?string $causerName): string|HtmlString {
-                $replace = [];
-                $replace['causerName'] = $this->getRecordLink($activity->causer, $causerName);
-                $possessiveSubjectName = Str::possessive($this->getRecordTitle($activity->subject));
-                $replace['subjectName'] = $this->getRecordLink($activity->subject, $possessiveSubjectName);
-
-                $message = 'Some kit was checked.';
-                if (data_get($replace, 'causerName') && data_get($replace, 'subjectName')) {
-                    $message = '**:causerName** checked **:subjectName** kit.';
-                } elseif (data_get($replace, 'causerName')) {
-                    $message = '**:causerName** checked some kit.';
-                } elseif (data_get($replace, 'subjectName')) {
-                    $message = '**:subjectName** kit was checked.';
-                }
-
-                $wrap = '';
-                if ($activity->subject_id && ! $activity->subject && $activity->event != 'deleted') {
-                    // The subject no longer exists
-                    $wrap = '~~';
-                }
-
-                return str($wrap.__(trim($message), $replace).$wrap)->inlineMarkdown()->toHtmlString();
+            ->eventDescription('kitChecked', function (Activity|ActivityModel $activity, ?string $causerName): string|HtmlString {
+                return __('**:causerName** checked the user\'s kit.', [
+                    'causerName' => $this->getRecordLink($activity->causer, $causerName),
+                ]);
             })
-            ->eventDescription('transferred', function (Activity $activity) use ($timeline): HtmlString {
-                $replace = [];
+            ->eventDescription('transferred', function (Activity|ActivityModel $activity): string|HtmlString {
                 $changes = [];
                 if ($oldHolder = User::find(Arr::get($activity->changes(), 'old.holder_id'))) {
-                    $replace['oldHolderName'] = $this->getRecordLink($oldHolder);
-                    $changes[] = 'from :oldHolderName';
+                    $changes[] = 'from '.$this->getRecordLink($oldHolder);
                 }
                 if ($newHolder = User::find(Arr::get($activity->changes(), 'attributes.holder_id'))) {
-                    $replace['newHolderName'] = $this->getRecordLink($newHolder);
-                    $changes[] = 'to **:newHolderName**';
+                    $changes[] = 'to **'.$this->getRecordLink($newHolder).'**';
                 }
 
-                return $this->generateEventDescription($activity, $timeline->getRecord(), implode(' ', $changes), $replace);
+                return $this->generateEventDescription($activity, implode(' ', $changes));
             }, Key::class)
+            ->modifyEventDescriptionUsing(function (string|HtmlString $eventDescription, Activity $activity, string $recordTitle, ?string $causerName, ?string $changesSummary) {
+                $recordTitle = $this->getRecordLink($activity->subject, $recordTitle);
+
+                return str("{$recordTitle} | {$eventDescription}")->inlineMarkdown()->toHtmlString();
+            })
         );
     }
 
-    protected function generateEventDescriptionCallback(Timeline $timeline): Closure
+    protected function generateEventDescription(Activity|ActivityModel $activity, ?string $changesSummary = null): string|HtmlString
     {
-        return fn (Activity $activity, ?string $changesSummary): HtmlString => $this->generateEventDescription($activity, $timeline->getRecord(), $changesSummary);
-    }
-
-    protected function generateEventDescription(Activity $activity, ?Model $record = null, ?string $changesSummary = null, array $replace = []): string|HtmlString
-    {
-        $formattedEvent = str($activity->event)->headline()->lower();
-        $subjectLabel = $this->getRecordLabel($activity->subject_type, $activity->subject);
-
         $message = '';
-        $wrap = '';
 
-        if ($activity->event == 'created' || $activity->event == 'deleted') {
-            $changesSummary = '';
-        }
+        $replace = [
+            'causerName' => $this->getRecordLink($activity->causer),
+            'event' => str($activity->event)->headline()->lower(),
+            'modelLabel' => $this->getRecordLabel($activity->subject_type, $activity->subject),
+            'changesSummary' => $changesSummary,
+        ];
 
-        $replace['causerName'] = $this->getRecordLink($activity->causer);
-
-        if ($activity->subject && ! $record) {
-            $replace['subjectName'] = $this->getRecordLink($activity->subject);
-        }
-
-        if (data_get($replace, 'causerName') && data_get($replace, 'subjectName') && $activity->event == 'updated' && filled($changesSummary)) {
-            $message = "**:causerName** $formattedEvent $changesSummary for :subjectName";
-        } elseif (data_get($replace, 'causerName') && data_get($replace, 'subjectName')) {
-            $message = "**:causerName** $formattedEvent :subjectName $changesSummary";
-        } elseif (data_get($replace, 'causerName') && $activity->event == 'updated' && filled($changesSummary)) {
-            $message = "**:causerName** $formattedEvent $changesSummary";
-        } elseif (data_get($replace, 'causerName')) {
-            $message = "**:causerName** $formattedEvent the $subjectLabel $changesSummary";
-        } elseif (data_get($replace, 'subjectName')) {
-            $message = ":subjectName was $formattedEvent $changesSummary";
+        if ($replace['causerName'] && $replace['changesSummary']) {
+            $message = '**:causerName** :event the :modelLabel :changesSummary.';
+        } elseif ($replace['causerName']) {
+            $message = '**:causerName** :event the :modelLabel.';
+        } elseif ($replace['changesSummary']) {
+            $message = 'The :modelLabel was :event :changesSummary';
         } else {
-            $message = "The $subjectLabel was $formattedEvent $changesSummary";
+            $message = 'The :modelLabel was :event.';
         }
 
-        if ($activity->subject_id && ! $activity->subject && $activity->event != 'deleted') {
-            // The subject no longer exists
-            $wrap = '~~';
-        }
-
-        return str($wrap.__(trim($message).'.', $replace).$wrap)->inlineMarkdown()->toHtmlString();
+        return __($message, $replace);
     }
 
     protected function getRecordLink(?Model $record, ?string $title = null): ?string
