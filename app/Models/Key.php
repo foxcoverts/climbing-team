@@ -58,6 +58,11 @@ class Key extends Model
         });
     }
 
+    public function scopeHeldBy(Builder $keys, User $user): void
+    {
+        $keys->where('holder_id', $user->id);
+    }
+
     /**
      * Bookings that the given User should be able to view.
      */

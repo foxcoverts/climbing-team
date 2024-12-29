@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Clusters\Admin\Resources\KeyResource\Tables\Actions;
+namespace App\Filament\Clusters\My\Resources\KeyResource\Tables\Actions;
 
 use App\Models\Key;
 use App\Models\User;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Forms;
 use Filament\Tables\Actions\Action;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class TransferAction extends Action
 {
@@ -32,7 +32,7 @@ class TransferAction extends Action
 
         $this->icon('heroicon-m-arrows-right-left');
 
-        $this->visible(fn (Request $request, Key $record): bool => $request->user()->can('transfer', $record));
+        $this->visible(fn (Key $record): bool => Gate::check('transfer', $record));
 
         $this->form([
             Forms\Components\Placeholder::make('from')
@@ -49,8 +49,8 @@ class TransferAction extends Action
         $this->fillForm(fn (Key $record): array => $record->attributesToArray());
 
         $this->action(function (): void {
-            $this->process(function (array $data, Key $record, Request $request) {
-                if (! $request->user()->can('transfer', $record)) {
+            $this->process(function (array $data, Key $record) {
+                if (! Gate::check('transfer', $record)) {
                     $this->failure();
 
                     return;
