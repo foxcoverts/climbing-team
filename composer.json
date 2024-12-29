@@ -21,6 +21,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "league/flysystem-read-only": "^3.23",
+        "log1x/blade-filetype-icons": "^1.0",
         "propaganistas/laravel-phone": "^5.3",
         "ralphjsmit/laravel-filament-activitylog": "^1.8",
         "sabre/vobject": "^4.5",
