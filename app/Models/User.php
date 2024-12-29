@@ -120,7 +120,7 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->isTeamLeader();
+        return true;
     }
 
     public function bookings(): BelongsToMany

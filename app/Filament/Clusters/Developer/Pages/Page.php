@@ -4,9 +4,9 @@ namespace App\Filament\Clusters\Developer\Pages;
 
 use App\Filament\Clusters\Developer;
 use App\Filament\Pages\Concerns\HasClusterSidebarNavigation;
-use App\Filament\Pages\Page as AppPage;
+use Filament\Pages\Page as FilamentPage;
 
-abstract class Page extends AppPage
+abstract class Page extends FilamentPage
 {
     use HasClusterSidebarNavigation;
 
