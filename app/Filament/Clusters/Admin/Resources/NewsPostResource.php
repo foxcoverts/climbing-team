@@ -8,7 +8,6 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
-use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Http\Request;
@@ -20,9 +19,18 @@ class NewsPostResource extends Resource
 {
     protected static ?string $model = NewsPost::class;
 
+    protected static ?string $modelLabel = 'news';
+
+    protected static ?string $slug = 'news';
+
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    public static function canAccess(): bool
+    {
+        return static::can('manage');
+    }
 
     public static function form(Form $form): Form
     {
@@ -81,9 +89,6 @@ class NewsPostResource extends Resource
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
-            ->filters([
-                //
-            ])
             ->actions([
                 ActivityLog\Tables\Actions\TimelineAction::make()
                     ->label('Log')
@@ -105,10 +110,6 @@ class NewsPostResource extends Resource
                 Infolists\Components\Split::make([
                     Infolists\Components\Section::make()
                         ->schema([
-                            Infolists\Components\TextEntry::make('title')
-                                ->hiddenLabel(true)
-                                ->size('text-2xl')
-                                ->weight(FontWeight::Medium),
                             Infolists\Components\TextEntry::make('body')
                                 ->hiddenLabel(true)
                                 ->markdown()->prose()
@@ -116,13 +117,11 @@ class NewsPostResource extends Resource
                         ])->grow(true),
                     Infolists\Components\Section::make()
                         ->schema([
-                            Infolists\Components\TextEntry::make('slug')
-                                ->prefix('/'),
+                            Infolists\Components\TextEntry::make('author.name'),
                             Infolists\Components\TextEntry::make('created_at')
-                                ->label('Created')
+                                ->label('Posted')
                                 ->since()
                                 ->dateTimeTooltip(),
-                            Infolists\Components\TextEntry::make('author.name'),
                         ])->grow(false),
                 ])->from('md')->columnSpanFull(),
             ]);
