@@ -24,6 +24,11 @@ class DocumentResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    public static function canAccess(): bool
+    {
+        return static::can('manage');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
