@@ -13,6 +13,11 @@ class QualificationTypeChart extends ChartWidget
 {
     protected static ?string $heading = 'Qualification Holders by Type';
 
+    public static function canView(): bool
+    {
+        return Qualification::exists();
+    }
+
     protected function getData(): array
     {
         $data = Qualification::query()
