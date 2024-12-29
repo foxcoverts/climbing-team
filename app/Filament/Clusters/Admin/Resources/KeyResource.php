@@ -3,7 +3,7 @@
 namespace App\Filament\Clusters\Admin\Resources;
 
 use App\Filament\Clusters\Admin\Resources\KeyResource\Pages;
-use App\Filament\Clusters\Admin\Resources\KeyResource\Tables\Actions\TransferAction;
+use App\Filament\Clusters\My\Resources\KeyResource\Tables\Actions\TransferAction;
 use App\Models\Key;
 use Filament\Forms;
 use Filament\Forms\Form;
