@@ -1,4 +1,4 @@
-@use(App\Filament\Clusters\Admin\Resources\NewsPostResource)
+@use(App\Filament\Resources\NewsPostResource)
 @use(App\Models\NewsPost)
 <x-filament-widgets::widget>
     <x-filament::section icon="heroicon-o-newspaper">
@@ -34,7 +34,8 @@
 
         <x-slot name="footerActions">
             <div class="text-sm grow">
-                <x-markdown>{{ __('Posted :ago by **:author**.', compact('ago', 'author')) }}</x-markdown></div>
+                <x-markdown>{{ __('Posted :ago by **:author**.', compact('ago', 'author')) }}</x-markdown>
+            </div>
 
             @can('viewAny', NewsPost::class)
                 <x-filament::link :href="NewsPostResource::getUrl('index')" wire:navigate>{{ __('View all news') }}</x-filament::link>
