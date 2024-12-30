@@ -10,4 +10,14 @@ abstract class Resource extends FilamentResource
     protected static ?string $cluster = My::class;
 
     protected static ?string $navigationGroup = 'My';
+
+    public static function canViewAny(): bool
+    {
+        return static::can('viewOwn');
+    }
+
+    public static function authorizeViewAny(): void
+    {
+        static::authorize('viewOwn');
+    }
 }

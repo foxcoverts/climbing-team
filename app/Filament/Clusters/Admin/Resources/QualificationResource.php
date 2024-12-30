@@ -8,6 +8,7 @@ use App\Enums\ScoutPermitActivity;
 use App\Enums\ScoutPermitCategory;
 use App\Enums\ScoutPermitType;
 use App\Filament\Clusters\Admin\Resources\QualificationResource\Pages;
+use App\Filament\Clusters\My\Resources\QualificationResource as MyQualificationResource;
 use App\Models\GirlguidingQualification;
 use App\Models\MountainTrainingQualification;
 use App\Models\Qualification;
@@ -126,7 +127,10 @@ class QualificationResource extends Resource
             Infolists\Components\Section::make()->schema([
                 Infolists\Components\TextEntry::make('user.name')
                     ->url(fn (Qualification $record) => UserResource::getUrl('view', ['record' => $record->user_id, 'activeRelationManager' => 'qualifications']))
-                    ->hidden(fn ($component): bool => $component->getLivewire() instanceof UserResource\RelationManagers\QualificationsRelationManager),
+                    ->hidden(fn ($component): bool => in_array($component->getLivewire()::class, [
+                            UserResource\RelationManagers\QualificationsRelationManager::class,
+                            MyQualificationResource\Pages\ViewQualification::class,
+                        ])),
                 Infolists\Components\TextEntry::make('detail_type')
                     ->label('Type')
                     ->formatStateUsing(fn (string $state): string => __("app.qualification.type.{$state}")),
@@ -171,7 +175,10 @@ class QualificationResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->url(fn (Qualification $record) => UserResource::getUrl('view', ['record' => $record->user_id, 'activeRelationManager' => 'qualifications']))
                     ->searchable()
-                    ->hiddenOn(UserResource\RelationManagers\QualificationsRelationManager::class),
+                    ->hiddenOn([
+                        UserResource\RelationManagers\QualificationsRelationManager::class,
+                        MyQualificationResource\Pages\ListQualifications::class,
+                    ]),
                 Tables\Columns\TextColumn::make('detail_type')
                     ->label('Type')
                     ->state(fn (Qualification $record) => __('app.qualification.type.'.$record->detail_type)),
