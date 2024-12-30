@@ -8,8 +8,10 @@ use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Enums\Section;
 use App\Notifications\SetupAccount;
+use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
+use Filament\Notifications\Auth\VerifyEmail;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -98,6 +100,12 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
 
     protected static function booted(): void
     {
+        static::updating(function (User $model): void {
+            if ($model->isDirty('email')) {
+                $model->email_verified_at = null;
+            }
+        });
+
         static::updated(function (User $model): void {
             if ($model->wasChanged('password') && ($model->getOriginal('password') == '')) {
                 activity()
@@ -106,6 +114,12 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
                     ->by($model)
                     ->createdAt($model->updated_at)
                     ->log('activated');
+            }
+            if ($model->wasChanged('email') && ! $model->hasVerifiedEmail()) {
+                $notification = app(VerifyEmail::class);
+                $notification->url = Filament::getVerifyEmailUrl($model);
+
+                $model->notify($notification);
             }
         });
     }

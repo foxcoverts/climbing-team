@@ -2,8 +2,6 @@
 
 namespace App\Filament\Clusters\My\Pages;
 
-use App\Filament\Clusters\My;
-use App\Filament\Pages\Concerns\HasClusterSidebarNavigation;
 use App\Models\User;
 use Filament\Forms\Components;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -17,7 +15,7 @@ use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 
 class EditProfile extends Page implements HasForms
 {
-    use HasClusterSidebarNavigation, InteractsWithForms;
+    use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
 
