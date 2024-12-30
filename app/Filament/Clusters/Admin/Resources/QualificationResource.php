@@ -128,9 +128,9 @@ class QualificationResource extends Resource
                 Infolists\Components\TextEntry::make('user.name')
                     ->url(fn (Qualification $record) => UserResource::getUrl('view', ['record' => $record->user_id, 'activeRelationManager' => 'qualifications']))
                     ->hidden(fn ($component): bool => in_array($component->getLivewire()::class, [
-                            UserResource\RelationManagers\QualificationsRelationManager::class,
-                            MyQualificationResource\Pages\ViewQualification::class,
-                        ])),
+                        UserResource\RelationManagers\QualificationsRelationManager::class,
+                        MyQualificationResource\Pages\ViewQualification::class,
+                    ])),
                 Infolists\Components\TextEntry::make('detail_type')
                     ->label('Type')
                     ->formatStateUsing(fn (string $state): string => __("app.qualification.type.{$state}")),

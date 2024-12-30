@@ -33,7 +33,8 @@ class QualificationResource extends Resource
             ->recordAction('view')
             ->actions([
                 Tables\Actions\ViewAction::make(),
-            ]);
+            ])
+            ->bulkActions([]);
     }
 
     public static function getPages(): array
