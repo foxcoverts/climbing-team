@@ -19,7 +19,11 @@ class EditProfile extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
 
+    protected static ?string $activeNavigationIcon = 'heroicon-s-user';
+
     protected static ?string $navigationLabel = 'Profile';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $slug = 'profile';
 
