@@ -8,7 +8,7 @@ export default defineConfig({
                 "resources/css/app.css",
                 "resources/js/app.js",
                 "resources/js/booking/calendar.js",
-                "resources/css/filament/admin/theme.css",
+                "resources/css/filament/team/theme.css",
             ],
             refresh: true,
         }),
