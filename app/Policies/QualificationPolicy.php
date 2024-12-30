@@ -31,6 +31,14 @@ class QualificationPolicy
     }
 
     /**
+     * Determine whether the user can list their own qualifications.
+     */
+    public function viewOwn(User $user): bool
+    {
+        return true;
+    }
+
+    /**
      * Determine whether the user can view the qualification.
      */
     public function view(User $user, Qualification $qualification): bool
