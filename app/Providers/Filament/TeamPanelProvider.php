@@ -2,10 +2,12 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Pages\Auth\EditProfile;
+use App\Filament\Clusters;
+use App\Filament\Clusters\My\Pages\EditProfile;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
@@ -46,9 +48,15 @@ class TeamPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label('Admin'),
+                    ->label(Clusters\My::getNavigationLabel()),
                 NavigationGroup::make()
-                    ->label('Developer'),
+                    ->label(Clusters\Admin::getNavigationLabel()),
+                NavigationGroup::make()
+                    ->label(Clusters\Developer::getNavigationLabel()),
+            ])
+            ->userMenuItems([
+                'profile' => MenuItem::make()
+                    ->url(fn (): string => EditProfile::getUrl()),
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -67,7 +75,6 @@ class TeamPanelProvider extends PanelProvider
             ->login()
             ->passwordReset()
             ->emailVerification()
-            ->profile(EditProfile::class)
             ->spa();
     }
 }

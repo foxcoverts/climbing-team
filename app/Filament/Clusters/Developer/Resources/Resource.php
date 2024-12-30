@@ -9,5 +9,8 @@ abstract class Resource extends FilamentResource
 {
     protected static ?string $cluster = Developer::class;
 
-    protected static ?string $navigationGroup = 'Developer';
+    public static function getNavigationGroup(): ?string
+    {
+        return static::$cluster::getNavigationLabel();
+    }
 }
