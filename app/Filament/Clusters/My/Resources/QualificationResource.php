@@ -3,24 +3,12 @@
 namespace App\Filament\Clusters\My\Resources;
 
 use App\Filament\Clusters\Admin\Resources\QualificationResource as AdminQualificationResource;
-use App\Filament\Clusters\Admin\Resources\UserResource;
-use App\Filament\Clusters\My;
 use App\Filament\Clusters\My\Resources\QualificationResource\Pages;
-use App\Filament\Clusters\My\Resources\QualificationResource\RelationManagers;
-use App\Models\GirlguidingQualification;
-use App\Models\MountainTrainingQualification;
 use App\Models\Qualification;
-use App\Models\ScoutPermit;
-use Filament\Infolists;
 use Filament\Infolists\Infolist;
-use Filament\Support\Colors\Color;
 use Filament\Tables;
-use Filament\Tables\Filters\Indicator;
-use Illuminate\Database\Eloquent;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class QualificationResource extends Resource
