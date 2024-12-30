@@ -5,9 +5,12 @@ namespace App\Filament\Clusters\Admin\Resources;
 use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Filament\Clusters\Admin\Resources\KitCheckResource\Pages;
+use App\Filament\Clusters\My\Resources\KitCheckResource as MyKitCheckResource;
 use App\Models\KitCheck;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -56,14 +59,23 @@ class KitCheckResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
-                    ->url(fn (KitCheck $record) => UserResource::getUrl('view', ['record' => $record->user_id, 'activeRelationManager' => 'kitChecks']))
+                    ->url(fn (KitCheck $record): ?string => UserResource::canView($record->user)
+                        ? UserResource::getUrl('view', ['record' => $record->user, 'activeRelationManager' => 'kitChecks'])
+                        : null
+                    )
                     ->searchable()
-                    ->hiddenOn(UserResource\RelationManagers\KitChecksRelationManager::class),
+                    ->hiddenOn([
+                        UserResource\RelationManagers\KitChecksRelationManager::class,
+                        MyKitCheckResource\Pages\ListKitChecks::class,
+                    ]),
                 Tables\Columns\TextColumn::make('checked_on')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('checked_by.name')
-                    ->url(fn (KitCheck $record) => UserResource::getUrl('view', ['record' => $record->checked_by_id, 'activeRelationManager' => 'kitChecks']))
+                    ->url(fn (KitCheck $record): ?string => UserResource::canView($record->checked_by)
+                        ? UserResource::getUrl('view', ['record' => $record->checked_by, 'activeRelationManager' => 'kitChecks'])
+                        : null
+                    )
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->state(fn (KitCheck $record): string => match ($record->isExpired()) {
@@ -101,11 +113,28 @@ class KitCheckResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
+    public static function infolist(Infolist $infolist): Infolist
     {
-        return [
-            //
-        ];
+        return $infolist->schema([
+            Infolists\Components\TextEntry::make('checked_on')
+                ->date(),
+            Infolists\Components\TextEntry::make('checked_by.name')
+                ->url(fn (KitCheck $record): ?string => UserResource::canView($record->checked_by)
+                    ? UserResource::getUrl('view', ['record' => $record->checked_by, 'activeRelationManager' => 'kitChecks'])
+                    : null
+                ),
+            Infolists\Components\TextEntry::make('comment')
+                ->columnSpanFull(),
+            Infolists\Components\TextEntry::make('user.name')
+                ->url(fn (KitCheck $record): ?string => UserResource::canView($record->user)
+                    ? UserResource::getUrl('view', ['record' => $record->user, 'activeRelationManager' => 'kitChecks'])
+                    : null
+                )
+                ->hidden(fn ($component): bool => in_array($component->getLivewire()::class, [
+                    UserResource\RelationManagers\KitChecksRelationManager::class,
+                    MyKitCheckResource\Pages\ListKitChecks::class,
+                ])),
+        ]);
     }
 
     public static function getPages(): array
