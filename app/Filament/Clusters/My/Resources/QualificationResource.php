@@ -17,6 +17,10 @@ class QualificationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
 
+    protected static ?string $activeNavigationIcon = 'heroicon-s-wallet';
+
+    protected static ?int $navigationSort = 4;
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->whereBelongsTo(Auth::user());
