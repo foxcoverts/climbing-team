@@ -17,6 +17,10 @@ class KeyResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-key';
 
+    protected static ?string $activeNavigationIcon = 'heroicon-s-key';
+
+    protected static ?int $navigationSort = 2;
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function table(Table $table): Table
