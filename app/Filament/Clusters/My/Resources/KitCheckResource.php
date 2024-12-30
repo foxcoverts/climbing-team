@@ -17,6 +17,10 @@ class KitCheckResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-check';
 
+    protected static ?string $activeNavigationIcon = 'heroicon-s-document-check';
+
+    protected static ?int $navigationSort = 3;
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->whereBelongsTo(Auth::user());
