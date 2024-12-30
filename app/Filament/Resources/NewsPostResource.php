@@ -9,8 +9,6 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
-use Filament\Tables\Columns\Layout\Stack;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class NewsPostResource extends Resource
@@ -29,11 +27,11 @@ class NewsPostResource extends Resource
     {
         return $table
             ->columns([
-                Stack::make([
-                    TextColumn::make('title')
+                Tables\Columns\Layout\Stack::make([
+                    Tables\Columns\TextColumn::make('title')
                         ->size('text-xl')
                         ->weight(FontWeight::Medium),
-                    TextColumn::make('summary')
+                    Tables\Columns\TextColumn::make('summary')
                         ->html(),
                 ]),
             ])
