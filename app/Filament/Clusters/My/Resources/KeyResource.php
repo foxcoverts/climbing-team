@@ -19,16 +19,6 @@ class KeyResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function canViewAny(): bool
-    {
-        return static::can('viewOwn');
-    }
-
-    public static function authorizeViewAny(): void
-    {
-        static::authorize('viewOwn');
-    }
-
     public static function table(Table $table): Table
     {
         return $table
@@ -40,21 +30,17 @@ class KeyResource extends Resource
                     ->searchable(),
             ])
             ->defaultSort('name')
-            ->filters([
-                //
-            ])
             ->actions([
                 Activitylog\Tables\Actions\TimelineAction::make()
                     ->label('Log')
                     ->color('info'),
                 TransferAction::make(),
-            ])
-            ->bulkActions([]);
+            ]);
     }
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->heldBy(Auth::user());
+        return parent::getEloquentQuery()->whereBelongsTo(Auth::user(), 'holder');
     }
 
     public static function getPages(): array
