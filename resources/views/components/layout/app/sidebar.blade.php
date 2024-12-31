@@ -27,9 +27,6 @@
             <x-sidebar.link route='booking.rota' :label="__('My Rota')" icon="inbox.check" />
             <x-sidebar.link route='booking.invite' :match-routes="['booking.invite', 'booking.attendance.*']" :label="__('Invites')" icon="inbox" />
         @endcan
-        @can('viewAny', App\Models\Document::class)
-            <x-sidebar.link route='document.index' :match-routes="['document.*', 'trash.document.*']" :label="__('Documents')" icon="document" />
-        @endcan
         @can('viewAny', App\Models\NewsPost::class)
             <x-sidebar.link route='news.index' match-routes="news.*" :label="__('News')" icon="news" />
         @endcan

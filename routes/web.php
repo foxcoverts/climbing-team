@@ -17,7 +17,6 @@ use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\KeyController;
 use App\Http\Controllers\KitCheckController;
@@ -87,8 +86,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('change', ChangeController::class)->name('change.index');
 
     Route::resource('comment', CommentController::class)->shallow()->only('store', 'update', 'destroy');
-
-    Route::resource('document', DocumentController::class)->only('index', 'show');
 
     Route::controller(IncidentController::class)->group(function () {
         Route::get('incident', 'create')->name('incident.create');
