@@ -129,7 +129,7 @@ class EditProfile extends Page
             ->send();
     }
 
-    protected function getFormActions(): array
+    public function getFormActions(): array
     {
         return [
             $this->getSaveFormAction(),

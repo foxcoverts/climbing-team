@@ -24,7 +24,7 @@ class ChangePassword extends Page
 
     protected static ?string $navigationLabel = 'Password';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 5;
 
     protected static string $view = 'filament.clusters.my.pages.change-password';
 
@@ -118,7 +118,7 @@ class ChangePassword extends Page
             ->send();
     }
 
-    protected function getFormActions(): array
+    public function getFormActions(): array
     {
         return [
             $this->getSaveFormAction(),
