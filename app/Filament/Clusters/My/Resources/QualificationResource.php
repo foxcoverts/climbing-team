@@ -19,7 +19,7 @@ class QualificationResource extends Resource
 
     protected static ?string $activeNavigationIcon = 'heroicon-s-wallet';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 6;
 
     public static function getEloquentQuery(): Builder
     {
