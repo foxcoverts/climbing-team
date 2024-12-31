@@ -2,22 +2,21 @@
 
 namespace App\Filament\Clusters\My\Pages;
 
+use App\Models\User;
 use App\Rules\Password;
-use Exception;
+use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
+use Filament\Pages\Concerns\HasUnsavedDataChangesAlert;
+use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Support\Exceptions\Halt;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
-class ChangePassword extends Page implements HasForms
+class ChangePassword extends Page
 {
-    use InteractsWithForms;
+    use HasUnsavedDataChangesAlert, InteractsWithFormActions;
 
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
 
@@ -33,7 +32,14 @@ class ChangePassword extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->form->fill($this->getUser()->attributesToArray());
+        $this->fillForm();
+    }
+
+    protected function fillForm(): void
+    {
+        $data = $this->getRecord()?->attributesToArray();
+
+        $this->form->fill($data);
     }
 
     public function getBreadcrumbs(): array
@@ -53,6 +59,8 @@ class ChangePassword extends Page implements HasForms
     public function form(Form $form): Form
     {
         return $form
+            ->model($this->getRecord())
+            ->operation('edit')
             ->statePath('data')
             ->schema([
                 Components\Section::make()
@@ -91,7 +99,7 @@ class ChangePassword extends Page implements HasForms
         try {
             $data = $this->form->getState();
 
-            $this->getUser()->update($data);
+            $this->getRecord()->update($data);
         } catch (Halt $exception) {
             return;
         }
@@ -102,9 +110,7 @@ class ChangePassword extends Page implements HasForms
             ]);
         }
 
-        $this->data['currentPassword'] = null;
-        $this->data['password'] = null;
-        $this->data['passwordConfirmation'] = null;
+        $this->fillForm();
 
         Notification::make()
             ->success()
@@ -115,20 +121,21 @@ class ChangePassword extends Page implements HasForms
     protected function getFormActions(): array
     {
         return [
-            Components\Actions\Action::make('save')
-                ->label(__('filament-panels::resources/pages/edit-record.form.actions.save.label'))
-                ->submit('save'),
+            $this->getSaveFormAction(),
         ];
     }
 
-    public function getUser(): Authenticatable&Model
+    protected function getSaveFormAction(): Action
     {
-        $user = Filament::auth()->user();
+        return Action::make('save')
+            ->record($this->getRecord())
+            ->label(__('filament-panels::resources/pages/edit-record.form.actions.save.label'))
+            ->submit('save')
+            ->keyBindings(['mod+s']);
+    }
 
-        if (! $user instanceof Model) {
-            throw new Exception('The authenticated user object must be an Eloquent model to allow the profile page to update it.');
-        }
-
-        return $user;
+    public function getRecord(): ?User
+    {
+        return Filament::auth()->user();
     }
 }
