@@ -3,19 +3,20 @@
 namespace App\Filament\Clusters\My\Pages;
 
 use App\Models\User;
+use Filament\Actions\Action;
+use Filament\Facades\Filament;
 use Filament\Forms\Components;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
+use Filament\Pages\Concerns\HasUnsavedDataChangesAlert;
+use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Support\Colors\Color;
 use Filament\Support\Exceptions\Halt;
-use Illuminate\Support\Facades\Auth;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 
-class EditProfile extends Page implements HasForms
+class EditProfile extends Page
 {
-    use InteractsWithForms;
+    use HasUnsavedDataChangesAlert, InteractsWithFormActions;
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
 
@@ -33,7 +34,14 @@ class EditProfile extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->form->fill($this->user()->attributesToArray());
+        $this->fillForm();
+    }
+
+    protected function fillForm(): void
+    {
+        $data = $this->getRecord()?->attributesToArray();
+
+        $this->form->fill($data);
     }
 
     public function getBreadcrumbs(): array
@@ -53,6 +61,8 @@ class EditProfile extends Page implements HasForms
     public function form(Form $form): Form
     {
         return $form
+            ->model($this->getRecord())
+            ->operation('edit')
             ->statePath('data')
             ->schema([
                 Components\Section::make('Contact Details')
@@ -108,7 +118,7 @@ class EditProfile extends Page implements HasForms
         try {
             $data = $this->form->getState();
 
-            $this->user()->update($data);
+            $this->getRecord()->update($data);
         } catch (Halt $exception) {
             return;
         }
@@ -122,14 +132,21 @@ class EditProfile extends Page implements HasForms
     protected function getFormActions(): array
     {
         return [
-            Components\Actions\Action::make('save')
-                ->label(__('filament-panels::resources/pages/edit-record.form.actions.save.label'))
-                ->submit('save'),
+            $this->getSaveFormAction(),
         ];
     }
 
-    protected function user(): User
+    protected function getSaveFormAction(): Action
     {
-        return Auth::user();
+        return Action::make('save')
+            ->record($this->getRecord())
+            ->label(__('filament-panels::resources/pages/edit-record.form.actions.save.label'))
+            ->submit('save')
+            ->keyBindings(['mod+s']);
+    }
+
+    public function getRecord(): ?User
+    {
+        return Filament::auth()->user();
     }
 }
