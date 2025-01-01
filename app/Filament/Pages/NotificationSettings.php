@@ -23,6 +23,8 @@ class NotificationSettings extends Page
 
     protected static ?string $activeNavigationIcon = 'heroicon-s-bell';
 
+    protected static ?string $navigationGroup = 'Profile';
+
     protected static string $view = 'filament.pages.notification-settings';
 
     public ?array $data = [];
