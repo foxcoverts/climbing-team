@@ -65,9 +65,6 @@
         @if (auth()->user()->keys()->exists())
             <x-sidebar.link route='key.index' match-routes="key.*" :label="__('Keys')" icon="key" />
         @endif
-        @can('viewAny', App\Models\KitCheck::class)
-            <x-sidebar.link route='kit-check.index' match-routes="kit-check.*" :label="__('Kit Checks')" icon="shield" />
-        @endcan
         @can('viewAny', App\Models\MailLog::class)
             <x-sidebar.link route='mail.index' match-routes="mail.*" :label="__('Mail Log')">
                 <x-slot:icon>
