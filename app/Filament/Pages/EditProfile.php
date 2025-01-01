@@ -24,7 +24,7 @@ class EditProfile extends Page
 
     protected static ?string $activeNavigationIcon = 'heroicon-s-user';
 
-    protected static ?string $navigationLabel = 'Profile';
+    protected static ?string $navigationGroup = 'Profile';
 
     protected static ?string $slug = 'profile';
 
