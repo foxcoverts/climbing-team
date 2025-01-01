@@ -23,8 +23,6 @@ use App\Http\Controllers\KitCheckController;
 use App\Http\Controllers\KitCheckUserController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProfileNotificationsController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
@@ -107,18 +105,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('todo', TodoController::class);
 
-    Route::prefix('profile')->name('profile.')->group(function () {
-        Route::singleton('notifications', ProfileNotificationsController::class)
-            ->destroyable();
-    });
-
     Route::middleware('password.confirm')->group(function () {
-        Route::controller(ProfileController::class)->group(function () {
-            Route::get('profile', 'edit')->name('profile.edit');
-            Route::patch('profile', 'update')->name('profile.update');
-            Route::delete('profile', 'destroy')->name('profile.destroy');
-        });
-
         Route::controller(UserBookingInviteController::class)->group(function () {
             Route::get('user/{user}/booking/invite', 'create')->name('user.booking.invite');
             Route::post('user/{user}/booking/invite', 'store')->name('user.booking.invite.store');
