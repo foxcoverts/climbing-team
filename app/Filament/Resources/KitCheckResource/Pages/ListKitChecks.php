@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Filament\Clusters\My\Resources\KitCheckResource\Pages;
+namespace App\Filament\Resources\KitCheckResource\Pages;
 
 use App\Filament\Clusters\Admin;
-use App\Filament\Clusters\My\Resources\KitCheckResource;
-use App\Filament\Pages\Concerns\HasClusterSidebarNavigation;
+use App\Filament\Resources\KitCheckResource;
 use App\Models\KitCheck;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -12,8 +11,6 @@ use Illuminate\Support\Facades\Gate;
 
 class ListKitChecks extends ListRecords
 {
-    use HasClusterSidebarNavigation;
-
     protected static string $resource = KitCheckResource::class;
 
     protected function getHeaderActions(): array
