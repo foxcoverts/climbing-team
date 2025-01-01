@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\My\Pages;
 
+use App\Filament\Forms\Components as AppComponents;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
@@ -109,6 +110,13 @@ class EditProfile extends Page
                             ->validateFor(['INTERNATIONAL', 'GB'])
                             ->requiredWith('emergency_name')
                             ->nullable(),
+                    ]),
+                Components\Section::make('Settings')
+                    ->schema([
+                        AppComponents\TimezoneSelect::make('timezone')
+                            ->searchable()
+                            ->required()
+                            ->defaultByBrowser(),
                     ]),
             ]);
     }
