@@ -25,7 +25,6 @@ class RecentNews extends Widget
             'ago' => localDate($post->created_at)->ago(['options' => Carbon::JUST_NOW | Carbon::ONE_DAY_WORDS]),
             'summary' => $post->summary,
             'body' => $post->body,
-            'link' => route('news.show', $post),
         ];
     }
 
