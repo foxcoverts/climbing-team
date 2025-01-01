@@ -23,7 +23,7 @@ class ChangePassword extends Page
 
     protected static ?string $activeNavigationIcon = 'heroicon-s-lock-closed';
 
-    protected static ?string $navigationLabel = 'Password';
+    protected static ?string $navigationGroup = 'Profile';
 
     protected static string $view = 'filament.pages.change-password';
 
