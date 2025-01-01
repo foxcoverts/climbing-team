@@ -1,3 +1,4 @@
+@use(App\Filament\Clusters\Admin\Resources\UserResource)
 <x-layout.app :title="$user->name">
     <section>
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
@@ -158,7 +159,7 @@
                             <x-fake-label :value="__('Last checked')" />
                             <div class="flex items-center gap-2">
                                 @can('viewAny', App\Models\KitCheck::class)
-                                    <p><a href="{{ route('kit-check.user.index', $user) }}" x-data="{{ Js::from(['checked_on' => localDate($user->latestKitCheck->checked_on)]) }}"
+                                    <p><a href="{{ UserResource::getUrl('view', ['record' => $user, 'activeRelationManager' => 'kitChecks']) }}" x-data="{{ Js::from(['checked_on' => localDate($user->latestKitCheck->checked_on)]) }}"
                                             x-text="dateString(checked_on)">
                                             {{ localDate($user->latestKitCheck->checked_on)->toFormattedDayDateString() }}
                                         </a>
