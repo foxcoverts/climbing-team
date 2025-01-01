@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Clusters\My\Pages;
+namespace App\Filament\Pages;
 
 use App\Filament\Forms\Components as AppComponents;
 use App\Models\User;
@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Concerns\HasUnsavedDataChangesAlert;
 use Filament\Pages\Concerns\InteractsWithFormActions;
+use Filament\Pages\Page;
 use Filament\Support\Colors\Color;
 use Filament\Support\Exceptions\Halt;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
@@ -25,11 +26,9 @@ class EditProfile extends Page
 
     protected static ?string $navigationLabel = 'Profile';
 
-    protected static ?int $navigationSort = 1;
-
     protected static ?string $slug = 'profile';
 
-    protected static string $view = 'filament.clusters.my.pages.edit-profile';
+    protected static string $view = 'filament.pages.edit-profile';
 
     public ?array $data = [];
 
