@@ -5,7 +5,7 @@ namespace App\Filament\Clusters\Admin\Resources;
 use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Filament\Clusters\Admin\Resources\KitCheckResource\Pages;
-use App\Filament\Clusters\My\Resources\KitCheckResource as MyKitCheckResource;
+use App\Filament\Resources\KitCheckResource as MyKitCheckResource;
 use App\Models\KitCheck;
 use Filament\Forms;
 use Filament\Forms\Form;
