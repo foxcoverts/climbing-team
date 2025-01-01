@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Clusters\My\Pages;
+namespace App\Filament\Pages;
 
 use App\Models\User;
 use App\Rules\Password;
@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Concerns\HasUnsavedDataChangesAlert;
 use Filament\Pages\Concerns\InteractsWithFormActions;
+use Filament\Pages\Page;
 use Filament\Support\Exceptions\Halt;
 use Illuminate\Support\Facades\Hash;
 
@@ -24,9 +25,7 @@ class ChangePassword extends Page
 
     protected static ?string $navigationLabel = 'Password';
 
-    protected static ?int $navigationSort = 5;
-
-    protected static string $view = 'filament.clusters.my.pages.change-password';
+    protected static string $view = 'filament.pages.change-password';
 
     public ?array $data = [];
 

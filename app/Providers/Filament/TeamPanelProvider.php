@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Clusters;
-use App\Filament\Clusters\My\Pages\ChangePassword;
 use App\Filament\Pages;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -61,7 +60,7 @@ class TeamPanelProvider extends PanelProvider
                 'password' => MenuItem::make()
                     ->label('Change Password')
                     ->icon('heroicon-o-lock-closed')
-                    ->url(fn (): string => ChangePassword::getUrl()),
+                    ->url(fn (): string => Pages\ChangePassword::getUrl()),
             ])
             ->middleware([
                 EncryptCookies::class,
