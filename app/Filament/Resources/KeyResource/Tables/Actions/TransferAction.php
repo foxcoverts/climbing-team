@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Clusters\My\Resources\KeyResource\Tables\Actions;
+namespace App\Filament\Resources\KeyResource\Tables\Actions;
 
 use App\Models\Key;
 use App\Models\User;

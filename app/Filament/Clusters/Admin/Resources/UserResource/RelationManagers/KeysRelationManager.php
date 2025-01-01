@@ -2,7 +2,7 @@
 
 namespace App\Filament\Clusters\Admin\Resources\UserResource\RelationManagers;
 
-use App\Filament\Clusters\My\Resources\KeyResource\Tables\Actions\TransferAction;
+use App\Filament\Resources\KeyResource\Tables\Actions\TransferAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
