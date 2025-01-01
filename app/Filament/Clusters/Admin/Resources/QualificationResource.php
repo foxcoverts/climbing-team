@@ -8,7 +8,7 @@ use App\Enums\ScoutPermitActivity;
 use App\Enums\ScoutPermitCategory;
 use App\Enums\ScoutPermitType;
 use App\Filament\Clusters\Admin\Resources\QualificationResource\Pages;
-use App\Filament\Clusters\My\Resources\QualificationResource as MyQualificationResource;
+use App\Filament\Resources\QualificationResource as MyQualificationResource;
 use App\Models\GirlguidingQualification;
 use App\Models\MountainTrainingQualification;
 use App\Models\Qualification;

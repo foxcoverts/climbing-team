@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Filament\Clusters\My\Resources;
+namespace App\Filament\Resources;
 
 use App\Filament\Clusters\Admin\Resources\QualificationResource as AdminQualificationResource;
-use App\Filament\Clusters\My\Resources\QualificationResource\Pages;
+use App\Filament\Resources\QualificationResource\Pages;
 use App\Models\Qualification;
 use Filament\Infolists\Infolist;
+use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,18 +20,6 @@ class QualificationResource extends Resource
 
     protected static ?string $activeNavigationIcon = 'heroicon-s-wallet';
 
-    protected static ?int $navigationSort = 6;
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()->whereBelongsTo(Auth::user());
-    }
-
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return AdminQualificationResource::infolist($infolist);
-    }
-
     public static function table(Table $table): Table
     {
         return AdminQualificationResource::table($table)
@@ -39,6 +28,26 @@ class QualificationResource extends Resource
                 Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return AdminQualificationResource::infolist($infolist);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->whereBelongsTo(Auth::user());
+    }
+
+    public static function canViewAny(): bool
+    {
+        return static::can('viewOwn');
+    }
+
+    public static function authorizeViewAny(): void
+    {
+        static::authorize('viewOwn');
     }
 
     public static function getPages(): array
