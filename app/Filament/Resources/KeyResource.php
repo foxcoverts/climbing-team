@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Filament\Clusters\My\Resources;
+namespace App\Filament\Resources;
 
-use App\Filament\Clusters\My\Resources\KeyResource\Tables\Actions\TransferAction;
-use App\Filament\Clusters\My\Resources\KeyResource\Pages;
+use App\Filament\Resources\KeyResource\Tables\Actions\TransferAction;
+use App\Filament\Resources\KeyResource\Pages;
 use App\Models\Key;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use RalphJSmit\Filament\Activitylog;
+use Filament\Resources\Resource;
 
 class KeyResource extends Resource
 {
@@ -18,8 +19,6 @@ class KeyResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-key';
 
     protected static ?string $activeNavigationIcon = 'heroicon-s-key';
-
-    protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -45,6 +44,16 @@ class KeyResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->whereBelongsTo(Auth::user(), 'holder');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return static::can('viewOwn');
+    }
+
+    public static function authorizeViewAny(): void
+    {
+        static::authorize('viewOwn');
     }
 
     public static function getPages(): array
