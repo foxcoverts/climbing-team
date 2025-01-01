@@ -18,7 +18,6 @@ use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncidentController;
-use App\Http\Controllers\KeyController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\QualificationController;
@@ -87,8 +86,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('incident', 'create')->name('incident.create');
         Route::post('incident', 'store');
     });
-
-    Route::resource('key', KeyController::class)->only('index', 'edit', 'update');
 
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);

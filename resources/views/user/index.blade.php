@@ -1,4 +1,5 @@
 @use('App\Enums\Accreditation')
+@use('App\Filament\Clusters\Admin\Resources\UserResource')
 @use('App\Models\User')
 <x-layout.app :title="__('Users')">
     <section>
@@ -33,7 +34,7 @@
                             @endif
                             @if ($user->isKeyHolder())
                                 @can('manage', App\Models\Key::class)
-                                    <a href="{{ route('key.index') }}" class="flex items-stretch">
+                                    <a href="{{ UserResource::getUrl('view', ['record' => $user, 'activeRelationManager' => 'keys']) }}" class="flex items-stretch">
                                         <x-badge.key-holder label="" class="text-sm whitespace-nowrap" />
                                     </a>
                                 @else

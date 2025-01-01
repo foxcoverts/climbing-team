@@ -1,5 +1,6 @@
 @use('App\Enums\Accreditation')
 @use('App\Enums\Role')
+@use('App\Filament\Clusters\Admin\Resources\UserResource')
 @use('Carbon\Carbon')
 @use('Illuminate\Contracts\Auth\Access\Gate')
 <x-layout.app :title="__(':name - Attendance', ['name' => $attendee->name])">
@@ -27,7 +28,7 @@
 
                         @if ($attendee->isKeyHolder())
                             @can('manage', App\Models\Key::class)
-                                <a href="{{ route('key.index') }}" class="flex items-stretch">
+                                <a href="{{ UserResource::getUrl('view', ['record' => $attendee, 'activeRelationManager' => 'keys']) }}" class="flex items-stretch">
                                     <x-badge.key-holder class="text-sm whitespace-nowrap" />
                                 </a>
                             @else
