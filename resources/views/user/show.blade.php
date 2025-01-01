@@ -1,4 +1,4 @@
-@use(App\Filament\Clusters\Admin\Resources\UserResource)
+@use('App\Filament\Clusters\Admin\Resources\UserResource')
 <x-layout.app :title="$user->name">
     <section>
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
@@ -26,7 +26,7 @@
                     @endif
                     @if ($user->isKeyHolder())
                         @can('manage', App\Models\Key::class)
-                            <a href="{{ route('key.index') }}" class="flex items-stretch">
+                            <a href="{{ UserResource::getUrl('view', ['record' => $user, 'activeRelationManager' => 'keys']) }}" class="flex items-stretch">
                                 <x-badge.key-holder class="text-sm whitespace-nowrap" />
                             </a>
                         @else
