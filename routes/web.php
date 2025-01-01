@@ -19,8 +19,6 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\KeyController;
-use App\Http\Controllers\KitCheckController;
-use App\Http\Controllers\KitCheckUserController;
 use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\QualificationController;
@@ -91,9 +89,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::resource('key', KeyController::class)->only('index', 'edit', 'update');
-
-    Route::get('kit-check/user/{user}', [KitCheckUserController::class, 'index'])->name('kit-check.user.index');
-    Route::resource('kit-check', KitCheckController::class)->only('index', 'show');
 
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
