@@ -51,13 +51,15 @@ class TeamPanelProvider extends PanelProvider
                     ->label(Clusters\Admin::getNavigationLabel()),
                 NavigationGroup::make()
                     ->label(Clusters\Developer::getNavigationLabel()),
+                NavigationGroup::make()
+                    ->label('Profile'),
             ])
             ->userMenuItems([
                 'profile' => MenuItem::make()
                     ->url(fn (): string => Pages\EditProfile::getUrl()),
                 'password' => MenuItem::make()
-                    ->label('Change Password')
-                    ->icon('heroicon-o-lock-closed')
+                    ->label(Pages\ChangePassword::getNavigationLabel())
+                    ->icon(Pages\ChangePassword::getNavigationIcon())
                     ->url(fn (): string => Pages\ChangePassword::getUrl()),
             ])
             ->middleware([
