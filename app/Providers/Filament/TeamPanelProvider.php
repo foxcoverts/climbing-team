@@ -4,7 +4,6 @@ namespace App\Providers\Filament;
 
 use App\Filament\Clusters;
 use App\Filament\Clusters\My\Pages\ChangePassword;
-use App\Filament\Clusters\My\Pages\EditProfile;
 use App\Filament\Pages;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -58,7 +57,7 @@ class TeamPanelProvider extends PanelProvider
             ])
             ->userMenuItems([
                 'profile' => MenuItem::make()
-                    ->url(fn (): string => EditProfile::getUrl()),
+                    ->url(fn (): string => Pages\EditProfile::getUrl()),
                 'password' => MenuItem::make()
                     ->label('Change Password')
                     ->icon('heroicon-o-lock-closed')
