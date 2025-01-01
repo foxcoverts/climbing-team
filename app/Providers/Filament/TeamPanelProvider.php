@@ -48,8 +48,6 @@ class TeamPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label(Clusters\My::getNavigationLabel()),
-                NavigationGroup::make()
                     ->label(Clusters\Admin::getNavigationLabel()),
                 NavigationGroup::make()
                     ->label(Clusters\Developer::getNavigationLabel()),
