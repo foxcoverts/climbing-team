@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Clusters\My\Pages;
+namespace App\Filament\Pages;
 
 use App\Enums\CommentNotificationOption;
 use App\Models\NotificationSettings as NotificationSettingsModel;
@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Concerns\HasUnsavedDataChangesAlert;
 use Filament\Pages\Concerns\InteractsWithFormActions;
+use Filament\Pages\Page;
 use Filament\Support\Contracts\HasLabel;
 use Filament\Support\Exceptions\Halt;
 
@@ -22,9 +23,7 @@ class NotificationSettings extends Page
 
     protected static ?string $activeNavigationIcon = 'heroicon-s-bell';
 
-    protected static ?int $navigationSort = 4;
-
-    protected static string $view = 'filament.clusters.my.pages.notification-settings';
+    protected static string $view = 'filament.pages.notification-settings';
 
     public ?array $data = [];
 
