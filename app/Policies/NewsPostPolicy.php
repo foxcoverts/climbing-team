@@ -12,7 +12,7 @@ class NewsPostPolicy
         return $user->isTeamLeader();
     }
 
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
         return true;
     }
@@ -22,7 +22,7 @@ class NewsPostPolicy
         return $user->can('manage', NewsPost::class);
     }
 
-    public function view(User $user, NewsPost $post)
+    public function view(?User $user, NewsPost $post)
     {
         return true;
     }
