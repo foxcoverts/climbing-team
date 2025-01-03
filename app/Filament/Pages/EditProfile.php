@@ -14,6 +14,7 @@ use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
 use Filament\Support\Colors\Color;
 use Filament\Support\Exceptions\Halt;
+use Illuminate\Support\Facades\Gate;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 
 class EditProfile extends Page
@@ -34,7 +35,19 @@ class EditProfile extends Page
 
     public function mount(): void
     {
+        $this->authorizeAccess();
+
         $this->fillForm();
+    }
+
+    public static function canAccess(): bool
+    {
+        return Filament::auth()->check();
+    }
+
+    protected function authorizeAccess(): void
+    {
+        abort_unless(Gate::check('update', $this->getRecord() ?? User::class), 403);
     }
 
     protected function fillForm(): void

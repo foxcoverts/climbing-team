@@ -13,6 +13,7 @@ use Filament\Pages\Concerns\HasUnsavedDataChangesAlert;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
 use Filament\Support\Exceptions\Halt;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class ChangePassword extends Page
@@ -31,7 +32,19 @@ class ChangePassword extends Page
 
     public function mount(): void
     {
+        $this->authorizeAccess();
+
         $this->fillForm();
+    }
+
+    public static function canAccess(): bool
+    {
+        return Filament::auth()->check();
+    }
+
+    protected function authorizeAccess(): void
+    {
+        abort_unless(Gate::check('update', $this->getRecord() ?? User::class), 403);
     }
 
     protected function fillForm(): void
