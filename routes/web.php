@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\BookingStatus;
+use App\Filament\Resources\NewsPostResource\Pages\ViewNewsPost;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingAttendeeInviteController;
@@ -19,7 +20,6 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\MailLogController;
-use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
@@ -90,9 +90,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
     Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
 
-    Route::resource('news', NewsPostController::class)->only('index')
-        ->parameters(['news' => 'post']);
-
     Route::get('todo/{todo}.ics', [TodoIcsController::class, 'show'])->name('todo.show.ics');
 
     Route::resource('todo', TodoController::class);
@@ -118,9 +115,6 @@ Route::controller(BookingIcsController::class)
         Route::get('ical/{user:ical_token}/rota.ics', 'rota')->name('booking.rota.ics');
     });
 
-Route::resource('news', NewsPostController::class)->only('show')
-    ->parameters(['news' => 'post']);
-
 Route::controller(RespondController::class)
     ->middleware(Authenticate::fromParam('attendee'))
     ->group(function () {
@@ -130,5 +124,7 @@ Route::controller(RespondController::class)
         Route::get('respond/{booking}/{attendee}/tentative', 'tentative')->scopeBindings()->name('respond.tentative');
         Route::get('respond/{booking}/{attendee}/decline', 'decline')->scopeBindings()->name('respond.decline');
     });
+
+Route::get('news/{record}', ViewNewsPost::class);
 
 require __DIR__.'/auth.php';

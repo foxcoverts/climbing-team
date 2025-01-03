@@ -4,9 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\NewsPostResource\Pages;
 use App\Models\NewsPost;
+use Filament\Facades\Filament;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -44,25 +46,49 @@ class NewsPostResource extends Resource
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
-            ->schema([
-                Infolists\Components\Split::make([
+            ->schema(fn () => match (true) {
+                Filament::auth()->check() => [
+                    Infolists\Components\Split::make([
+                        Infolists\Components\Section::make()
+                            ->schema([
+                                Infolists\Components\TextEntry::make('body')
+                                    ->hiddenLabel()
+                                    ->markdown()->prose()
+                                    ->columnSpanFull(),
+                            ])->grow(true),
+                        Infolists\Components\Section::make()
+                            ->schema([
+                                Infolists\Components\TextEntry::make('author.name'),
+                                Infolists\Components\TextEntry::make('created_at')
+                                    ->label('Posted')
+                                    ->since()
+                                    ->dateTimeTooltip(),
+                            ])->grow(false),
+                    ])->from('md')->columnSpanFull(),
+                ],
+                default => [ // guest
                     Infolists\Components\Section::make()
                         ->schema([
-                            Infolists\Components\TextEntry::make('body')
-                                ->hiddenLabel(true)
+                            Infolists\Components\TextEntry::make('summary')
+                                ->hiddenLabel()
                                 ->markdown()->prose()
                                 ->columnSpanFull(),
-                        ])->grow(true),
-                    Infolists\Components\Section::make()
-                        ->schema([
-                            Infolists\Components\TextEntry::make('author.name'),
-                            Infolists\Components\TextEntry::make('created_at')
-                                ->label('Posted')
-                                ->since()
-                                ->dateTimeTooltip(),
-                        ])->grow(false),
-                ])->from('md')->columnSpanFull(),
-            ]);
+                        ])
+                        ->grow(true)
+                        ->footerActions([
+                            Infolists\Components\Actions\Action::make('read-more')
+                                ->label('Read More')
+                                ->url(fn () => Filament::getCurrentPanel()->getLoginUrl()),
+                        ])
+                        ->footerActionsAlignment(Alignment::Center),
+                    Infolists\Components\TextEntry::make('please-login')
+                        ->state('Please login to view the full post.')
+                        ->url(fn () => Filament::getCurrentPanel()->getLoginUrl())
+                        ->hiddenLabel()
+                        ->alignCenter()
+                        ->columnSpanFull(),
+                ]
+            });
     }
 
     public static function getPages(): array
