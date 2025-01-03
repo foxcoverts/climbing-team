@@ -19,7 +19,6 @@ use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncidentController;
-use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
@@ -86,9 +85,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('incident', 'create')->name('incident.create');
         Route::post('incident', 'store');
     });
-
-    Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
-    Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
 
     Route::get('todo/{todo}.ics', [TodoIcsController::class, 'show'])->name('todo.show.ics');
 
