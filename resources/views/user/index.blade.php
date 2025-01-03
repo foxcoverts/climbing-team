@@ -1,4 +1,5 @@
 @use('App\Enums\Accreditation')
+@use('App\Filament\Clusters\Admin\Resources\UserResource')
 @use('App\Models\User')
 <x-layout.app :title="__('Users')">
     <section>
@@ -7,12 +8,6 @@
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ __('Users') }}
                 </h1>
-
-                @can('create', App\Models\User::class)
-                    <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('user.create')" :label="__('Add User')" />
-                    </nav>
-                @endcan
             </div>
         </header>
 
@@ -39,7 +34,7 @@
                             @endif
                             @if ($user->isKeyHolder())
                                 @can('manage', App\Models\Key::class)
-                                    <a href="{{ route('key.index') }}" class="flex items-stretch">
+                                    <a href="{{ UserResource::getUrl('view', ['record' => $user, 'activeRelationManager' => 'keys']) }}" class="flex items-stretch">
                                         <x-badge.key-holder label="" class="text-sm whitespace-nowrap" />
                                     </a>
                                 @else

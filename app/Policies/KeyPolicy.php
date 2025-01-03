@@ -20,6 +20,14 @@ class KeyPolicy
      */
     public function viewAny(User $user): bool
     {
+        return $user->can('manage', Key::class);
+    }
+
+    /**
+     * Determine whether the user can view their own keys.
+     */
+    public function viewOwn(User $user): bool
+    {
         return true;
     }
 

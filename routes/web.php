@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\BookingStatus;
+use App\Filament\Resources\NewsPostResource\Pages\ViewNewsPost;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingAttendeeInviteController;
@@ -17,21 +18,11 @@ use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\IncidentController;
-use App\Http\Controllers\KeyController;
-use App\Http\Controllers\KitCheckController;
-use App\Http\Controllers\KitCheckUserController;
-use App\Http\Controllers\MailLogController;
-use App\Http\Controllers\NewsPostController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProfileNotificationsController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TodoIcsController;
-use App\Http\Controllers\TransferKeyController;
-use App\Http\Controllers\TrashedDocumentController;
 use App\Http\Controllers\UserBookingController;
 use App\Http\Controllers\UserBookingInviteController;
 use App\Http\Controllers\UserController;
@@ -90,60 +81,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('comment', CommentController::class)->shallow()->only('store', 'update', 'destroy');
 
-    Route::resource('document', DocumentController::class);
-
     Route::controller(IncidentController::class)->group(function () {
         Route::get('incident', 'create')->name('incident.create');
         Route::post('incident', 'store');
     });
 
-    Route::controller(TransferKeyController::class)->group(function () {
-        Route::get('key/{key}/transfer', 'edit')->name('key.transfer');
-        Route::put('key/{key}/transfer', 'update');
-        Route::patch('key/{key}/transfer', 'update');
-    });
-    Route::resource('key', KeyController::class);
-
-    Route::get('kit-check/user/{user}', [KitCheckUserController::class, 'index'])->name('kit-check.user.index');
-    Route::resource('kit-check', KitCheckController::class);
-
-    Route::get('mail/{mail}/raw', [MailLogController::class, 'raw']);
-    Route::resource('mail', MailLogController::class)->except(['create', 'store', 'edit', 'update']);
-
-    Route::resource('news', NewsPostController::class)
-        ->except('show')
-        ->parameters(['news' => 'post']);
-
     Route::get('todo/{todo}.ics', [TodoIcsController::class, 'show'])->name('todo.show.ics');
 
     Route::resource('todo', TodoController::class);
 
-    Route::prefix('profile')->name('profile.')->group(function () {
-        Route::singleton('notifications', ProfileNotificationsController::class)
-            ->destroyable();
-    });
-
     Route::middleware('password.confirm')->group(function () {
-        Route::controller(ProfileController::class)->group(function () {
-            Route::get('profile', 'edit')->name('profile.edit');
-            Route::patch('profile', 'update')->name('profile.update');
-            Route::delete('profile', 'destroy')->name('profile.destroy');
-        });
-
-        Route::prefix('trash')->name('trash.')->group(function () {
-            Route::resource('document', TrashedDocumentController::class)
-                ->only(['index', 'show', 'update', 'destroy'])
-                ->withTrashed(['show', 'update', 'destroy']);
-        });
-
         Route::controller(UserBookingInviteController::class)->group(function () {
             Route::get('user/{user}/booking/invite', 'create')->name('user.booking.invite');
             Route::post('user/{user}/booking/invite', 'store')->name('user.booking.invite.store');
         });
         Route::get('user/{user}/booking', UserBookingController::class)->name('user.booking.index');
-        Route::post('user/{user}/invite', [UserController::class, 'sendInvite'])->name('user.invite');
-        Route::resource('user.qualification', QualificationController::class);
-        Route::resource('user', UserController::class);
+        Route::resource('user.qualification', QualificationController::class)->only('index', 'show');
+        Route::resource('user', UserController::class)->only('index', 'show');
     });
 });
 
@@ -157,8 +111,6 @@ Route::controller(BookingIcsController::class)
         Route::get('ical/{user:ical_token}/rota.ics', 'rota')->name('booking.rota.ics');
     });
 
-Route::get('news/{post}', [NewsPostController::class, 'show'])->name('news.show');
-
 Route::controller(RespondController::class)
     ->middleware(Authenticate::fromParam('attendee'))
     ->group(function () {
@@ -168,5 +120,7 @@ Route::controller(RespondController::class)
         Route::get('respond/{booking}/{attendee}/tentative', 'tentative')->scopeBindings()->name('respond.tentative');
         Route::get('respond/{booking}/{attendee}/decline', 'decline')->scopeBindings()->name('respond.decline');
     });
+
+Route::get('news/{record}', ViewNewsPost::class);
 
 require __DIR__.'/auth.php';

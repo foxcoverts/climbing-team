@@ -6,12 +6,6 @@
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ $user->name }}
                 </h1>
-
-                @can('update', $qualification)
-                    <nav class="grow flex justify-end">
-                        <x-button.primary :href="route('user.qualification.edit', [$user, $qualification])" :label="__('Edit')" />
-                    </nav>
-                @endcan
             </div>
         </header>
 

@@ -27,12 +27,6 @@
             <x-sidebar.link route='booking.rota' :label="__('My Rota')" icon="inbox.check" />
             <x-sidebar.link route='booking.invite' :match-routes="['booking.invite', 'booking.attendance.*']" :label="__('Invites')" icon="inbox" />
         @endcan
-        @can('viewAny', App\Models\Document::class)
-            <x-sidebar.link route='document.index' :match-routes="['document.*', 'trash.document.*']" :label="__('Documents')" icon="document" />
-        @endcan
-        @can('viewAny', App\Models\NewsPost::class)
-            <x-sidebar.link route='news.index' match-routes="news.*" :label="__('News')" icon="news" />
-        @endcan
         @can('create', App\Models\Incident::class)
             <x-sidebar.link route='incident.create' :label="__('Report Incident')" icon="incident" />
         @endcan
@@ -65,20 +59,6 @@
                 </x-slot:icon>
             </x-sidebar.link>
         @endcan
-        @if (auth()->user()->keys()->exists())
-            <x-sidebar.link route='key.index' match-routes="key.*" :label="__('Keys')" icon="key" />
-        @endif
-        @can('viewAny', App\Models\KitCheck::class)
-            <x-sidebar.link route='kit-check.index' match-routes="kit-check.*" :label="__('Kit Checks')" icon="shield" />
-        @endcan
-        @can('viewAny', App\Models\MailLog::class)
-            <x-sidebar.link route='mail.index' match-routes="mail.*" :label="__('Mail Log')">
-                <x-slot:icon>
-                    <path
-                        d="M18 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h16zm-4.37 9.1L20 16v-2l-5.12-3.9L20 6V4l-10 8L0 4v2l5.12 4.1L0 14v2l6.37-4.9L10 14l3.63-2.9z" />
-                </x-slot:icon>
-            </x-sidebar.link>
-        @endcan
         @can('viewAny', App\Models\Todo::class)
             <x-sidebar.link route='todo.index' match-routes='todo.*' :label="__('Tasks')" icon="outline.checkmark" />
         @endcan
@@ -94,8 +74,6 @@
 
     <x-sidebar.group :heading="__('Account')">
         @auth
-            <x-sidebar.link route='profile.edit' :label="__('Profile')" icon="user-solid-square" />
-            <x-sidebar.link route='profile.notifications.show' :label="__('Notification Settings')" icon="notifications" />
             <x-sidebar.link route='booking.links' :label="__('Calendar Links')" icon="calendar.download" />
             <x-sidebar.button route='logout' method="POST" :label="__('Logout')">
                 <x-slot:icon>
