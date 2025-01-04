@@ -10,6 +10,8 @@ class RecentNews extends Widget
 {
     protected static string $view = 'filament.widgets.recent-news';
 
+    protected static ?int $sort = 1;
+
     public static function canView(): bool
     {
         return filled(static::getMostRecentPost());
