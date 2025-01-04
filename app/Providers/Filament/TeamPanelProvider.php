@@ -53,6 +53,9 @@ class TeamPanelProvider extends PanelProvider
                     ->label(Clusters\Developer::getNavigationLabel()),
                 NavigationGroup::make()
                     ->label('Profile'),
+                NavigationGroup::make()
+                    ->label('Policies')
+                    ->collapsed(),
             ])
             ->userMenuItems([
                 'profile' => MenuItem::make()
