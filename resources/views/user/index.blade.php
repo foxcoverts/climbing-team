@@ -28,9 +28,7 @@
                                 <x-badge.section :section="$user->section" class="text-sm text-nowrap whitespace-nowrap" />
                             @endif
                             @if ($user->isPermitHolder())
-                                <a href="{{ route('user.qualification.index', $user) }}">
-                                    <x-badge.permit-holder class="text-sm" />
-                                </a>
+                                <x-badge.permit-holder class="text-sm" />
                             @endif
                             @if ($user->isKeyHolder())
                                 @can('manage', App\Models\Key::class)
