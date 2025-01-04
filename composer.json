@@ -29,6 +29,7 @@
         "symfony/http-client": "^7.0",
         "symfony/sendgrid-mailer": "^7.0",
         "symfony/yaml": "^7.0",
+        "webbingbrasil/filament-copyactions": "^3.0",
         "ysfkaya/filament-phone-input": "^3.1"
     },
     "require-dev": {
