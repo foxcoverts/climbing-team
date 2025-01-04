@@ -10,7 +10,6 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
-use App\Http\Controllers\BookingLinkController;
 use App\Http\Controllers\BookingNotificationsController;
 use App\Http\Controllers\BookingPreviewController;
 use App\Http\Controllers\BookingRelatedController;
@@ -37,11 +36,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('booking/'.$status->value, [BookingController::class, $status->value])
             ->name('booking.'.$status->value);
     }
-    Route::controller(BookingLinkController::class)
-        ->group(function () {
-            Route::get('booking/links', 'index')->name('booking.links');
-            Route::delete('booking/links', 'destroy')->name('booking.links.reset');
-        });
 
     Route::controller(BookingAttendanceController::class)->group(function () {
         Route::get('booking/{booking}/attendance', 'edit')->name('booking.attendance.edit');
