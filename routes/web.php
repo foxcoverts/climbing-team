@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\BookingStatus;
+use App\Filament\Pages\PrivacyPolicy;
 use App\Filament\Resources\NewsPostResource\Pages\ViewNewsPost;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
@@ -29,7 +30,6 @@ use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
-Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('booking', [BookingController::class, 'calendar'])->name('booking.calendar');
@@ -120,5 +120,6 @@ Route::controller(RespondController::class)
     });
 
 Route::get('news/{record}', ViewNewsPost::class);
+Route::get('/privacy-policy', PrivacyPolicy::class);
 
 require __DIR__.'/auth.php';
