@@ -19,7 +19,6 @@ use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncidentController;
-use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TodoIcsController;
@@ -96,7 +95,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('user/{user}/booking/invite', 'store')->name('user.booking.invite.store');
         });
         Route::get('user/{user}/booking', UserBookingController::class)->name('user.booking.index');
-        Route::resource('user.qualification', QualificationController::class)->only('index', 'show');
         Route::resource('user', UserController::class)->only('index', 'show');
     });
 });

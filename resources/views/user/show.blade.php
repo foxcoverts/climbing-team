@@ -20,9 +20,7 @@
                         <x-badge.section :section="$user->section" class="text-sm text-nowrap whitespace-nowrap" />
                     @endif
                     @if ($user->isPermitHolder())
-                        <a href="{{ route('user.qualification.index', $user) }}">
-                            <x-badge.permit-holder class="text-sm text-nowrap whitespace-nowrap" />
-                        </a>
+                        <x-badge.permit-holder class="text-sm text-nowrap whitespace-nowrap" />
                     @endif
                     @if ($user->isKeyHolder())
                         @can('manage', App\Models\Key::class)
@@ -205,9 +203,6 @@
             <footer class="mt-4 flex flex-wrap items-start gap-4">
                 @can('manage', \App\Models\Booking::class)
                     <x-button.secondary :href="route('user.booking.index', $user)" :label="__('Bookings')" />
-                @endcan
-                @can('viewAny', [\App\Models\Qualification::class, $user])
-                    <x-button.secondary :href="route('user.qualification.index', $user)" :label="__('Qualifications')" />
                 @endcan
             </footer>
         </div>
