@@ -2,8 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Filament\Pages\Dashboard;
+use App\Filament\Resources\NewsPostResource;
+use App\Filament\Resources\NewsPostResource\Pages\ListNewsPosts;
+use App\Filament\Widgets\RecentNews;
 use App\Models\NewsPost;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,23 +24,19 @@ class NewsTest extends TestCase
 
         $this
             ->actingAs($user)
-            ->get('/news')
+            ->get(NewsPostResource::getUrl())
             ->assertOk()
-            ->assertViewIs('news.index')
-            ->assertSeeInOrder([
-                $postA->title,
-                'Read more...',
-                $postB->title,
-                'Read more...',
-            ]);
+            ->assertSeeLivewire(ListNewsPosts::class)
+            ->assertSee($postA->title)
+            ->assertSee($postB->title);
     }
 
     public function test_news_is_auth_protected(): void
     {
         $this
-            ->get('/news')
+            ->get(NewsPostResource::getUrl())
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/login');
+            ->assertRedirect(Filament::getCurrentPanel()->getLoginUrl());
     }
 
     public function test_news_article_can_be_previewed(): void
@@ -70,13 +71,9 @@ class NewsTest extends TestCase
 
         $this
             ->actingAs($user)
-            ->get('/dashboard')
+            ->get(Dashboard::getUrl())
             ->assertOk()
-            ->assertSeeInOrder([
-                'Recent News',
-                $post->title,
-                'Posted',
-                'View all news',
-            ]);
+            ->assertSeeLivewire(Dashboard::class)
+            ->assertSeeLivewire(RecentNews::class);
     }
 }
