@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Clusters;
 use App\Filament\Pages;
+use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -21,6 +22,10 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use RalphJSmit\Filament\Activitylog\FilamentActivitylog;
+use RalphJSmit\Filament\Onboard;
+use RalphJSmit\Filament\Onboard\FilamentOnboard;
+use RalphJSmit\Filament\Onboard\Http\Middleware\OnboardMiddleware;
+use RalphJSmit\Filament\Onboard\Widgets\OnboardTrackWidget;
 
 class TeamPanelProvider extends PanelProvider
 {
@@ -38,13 +43,25 @@ class TeamPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
-            ->plugin(FilamentActivitylog::make())
+            ->plugins([
+                FilamentActivitylog::make(),
+                FilamentOnboard::make()
+                    ->prefix('welcome')
+                    ->addTrack(fn () => Onboard\Track::make([
+                        Onboard\Step::make('Emergency Contact', 'onboard::emergency-contact')
+                            ->description('You have not provided any emergency contact details, there may be a delay in contacting someone if necessary.')
+                            ->performStepActionLabel('Edit Contacts')
+                            ->url(Pages\EditProfile::getUrl())
+                            ->completeIf(fn (): bool => filled(Filament::auth()->user()->emergency_phone)),
+                    ])),
+            ])
             ->pages([
                 Pages\Dashboard::class,
             ])
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+                OnboardTrackWidget::class,
             ])
             ->navigationGroups([
                 NavigationGroup::make()
@@ -78,6 +95,7 @@ class TeamPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                OnboardMiddleware::class,
             ])
             ->login()
             ->passwordReset()

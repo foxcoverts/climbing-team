@@ -7,5 +7,6 @@ export default {
         './resources/views/filament/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
         './vendor/ralphjsmit/laravel-filament-activitylog/resources/**/*.blade.php',
+        './vendor/ralphjsmit/laravel-filament-onboard/resources/**/*.blade.php',
     ],
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c04654e4884b902b72eee1887a73190",
+    "content-hash": "a5a2923bf08d69940f5b2ad77b813c23",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -4917,6 +4917,97 @@
                 "issues": "https://github.com/ralphjsmit/laravel-filament-activitylog/issues"
             },
             "time": "2024-12-26T16:33:31+00:00"
+        },
+        {
+            "name": "ralphjsmit/laravel-filament-onboard",
+            "version": "2.5.4",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:ralphjsmit/laravel-filament-onboard.git",
+                "reference": "f58794c5798db300f58f3af0d9dd0f26d4ccc5fc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://satis.ralphjsmit.com/dist/ralphjsmit/laravel-filament-onboard/ralphjsmit-laravel-filament-onboard-f58794c5798db300f58f3af0d9dd0f26d4ccc5fc-zip-e9e79a.zip",
+                "reference": "f58794c5798db300f58f3af0d9dd0f26d4ccc5fc",
+                "shasum": "6320334c84def4fdc37db53046f8b361b7f9eddb"
+            },
+            "require": {
+                "filament/actions": "^3.2",
+                "filament/filament": "^3.0.95",
+                "illuminate/contracts": "^10.0|^11.0",
+                "php": "^8.0",
+                "ralphjsmit/packages": "^1.4",
+                "spatie/laravel-package-tools": "^1.9.2"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.15",
+                "nesbot/carbon": "^2.66|^3.0",
+                "nunomaduro/collision": "^7.0|^8.0",
+                "orchestra/testbench": "^8.0|^9.0",
+                "pestphp/pest": "^1.21|^2.0",
+                "pestphp/pest-plugin-laravel": "^1.1|^2.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^9.5|^10.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "RalphJSmit\\Filament\\Onboard\\OnboardServiceProvider"
+                    ],
+                    "aliases": {
+                        "Onboard": "RalphJSmit\\Filament\\Onboard\\Facades\\Onboard"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "RalphJSmit\\Filament\\Onboard\\": "src",
+                    "RalphJSmit\\Filament\\Onboard\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "RalphJSmit\\Filament\\Onboard\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ralph J. Smit",
+                    "email": "rjs@ralphjsmit.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A package to handle onboarding in Filament Admin.",
+            "homepage": "https://github.com/ralphjsmit/laravel-filament-onboard",
+            "keywords": [
+                "laravel",
+                "laravel-filament-onboard",
+                "ralphjsmit"
+            ],
+            "support": {
+                "source": "https://github.com/ralphjsmit/laravel-filament-onboard/tree/2.5.4",
+                "issues": "https://github.com/ralphjsmit/laravel-filament-onboard/issues"
+            },
+            "time": "2024-09-21T15:50:18+00:00"
         },
         {
             "name": "ralphjsmit/packages",
