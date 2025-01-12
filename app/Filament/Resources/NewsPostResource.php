@@ -12,6 +12,7 @@ use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class NewsPostResource extends Resource
 {
@@ -24,6 +25,13 @@ class NewsPostResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Posted' => $record->created_at->ago(),
+        ];
+    }
 
     public static function table(Table $table): Table
     {

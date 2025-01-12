@@ -97,6 +97,8 @@ class TeamPanelProvider extends PanelProvider
                 Authenticate::class,
                 OnboardMiddleware::class,
             ])
+            ->globalSearchKeyBindings(['mod+k'])
+            ->globalSearchFieldKeyBindingSuffix()
             ->login()
             ->passwordReset()
             ->emailVerification()

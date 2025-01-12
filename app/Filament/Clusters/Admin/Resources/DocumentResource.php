@@ -10,7 +10,7 @@ use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -23,6 +23,18 @@ class DocumentResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getGlobalSearchResultDetails(Eloquent\Model $record): array
+    {
+        return [
+            'Category' => $record->category,
+        ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title', 'category'];
+    }
 
     public static function canAccess(): bool
     {
@@ -142,7 +154,7 @@ class DocumentResource extends Resource
             ]);
     }
 
-    public static function getEloquentQuery(): Builder
+    public static function getEloquentQuery(): Eloquent\Builder
     {
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
