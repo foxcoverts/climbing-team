@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent;
 use Illuminate\Http\Request;
 use RalphJSmit\Filament\Activitylog;
 
@@ -19,6 +20,18 @@ class KeyResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-key';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getGlobalSearchEloquentQuery(): Eloquent\Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['holder']);
+    }
+
+    public static function getGlobalSearchResultDetails(Eloquent\Model $record): array
+    {
+        return [
+            'Holder' => $record->holder->name,
+        ];
+    }
 
     public static function form(Form $form): Form
     {
