@@ -2,15 +2,15 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\KeyResource\Tables\Actions\TransferAction;
 use App\Filament\Resources\KeyResource\Pages;
+use App\Filament\Resources\KeyResource\Tables\Actions\TransferAction;
 use App\Models\Key;
+use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent;
 use Illuminate\Support\Facades\Auth;
 use RalphJSmit\Filament\Activitylog;
-use Filament\Resources\Resource;
 
 class KeyResource extends Resource
 {
@@ -21,6 +21,18 @@ class KeyResource extends Resource
     protected static ?string $activeNavigationIcon = 'heroicon-s-key';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getGlobalSearchEloquentQuery(): Eloquent\Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['holder']);
+    }
+
+    public static function getGlobalSearchResultDetails(Eloquent\Model $record): array
+    {
+        return [
+            'Holder' => $record->holder->name,
+        ];
+    }
 
     public static function table(Table $table): Table
     {
@@ -41,9 +53,10 @@ class KeyResource extends Resource
             ]);
     }
 
-    public static function getEloquentQuery(): Builder
+    public static function getEloquentQuery(): Eloquent\Builder
     {
-        return parent::getEloquentQuery()->whereBelongsTo(Auth::user(), 'holder');
+        return parent::getEloquentQuery()
+            ->whereBelongsTo(Auth::user(), 'holder');
     }
 
     public static function canViewAny(): bool
