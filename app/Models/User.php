@@ -8,6 +8,11 @@ use App\Enums\Accreditation;
 use App\Enums\Role;
 use App\Enums\Section;
 use App\Notifications\SetupAccount;
+use Filament\Facades\Filament;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
+use Filament\Notifications\Auth\VerifyEmail;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,10 +24,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\CausesActivity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail
 {
-    use Concerns\HasUid, HasApiTokens, HasFactory, HasUlids, Notifiable;
+    use CausesActivity, Concerns\HasUid, HasApiTokens, HasFactory, HasUlids, LogsActivity, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -81,6 +89,54 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['accreditations', 'role', 'section'])
+            ->useAttributeRawValues(['accreditations'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    protected static function booted(): void
+    {
+        static::updating(function (User $model): void {
+            if ($model->isDirty('email')) {
+                $model->email_verified_at = null;
+            }
+        });
+
+        static::updated(function (User $model): void {
+            if ($model->wasChanged('password') && ($model->getOriginal('password') == '')) {
+                activity()
+                    ->event('activated')
+                    ->on($model)
+                    ->by($model)
+                    ->createdAt($model->updated_at)
+                    ->log('activated');
+            }
+            if ($model->wasChanged('email') && ! $model->hasVerifiedEmail()) {
+                $notification = app(VerifyEmail::class);
+                $notification->url = Filament::getVerifyEmailUrl($model);
+
+                $model->notify($notification);
+            }
+        });
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Control access to admin panels.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
+    }
+
     public function bookings(): BelongsToMany
     {
         return $this->belongsToMany(Booking::class)
@@ -107,6 +163,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function qualifications(): HasMany
     {
         return $this->hasMany(Qualification::class)->notExpired()->ordered();
+    }
+
+    public function scoutPermits(): HasMany
+    {
+        return $this->qualifications()
+            ->where('detail_type', ScoutPermit::class);
     }
 
     public function allQualifications(): HasMany
@@ -176,7 +238,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isPermitHolder(): bool
     {
-        return $this->qualifications->where('detail_type', ScoutPermit::class)->count() > 0;
+        return $this->scoutPermits->count() > 0;
     }
 
     public function isBookingManager(): bool

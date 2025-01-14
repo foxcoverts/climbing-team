@@ -1,3 +1,4 @@
+@use('App\Filament\Clusters\Admin\Resources\UserResource')
 <x-layout.app :title="$user->name">
     <section>
         <header class="bg-white dark:bg-gray-800 border-b sm:sticky sm:top-0 px-4 sm:px-8">
@@ -5,12 +6,6 @@
                 <h1 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
                     {{ $user->name }}
                 </h1>
-
-                @can('update', $user)
-                    <nav class="flex items-center gap-4 justify-end grow">
-                        <x-button.primary :href="route('user.edit', $user)" :label="__('Edit')" />
-                    </nav>
-                @endcan
             </div>
         </header>
 
@@ -25,13 +20,11 @@
                         <x-badge.section :section="$user->section" class="text-sm text-nowrap whitespace-nowrap" />
                     @endif
                     @if ($user->isPermitHolder())
-                        <a href="{{ route('user.qualification.index', $user) }}">
-                            <x-badge.permit-holder class="text-sm text-nowrap whitespace-nowrap" />
-                        </a>
+                        <x-badge.permit-holder class="text-sm text-nowrap whitespace-nowrap" />
                     @endif
                     @if ($user->isKeyHolder())
                         @can('manage', App\Models\Key::class)
-                            <a href="{{ route('key.index') }}" class="flex items-stretch">
+                            <a href="{{ UserResource::getUrl('view', ['record' => $user, 'activeRelationManager' => 'keys']) }}" class="flex items-stretch">
                                 <x-badge.key-holder class="text-sm whitespace-nowrap" />
                             </a>
                         @else
@@ -164,7 +157,7 @@
                             <x-fake-label :value="__('Last checked')" />
                             <div class="flex items-center gap-2">
                                 @can('viewAny', App\Models\KitCheck::class)
-                                    <p><a href="{{ route('kit-check.user.index', $user) }}" x-data="{{ Js::from(['checked_on' => localDate($user->latestKitCheck->checked_on)]) }}"
+                                    <p><a href="{{ UserResource::getUrl('view', ['record' => $user, 'activeRelationManager' => 'kitChecks']) }}" x-data="{{ Js::from(['checked_on' => localDate($user->latestKitCheck->checked_on)]) }}"
                                             x-text="dateString(checked_on)">
                                             {{ localDate($user->latestKitCheck->checked_on)->toFormattedDayDateString() }}
                                         </a>
@@ -181,9 +174,6 @@
                                 {{ __('If this user has any climbing kit of their own they should ask one of the team\'s kit checkers to look over it with them to ensure it is in good condition.') }}
                             </p>
                         @endisset
-                        @can('create', App\Models\KitCheck::class)
-                            <x-button.primary :href="route('kit-check.create', ['users' => $user->id])" :label="__('Log Kit Check')" />
-                        @endcan
                     </div>
                 </div>
 
@@ -214,21 +204,6 @@
                 @can('manage', \App\Models\Booking::class)
                     <x-button.secondary :href="route('user.booking.index', $user)" :label="__('Bookings')" />
                 @endcan
-                @can('viewAny', [\App\Models\Qualification::class, $user])
-                    <x-button.secondary :href="route('user.qualification.index', $user)" :label="__('Qualifications')" />
-                @endcan
-
-                @if (!$user->isActive())
-                    @can('update', $user)
-                        <form method="post" action="{{ route('user.invite', $user) }}" x-data="{ submitted: false }"
-                            x-on:submit="setTimeout(() => submitted = true, 0)">
-                            @csrf
-                            <x-button.secondary type="submit" class="whitespace-nowrap" x-bind:disabled="submitted"
-                                :label="__('Re-send Invite')"
-                                x-text="submitted ? '{{ __('Please wait...') }}' : '{{ __('Re-send Invite') }}'" />
-                        </form>
-                    @endcan
-                @endif
             </footer>
         </div>
     </section>
