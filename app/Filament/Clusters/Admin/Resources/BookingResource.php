@@ -46,7 +46,7 @@ class BookingResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make()->schema([
+                Forms\Components\Section::make('Booking Details')->schema([
                     Forms\Components\Split::make([
                         Forms\Components\Split::make([
                             Forms\Components\DatePicker::make('date')
@@ -108,14 +108,15 @@ class BookingResource extends Resource
                     //     ->default(BookingStatus::Tentative)
                     //     ->selectablePlaceholder(false)
                     //     ->required(),
-                    // Forms\Components\Select::make('lead_instructor_id')
-                    //     ->relationship('lead_instructor', 'name')
-                    //     ->helperText('Someone missing? Only instructors who are going to this booking will appear here.')
-                    //     ->requiredIf('status', BookingStatus::Confirmed->value),
-                    // Forms\Components\Textarea::make('lead_instructor_notes')
-                    //     ->helperText('The Lead instructor notes will only be visible to the Lead instructor. You can use these to share access arrangements, gate codes, etc.')
-                    //     ->autosize()
-                    //     ->columnSpanFull(),
+                ]),
+                Forms\Components\Section::make('Lead Instructor')->schema([
+                    Forms\Components\Select::make('lead_instructor_id')
+                        ->relationship('lead_instructor', 'name')
+                        // ->helperText('Someone missing? Only instructors who are going to this booking will appear here.')
+                        ->requiredIf('status', BookingStatus::Confirmed->value),
+                    Forms\Components\MarkdownEditor::make('lead_instructor_notes')
+                        ->helperText('These notes will be visible to the Lead instructor. You can use these to share access arrangements, gate codes, etc.')
+                        ->columnSpanFull(),
                 ]),
             ]);
     }
@@ -124,24 +125,44 @@ class BookingResource extends Resource
     {
         return $infolist
             ->schema([
-                Infolists\Components\Section::make()
-                    ->schema([
-                        Infolists\Components\TextEntry::make('status')
-                            ->hiddenLabel()
-                            ->badge(),
-                        Infolists\Components\TextEntry::make('when')
-                            ->state(fn (Booking $record) => __(':date from :start_time to :end_time (:duration)', [
-                                'date' => $record->start_at->timezone($record->timezone)->toFormattedDayDateString(),
-                                'start_time' => $record->start_at->timezone($record->timezone)->format('H:i'),
-                                'end_time' => $record->end_at->timezone($record->timezone)->format('H:i'),
-                                'duration' => $record->start_at->diffAsCarbonInterval($record->end_at),
-                            ])),
-                        Infolists\Components\TextEntry::make('location'),
-                        Infolists\Components\TextEntry::make('activity'),
-                        Infolists\Components\TextEntry::make('group_name'),
-                        Infolists\Components\TextEntry::make('notes')
-                            ->markdown(),
-                    ]),
+                Infolists\Components\Split::make([
+                    Infolists\Components\Section::make('Booking Details')
+                        ->icon(fn (Booking $record) => $record->status->getIcon())
+                        ->iconColor(fn (Booking $record) => $record->status->getColor())
+                        ->schema([
+                            Infolists\Components\TextEntry::make('status')
+                                ->hiddenLabel()
+                                ->badge(),
+                            Infolists\Components\TextEntry::make('when')
+                                ->state(fn (Booking $record) => __(':date from :start_time to :end_time (:duration)', [
+                                    'date' => $record->start_at->timezone($record->timezone)->toFormattedDayDateString(),
+                                    'start_time' => $record->start_at->timezone($record->timezone)->format('H:i'),
+                                    'end_time' => $record->end_at->timezone($record->timezone)->format('H:i'),
+                                    'duration' => $record->start_at->diffAsCarbonInterval($record->end_at),
+                                ])),
+                            Infolists\Components\TextEntry::make('location'),
+                            Infolists\Components\TextEntry::make('activity'),
+                            Infolists\Components\TextEntry::make('group_name')
+                                ->label('Group'),
+                            Infolists\Components\TextEntry::make('notes')
+                                ->markdown(),
+                        ]),
+                    Infolists\Components\Group::make([
+                        Infolists\Components\Section::make('Lead Instructor')
+                            ->visible(fn (Booking $record) => filled($record->lead_instructor_id))
+                            ->schema([
+                                Infolists\Components\TextEntry::make('lead_instructor.name')
+                                    ->hiddenLabel(),
+                            ]),
+                        Infolists\Components\Section::make('Guest List')
+                            ->schema([
+                                Infolists\Components\TextEntry::make('guest-list')
+                                    ->hiddenLabel()
+                                    ->default('No attendees'),
+                            ])
+                            ->collapsed(),
+                    ])->grow(false),
+                ])->columnSpanFull(),
             ]);
     }
 
