@@ -79,7 +79,7 @@ class Booking extends Model
     public function summary(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->activity.' - '.localDate($this->start_at, $this->timezone)->toFormattedDayDateString()
+            get: fn () => $this->activity.' - '.$this->start_at->timezone($this->timezone)->toFormattedDayDateString()
         );
     }
 
