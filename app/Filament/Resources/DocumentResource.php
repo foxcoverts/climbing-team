@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DocumentResource\Pages;
 use App\Models\Document;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
@@ -59,13 +61,29 @@ class DocumentResource extends Resource
                     ->icon('heroicon-m-arrow-down-tray')
                     ->action(fn (Document $record) => Storage::response($record->file_path, $record->file_name)),
             ])
-            ->recordAction('download');
+            ->recordAction('download')
+            ->recordUrl(null);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\Section::make()->schema([
+                    Infolists\Components\TextEntry::make('title'),
+                    Infolists\Components\TextEntry::make('category'),
+                    Infolists\Components\TextEntry::make('description')
+                        ->markdown()
+                        ->columnSpanFull(),
+                ]),
+            ]);
     }
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListDocuments::route('/'),
+            'view' => Pages\ViewDocument::route('/{record}'),
         ];
     }
 }
