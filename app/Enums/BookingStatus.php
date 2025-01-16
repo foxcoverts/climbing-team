@@ -18,7 +18,7 @@ enum BookingStatus: string implements HasColor, HasIcon, HasLabel
         return match ($this) {
             self::Confirmed => Color::Green,
             self::Tentative => Color::Yellow,
-            self::Cancelled => Color::Gray,
+            self::Cancelled => Color::Red,
         };
     }
 

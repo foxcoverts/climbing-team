@@ -1,5 +1,8 @@
 <?php
 
+use App\Enums\BookingAttendeeStatus;
+use App\Enums\BookingStatus;
+use App\Enums\CommentNotificationOption;
 use App\Enums\GirlguidingScheme;
 use App\Enums\MountainTrainingAward;
 use App\Enums\ScoutPermitActivity;
@@ -7,19 +10,20 @@ use App\Enums\ScoutPermitCategory;
 use App\Enums\ScoutPermitType;
 
 return [
-    'attendee' => [
-        'status' => [
-            'accepted' => 'Going',
-            'tentative' => 'Maybe',
-            'declined' => 'Can\'t go',
-            'needs-action' => 'Invited',
-        ],
-    ],
     'booking' => [
+        'attendee' => [
+            'status' => [
+                BookingAttendeeStatus::Accepted->value => 'Going',
+                BookingAttendeeStatus::Tentative->value => 'Maybe',
+                BookingAttendeeStatus::Declined->value => 'Can\'t go',
+                BookingAttendeeStatus::NeedsAction->value => 'Invited',
+            ],
+        ],
         'status' => [
-            'confirmed' => 'Confirmed',
-            'tentative' => 'Tentative',
-            'cancelled' => 'Cancelled',
+            'new' => 'New',
+            BookingStatus::Tentative->value => 'Tentative',
+            BookingStatus::Confirmed->value => 'Confirmed',
+            BookingStatus::Cancelled->value => 'Cancelled',
         ],
     ],
     'girlguiding' => [
@@ -39,10 +43,10 @@ return [
     ],
     'notification' => [
         'comment-option' => [
-            'all' => 'All',
-            'reply' => 'Replies',
-            'leader' => 'Lead Instructor',
-            'none' => 'None',
+            CommentNotificationOption::All->value => 'All',
+            CommentNotificationOption::Reply->value => 'Replies',
+            CommentNotificationOption::Leader->value => 'Lead Instructor',
+            CommentNotificationOption::None->value => 'None',
         ],
     ],
     'qualification' => [

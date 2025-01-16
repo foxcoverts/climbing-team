@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\Admin\Resources\BookingResource\Pages\Concerns;
 
+use App\Enums\BookingStatus;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 
@@ -45,10 +46,17 @@ trait MutatesFormData
             }
         }
 
+        if (data_get($data, 'confirm', false)) {
+            $data['status'] = BookingStatus::Confirmed->value;
+        }
+        if (data_get($data, 'restore', false)) {
+            $data['status'] = BookingStatus::Tentative->value;
+        }
+
         return [
             'start_at' => $start_at,
             'end_at' => $end_at,
-            ...Arr::except($data, ['date', 'start_time', 'end_time']),
+            ...Arr::except($data, ['date', 'start_time', 'end_time', 'confirm', 'restore']),
         ];
     }
 }

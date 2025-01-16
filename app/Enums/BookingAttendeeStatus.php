@@ -39,7 +39,7 @@ enum BookingAttendeeStatus: string implements HasIcon, HasLabel
 
     public function getLabel(): ?string
     {
-        return __('app.attendee.status.'.$this->value);
+        return __('app.booking.attendee.status.'.$this->value);
     }
 
     /**
