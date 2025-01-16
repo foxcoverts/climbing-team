@@ -5,10 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\KeyResource\Pages;
 use App\Filament\Resources\KeyResource\Tables\Actions\TransferAction;
 use App\Models\Key;
+use Filament\Facades\Filament;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use RalphJSmit\Filament\Activitylog;
 
@@ -53,6 +57,16 @@ class KeyResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist->schema([
+            Infolists\Components\Section::make()->schema([
+                Infolists\Components\TextEntry::make('name'),
+                Infolists\Components\TextEntry::make('holder.name'),
+            ]),
+        ]);
+    }
+
     public static function getEloquentQuery(): Eloquent\Builder
     {
         return parent::getEloquentQuery()
@@ -69,10 +83,20 @@ class KeyResource extends Resource
         static::authorize('viewOwn');
     }
 
+    public static function canView(Model $record): bool
+    {
+        if ($record->holder_id === Filament::auth()->user()->id) {
+            return static::can('view', $record);
+        }
+
+        return false;
+    }
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListKeys::route('/'),
+            'view' => Pages\ViewKey::route('/{record}'),
         ];
     }
 }

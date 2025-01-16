@@ -3,9 +3,11 @@
 namespace App\Providers\Filament;
 
 use App\Enums\Accreditation;
+use App\Filament\Clusters\Admin;
 use App\Models\Key;
 use App\Models\NewsPost;
 use App\Models\User;
+use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -147,35 +149,69 @@ class TimelineProvider extends ServiceProvider
             return null;
         }
 
-        if (class_exists(\Filament\Facades\Filament::class) && ($panel = \Filament\Facades\Filament::getCurrentPanel())) {
-            /** @var \Filament\Resources\Resource $modelResource */
-            $modelResource = $panel->getModelResource($record);
+        $getRecordUrl = fn ($resource) => $resource::hasPage('view') && $resource::canView($record)
+            ? $resource::getUrl('view', ['record' => $record])
+            : ($resource::hasPage('edit') && $resource::canEdit($record)
+            ? $resource::getUrl('edit', ['record' => $record])
+            : null);
 
-            if ($modelResource && ($modelResource::hasPage('view') || $modelResource::hasPage('edit'))) {
-                return $modelResource::hasPage('view') && $modelResource::canView($record)
-                    ? $modelResource::getUrl('view', ['record' => $record])
-                    : ($modelResource::hasPage('edit') && $modelResource::canEdit($record) ? $modelResource::getUrl('edit', ['record' => $record]) : null);
-            }
-        }
-
-        return null;
+        return $this->withModelResource($record, $getRecordUrl, [
+            fn ($resource) => ($resource::getCluster() === Admin::class),
+            true,
+        ]);
     }
 
-    public function getRecordLabel(string $recordClass, ?Model $record = null): ?string
+    protected function getRecordLabel(string $recordClass, ?Model $record = null): ?string
     {
-        $modelLabel = null;
+        $modelLabel = $this->withModelResource($recordClass ?? $record, fn ($resource) => $resource::getModelLabel(), [
+            fn ($resource): bool => $resource::getCluster() === Admin::class,
+            true,
+        ], fn (): string => \Filament\Support\get_model_label($recordClass ?? $record));
+
+        return str($modelLabel)->lower();
+    }
+
+    /**
+     * Walk through the resources for the given model and apply the callback, returning the first non-null value.
+     *
+     * @param  array  $filters  Additional filter that can be applied to check resource validity. If multiple filters are given then the resources are looped through again.
+     * @param  mixed  $default  Default value (or callback) if all resources return null, or no resources are found.
+     */
+    protected function withModelResource(string|Model $model, Closure $callback, Closure|array $filters = [], mixed $default = null): mixed
+    {
+        if ($model instanceof Model) {
+            $model = $model::class;
+        }
+        if (is_callable($filters)) {
+            $filters = [$filters];
+        } elseif (empty($filters)) {
+            $filters = [true];
+        }
 
         if (class_exists(\Filament\Facades\Filament::class) && ($panel = \Filament\Facades\Filament::getCurrentPanel())) {
-            /** @var \Filament\Resources\Resource $modelResource */
-            $modelResource = $panel->getModelResource($recordClass ?? $record);
+            foreach ($filters as $filter) {
+                foreach ($panel->getResources() as $resource) {
+                    if ($model !== $resource::getModel()) {
+                        continue;
+                    }
+                    if (! $resource::canAccess()) {
+                        continue;
+                    }
+                    if (is_callable($filter) && ! $filter($resource)) {
+                        continue;
+                    }
 
-            if ($modelResource) {
-                $modelLabel = $modelResource::getModelLabel();
+                    if (! is_null($value = $callback($resource))) {
+                        return $value;
+                    }
+                }
             }
         }
 
-        $modelLabel ??= \Filament\Support\get_model_label($recordClass ?? $record);
+        if (is_callable($default)) {
+            return $default();
+        }
 
-        return str($modelLabel)->lower();
+        return $default;
     }
 }
