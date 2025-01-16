@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Enums\Accreditation;
 use App\Filament\Clusters\Admin;
+use App\Models\Booking;
 use App\Models\Key;
 use App\Models\NewsPost;
 use App\Models\User;
@@ -50,6 +51,8 @@ class TimelineProvider extends ServiceProvider
             ->attributeLabel('author_id', 'author', NewsPost::class)
             ->attributeValue('holder_id', fn ($value) => User::find($value)?->getFilamentName(), Key::class)
             ->attributeLabel('holder_id', 'holder', Key::class)
+            ->attributeValue('lead_instructor_id', fn ($value) => User::find($value)?->getFilamentName(), Booking::class)
+            ->attributeLabel('lead_instructor_id', 'lead instructor')
             ->causerUrl(fn (?User $causer) => $this->getRecordUrl($causer))
             ->eventDescription('activated', function (Activity|ActivityModel $activity, ?string $causerName): string|HtmlString {
                 if (! $activity->causer || $activity->subject->is($activity->causer)) {
