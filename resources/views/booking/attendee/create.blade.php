@@ -28,7 +28,7 @@
                                 <x-select-input id="status" name="status" class="mt-1 block" required
                                     :value="old('status', BookingAttendeeStatus::Accepted)" x-model.fill="form.status">
                                     <x-select-input.enum :options="BookingAttendeeStatus::class" :except="BookingAttendeeStatus::NeedsAction"
-                                        lang="app.attendee.status.:value" />
+                                        lang="app.booking.attendee.status.:value" />
                                 </x-select-input>
                                 <x-input-error class="mt-2" :messages="$errors->get('status')" />
                                 <p class="text-sm pt-2">
