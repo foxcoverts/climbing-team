@@ -7,6 +7,7 @@ use App\Casts\AsTimezone;
 use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
 use Carbon\Carbon;
+use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -16,10 +17,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-class Booking extends Model
+class Booking extends Model implements HasName
 {
-    use Concerns\HasSequence, Concerns\HasUid, HasFactory, HasUlids;
+    use Concerns\HasSequence, Concerns\HasUid, HasFactory, HasUlids, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -62,6 +65,29 @@ class Booking extends Model
         'sequence' => AsSequence::class,
         'timezone' => AsTimezone::class,
     ];
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array<int, string>
+     */
+    protected $with = [
+        'attendees',
+    ];
+
+    public function getFilamentName(): string
+    {
+        return $this->summary;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->useAttributeRawValues(['timezone'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     /**
      * The attributes that cause the `sequence` to increase.
