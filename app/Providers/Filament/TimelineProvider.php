@@ -30,10 +30,15 @@ class TimelineProvider extends ServiceProvider
                 'activated' => 'heroicon-o-check',
                 'kitChecked' => 'heroicon-o-document-check',
                 'transferred' => 'heroicon-o-arrows-right-left',
+                'confirmed' => 'heroicon-o-check',
+                'cancelled' => 'heroicon-o-x-mark',
+                'restored' => 'heroicon-o-arrow-uturn-left',
             ])
             ->itemIconColors([
+                'cancelled' => 'danger',
                 'deleted' => 'danger',
                 'activated' => 'success',
+                'confirmed' => 'success',
                 'kitChecked' => 'info',
                 'transferred' => 'info',
             ])

@@ -16,6 +16,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use RalphJSmit\Filament\Activitylog;
 
 class BookingResource extends Resource
 {
@@ -171,27 +172,32 @@ class BookingResource extends Resource
         return $infolist
             ->schema([
                 Infolists\Components\Split::make([
-                    Infolists\Components\Section::make(fn (Booking $record) => __(':Status Booking', [
-                        'status' => $record->status->getLabel(),
-                    ]))
-                        ->icon(fn (Booking $record) => $record->status->getIcon())
-                        ->iconColor(fn (Booking $record) => $record->status->getColor())
-                        ->schema([
-                            Infolists\Components\TextEntry::make('when')
-                                ->state(fn (Booking $record) => __(':date from :start_time to :end_time (:duration)', [
-                                    'date' => $record->start_at->timezone($record->timezone)->toFormattedDayDateString(),
-                                    'start_time' => $record->start_at->timezone($record->timezone)->format('H:i'),
-                                    'end_time' => $record->end_at->timezone($record->timezone)->format('H:i'),
-                                    'duration' => $record->start_at->diffAsCarbonInterval($record->end_at),
-                                ])),
-                            Infolists\Components\TextEntry::make('location'),
-                            Infolists\Components\TextEntry::make('activity'),
-                            Infolists\Components\TextEntry::make('group_name')
-                                ->label('Group'),
-                            Infolists\Components\TextEntry::make('notes')
-                                ->visible(fn (Booking $record) => filled($record->notes))
-                                ->markdown(),
-                        ]),
+                    Infolists\Components\Group::make([
+                        Infolists\Components\Section::make(fn (Booking $record) => __(':Status Booking', [
+                            'status' => $record->status->getLabel(),
+                        ]))
+                            ->icon(fn (Booking $record) => $record->status->getIcon())
+                            ->iconColor(fn (Booking $record) => $record->status->getColor())
+                            ->schema([
+                                Infolists\Components\TextEntry::make('when')
+                                    ->state(fn (Booking $record) => __(':date from :start_time to :end_time (:duration)', [
+                                        'date' => $record->start_at->timezone($record->timezone)->toFormattedDayDateString(),
+                                        'start_time' => $record->start_at->timezone($record->timezone)->format('H:i'),
+                                        'end_time' => $record->end_at->timezone($record->timezone)->format('H:i'),
+                                        'duration' => $record->start_at->diffAsCarbonInterval($record->end_at),
+                                    ])),
+                                Infolists\Components\TextEntry::make('location'),
+                                Infolists\Components\TextEntry::make('activity'),
+                                Infolists\Components\TextEntry::make('group_name')
+                                    ->label('Group'),
+                                Infolists\Components\TextEntry::make('notes')
+                                    ->visible(fn (Booking $record) => filled($record->notes))
+                                    ->markdown(),
+                            ]),
+                        Activitylog\Infolists\Components\Timeline::make()
+                            ->label('Activity Log')
+                            ->columnSpanFull(),
+                    ]),
                     Infolists\Components\Group::make([
                         Infolists\Components\Section::make('Lead Instructor')
                             ->visible(fn (Booking $record) => filled($record->lead_instructor_id))
