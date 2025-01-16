@@ -84,6 +84,7 @@ class Booking extends Model implements HasName
     {
         return LogOptions::defaults()
             ->logFillable()
+            ->logExcept(['status'])
             ->useAttributeRawValues(['timezone'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
@@ -100,6 +101,28 @@ class Booking extends Model implements HasName
             'location',
             'status',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::updated(function (Booking $model): void {
+            if ($model->wasChanged('status')) {
+                $event = match ($model->status) {
+                    BookingStatus::Cancelled,
+                    BookingStatus::Confirmed => $model->status->value,
+                    default => 'restored',
+                };
+                activity()
+                    ->event($event)
+                    ->on($model)
+                    ->createdAt($model->updated_at)
+                    ->withProperties([
+                        'old' => ['status' => $model->getOriginal('status')],
+                        'attributes' => ['status' => $model->status],
+                    ])
+                    ->log($event);
+            }
+        });
     }
 
     public function summary(): Attribute
