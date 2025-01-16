@@ -33,7 +33,7 @@
                         @if (isset($attendees[BookingAttendeeStatus::Accepted->value]))
                             <div>
                                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                    {{ __('app.attendee.status.' . BookingAttendeeStatus::Accepted->value) }}
+                                    {{ __('app.booking.attendee.status.' . BookingAttendeeStatus::Accepted->value) }}
                                 </h3>
                                 <ul>
                                     @foreach ($attendees[BookingAttendeeStatus::Accepted->value] as $attendee)
@@ -57,7 +57,7 @@
                             @unless ($status == BookingAttendeeStatus::Accepted->value)
                                 <div>
                                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                        {{ __("app.attendee.status.$status") }}
+                                        {{ __("app.booking.attendee.status.$status") }}
                                     </h3>
                                     <ul>
                                         @foreach ($list as $attendee)

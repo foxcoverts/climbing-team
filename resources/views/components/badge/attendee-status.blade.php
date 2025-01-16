@@ -14,4 +14,4 @@
     },
     'label',
 ])
-<x-badge :$color :$icon :label="__('app.attendee.status.' . $status->value)" {{ $attributes }} />
+<x-badge :$color :$icon :label="__('app.booking.attendee.status.' . $status->value)" {{ $attributes }} />
