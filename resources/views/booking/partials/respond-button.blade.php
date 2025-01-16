@@ -11,7 +11,7 @@
                 @if (is_null($attendance))
                     {{ __('Respond') }}
                 @else
-                    {{ __("app.attendee.status.{$attendance->status->value}") }}
+                    {{ __("app.booking.attendee.status.{$attendance->status->value}") }}
                 @endif
 
                 <x-icon.cheveron.down class="w-4 h-4 fill-current" x-show="!open" />
@@ -40,7 +40,7 @@
                                 class="relative focus:z-30 flex gap-2 flex-nowrap items-center min-w-full px-4 py-2 text-xs uppercase font-semibold tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-25">
                                 <x-icon.outline class="h-4 w-4 fill-current" />
                                 <span class="flex-grow text-left">
-                                    {{ __("app.attendee.status.{$status->value}") }}</span>
+                                    {{ __("app.booking.attendee.status.{$status->value}") }}</span>
                             </button>
                         @endif
                     @endforeach
@@ -66,6 +66,6 @@
     <div
         class="flex gap-2 px-4 py-2 cursor-not-allowed border rounded-md font-semibold text-xs uppercase tracking-widest bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 shadow-sm disabled:opacity-25">
         <x-icon.attendance :$attendance class="w-4 h-4 fill-current" />
-        {{ __("app.attendee.status.{$attendance->status->value}") }}
+        {{ __("app.booking.attendee.status.{$attendance->status->value}") }}
     </div>
 @endif
