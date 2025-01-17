@@ -3,6 +3,7 @@
 namespace App\Filament\Clusters\Admin\Resources\BookingResource\RelationManagers;
 
 use App\Enums\BookingAttendeeStatus;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -91,8 +92,10 @@ class GuestListRelationManager extends RelationManager
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hidden(fn (User $record, RelationManager $livewire) => $record->id === $livewire->getOwnerRecord()->lead_instructor_id),
                 Tables\Actions\DetachAction::make()
+                    ->hidden(fn (User $record, RelationManager $livewire) => $record->id === $livewire->getOwnerRecord()->lead_instructor_id)
                     ->label('Remove'),
             ])
             ->bulkActions([
