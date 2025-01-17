@@ -2,10 +2,11 @@
 
 namespace App\Enums;
 
+use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 
-enum BookingAttendeeStatus: string implements HasIcon, HasLabel
+enum BookingAttendeeStatus: string implements HasColor, HasIcon, HasLabel
 {
     /**
      * Person has confirmed they are available to help with a booking.
@@ -26,6 +27,16 @@ enum BookingAttendeeStatus: string implements HasIcon, HasLabel
      * Person has been invited to the booking but has not responded.
      */
     case NeedsAction = 'needs-action';
+
+    public function getColor(): string|array|null
+    {
+        return match ($this) {
+            self::Accepted => 'success',
+            self::Declined => 'danger',
+            self::Tentative => 'primary',
+            self::NeedsAction => 'gray',
+        };
+    }
 
     public function getIcon(): ?string
     {
