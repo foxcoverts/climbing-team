@@ -51,6 +51,7 @@ class GuestListRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\AttachAction::make('invite')
+                    ->hidden(fn (RelationManager $livewire) => $livewire->getOwnerRecord()->isPast() || $livewire->getOwnerRecord()->isCancelled())
                     ->label('Invite')
                     ->modalHeading('Invite Attendees')
                     ->modalSubmitActionLabel('Invite Attendees')
