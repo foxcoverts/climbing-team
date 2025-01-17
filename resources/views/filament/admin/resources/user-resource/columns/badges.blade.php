@@ -13,7 +13,11 @@
         {{ $getRecord()->role->getLabel() }}
     </x-filament::badge>
 
-    @if ($getRecord()->isUnder18() || $getRecord()->isParent())
+    @if ($getRecord()->isUnder18())
+        <x-filament::badge color="danger">
+            {{ __('Under 18') }}
+        </x-filament::badge>
+    @elseif ($getRecord()->isParent())
         <x-filament::badge :color="$getRecord()->section->getColor()">
             {{ $getRecord()->section->getLabel() }}
         </x-filament::badge>

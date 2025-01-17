@@ -41,4 +41,14 @@ class EditBooking extends EditRecord
                 ->visible(fn (Booking $record) => $record->isCancelled()),
         ];
     }
+
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Booking Details';
+    }
 }

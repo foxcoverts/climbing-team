@@ -19,4 +19,14 @@ class ViewBooking extends ViewRecord
             Actions\EditAction::make(),
         ];
     }
+
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Booking Details';
+    }
 }

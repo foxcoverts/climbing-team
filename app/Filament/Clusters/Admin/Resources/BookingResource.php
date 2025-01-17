@@ -205,13 +205,6 @@ class BookingResource extends Resource
                                 Infolists\Components\TextEntry::make('lead_instructor.name')
                                     ->hiddenLabel(),
                             ]),
-                        Infolists\Components\Section::make('Guest List')
-                            ->schema([
-                                Infolists\Components\TextEntry::make('guest-list')
-                                    ->hiddenLabel()
-                                    ->default('No attendees'),
-                            ])
-                            ->collapsed(),
                     ])->grow(false),
                 ])->columnSpanFull(),
             ]);
@@ -277,7 +270,7 @@ class BookingResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            'guest-list' => BookingResource\RelationManagers\GuestListRelationManager::class,
         ];
     }
 
