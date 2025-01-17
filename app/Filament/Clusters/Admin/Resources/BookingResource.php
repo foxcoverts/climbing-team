@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\Admin\Resources;
 
+use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
 use App\Filament\Clusters\Admin;
 use App\Filament\Clusters\Admin\Resources\BookingResource\Pages;
@@ -155,8 +156,17 @@ class BookingResource extends Resource
                 Forms\Components\Section::make('Lead Instructor')->schema([
                     Forms\Components\Select::make('lead_instructor_id')
                         ->disabled(fn (Forms\Get $get) => $get('status') == BookingStatus::Cancelled->value)
-                        ->relationship('lead_instructor', 'name')
-                        // ->helperText('Someone missing? Only instructors who are going to this booking will appear here.')
+                        ->relationship(
+                            'lead_instructor', 'name',
+                            modifyQueryUsing: fn (Booking $record, Eloquent\Builder $query) => $query->whereIn('id',
+                                $record->attendees()
+                                    ->wherePivot('status', BookingAttendeeStatus::Accepted)
+                                    ->whereHas('qualifications')
+                                    ->select('id')
+                            ),
+                        )
+                        ->helperText('Someone missing? Only instructors who are going to this booking will appear here.')
+                        ->selectablePlaceholder(fn (Forms\Get $get, $state) => blank($state) || $get('status') != BookingStatus::Confirmed->value)
                         ->required(fn (Forms\Get $get) => $get('status') == BookingStatus::Confirmed->value),
 
                     Forms\Components\MarkdownEditor::make('lead_instructor_notes')
