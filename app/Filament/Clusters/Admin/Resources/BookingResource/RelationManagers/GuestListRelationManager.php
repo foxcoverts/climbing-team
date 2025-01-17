@@ -50,6 +50,23 @@ class GuestListRelationManager extends RelationManager
                     ->options(BookingAttendeeStatus::class),
             ])
             ->headerActions([
+                Tables\Actions\AttachAction::make('invite')
+                    ->label('Invite')
+                    ->modalHeading('Invite Attendees')
+                    ->modalSubmitActionLabel('Invite Attendees')
+                    ->attachAnother(false)
+                    ->preloadRecordSelect()
+                    ->recordSelectOptionsQuery(fn (Builder $query) => $query->whereNotNull('email_verified_at'))
+                    ->form(fn (Tables\Actions\AttachAction $action): array => [
+                        $action->getRecordSelect()
+                            ->multiple()
+                            ->prefixIcon('heroicon-o-user')
+                            ->placeholder('Select users')
+                            ->hintAction(fn (Forms\Components\Select $component) => Forms\Components\Actions\Action::make('select all')
+                                ->action(fn () => $component->state(array_keys($component->getOptions())))
+                            )
+                            ->helperText('Someone missing? Only users who have verified their email address will appear here. If you know their availability you may be able to add them directly.'),
+                    ]),
                 Tables\Actions\AttachAction::make()
                     ->label('Add')
                     ->modalHeading('Add Attendee')
