@@ -3,13 +3,17 @@
 namespace App\Filament\Clusters\Admin\Resources\BookingResource\RelationManagers;
 
 use App\Enums\BookingAttendeeStatus;
+use App\Models\Booking;
+use App\Models\BookingAttendance;
 use App\Models\User;
+use App\Notifications\BookingInvite;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Notification;
 
 class GuestListRelationManager extends RelationManager
 {
@@ -59,6 +63,28 @@ class GuestListRelationManager extends RelationManager
                     ->attachAnother(false)
                     ->preloadRecordSelect()
                     ->recordSelectOptionsQuery(fn (Builder $query) => $query->whereNotNull('email_verified_at'))
+                    ->using(function (RelationManager $livewire, array $data) {
+                        /** @var Booking $booking */
+                        $booking = $livewire->getOwnerRecord();
+
+                        if ($booking->isCancelled() || $booking->isPast()) {
+                            return;
+                        }
+
+                        $invites = collect($data['recordId'])
+                            ->reject(fn (string $id) => $booking->attendees->contains('id', $id))
+                            ->flatMap(fn (string $id) => [
+                                $id => [
+                                    'status' => BookingAttendeeStatus::NeedsAction,
+                                    'token' => BookingAttendance::generateToken(),
+                                ],
+                            ]);
+
+                        $booking->attendees()->syncWithoutDetaching($invites);
+                        $booking->load('attendees');
+
+                        Notification::send(User::findMany($invites->keys()), new BookingInvite($booking));
+                    })
                     ->form(fn (Tables\Actions\AttachAction $action): array => [
                         $action->getRecordSelect()
                             ->multiple()
