@@ -4848,17 +4848,17 @@
         },
         {
             "name": "ralphjsmit/laravel-filament-activitylog",
-            "version": "1.8.2",
+            "version": "1.8.5",
             "source": {
                 "type": "git",
                 "url": "git@github.com:ralphjsmit/laravel-filament-activitylog.git",
-                "reference": "b16549862b7f0dc11d59be9ce8fc42f27122482c"
+                "reference": "f8c2ec37d04830b195499ecadf9ea5c300b27e4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://satis.ralphjsmit.com/dist/ralphjsmit/laravel-filament-activitylog/ralphjsmit-laravel-filament-activitylog-b16549862b7f0dc11d59be9ce8fc42f27122482c-zip-bc1670.zip",
-                "reference": "b16549862b7f0dc11d59be9ce8fc42f27122482c",
-                "shasum": "c2153e9bcaa9c3ebbf245e9e3ac243f5ca28c589"
+                "url": "https://satis.ralphjsmit.com/dist/ralphjsmit/laravel-filament-activitylog/ralphjsmit-laravel-filament-activitylog-f8c2ec37d04830b195499ecadf9ea5c300b27e4e-zip-6fe6dd.zip",
+                "reference": "f8c2ec37d04830b195499ecadf9ea5c300b27e4e",
+                "shasum": "95c191df9bf041b4218db7d7de80fca74c4bceed"
             },
             "require": {
                 "filament/forms": "^3.1",
@@ -4913,10 +4913,10 @@
                 "laravel-filament-activitylog"
             ],
             "support": {
-                "source": "https://github.com/ralphjsmit/laravel-filament-activitylog/tree/1.8.2",
+                "source": "https://github.com/ralphjsmit/laravel-filament-activitylog/tree/1.8.5",
                 "issues": "https://github.com/ralphjsmit/laravel-filament-activitylog/issues"
             },
-            "time": "2024-12-26T16:33:31+00:00"
+            "time": "2025-01-18T15:49:15+00:00"
         },
         {
             "name": "ralphjsmit/laravel-filament-onboard",
