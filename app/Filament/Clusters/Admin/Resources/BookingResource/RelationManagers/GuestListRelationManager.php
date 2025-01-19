@@ -60,6 +60,7 @@ class GuestListRelationManager extends RelationManager
                     ->label('Invite')
                     ->modalHeading('Invite Attendees')
                     ->modalSubmitActionLabel('Invite Attendees')
+                    ->successNotificationTitle('Invitation Sent')
                     ->attachAnother(false)
                     ->preloadRecordSelect()
                     ->recordSelectOptionsQuery(fn (Builder $query) => $query->whereNotNull('email_verified_at'))
@@ -99,6 +100,7 @@ class GuestListRelationManager extends RelationManager
                     ->label('Add')
                     ->modalHeading('Add Attendee')
                     ->modalSubmitActionLabel('Add Attendee')
+                    ->successNotificationTitle('Attendee Added')
                     ->attachAnother(false)
                     ->preloadRecordSelect()
                     ->form(fn (Tables\Actions\AttachAction $action): array => [
