@@ -35,7 +35,7 @@ class BookingInvite extends Notification
         if ($notifiable instanceof MustVerifyEmail && ! $notifiable->hasVerifiedEmail()) {
             return [];
         }
-        if ($notifiable->attendance->status === BookingAttendeeStatus::Declined) {
+        if ($this->isAttendanceDeclined($notifiable)) {
             return [];
         }
         if (! NotificationSettings::check($notifiable, $this->booking, static::$notification_setting)) {
@@ -52,5 +52,18 @@ class BookingInvite extends Notification
     {
         return (new (static::$mailable)($this->booking, $notifiable, $this->changes))
             ->to($notifiable->email, $notifiable->name);
+    }
+
+    protected function isAttendanceDeclined(User $notifiable): bool
+    {
+        if (! $notifiable->hasAttribute('attendance')) {
+            $notifiable = $this->booking->attendees()->find($notifiable->id);
+        }
+
+        if ($notifiable->attendance->status === BookingAttendeeStatus::Declined) {
+            return true;
+        }
+
+        return false;
     }
 }
