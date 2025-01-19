@@ -64,14 +64,14 @@ class TimelineProvider extends ServiceProvider
                     return __('Activated their account.');
                 }
 
-                return __('**:causerName** activated the account.', [
+                return str(__('**:causerName** activated the account.', [
                     'causerName' => $this->getRecordLink($activity->causer, $causerName),
-                ]);
+                ]))->inlineMarkdown()->toHtmlString();
             }, User::class)
             ->eventDescription('kitChecked', function (Activity|ActivityModel $activity, ?string $causerName): string|HtmlString {
-                return __('**:causerName** checked the user\'s kit.', [
+                return str(__('**:causerName** checked the user\'s kit.', [
                     'causerName' => $this->getRecordLink($activity->causer, $causerName),
-                ]);
+                ]))->inlineMarkdown()->toHtmlString();
             })
             ->eventDescription('transferred', function (Activity|ActivityModel $activity): string|HtmlString {
                 $changes = [];
@@ -82,7 +82,7 @@ class TimelineProvider extends ServiceProvider
                     $changes[] = 'to **'.$this->getRecordLink($newHolder).'**';
                 }
 
-                return $this->generateEventDescription($activity, implode(' ', $changes));
+                return str($this->generateEventDescription($activity, implode(' ', $changes)))->inlineMarkdown()->toHtmlString();
             }, Key::class)
             ->modifyEventDescriptionUsing(function (string|HtmlString $eventDescription, Activity $activity, string $recordTitle, ?string $causerName, ?string $changesSummary) {
                 $recordTitle = $this->getRecordLink($activity->subject, $recordTitle);
