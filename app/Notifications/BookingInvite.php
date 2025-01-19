@@ -59,7 +59,9 @@ class BookingInvite extends Notification
         if (! $notifiable->hasAttribute('attendance')) {
             $notifiable = $this->booking->attendees()->find($notifiable->id);
         }
-
+        if (! $notifiable) {
+            return true;
+        }
         if ($notifiable->attendance->status === BookingAttendeeStatus::Declined) {
             return true;
         }
