@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Events\KeyTransferred;
+use App\Notifications\KeyTransferredFrom;
+use App\Notifications\KeyTransferredTo;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,6 +45,9 @@ class Key extends Model
                 if ($model->holder->id != $model->holder_id) {
                     $model->load('holder');
                 }
+
+                $from = User::find($model->getOriginal('holder_id'));
+
                 activity()
                     ->on($model)
                     ->createdAt($model->updated_at)
@@ -53,7 +57,9 @@ class Key extends Model
                     ])
                     ->event('transferred')
                     ->log('transferred');
-                event(new KeyTransferred($model, from: User::find($model->getOriginal('holder_id'))));
+
+                $model->holder->notify(new KeyTransferredTo($model, $from));
+                $from->notify(new KeyTransferredFrom($model));
             }
         });
     }
