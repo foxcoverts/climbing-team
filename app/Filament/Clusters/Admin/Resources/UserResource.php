@@ -166,7 +166,9 @@ class UserResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\ViewColumn::make('badges')
-                    ->view('filament.admin.resources.user-resource.columns.badges'),
+                    ->view('filament.resources.user-resource.columns.badges'),
+                Tables\Columns\ViewColumn::make('accreditations')
+                    ->view('filament.resources.user-resource.columns.accreditations'),
             ])
             ->defaultSort('name')
             ->filters([

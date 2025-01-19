@@ -44,7 +44,7 @@ class GuestListRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('name')
                     ->sortable(),
                 Tables\Columns\ViewColumn::make('badges')
-                    ->view('filament.admin.resources.user-resource.columns.badges'),
+                    ->view('filament.resources.user-resource.columns.badges'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
             ])
