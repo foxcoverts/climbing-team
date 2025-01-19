@@ -97,6 +97,7 @@ class GuestListRelationManager extends RelationManager
                             ->helperText('Someone missing? Only users who have verified their email address will appear here. If you know their availability you may be able to add them directly.'),
                     ]),
                 Tables\Actions\AttachAction::make()
+                    ->hidden(fn (RelationManager $livewire) => $livewire->getOwnerRecord()->isCancelled())
                     ->label('Add')
                     ->modalHeading('Add Attendee')
                     ->modalSubmitActionLabel('Add Attendee')
