@@ -7,7 +7,9 @@ use App\Casts\AsTimezone;
 use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
 use Carbon\Carbon;
+use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,10 +17,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-class Booking extends Model
+class Booking extends Model implements HasName
 {
-    use Concerns\HasSequence, Concerns\HasUid, HasFactory, HasUlids;
+    use Concerns\HasSequence, Concerns\HasUid, HasFactory, HasUlids, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -63,6 +67,30 @@ class Booking extends Model
     ];
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array<int, string>
+     */
+    protected $with = [
+        'attendees',
+    ];
+
+    public function getFilamentName(): string
+    {
+        return $this->summary;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logExcept(['status'])
+            ->useAttributeRawValues(['timezone'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    /**
      * The attributes that cause the `sequence` to increase.
      */
     protected function sequenced(): array
@@ -73,6 +101,35 @@ class Booking extends Model
             'location',
             'status',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::updated(function (Booking $model): void {
+            if ($model->wasChanged('status')) {
+                $event = match ($model->status) {
+                    BookingStatus::Cancelled,
+                    BookingStatus::Confirmed => $model->status->value,
+                    default => 'restored',
+                };
+                activity()
+                    ->event($event)
+                    ->on($model)
+                    ->createdAt($model->updated_at)
+                    ->withProperties([
+                        'old' => ['status' => $model->getOriginal('status')],
+                        'attributes' => ['status' => $model->status],
+                    ])
+                    ->log($event);
+            }
+        });
+    }
+
+    public function summary(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->activity.' - '.$this->start_at->timezone($this->timezone)->toFormattedDayDateString()
+        );
     }
 
     public function attendees(): BelongsToMany
