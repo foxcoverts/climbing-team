@@ -2,13 +2,16 @@
 
 namespace App\Filament\Clusters\Admin\Resources\BookingResource\Pages;
 
+use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
 use App\Filament\Clusters\Admin\Resources\BookingResource;
 use App\Filament\Pages\Concerns\HasClusterSidebarNavigation;
 use App\Models\Booking;
+use App\Models\BookingAttendance;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\DB;
 
 class EditBooking extends EditRecord
 {
@@ -29,8 +32,15 @@ class EditBooking extends EditRecord
                 ->icon(BookingStatus::Cancelled->getIcon())
                 ->color(BookingStatus::Cancelled->getColor())
                 ->action(function (Booking $record) {
-                    $record->status = BookingStatus::Cancelled;
-                    $record->save();
+                    DB::transaction(function () use ($record) {
+                        // Remove attendees with outstanding invites
+                        BookingAttendance::where('booking_id', $record->id)
+                            ->where('status', BookingAttendeeStatus::NeedsAction)
+                            ->delete();
+
+                        $record->status = BookingStatus::Cancelled;
+                        $record->save();
+                    });
 
                     Notification::make()
                         ->title('Booking cancelled')
