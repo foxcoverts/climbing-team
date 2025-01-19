@@ -2,11 +2,13 @@
 
 namespace App\Notifications;
 
+use App\Enums\BookingAttendeeStatus;
 use App\Mail\BookingInvite as MailBookingInvite;
 use App\Models\Booking;
 use App\Models\NotificationSettings;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Notifications\Notification;
 
@@ -14,8 +16,13 @@ class BookingInvite extends Notification
 {
     use Queueable;
 
+    protected static string $notification_setting = 'invite_mail';
+
+    protected static string $mailable = MailBookingInvite::class;
+
     public function __construct(
         public Booking $booking,
+        public array $changes = [],
     ) {}
 
     /**
@@ -25,7 +32,13 @@ class BookingInvite extends Notification
      */
     public function via(User $notifiable): array
     {
-        if (! NotificationSettings::check($notifiable, $this->booking, 'invite_mail')) {
+        if ($notifiable instanceof MustVerifyEmail && ! $notifiable->hasVerifiedEmail()) {
+            return [];
+        }
+        if ($notifiable->attendance->status === BookingAttendeeStatus::Declined) {
+            return [];
+        }
+        if (! NotificationSettings::check($notifiable, $this->booking, static::$notification_setting)) {
             return [];
         }
 
@@ -37,7 +50,7 @@ class BookingInvite extends Notification
      */
     public function toMail(User $notifiable): Mailable
     {
-        return (new MailBookingInvite($this->booking, $notifiable))
+        return (new (static::$mailable)($this->booking, $notifiable, $this->changes))
             ->to($notifiable->email, $notifiable->name);
     }
 }

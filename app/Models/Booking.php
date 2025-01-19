@@ -6,6 +6,9 @@ use App\Casts\AsSequence;
 use App\Casts\AsTimezone;
 use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
+use App\Notifications\BookingCancelled;
+use App\Notifications\BookingChanged;
+use App\Notifications\BookingConfirmed;
 use Carbon\Carbon;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Facades\Notification;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -121,6 +125,14 @@ class Booking extends Model implements HasName
                         'attributes' => ['status' => $model->status],
                     ])
                     ->log($event);
+
+                if ($model->isConfirmed()) {
+                    Notification::send($model->attendees, new BookingConfirmed($model, $model->getChanges()));
+                } elseif ($model->isCancelled()) {
+                    Notification::send($model->attendees, new BookingCancelled($model));
+                }
+            } elseif ($model->wasChanged('sequence')) {
+                Notification::send($model->attendees, new BookingChanged($model, $model->getChanges()));
             }
         });
     }
