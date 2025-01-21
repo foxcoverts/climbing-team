@@ -163,10 +163,11 @@ class BookingResource extends Resource
                                     ->wherePivot('status', BookingAttendeeStatus::Accepted)
                                     ->whereHas('qualifications')
                                     ->select('id')
-                            ),
+                            )->orWhere('id', $record->lead_instructor_id),
                         )
                         ->helperText('Someone missing? Only instructors who are going to this booking will appear here.')
                         ->selectablePlaceholder(fn (Forms\Get $get, $state) => blank($state) || $get('status') != BookingStatus::Confirmed->value)
+                        ->disableOptionWhen(fn (Booking $record, string $value) => ! $record->attendees->contains($value))
                         ->required(fn (Forms\Get $get) => $get('status') == BookingStatus::Confirmed->value),
 
                     Forms\Components\MarkdownEditor::make('lead_instructor_notes')
