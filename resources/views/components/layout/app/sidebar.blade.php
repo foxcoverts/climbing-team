@@ -45,9 +45,6 @@
         @can('viewAny', [App\Models\Booking::class, BookingStatus::Cancelled])
             <x-sidebar.link route='booking.cancelled' :label="__('Cancelled')" icon="calendar.cross" />
         @endcan
-        @can('create', App\Models\Booking::class)
-            <x-sidebar.link route='booking.create' :label="__('Add Booking')" icon="calendar.plus" />
-        @endcan
     </x-sidebar.group>
 
     <x-sidebar.group :heading="__('Manage')">

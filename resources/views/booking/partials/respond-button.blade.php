@@ -25,13 +25,6 @@
                     @csrf
                     @method('PUT')
                 </form>
-                @can('delete', $attendance)
-                    <form method="post" action="{{ route('booking.attendee.destroy', [$booking, $currentUser]) }}"
-                        id="remove-attendee" x-on:submit="setTimeout(() => submitted = true, 0)">
-                        @csrf
-                        @method('delete')
-                    </form>
-                @endcan
                 <div class="divide-y divide-gray-300 dark:divide-gray-500">
                     @foreach ([BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative, BookingAttendeeStatus::Declined] as $status)
                         @if ($status != $attendance?->status)

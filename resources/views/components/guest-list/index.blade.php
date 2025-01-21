@@ -67,14 +67,6 @@
                 ])
             </div>
             <div class="flex flex-wrap gap-4">{{-- flex-group --}}
-                @if ($booking->isFuture() && !$booking->isCancelled())
-                    @can('create', [BookingAttendance::class, $booking])
-                        <x-button.primary :href="route('booking.attendee.invite', $booking)" :label="__('Invite')" />
-
-                        <x-button.primary :href="route('booking.attendee.create', $booking)" :label="__('Add')" />
-                    @endcan
-                @endif
-
                 @can('rollcall', [BookingAttendance::class, $booking])
                     <x-button.primary :href="route('booking.attendee.index', $booking)" :label="__('Roll call')" />
                 @endcan
