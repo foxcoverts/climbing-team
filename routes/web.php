@@ -5,12 +5,10 @@ use App\Filament\Pages\PrivacyPolicy;
 use App\Filament\Resources\NewsPostResource\Pages\ViewNewsPost;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
-use App\Http\Controllers\BookingAttendeeInviteController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
-use App\Http\Controllers\BookingNotificationsController;
 use App\Http\Controllers\BookingPreviewController;
 use App\Http\Controllers\BookingRelatedController;
 use App\Http\Controllers\BookingRotaController;
@@ -22,8 +20,6 @@ use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TodoIcsController;
-use App\Http\Controllers\UserBookingController;
-use App\Http\Controllers\UserBookingInviteController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
@@ -42,13 +38,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('booking/{booking}/attendance', 'update')->name('booking.attendance.update');
     });
 
-    Route::controller(BookingAttendeeInviteController::class)->group(function () {
-        Route::get('booking/{booking}/attendee/invite', 'create')->name('booking.attendee.invite');
-        Route::post('booking/{booking}/attendee/invite', 'store')->name('booking.attendee.invite.store');
-    });
-
     Route::patch('booking/{booking}/attendee', [BookingAttendeeController::class, 'updateMany'])->name('booking.attendee.updateMany');
-    Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->except('edit');
+    Route::resource('booking.attendee', BookingAttendeeController::class)->scoped()->only('index', 'show');
 
     Route::resource('booking.related', BookingRelatedController::class)->scoped(['bookings'])->except('show', 'edit', 'update');
 
@@ -56,13 +47,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('booking/{booking}/email', BookingEmailController::class)->name('booking.email');
 
-    Route::singleton('booking.notifications', BookingNotificationsController::class)->destroyable()->except('edit');
-
     Route::get('booking/{booking}/share', BookingShareController::class)->name('booking.share');
 
     Route::get('booking/{booking}.ics', [BookingIcsController::class, 'show'])->name('booking.show.ics');
-
-    Route::resource('booking', BookingController::class)->except('index', 'show');
 
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
@@ -83,14 +70,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('todo', TodoController::class);
 
-    Route::middleware('password.confirm')->group(function () {
-        Route::controller(UserBookingInviteController::class)->group(function () {
-            Route::get('user/{user}/booking/invite', 'create')->name('user.booking.invite');
-            Route::post('user/{user}/booking/invite', 'store')->name('user.booking.invite.store');
-        });
-        Route::get('user/{user}/booking', UserBookingController::class)->name('user.booking.index');
-        Route::resource('user', UserController::class)->only('index', 'show');
-    });
+    Route::resource('user', UserController::class)->only('index', 'show');
 });
 
 Route::get('booking/{booking}/preview', BookingPreviewController::class);

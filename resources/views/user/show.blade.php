@@ -199,12 +199,6 @@
                     </div>
                 </div>
             </div>
-
-            <footer class="mt-4 flex flex-wrap items-start gap-4">
-                @can('manage', \App\Models\Booking::class)
-                    <x-button.secondary :href="route('user.booking.index', $user)" :label="__('Bookings')" />
-                @endcan
-            </footer>
         </div>
     </section>
 </x-layout.app>
