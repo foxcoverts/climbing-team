@@ -9,6 +9,7 @@ use App\Enums\BookingStatus;
 use App\Notifications\BookingCancelled;
 use App\Notifications\BookingChanged;
 use App\Notifications\BookingConfirmed;
+use App\Notifications\BookingInvite;
 use Carbon\Carbon;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Builder;
@@ -109,19 +110,51 @@ class Booking extends Model implements HasName
 
     protected static function booted(): void
     {
+        static::updating(function (Booking $model): void {
+            if ($model->status === BookingStatus::Cancelled && $model->isDirty('status')) {
+                $model->lead_instructor_id = null;
+            }
+        });
+
         static::updated(function (Booking $model): void {
             if ($model->wasChanged('status')) {
-                $event = match ($model->status) {
-                    BookingStatus::Cancelled,
-                    BookingStatus::Confirmed => $model->status->value,
-                    default => 'restored',
-                };
+                $originalStatus = $model->getOriginal('status');
+
+                if ($originalStatus === BookingStatus::Cancelled) {
+                    $event = 'restored';
+
+                    $invites = $model->attendees->mapWithKeys(fn (User $attendee): array => match (true) {
+                        // Anyone who previously couldn't go probably still can't go
+                        $attendee->attendance->status === BookingAttendeeStatus::Declined => [],
+                        // Re-invite anyone with a verified email address
+                        $attendee->hasVerifiedEmail() => [
+                            $attendee->id => [
+                                'status' => BookingAttendeeStatus::NeedsAction,
+                                'token' => BookingAttendance::generateToken(),
+                            ],
+                        ],
+                        // Mark anyone else as 'Maybe'
+                        default => [
+                            $attendee->id => [
+                                'status' => BookingAttendeeStatus::Tentative,
+                            ],
+                        ]
+                    });
+
+                    $model->attendees()->syncWithoutDetaching($invites);
+                    $model->load('attendees');
+
+                    Notification::send($model->attendees, new BookingInvite($model));
+                } else {
+                    $event = $model->status->value;
+                }
+
                 activity()
                     ->event($event)
                     ->on($model)
                     ->createdAt($model->updated_at)
                     ->withProperties([
-                        'old' => ['status' => $model->getOriginal('status')],
+                        'old' => ['status' => $originalStatus],
                         'attributes' => ['status' => $model->status],
                     ])
                     ->log($event);

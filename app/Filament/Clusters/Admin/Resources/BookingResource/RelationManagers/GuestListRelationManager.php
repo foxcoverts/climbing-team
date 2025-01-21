@@ -122,9 +122,9 @@ class GuestListRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->hidden(fn (User $record, RelationManager $livewire) => $record->id === $livewire->getOwnerRecord()->lead_instructor_id),
+                    ->hidden(fn (User $record, RelationManager $livewire) => $record->status === BookingAttendeeStatus::Accepted && $record->id === $livewire->getOwnerRecord()->lead_instructor_id),
                 Tables\Actions\DetachAction::make()
-                    ->hidden(fn (User $record, RelationManager $livewire) => $record->id === $livewire->getOwnerRecord()->lead_instructor_id)
+                    ->hidden(fn (User $record, RelationManager $livewire) => $record->status === BookingAttendeeStatus::Accepted && $record->id === $livewire->getOwnerRecord()->lead_instructor_id)
                     ->label('Remove'),
             ])
             ->bulkActions([
