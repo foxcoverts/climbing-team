@@ -3,10 +3,12 @@
 namespace App\Filament\Clusters\Admin\Resources\BookingResource\RelationManagers;
 
 use App\Enums\BookingAttendeeStatus;
+use App\Enums\BookingLeadInstructor;
 use App\Models\Booking;
 use App\Models\BookingAttendance;
 use App\Models\User;
 use App\Notifications\BookingInvite;
+use Awcodes\FilamentBadgeableColumn\Components\BadgeableColumn;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -41,12 +43,17 @@ class GuestListRelationManager extends RelationManager
             ->modifyQueryUsing(fn (Builder $query) => $query->with('keys', 'scoutPermits'))
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->sortable(),
+                BadgeableColumn::make('name')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->state(fn (User $record) => match (true) {
+                        $record->attendance->isLeadInstructor() => BookingLeadInstructor::LeadInstructor,
+                        default => $record->status,
+                    })
+                    ->badge(),
                 Tables\Columns\ViewColumn::make('badges')
                     ->view('filament.resources.user-resource.columns.badges'),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge(),
             ])
             ->defaultSort('name', 'asc')
             ->filters([
