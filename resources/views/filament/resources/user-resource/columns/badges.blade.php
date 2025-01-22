@@ -1,10 +1,4 @@
 <div class="flex gap-1.5 flex-wrap">
-    @unless ($getRecord()->isActive())
-        <x-filament::badge color="gray">
-            {{ __('Inactive') }}
-        </x-filament::badge>
-    @endunless
-
     <x-filament::badge :color="$getRecord()->role->getColor()">
         {{ $getRecord()->role->getLabel() }}
     </x-filament::badge>
