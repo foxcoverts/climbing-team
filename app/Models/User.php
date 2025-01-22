@@ -9,6 +9,7 @@ use App\Enums\Role;
 use App\Enums\Section;
 use App\Notifications\SetupAccount;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -112,6 +113,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function allQualifications(): HasMany
     {
         return $this->hasMany(Qualification::class);
+    }
+
+    /**
+     * Sort users by name.
+     */
+    public function scopeOrdered(Builder $bookings): void
+    {
+        $bookings->orderBy('name');
     }
 
     public static function findByEmail(string $email): ?static
