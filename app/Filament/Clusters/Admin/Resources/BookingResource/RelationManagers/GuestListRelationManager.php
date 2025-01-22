@@ -47,6 +47,12 @@ class GuestListRelationManager extends RelationManager
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with('keys', 'scoutPermits'))
             ->recordTitleAttribute('name')
+            ->groups([
+                Tables\Grouping\Group::make('status')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+            ])
+            ->defaultGroup('status')
             ->columns([
                 BadgeableColumn::make('name')
                     ->sortable()
