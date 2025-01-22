@@ -10,6 +10,8 @@ use App\Filament\Clusters\Admin\Resources\UserResource\RelationManagers;
 use App\Filament\Forms\Components as AppComponents;
 use App\Filament\Infolists\Components\GDPRSection;
 use App\Models\User;
+use Awcodes\FilamentBadgeableColumn\Components\Badge;
+use Awcodes\FilamentBadgeableColumn\Components\BadgeableColumn;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
 use Filament\Infolists;
@@ -162,7 +164,13 @@ class UserResource extends Resource
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with('keys', 'scoutPermits'))
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                BadgeableColumn::make('name')
+                    ->suffixBadges([
+                        Badge::make('active')
+                            ->label('Inactive')
+                            ->color('danger')
+                            ->hidden(fn (User $record): bool => $record->isActive()),
+                    ])
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\ViewColumn::make('badges')

@@ -15,6 +15,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "awcodes/filament-badgeable-column": "^2.3",
         "eluceo/ical": "^2.13",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.6",
