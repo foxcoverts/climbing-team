@@ -8,10 +8,12 @@ use App\Filament\Clusters\Admin;
 use App\Filament\Clusters\Admin\Resources\BookingResource\Pages;
 use App\Filament\Forms\Components as AppComponents;
 use App\Models\Booking;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
+use Filament\Support\Enums\VerticalAlignment;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent;
@@ -225,31 +227,48 @@ class BookingResource extends Resource
     {
         return $table
             ->defaultSort('start_at', 'asc')
-            ->columns([
-                Tables\Columns\TextColumn::make('date')
-                    ->state(fn (Booking $record) => $record->start_at)
-                    ->date()
-                    ->timezone(fn (Booking $record) => $record->timezone),
-                Tables\Columns\TextColumn::make('start_at')
-                    ->time('H:i')
-                    ->timezone(fn (Booking $record) => $record->timezone)
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('end_at')
-                    ->time('H:i')
-                    ->timezone(fn (Booking $record) => $record->timezone)
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge(),
-                Tables\Columns\TextColumn::make('location')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('activity')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('group_name')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+            ->defaultGroup('start_at')
+            ->groupingSettingsHidden()
+            ->groups([
+                Tables\Grouping\Group::make('start_at')
+                    ->titlePrefixedWithLabel(false)
+                    ->date(),
             ])
+            ->columns([
+                Tables\Columns\TextColumn::make('start_at')
+                    ->verticalAlignment(VerticalAlignment::Start)
+                    ->label('Start')
+                    ->time('H:i')
+                    ->timezone(fn (Booking $record) => $record->timezone),
+                Tables\Columns\TextColumn::make('end_at')
+                    ->verticalAlignment(VerticalAlignment::Start)
+                    ->label('End')
+                    ->time('H:i')
+                    ->timezone(fn (Booking $record) => $record->timezone),
+                Tables\Columns\TextColumn::make('description')
+                    ->verticalAlignment(VerticalAlignment::Start)
+                    ->state(fn (Booking $booking) => __(':activity for :group at :location', [
+                        'activity' => $booking->activity,
+                        'group' => $booking->group_name,
+                        'location' => $booking->location,
+                    ]))
+                    ->extraAttributes([
+                        'class' => 'text-wrap',
+                    ]),
+                Tables\Columns\TextColumn::make('status')
+                    ->verticalAlignment(VerticalAlignment::Start)
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->badge(),
+                Tables\Columns\TextColumn::make('attendance')
+                    ->verticalAlignment(VerticalAlignment::Start)
+                    ->badge()
+                    ->state(fn (Booking $record) => $record
+                        ->attendees->find(Filament::auth()->user())
+                        ?->attendance
+                        ?->status
+                    ),
+            ])
+            ->recordClasses(['actions-align-top'])
             ->emptyStateHeading(fn ($livewire) => __('No :tab bookings', [
                 'tab' => $livewire->activeTab,
             ]))
@@ -267,8 +286,10 @@ class BookingResource extends Resource
                     ),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ]),
             ])
             ->bulkActions([]);
     }
