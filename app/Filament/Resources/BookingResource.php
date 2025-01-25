@@ -49,6 +49,16 @@ class BookingResource extends Resource
         return [];
     }
 
+    public static function canViewAny(): bool
+    {
+        return static::can('viewOwn');
+    }
+
+    public static function authorizeViewAny(): void
+    {
+        static::authorize('viewOwn');
+    }
+
     public static function getPages(): array
     {
         return [

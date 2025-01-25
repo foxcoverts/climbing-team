@@ -7,6 +7,7 @@ use App\Enums\BookingStatus;
 use App\Filament\Clusters\Admin;
 use App\Filament\Clusters\Admin\Resources\BookingResource\Pages;
 use App\Filament\Forms\Components as AppComponents;
+use App\Filament\Resources\BookingResource\Pages\ListBookings;
 use App\Models\Booking;
 use Filament\Facades\Filament;
 use Filament\Forms;
@@ -257,15 +258,22 @@ class BookingResource extends Resource
                     ]),
                 Tables\Columns\TextColumn::make('status')
                     ->verticalAlignment(VerticalAlignment::Start)
-                    ->visible(fn (ListRecords $livewire): bool => ($livewire->activeTab ?? 'all') === 'all')
+                    ->visible(fn (ListRecords $livewire): bool => match ($livewire::class) {
+                        Pages\ListBookings::class => $livewire->activeTab === 'all',
+                        default => true,
+                    })
                     ->badge(),
                 Tables\Columns\TextColumn::make('attendance')
-                    ->verticalAlignment(VerticalAlignment::Start)
-                    ->badge()
                     ->state(fn (Booking $record) => $record
                         ->attendees->find(Filament::auth()->user())
                         ?->attendance->status
-                    ),
+                    )
+                    ->verticalAlignment(VerticalAlignment::Start)
+                    ->visible(fn (ListRecords $livewire): bool => match ($livewire::class) {
+                        ListBookings::class => $livewire->activeTab === 'all',
+                        default => false,
+                    })
+                    ->badge(),
             ])
             ->recordClasses(['actions-align-top'])
             ->emptyStateHeading(fn ($livewire) => __('No :tab bookings', [
