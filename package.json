@@ -23,7 +23,7 @@
         "alpinejs": "^3.14",
         "autoprefixer": "^10.4",
         "axios": "^1.7",
-        "laravel-vite-plugin": "^1.1",
+        "laravel-vite-plugin": "^1.2",
         "libphonenumber-js": "^1.11",
         "moment": "^2.30",
         "postcss": "^8.5",
