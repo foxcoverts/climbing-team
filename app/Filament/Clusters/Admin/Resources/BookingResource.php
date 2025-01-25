@@ -156,7 +156,11 @@ class BookingResource extends Resource
                             ->columnSpanFull(),
                     ]),
                 Forms\Components\Section::make('Lead Instructor')->schema([
+                    Forms\Components\Placeholder::make('lead_instructor')
+                        ->visible(fn (?Booking $record): bool => is_null($record))
+                        ->content('After you have created this booking, you will be able to select a lead instructor from the attendees.'),
                     Forms\Components\Select::make('lead_instructor_id')
+                        ->hidden(fn (?Booking $record): bool => is_null($record))
                         ->disabled(fn (Forms\Get $get) => $get('status') == BookingStatus::Cancelled->value)
                         ->relationship(
                             'lead_instructor', 'name',
