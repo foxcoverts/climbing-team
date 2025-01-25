@@ -26,15 +26,23 @@ class ListBookings extends ListRecords
 
     public function getTabs(): array
     {
-        return collect(BookingStatus::cases())
-            ->mapWithKeys(fn (BookingStatus $status) => [
-                $status->value => Tab::make()
-                    ->label($status->getLabel())
-                    ->icon($status->getIcon())
-                    ->badge(fn () => Booking::future()->where('status', $status->value)->count())
-                    ->badgeColor($status->getColor())
-                    ->modifyQueryUsing(fn (Eloquent\Builder $query) => $query->where('status', $status->value)),
-            ])
-            ->all();
+        return [
+            'all' => Tab::make()->label('All'),
+            ...collect(BookingStatus::cases())
+                ->mapWithKeys(fn (BookingStatus $status) => [
+                    $status->value => Tab::make()
+                        ->label($status->getLabel())
+                        ->icon($status->getIcon())
+                        ->badge(fn () => Booking::future()->where('status', $status->value)->count())
+                        ->badgeColor($status->getColor())
+                        ->modifyQueryUsing(fn (Eloquent\Builder $query) => $query->where('status', $status->value)),
+                ])
+                ->all(),
+        ];
+    }
+
+    public function getDefaultActiveTab(): string|int|null
+    {
+        return BookingStatus::Confirmed->value;
     }
 }

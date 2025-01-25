@@ -257,7 +257,7 @@ class BookingResource extends Resource
                     ]),
                 Tables\Columns\TextColumn::make('status')
                     ->verticalAlignment(VerticalAlignment::Start)
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visible(fn (Pages\ListBookings $livewire): bool => $livewire->activeTab === 'all')
                     ->badge(),
                 Tables\Columns\TextColumn::make('attendance')
                     ->verticalAlignment(VerticalAlignment::Start)
