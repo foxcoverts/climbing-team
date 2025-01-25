@@ -85,6 +85,9 @@ class TimelineProvider extends ServiceProvider
                 return str($this->generateEventDescription($activity, implode(' ', $changes)))->inlineMarkdown()->toHtmlString();
             }, Key::class)
             ->modifyEventDescriptionUsing(function (string|HtmlString $eventDescription, Activity $activity, string $recordTitle, ?string $causerName, ?string $changesSummary) {
+                if (empty($recordTitle)) {
+                    $recordTitle = ucfirst($this->getRecordLabel($activity->subject_type));
+                }
                 $recordTitle = $this->getRecordLink($activity->subject, $recordTitle);
 
                 return str("{$recordTitle} | {$eventDescription}")->inlineMarkdown()->toHtmlString();
@@ -116,10 +119,13 @@ class TimelineProvider extends ServiceProvider
         return __($message, $replace);
     }
 
-    protected function getRecordLink(?Model $record, ?string $title = null): ?string
+    protected function getRecordLink(?Model $record, ?string $title = null): string
     {
-        if (! $title ??= $this->getRecordTitle($record)) {
-            return null;
+        if (is_null($title)) {
+            $title = $this->getRecordTitle($record);
+        }
+        if (empty($title)) {
+            return '';
         }
 
         if ($url = $this->getRecordUrl($record)) {
@@ -129,10 +135,10 @@ class TimelineProvider extends ServiceProvider
         return $title;
     }
 
-    protected function getRecordTitle(?Model $record): ?string
+    protected function getRecordTitle(?Model $record): string
     {
         if (! $record) {
-            return null;
+            return '';
         }
 
         if ($record instanceof \Filament\Models\Contracts\HasName) {
@@ -148,7 +154,7 @@ class TimelineProvider extends ServiceProvider
             return e(trim($record->title));
         }
 
-        return null;
+        return '';
     }
 
     protected function getRecordUrl(?Model $record): ?string
