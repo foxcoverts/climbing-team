@@ -13,6 +13,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
+use Filament\Resources\Pages\ListRecords;
 use Filament\Support\Enums\VerticalAlignment;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -184,46 +185,41 @@ class BookingResource extends Resource
             ]);
     }
 
+    public static function getInfolistDetails(): Infolists\Components\Section
+    {
+        return Infolists\Components\Section::make(fn (Booking $record) => __(':Status Booking', [
+            'status' => $record->status->getLabel(),
+        ]))
+            ->icon(fn (Booking $record) => $record->status->getIcon())
+            ->iconColor(fn (Booking $record) => $record->status->getColor())
+            ->schema([
+                Infolists\Components\TextEntry::make('when')
+                    ->state(fn (Booking $record) => __(':date from :start_time to :end_time (:duration)', [
+                        'date' => $record->start_at->timezone($record->timezone)->toFormattedDayDateString(),
+                        'start_time' => $record->start_at->timezone($record->timezone)->format('H:i'),
+                        'end_time' => $record->end_at->timezone($record->timezone)->format('H:i'),
+                        'duration' => $record->start_at->diffAsCarbonInterval($record->end_at),
+                    ])),
+                Infolists\Components\TextEntry::make('location'),
+                Infolists\Components\TextEntry::make('activity'),
+                Infolists\Components\TextEntry::make('group_name')
+                    ->label('Group'),
+                Infolists\Components\TextEntry::make('lead_instructor.name')
+                    ->visible(fn (Booking $record) => filled($record->lead_instructor_id)),
+                Infolists\Components\TextEntry::make('notes')
+                    ->visible(fn (Booking $record) => filled($record->notes))
+                    ->markdown(),
+            ]);
+    }
+
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
             ->schema([
-                Infolists\Components\Split::make([
-                    Infolists\Components\Group::make([
-                        Infolists\Components\Section::make(fn (Booking $record) => __(':Status Booking', [
-                            'status' => $record->status->getLabel(),
-                        ]))
-                            ->icon(fn (Booking $record) => $record->status->getIcon())
-                            ->iconColor(fn (Booking $record) => $record->status->getColor())
-                            ->schema([
-                                Infolists\Components\TextEntry::make('when')
-                                    ->state(fn (Booking $record) => __(':date from :start_time to :end_time (:duration)', [
-                                        'date' => $record->start_at->timezone($record->timezone)->toFormattedDayDateString(),
-                                        'start_time' => $record->start_at->timezone($record->timezone)->format('H:i'),
-                                        'end_time' => $record->end_at->timezone($record->timezone)->format('H:i'),
-                                        'duration' => $record->start_at->diffAsCarbonInterval($record->end_at),
-                                    ])),
-                                Infolists\Components\TextEntry::make('location'),
-                                Infolists\Components\TextEntry::make('activity'),
-                                Infolists\Components\TextEntry::make('group_name')
-                                    ->label('Group'),
-                                Infolists\Components\TextEntry::make('notes')
-                                    ->visible(fn (Booking $record) => filled($record->notes))
-                                    ->markdown(),
-                            ]),
-                        Activitylog\Infolists\Components\Timeline::make()
-                            ->label('Activity Log')
-                            ->columnSpanFull(),
-                    ]),
-                    Infolists\Components\Group::make([
-                        Infolists\Components\Section::make('Lead Instructor')
-                            ->visible(fn (Booking $record) => filled($record->lead_instructor_id))
-                            ->schema([
-                                Infolists\Components\TextEntry::make('lead_instructor.name')
-                                    ->hiddenLabel(),
-                            ]),
-                    ])->grow(false),
-                ])->columnSpanFull(),
+                static::getInfolistDetails(),
+                Activitylog\Infolists\Components\Timeline::make()
+                    ->label('Activity Log')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -261,15 +257,14 @@ class BookingResource extends Resource
                     ]),
                 Tables\Columns\TextColumn::make('status')
                     ->verticalAlignment(VerticalAlignment::Start)
-                    ->visible(fn (Pages\ListBookings $livewire): bool => $livewire->activeTab === 'all')
+                    ->visible(fn (ListRecords $livewire): bool => ($livewire->activeTab ?? 'all') === 'all')
                     ->badge(),
                 Tables\Columns\TextColumn::make('attendance')
                     ->verticalAlignment(VerticalAlignment::Start)
                     ->badge()
                     ->state(fn (Booking $record) => $record
                         ->attendees->find(Filament::auth()->user())
-                        ?->attendance
-                        ?->status
+                        ?->attendance->status
                     ),
             ])
             ->recordClasses(['actions-align-top'])
