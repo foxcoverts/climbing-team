@@ -296,14 +296,19 @@ class Booking extends Model implements HasName
      *
      * @param  BookingAttendeeStatus[]  $status  (default excludes `Declined`)
      */
-    public function scopeAttendeeStatus(Builder $bookings, User $attendee, array $status = []): void
+    public function scopeAttendeeStatus(Builder $bookings, User $attendee, null|array|BookingAttendeeStatus $status = null): void
     {
+        if (! is_null($status) && ! is_array($status)) {
+            $status = [$status];
+        }
+
         $bookings->whereHas('attendees', function (Builder $query) use ($attendee, $status) {
             $query->where('user_id', $attendee->id);
-            if (empty($status)) {
-                $query->whereNot('status', BookingAttendeeStatus::Declined);
-            } else {
+
+            if (filled($status)) {
                 $query->whereIn('status', $status);
+            } elseif (is_null($status)) {
+                $query->whereNot('status', BookingAttendeeStatus::Declined);
             }
         });
     }
@@ -316,10 +321,10 @@ class Booking extends Model implements HasName
         if ($user->isGuest()) {
             $bookings->attendeeStatus($user);
         } elseif ($user->cannot('manage', Booking::class)) {
-            $bookings->where(function (Builder $query) use ($user) {
-                $query->attendeeStatus($user)
-                    ->orWhereIn('status', [BookingStatus::Confirmed]);
-            });
+            $bookings->where(fn (Builder $query) => $query
+                ->attendeeStatus($user, [])
+                ->orWhereIn('status', [BookingStatus::Confirmed])
+            );
         }
     }
 }
