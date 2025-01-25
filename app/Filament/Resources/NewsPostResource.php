@@ -46,9 +46,7 @@ class NewsPostResource extends Resource
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-            ]);
+            ->actions([]);
     }
 
     public static function infolist(Infolist $infolist): Infolist

@@ -7,7 +7,6 @@ use App\Filament\Resources\QualificationResource\Pages;
 use App\Models\Qualification;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -24,9 +23,7 @@ class QualificationResource extends Resource
     {
         return AdminQualificationResource::table($table)
             ->recordAction('view')
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-            ])
+            ->actions([])
             ->bulkActions([]);
     }
 

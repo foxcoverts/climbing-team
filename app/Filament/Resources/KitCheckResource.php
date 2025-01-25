@@ -7,7 +7,6 @@ use App\Filament\Resources\KitCheckResource\Pages;
 use App\Models\KitCheck;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -23,9 +22,7 @@ class KitCheckResource extends Resource
     public static function table(Table $table): Table
     {
         return AdminKitCheckResource::table($table)
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-            ])
+            ->actions([])
             ->bulkActions([]);
     }
 
