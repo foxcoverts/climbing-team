@@ -13,4 +13,9 @@ abstract class Resource extends FilamentResource
     {
         return static::$cluster::getNavigationLabel();
     }
+
+    public static function canAccess(): bool
+    {
+        return static::can('manage');
+    }
 }
