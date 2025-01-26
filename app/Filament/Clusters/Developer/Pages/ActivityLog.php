@@ -3,8 +3,10 @@
 namespace App\Filament\Clusters\Developer\Pages;
 
 use App\Filament\Clusters\Developer;
+use App\Providers\Filament\TimelineProvider;
 use Filament\Infolists\Infolist;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\HtmlString;
 use RalphJSmit\Filament\Activitylog\Infolists\Components\Timeline;
 use Spatie\Activitylog\Models\Activity;
 
@@ -28,7 +30,15 @@ class ActivityLog extends Page
             ->schema([
                 Timeline::make()
                     ->hiddenLabel()
-                    ->getActivitiesUsing(fn () => Activity::all()),
+                    ->getActivitiesUsing(fn () => Activity::all())
+                    ->modifyEventDescriptionUsing(function (string|HtmlString $eventDescription, Activity $activity, string $recordTitle, ?string $causerName, ?string $changesSummary) {
+                        if (empty($recordTitle)) {
+                            $recordTitle = ucfirst(TimelineProvider::getRecordLabel($activity->subject_type));
+                        }
+                        $recordTitle = TimelineProvider::getRecordLink($activity->subject, $recordTitle);
+
+                        return str("{$recordTitle} | {$eventDescription}")->inlineMarkdown()->toHtmlString();
+                    }),
             ]);
     }
 }
