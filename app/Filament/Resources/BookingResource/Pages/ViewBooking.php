@@ -15,6 +15,8 @@ class ViewBooking extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            BookingResource\Actions\RespondAction::make()
+                ->record($this->getRecord()),
             Actions\ActionGroup::make([
                 Actions\Action::make('edit')
                     ->icon('heroicon-m-pencil-square')

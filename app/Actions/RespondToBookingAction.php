@@ -12,7 +12,6 @@ use InvalidArgumentException;
 
 class RespondToBookingAction
 {
-
     public function __construct(
         public Booking $booking,
         public ?User $user = null
@@ -50,6 +49,19 @@ class RespondToBookingAction
             ],
         ]);
 
+        // Log Activity
+        $properties = [];
+        data_set($properties, 'attributes.attendance.attendee_id', $attendee->id);
+        data_set($properties, 'attributes.attendance.status', $status);
+        data_set($properties, 'old.attendance.status', $attendance?->status);
+
+        activity()
+            ->on($this->booking)
+            ->by($author)
+            ->withProperties($properties)
+            ->event('responded')
+            ->log('responded');
+
         // Record change
         if ($attendance?->status != $status) {
             $change = new Change;
@@ -59,11 +71,11 @@ class RespondToBookingAction
             $change_attendee = new ChangeAttendee;
             $change_attendee->attendee_id = $attendee_id;
             $change_attendee->attendee_status = $status;
-            if (!empty($comment) && ($attendance?->comment != $comment)) {
+            if (! empty($comment) && ($attendance?->comment != $comment)) {
                 $change_attendee->attendee_comment = $comment;
             }
             $change->attendees()->save($change_attendee);
-        } else if (!empty($comment) && ($attendance?->comment != $comment)) {
+        } elseif (! empty($comment) && ($attendance?->comment != $comment)) {
             $change = new Change;
             $change->author_id = $author_id;
             $this->booking->changes()->save($change);

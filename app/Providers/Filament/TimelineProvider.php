@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Enums\Accreditation;
+use App\Enums\BookingAttendeeStatus;
 use App\Filament\Clusters\Admin;
 use App\Models\Booking;
 use App\Models\Key;
@@ -58,51 +59,60 @@ class TimelineProvider extends ServiceProvider
             ->attributeLabel('holder_id', 'holder', Key::class)
             ->attributeValue('lead_instructor_id', fn ($value) => User::find($value)?->getFilamentName(), Booking::class)
             ->attributeLabel('lead_instructor_id', 'lead instructor')
-            ->causerUrl(fn (?User $causer) => $this->getRecordUrl($causer))
+            ->causerUrl(fn (?User $causer) => static::getRecordUrl($causer))
             ->eventDescription('activated', function (Activity|ActivityModel $activity, ?string $causerName): string|HtmlString {
                 if (! $activity->causer || $activity->subject->is($activity->causer)) {
                     return __('Activated their account.');
                 }
 
                 return str(__('**:causerName** activated the account.', [
-                    'causerName' => $this->getRecordLink($activity->causer, $causerName),
+                    'causerName' => static::getRecordLink($activity->causer, $causerName),
                 ]))->inlineMarkdown()->toHtmlString();
             }, User::class)
             ->eventDescription('kitChecked', function (Activity|ActivityModel $activity, ?string $causerName): string|HtmlString {
                 return str(__('**:causerName** checked the user\'s kit.', [
-                    'causerName' => $this->getRecordLink($activity->causer, $causerName),
+                    'causerName' => static::getRecordLink($activity->causer, $causerName),
                 ]))->inlineMarkdown()->toHtmlString();
             })
             ->eventDescription('transferred', function (Activity|ActivityModel $activity): string|HtmlString {
                 $changes = [];
                 if ($oldHolder = User::find(Arr::get($activity->changes(), 'old.holder_id'))) {
-                    $changes[] = 'from '.$this->getRecordLink($oldHolder);
+                    $changes[] = 'from '.static::getRecordLink($oldHolder);
                 }
                 if ($newHolder = User::find(Arr::get($activity->changes(), 'attributes.holder_id'))) {
-                    $changes[] = 'to **'.$this->getRecordLink($newHolder).'**';
+                    $changes[] = 'to **'.static::getRecordLink($newHolder).'**';
                 }
 
-                return str($this->generateEventDescription($activity, implode(' ', $changes)))->inlineMarkdown()->toHtmlString();
+                return str(static::generateEventDescription($activity, implode(' ', $changes)))->inlineMarkdown()->toHtmlString();
             }, Key::class)
-            ->modifyEventDescriptionUsing(function (string|HtmlString $eventDescription, Activity $activity, string $recordTitle, ?string $causerName, ?string $changesSummary) {
-                if (empty($recordTitle)) {
-                    $recordTitle = ucfirst($this->getRecordLabel($activity->subject_type));
-                }
-                $recordTitle = $this->getRecordLink($activity->subject, $recordTitle);
+            ->eventDescription('responded', function (Activity|ActivityModel $activity): string|HtmlString {
+                $status = BookingAttendeeStatus::tryFrom(data_get($activity->changes(), 'attributes.attendance.status'));
+                $attendee = User::find(data_get($activity->changes(), 'attributes.attendance.attendee_id'));
 
-                return str("{$recordTitle} | {$eventDescription}")->inlineMarkdown()->toHtmlString();
+                $replace = [
+                    'attendeeName' => static::getRecordLink($attendee),
+                    'modelLabel' => static::getRecordLabel($activity->subject_type, $activity->subject),
+                ];
+
+                $message = match ($status) {
+                    BookingAttendeeStatus::Accepted => '**:attendeeName** will be attending the :modelLabel.',
+                    BookingAttendeeStatus::Tentative => '**:attendeeName** may be able to attend the :modelLabel.',
+                    BookingAttendeeStatus::Declined => '**:attendeeName** cannot attend the :modelLabel.',
+                };
+
+                return str(__($message, $replace))->inlineMarkdown()->toHtmlString();
             })
         );
     }
 
-    protected function generateEventDescription(Activity|ActivityModel $activity, ?string $changesSummary = null): string|HtmlString
+    protected static function generateEventDescription(Activity|ActivityModel $activity, ?string $changesSummary = null): string|HtmlString
     {
         $message = '';
 
         $replace = [
-            'causerName' => $this->getRecordLink($activity->causer),
+            'causerName' => static::getRecordLink($activity->causer),
             'event' => str($activity->event)->headline()->lower(),
-            'modelLabel' => $this->getRecordLabel($activity->subject_type, $activity->subject),
+            'modelLabel' => static::getRecordLabel($activity->subject_type, $activity->subject),
             'changesSummary' => $changesSummary,
         ];
 
@@ -119,23 +129,23 @@ class TimelineProvider extends ServiceProvider
         return __($message, $replace);
     }
 
-    protected function getRecordLink(?Model $record, ?string $title = null): string
+    public static function getRecordLink(?Model $record, ?string $title = null): string
     {
         if (is_null($title)) {
-            $title = $this->getRecordTitle($record);
+            $title = static::getRecordTitle($record);
         }
         if (empty($title)) {
             return '';
         }
 
-        if ($url = $this->getRecordUrl($record)) {
+        if ($url = static::getRecordUrl($record)) {
             return "[$title]($url)";
         }
 
         return $title;
     }
 
-    protected function getRecordTitle(?Model $record): string
+    public static function getRecordTitle(?Model $record): string
     {
         if (! $record) {
             return '';
@@ -157,7 +167,7 @@ class TimelineProvider extends ServiceProvider
         return '';
     }
 
-    protected function getRecordUrl(?Model $record): ?string
+    public static function getRecordUrl(?Model $record): ?string
     {
         if (! $record) {
             return null;
@@ -169,15 +179,15 @@ class TimelineProvider extends ServiceProvider
             ? $resource::getUrl('edit', ['record' => $record])
             : null);
 
-        return $this->withModelResource($record, $getRecordUrl, [
+        return static::withModelResource($record, $getRecordUrl, [
             fn ($resource) => ($resource::getCluster() === Admin::class),
             true,
         ]);
     }
 
-    protected function getRecordLabel(string $recordClass, ?Model $record = null): ?string
+    public static function getRecordLabel(string $recordClass, ?Model $record = null): ?string
     {
-        $modelLabel = $this->withModelResource($recordClass ?? $record, fn ($resource) => $resource::getModelLabel(), [
+        $modelLabel = static::withModelResource($recordClass ?? $record, fn ($resource) => $resource::getModelLabel(), [
             fn ($resource): bool => $resource::getCluster() === Admin::class,
             true,
         ], fn (): string => \Filament\Support\get_model_label($recordClass ?? $record));
@@ -191,7 +201,7 @@ class TimelineProvider extends ServiceProvider
      * @param  array  $filters  Additional filter that can be applied to check resource validity. If multiple filters are given then the resources are looped through again.
      * @param  mixed  $default  Default value (or callback) if all resources return null, or no resources are found.
      */
-    protected function withModelResource(string|Model $model, Closure $callback, Closure|array $filters = [], mixed $default = null): mixed
+    protected static function withModelResource(string|Model $model, Closure $callback, Closure|array $filters = [], mixed $default = null): mixed
     {
         if ($model instanceof Model) {
             $model = $model::class;
