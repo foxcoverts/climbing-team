@@ -35,11 +35,6 @@ class NewsPostResource extends Resource
         ];
     }
 
-    public static function canAccess(): bool
-    {
-        return static::can('manage');
-    }
-
     public static function form(Form $form): Form
     {
         return $form
