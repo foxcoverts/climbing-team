@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Filament\Actions\Concerns;
+
+use App\Actions\RespondToBookingAction;
+use App\Enums\BookingAttendeeResponse;
+use App\Models\Booking;
+use Exception;
+use Filament\Actions\Concerns\CanCustomizeProcess;
+use Filament\Facades\Filament;
+use Filament\Forms;
+
+trait RespondAction
+{
+    use CanCustomizeProcess;
+
+    public static function getDefaultName(): ?string
+    {
+        return 'respond';
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->modalHeading(fn (): string => __('Respond :label', ['label' => $this->getRecordTitle()]));
+
+        $this->successNotificationTitle('Attendance updated');
+
+        $this->form([
+            Forms\Components\Section::make(fn (Booking $record) => __(':Status Booking', [
+                'status' => $record->status->getLabel(),
+            ]))
+                ->icon(fn (Booking $record) => $record->status->getIcon())
+                ->iconColor(fn (Booking $record) => $record->status->getColor())
+                ->schema([
+                    Forms\Components\Placeholder::make('when')
+                        ->content(fn (Booking $record) => __(':date from :start_time to :end_time (:duration)', [
+                            'date' => $record->start_at->timezone($record->timezone)->toFormattedDayDateString(),
+                            'start_time' => $record->start_at->timezone($record->timezone)->format('H:i'),
+                            'end_time' => $record->end_at->timezone($record->timezone)->format('H:i'),
+                            'duration' => $record->start_at->diffAsCarbonInterval($record->end_at),
+                        ])),
+                    Forms\Components\Placeholder::make('location')
+                        ->content(fn (Booking $record) => $record->location),
+                    Forms\Components\Placeholder::make('activity')
+                        ->content(fn (Booking $record) => $record->activity),
+                    Forms\Components\Placeholder::make('group')
+                        ->content(fn (Booking $record) => $record->group_name),
+                    Forms\Components\Placeholder::make('notes')
+                        ->hidden(fn (Booking $record) => blank($record->notes))
+                        ->content(fn (Booking $record) => str($record->notes)->markdown()->toHtmlString()),
+                    Forms\Components\Placeholder::make('lead_instructor')
+                        ->hidden(fn (Booking $record) => blank($record->lead_instructor))
+                        ->content(fn (Booking $record) => $record->lead_instructor?->name),
+                ]),
+            Forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\ToggleButtons::make('status')
+                        ->label('Can you attend this event?')
+                        ->options(BookingAttendeeResponse::class)
+                        ->required()->inline(),
+                ]),
+
+        ]);
+
+        $this->action(fn (array $data) => $this->save($data));
+
+        $this->modalSubmitActionLabel('Respond');
+    }
+
+    public function save(array $data): void
+    {
+        try {
+            $status = BookingAttendeeResponse::tryFrom($data['status'])->toStatus();
+            $attendee = Filament::auth()->user();
+
+            $respondToBooking = new RespondToBookingAction($this->getRecord());
+            $respondToBooking($attendee, $status);
+
+            $this->success();
+        } catch (Exception $e) {
+            $this->fail();
+        }
+    }
+}

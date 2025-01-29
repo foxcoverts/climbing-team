@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\BookingAttendeeResponse;
 use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
 use App\Enums\CommentNotificationOption;
@@ -12,6 +13,11 @@ use App\Enums\ScoutPermitType;
 return [
     'booking' => [
         'attendee' => [
+            'response' => [
+                BookingAttendeeResponse::Yes->value => 'Yes',
+                BookingAttendeeResponse::No->value => 'No',
+                BookingAttendeeResponse::Maybe->value => 'Maybe',
+            ],
             'status' => [
                 BookingAttendeeStatus::Accepted->value => 'Going',
                 BookingAttendeeStatus::Tentative->value => 'Maybe',
