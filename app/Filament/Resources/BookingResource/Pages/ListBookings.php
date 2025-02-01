@@ -7,6 +7,7 @@ use App\Filament\Clusters\Admin;
 use App\Filament\Resources\BookingResource;
 use App\Models\Booking;
 use Filament\Actions;
+use Filament\Facades\Filament;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent;
@@ -37,21 +38,23 @@ class ListBookings extends ListRecords
                 ),
             ...collect(BookingAttendeeStatus::cases())
                 ->mapWithKeys(fn (BookingAttendeeStatus $status) => [
-                            $status->value => Tab::make()
-                                ->label($status->getLabel())
-                                ->icon($status->getIcon())
-                                ->badge(fn () => Booking::future()->attendeeStatus(Auth::user(), $status)->count())
-                                ->badgeColor($status->getColor())
-                                ->modifyQueryUsing(fn (Eloquent\Builder $query) => $query
-                                    ->attendeeStatus(Auth::user(), $status)
-                                ),
-                        ])
+                    $status->value => Tab::make()
+                        ->label($status->getLabel())
+                        ->icon($status->getIcon())
+                        ->badge(fn () => Booking::future()->attendeeStatus(Filament::auth()->user(), $status)->count())
+                        ->badgeColor($status->getColor())
+                        ->modifyQueryUsing(fn (Eloquent\Builder $query) => $query
+                            ->attendeeStatus(Auth::user(), $status)
+                        ),
+                ])
                 ->all(),
         ];
     }
 
     public function getDefaultActiveTab(): string|int|null
     {
-        return BookingAttendeeStatus::Accepted->value;
+        return Booking::future()->attendeeStatus(Filament::auth()->user(), BookingAttendeeStatus::NeedsAction)->count()
+            ? BookingAttendeeStatus::NeedsAction->value
+            : BookingAttendeeStatus::Accepted->value;
     }
 }
