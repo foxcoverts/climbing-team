@@ -67,7 +67,8 @@ class RespondAction extends Actions\ActionGroup
         $this->label(fn (?BookingAttendeeStatus $status) => $status?->getLabel() ?? 'Respond')
             ->icon(fn (?BookingAttendeeStatus $status) => ($status ?? BookingAttendeeStatus::NeedsAction)->getIcon())
             ->color(fn (?BookingAttendeeStatus $status) => ($status ?? BookingAttendeeStatus::NeedsAction)->getColor())
-            ->button();
+            ->button()
+            ->hidden(fn () => Filament::auth()->guest());
     }
 
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array

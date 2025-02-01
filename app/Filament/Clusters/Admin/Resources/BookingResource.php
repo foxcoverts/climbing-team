@@ -204,11 +204,14 @@ class BookingResource extends Resource
                 Infolists\Components\TextEntry::make('location'),
                 Infolists\Components\TextEntry::make('activity'),
                 Infolists\Components\TextEntry::make('group_name')
-                    ->label('Group'),
+                    ->label('Group')
+                    ->hidden(fn () => Filament::auth()->guest()),
                 Infolists\Components\TextEntry::make('lead_instructor.name')
-                    ->visible(fn (Booking $record) => filled($record->lead_instructor_id)),
+                    ->visible(fn (Booking $record) => filled($record->lead_instructor_id))
+                    ->hidden(fn () => Filament::auth()->guest()),
                 Infolists\Components\TextEntry::make('notes')
                     ->visible(fn (Booking $record) => filled($record->notes))
+                    ->hidden(fn () => Filament::auth()->guest())
                     ->markdown(),
             ]);
     }
@@ -219,6 +222,7 @@ class BookingResource extends Resource
             ->schema([
                 static::getInfolistDetails(),
                 Activitylog\Infolists\Components\Timeline::make()
+                    ->hidden(fn () => Filament::auth()->guest())
                     ->label('Activity Log')
                     ->columnSpanFull(),
             ]);
