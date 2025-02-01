@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\BookingAttendeeStatus;
 use App\Filament\Clusters\Admin\Resources\BookingResource as AdminBookingResource;
 use App\Filament\Resources\BookingResource\Pages;
 use App\Models\Booking;
+use Filament\Facades\Filament;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
@@ -31,6 +33,27 @@ class BookingResource extends Resource
             'Location' => $record->location,
             'Group' => $record->group_name,
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        if ($currentUser = Filament::auth()->user()) {
+            $count = Booking::future()->attendeeStatus($currentUser, BookingAttendeeStatus::NeedsAction)->count();
+
+            return $count > 0 ? $count : null;
+        }
+
+        return null;
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Invitations';
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return BookingAttendeeStatus::NeedsAction->getColor();
     }
 
     public static function infolist(Infolist $infolist): Infolist
