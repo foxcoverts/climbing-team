@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     <x-filament::section>
-    <article class="prose">
+    <article class="prose dark:prose-invert">
         <p><dfn>Last updated:</dfn> 19 March 2024</p>
 
         <section>
