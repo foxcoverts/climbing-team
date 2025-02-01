@@ -7,6 +7,7 @@ use App\Enums\BookingStatus;
 use App\Filament\Clusters\Admin;
 use App\Filament\Clusters\Admin\Resources\BookingResource\Pages;
 use App\Filament\Forms\Components as AppComponents;
+use App\Filament\Resources\BookingResource\Pages\GotoBooking;
 use App\Filament\Resources\BookingResource\Pages\ListBookings;
 use App\Models\Booking;
 use Filament\Facades\Filament;
@@ -221,6 +222,16 @@ class BookingResource extends Resource
         return $infolist
             ->schema([
                 static::getInfolistDetails(),
+                Infolists\Components\Section::make('Can you attend this event?')
+                    ->description('Please login to view full details and to RSVP.')
+                    ->visible(fn () => Filament::auth()->guest())
+                    ->schema([
+                        Infolists\Components\Actions::make([
+                            Infolists\Components\Actions\Action::make('view')
+                                ->label('View full details')
+                                ->url(fn ($record) => GotoBooking::getUrl(['record' => $record])),
+                        ]),
+                    ]),
                 Activitylog\Infolists\Components\Timeline::make()
                     ->hidden(fn () => Filament::auth()->guest())
                     ->label('Activity Log')
