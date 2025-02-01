@@ -49,6 +49,11 @@ class BookingResource extends Resource
         return [];
     }
 
+    public static function canAccess(): bool
+    {
+        return true;
+    }
+
     public static function canViewAny(): bool
     {
         return static::can('viewOwn');

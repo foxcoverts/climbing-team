@@ -46,9 +46,11 @@ class BookingPolicy
     /**
      * Determine whether the user can view the booking.
      */
-    public function view(User $user, Booking $booking): bool
+    public function view(?User $user, Booking $booking): bool
     {
-        if ($booking->attendees->find($user)) {
+        if (is_null($user)) {
+            return $booking->status !== BookingStatus::Cancelled;
+        } elseif ($booking->attendees->find($user)) {
             return true;
         } else {
             return $this->viewAny($user, $booking->status);
