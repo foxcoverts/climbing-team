@@ -65,15 +65,15 @@ class BookingController extends Controller
      */
     public function show(Request $request, Booking $booking): Response|View
     {
-        if (Gate::check('view', $booking)) {
-            return view('booking.show', [
-                'booking' => $booking->load('changes'),
-                'currentUser' => $request->user(),
-            ]);
-        } elseif (Auth::guest()) {
+        if (Auth::guest()) {
             return view('booking.preview', [
                 'booking' => $booking,
                 'responded' => $request->get('responded'),
+            ]);
+        } elseif (Gate::check('view', $booking)) {
+            return view('booking.show', [
+                'booking' => $booking->load('changes'),
+                'currentUser' => $request->user(),
             ]);
         } else {
             return response()->view('booking.forbidden', [
