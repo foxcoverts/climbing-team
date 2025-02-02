@@ -10,8 +10,6 @@ use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingRelatedController;
 use App\Http\Controllers\BookingShareController;
-use App\Http\Controllers\ChangeController;
-use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\RespondController;
@@ -44,10 +42,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('booking/{booking}.ics', [BookingIcsController::class, 'show'])->name('booking.show.ics');
 
     Route::get('dashboard', DashboardController::class)->name('dashboard');
-
-    Route::get('change', ChangeController::class)->name('change.index');
-
-    Route::resource('comment', CommentController::class)->shallow()->only('store', 'update', 'destroy');
 
     Route::controller(IncidentController::class)->group(function () {
         Route::get('incident', 'create')->name('incident.create');

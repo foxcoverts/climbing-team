@@ -33,7 +33,7 @@ class BookingController extends Controller
             ]);
         } elseif (Gate::check('view', $booking)) {
             return view('booking.show', [
-                'booking' => $booking->load('changes'),
+                'booking' => $booking,
                 'currentUser' => $request->user(),
             ]);
         } else {
