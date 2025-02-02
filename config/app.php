@@ -138,4 +138,6 @@ return [
         'group' => env('APP_FACEBOOK_GROUP', 'https://www.facebook.com/groups/125557758285/'),
     ],
 
+    'twitter' => '@FoxCoverts',
+
 ];
