@@ -10,7 +10,6 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingInviteController;
-use App\Http\Controllers\BookingPreviewController;
 use App\Http\Controllers\BookingRelatedController;
 use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\BookingShareController;
@@ -71,7 +70,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('todo', TodoController::class);
 });
 
-Route::get('booking/{booking}/preview', BookingPreviewController::class);
 Route::get('booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
 
 Route::controller(BookingIcsController::class)
