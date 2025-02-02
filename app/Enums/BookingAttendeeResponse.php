@@ -43,4 +43,14 @@ enum BookingAttendeeResponse: string implements HasColor, HasIcon, HasLabel
             self::Maybe => BookingAttendeeStatus::Tentative,
         };
     }
+
+    public static function tryFromStatus(BookingAttendeeStatus $status): ?static
+    {
+        return match ($status) {
+            BookingAttendeeStatus::Accepted => self::Yes,
+            BookingAttendeeStatus::Declined => self::No,
+            BookingAttendeeStatus::Tentative => self::Maybe,
+            default => null
+        };
+    }
 }
