@@ -20,15 +20,8 @@ class DashboardController extends Controller
             ])
             ->ordered()->first();
 
-        $invite = Booking::future()->notCancelled()
-            ->attendeeStatus($request->user(), [
-                BookingAttendeeStatus::NeedsAction, BookingAttendeeStatus::Tentative,
-            ])
-            ->ordered()->first();
-
         return view('dashboard', [
             'next' => $nextBooking,
-            'invite' => $invite,
         ]);
     }
 }
