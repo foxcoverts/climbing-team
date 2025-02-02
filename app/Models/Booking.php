@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Activitylog\LogOptions;
@@ -183,12 +182,6 @@ class Booking extends Model implements HasName
             ->withTimestamps()
             ->withPivot('comment', 'status', 'token')->as('attendance')
             ->using(BookingAttendance::class);
-    }
-
-    public function changes(): MorphMany
-    {
-        return $this->morphMany(Change::class, 'changeable')
-            ->orderByDesc('created_at');
     }
 
     public function lead_instructor(): BelongsTo

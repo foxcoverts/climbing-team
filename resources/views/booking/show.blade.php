@@ -23,8 +23,6 @@
 
                 <x-related-bookings-list :$booking :$currentUser />
             </div>
-
-            @include('booking.partials.recent-activity')
         </div>
     </section>
 </x-layout.app>
