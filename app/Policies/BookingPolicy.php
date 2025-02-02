@@ -20,19 +20,9 @@ class BookingPolicy
     /**
      * Determine whether the user can view any bookings.
      */
-    public function viewAny(User $user, ?BookingStatus $status = null): bool
+    public function viewAny(User $user): bool
     {
-        switch ($status) {
-            case BookingStatus::Confirmed:
-                return $this->manage($user) || ! $user->isGuest();
-
-            case BookingStatus::Tentative:
-            case BookingStatus::Cancelled:
-                return $this->manage($user);
-
-            default:
-                return $this->manage($user) || ! $user->isGuest();
-        }
+        return ! $user->isGuest();
     }
 
     /**
