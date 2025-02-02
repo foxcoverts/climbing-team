@@ -45,9 +45,9 @@ class ViewNewsPost extends ViewRecord
                 '<meta property="og:type" content="website" />',
                 '<meta property="og:locale" content="'.config('app.locale', 'en').'" />',
                 '<meta name="twitter:card" content="summary" />',
-                '<meta name="twitter:site" content="@FoxCoverts" />',
+                '<meta name="twitter:site" content="'.config('app.twitter', '@scouts').'" />',
             ]),
-            scopes: ViewNewsPost::class,
+            scopes: static::class,
         );
 
         return parent::render();
