@@ -16,6 +16,7 @@ use Filament\Forms\Form;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\VerticalAlignment;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -221,17 +222,21 @@ class BookingResource extends Resource
     {
         return $infolist
             ->schema([
-                static::getInfolistDetails(),
-                Infolists\Components\Section::make('Can you attend this event?')
-                    ->description('Please login to view full details and to RSVP.')
-                    ->visible(fn () => Filament::auth()->guest())
-                    ->schema([
-                        Infolists\Components\Actions::make([
-                            Infolists\Components\Actions\Action::make('view')
-                                ->label('View full details')
-                                ->url(fn ($record) => GotoBooking::getUrl(['record' => $record])),
-                        ]),
+                static::getInfolistDetails()
+                    ->footerActionsAlignment(Alignment::Center)
+                    ->footerActions([
+                        Infolists\Components\Actions\Action::make('goto')
+                            ->label('View full details')
+                            ->visible(fn () => Filament::auth()->guest())
+                            ->url(fn (Booking $record) => GotoBooking::getUrl(['record' => $record])),
                     ]),
+                Infolists\Components\TextEntry::make('please-login')
+                    ->state('Please login to view the full post.')
+                    ->url(fn (Booking $record) => GotoBooking::getUrl(['record' => $record]))
+                    ->hiddenLabel()
+                    ->visible(fn () => Filament::auth()->guest())
+                    ->alignCenter()
+                    ->columnSpanFull(),
                 Activitylog\Infolists\Components\Timeline::make()
                     ->hidden(fn () => Filament::auth()->guest())
                     ->label('Activity Log')
