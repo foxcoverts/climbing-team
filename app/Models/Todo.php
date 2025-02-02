@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Auth;
 
 class Todo extends Model
@@ -108,12 +107,6 @@ class Todo extends Model
             ->withTimestamps()
             ->withPivot('comment', 'status', 'token')->as('attendance')
             ->using(TodoAttendance::class);
-    }
-
-    public function changes(): MorphMany
-    {
-        return $this->morphMany(Change::class, 'changeable')
-            ->orderByDesc('created_at');
     }
 
     /**

@@ -35,14 +35,6 @@
     </x-sidebar.group>
 
     <x-sidebar.group :heading="__('Manage')">
-        @can('viewAny', App\Models\Change::class)
-            <x-sidebar.link route='change.index' :match-routes="['change.*']" :label="__('Changes')">
-                <x-slot:icon>
-                    <path
-                        d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
-                </x-slot:icon>
-            </x-sidebar.link>
-        @endcan
         @can('viewAny', App\Models\Todo::class)
             <x-sidebar.link route='todo.index' match-routes='todo.*' :label="__('Tasks')" icon="outline.checkmark" />
         @endcan

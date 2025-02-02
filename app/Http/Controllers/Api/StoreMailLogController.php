@@ -25,14 +25,16 @@ class StoreMailLogController extends Controller
             ]);
         } catch (InvalidArgumentException $e) {
             return response()->json([
-                "error" => $e->getMessage()
+                'error' => $e->getMessage(),
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        if ($mail->calendar?->getMethod() == 'REPLY') {
+        if ($mail->calendar?->method == 'REPLY') {
             $changes = 0;
-            foreach ($mail->calendar->getEvents() as $event) {
-                if (!$event->getBooking()) continue;
+            foreach ($mail->calendar->events as $event) {
+                if (! $event->getBooking()) {
+                    continue;
+                }
 
                 try {
                     $respondToBooking = new RespondToBookingAction($event->getBooking());
@@ -41,16 +43,15 @@ class StoreMailLogController extends Controller
                 }
 
                 foreach ($event->getAttendees() as $attendee) {
-                    if (!$attendee->getUser()) continue;
+                    if (! $attendee->getUser()) {
+                        continue;
+                    }
 
-                    if ($change = $respondToBooking(
+                    $respondToBooking(
                         $attendee->getUser(),
                         $attendee->getStatus(),
                         $attendee->getComment()
-                    )) {
-                        $change->created_at = $event->getSentAt();
-                        $change->save();
-                    }
+                    );
                     $changes++;
                 }
             }
@@ -60,6 +61,6 @@ class StoreMailLogController extends Controller
         }
         $mail->save();
 
-        return response()->json("ok", Response::HTTP_OK);
+        return response()->json('ok', Response::HTTP_OK);
     }
 }
