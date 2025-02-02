@@ -33,6 +33,11 @@ class NewsPostResource extends Resource
         ];
     }
 
+    public static function canAccess(): bool
+    {
+        return true;
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -84,12 +89,12 @@ class NewsPostResource extends Resource
                         ->footerActions([
                             Infolists\Components\Actions\Action::make('read-more')
                                 ->label('Read More')
-                                ->url(fn () => Filament::getCurrentPanel()->getLoginUrl()),
+                                ->url(fn (NewsPost $record) => Pages\GotoNewsPost::getUrl(['record' => $record])),
                         ])
                         ->footerActionsAlignment(Alignment::Center),
                     Infolists\Components\TextEntry::make('please-login')
                         ->state('Please login to view the full post.')
-                        ->url(fn () => Filament::getCurrentPanel()->getLoginUrl())
+                        ->url(fn (NewsPost $record) => Pages\GotoNewsPost::getUrl(['record' => $record]))
                         ->hiddenLabel()
                         ->alignCenter()
                         ->columnSpanFull(),
@@ -102,6 +107,7 @@ class NewsPostResource extends Resource
         return [
             'index' => Pages\ListNewsPosts::route('/'),
             'view' => Pages\ViewNewsPost::route('/{record}'),
+            'goto' => Pages\GotoNewsPost::route('/{record}/goto'),
         ];
     }
 }

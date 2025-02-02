@@ -12,9 +12,9 @@ class NewsPostPolicy
         return $user->isTeamLeader();
     }
 
-    public function viewAny(?User $user)
+    public function viewAny(User $user)
     {
-        return true;
+        return $user->exists;
     }
 
     public function create(User $user)
