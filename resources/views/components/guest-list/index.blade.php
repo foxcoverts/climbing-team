@@ -66,11 +66,6 @@
                     'attendance' => $attendance(),
                 ])
             </div>
-            <div class="flex flex-wrap gap-4">{{-- flex-group --}}
-                @can('rollcall', [BookingAttendance::class, $booking])
-                    <x-button.primary :href="route('booking.attendee.index', $booking)" :label="__('Roll call')" />
-                @endcan
-            </div>
         </footer>
     @endif
 </aside>
