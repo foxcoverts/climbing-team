@@ -10,7 +10,6 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
 use App\Http\Controllers\BookingRelatedController;
-use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\CommentController;
@@ -50,8 +49,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('booking/{booking}.ics', [BookingIcsController::class, 'show'])->name('booking.show.ics');
 
     Route::get('dashboard', DashboardController::class)->name('dashboard');
-
-    Route::get('rota', BookingRotaController::class)->name('booking.rota');
 
     Route::get('change', ChangeController::class)->name('change.index');
 
