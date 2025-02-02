@@ -23,9 +23,6 @@
                 </x-slot:icon>
             </x-sidebar.link>
         @endguest
-        @can('viewOwn', App\Models\Booking::class)
-            <x-sidebar.link route='booking.rota' :label="__('My Rota')" icon="inbox.check" />
-        @endcan
         @can('create', App\Models\Incident::class)
             <x-sidebar.link route='incident.create' :label="__('Report Incident')" icon="incident" />
         @endcan
