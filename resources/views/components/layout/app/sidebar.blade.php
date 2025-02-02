@@ -32,15 +32,6 @@
         @can('viewAny', App\Models\Booking::class)
             <x-sidebar.link route='booking.calendar' :match-routes="['booking.calendar', 'booking.show', 'booking.edit', 'booking.attendee.*', 'booking.comment.*']" :label="__('Calendar')" icon="calendar" />
         @endcan
-        @can('viewAny', [App\Models\Booking::class, BookingStatus::Confirmed])
-            <x-sidebar.link route='booking.confirmed' :label="__('Confirmed')" icon="calendar.check" />
-        @endcan
-        @can('viewAny', [App\Models\Booking::class, BookingStatus::Tentative])
-            <x-sidebar.link route='booking.tentative' :label="__('Tentative')" icon="calendar.tee" />
-        @endcan
-        @can('viewAny', [App\Models\Booking::class, BookingStatus::Cancelled])
-            <x-sidebar.link route='booking.cancelled' :label="__('Cancelled')" icon="calendar.cross" />
-        @endcan
     </x-sidebar.group>
 
     <x-sidebar.group :heading="__('Manage')">

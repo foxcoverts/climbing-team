@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\BookingStatus;
 use App\Filament\Pages\PrivacyPolicy;
 use App\Filament\Resources\BookingResource\Pages\ViewBooking;
 use App\Filament\Resources\NewsPostResource\Pages\ViewNewsPost;
@@ -25,10 +24,6 @@ Route::view('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('booking', [BookingController::class, 'calendar'])->name('booking.calendar');
-    foreach (BookingStatus::cases() as $status) {
-        Route::get('booking/'.$status->value, [BookingController::class, $status->value])
-            ->name('booking.'.$status->value);
-    }
 
     Route::controller(BookingAttendanceController::class)->group(function () {
         Route::get('booking/{booking}/attendance', 'edit')->name('booking.attendance.edit');
