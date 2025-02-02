@@ -9,7 +9,6 @@ use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingEmailController;
 use App\Http\Controllers\BookingIcsController;
-use App\Http\Controllers\BookingInviteController;
 use App\Http\Controllers\BookingRelatedController;
 use App\Http\Controllers\BookingRotaController;
 use App\Http\Controllers\BookingShareController;
@@ -51,8 +50,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('booking/{booking}.ics', [BookingIcsController::class, 'show'])->name('booking.show.ics');
 
     Route::get('dashboard', DashboardController::class)->name('dashboard');
-
-    Route::get('invite', BookingInviteController::class)->name('booking.invite');
 
     Route::get('rota', BookingRotaController::class)->name('booking.rota');
 
