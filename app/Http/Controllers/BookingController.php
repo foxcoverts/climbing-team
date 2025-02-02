@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\BookingStatus;
 use App\Models\Booking;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -20,44 +19,6 @@ class BookingController extends Controller
         Gate::authorize('viewAny', Booking::class);
 
         return view('booking.calendar');
-    }
-
-    public function confirmed(Request $request): View
-    {
-        return $this->index($request, BookingStatus::Confirmed);
-    }
-
-    public function tentative(Request $request): View
-    {
-        return $this->index($request, BookingStatus::Tentative);
-    }
-
-    public function cancelled(Request $request): View
-    {
-        return $this->index($request, BookingStatus::Cancelled);
-    }
-
-    /**
-     * Display list of Bookings for the given status.
-     */
-    protected function index(Request $request, BookingStatus $status): View
-    {
-        Gate::authorize('viewAny', [Booking::class, $status]);
-
-        $bookings = Booking::future()
-            ->forUser($request->user())
-            ->where('bookings.status', $status)
-            ->with('attendees')
-            ->ordered()->get()
-            ->groupBy(function (Booking $booking) {
-                return $booking->start_at->startOfDay();
-            });
-
-        return view('booking.index', [
-            'user' => $request->user(),
-            'bookings' => $bookings,
-            'status' => $status,
-        ]);
     }
 
     /**
