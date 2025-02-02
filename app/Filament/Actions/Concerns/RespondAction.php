@@ -4,9 +4,11 @@ namespace App\Filament\Actions\Concerns;
 
 use App\Actions\RespondToBookingAction;
 use App\Enums\BookingAttendeeResponse;
+use App\Enums\BookingAttendeeStatus;
 use App\Models\Booking;
 use Exception;
 use Filament\Actions\Concerns\CanCustomizeProcess;
+use Filament\Actions\StaticAction;
 use Filament\Facades\Filament;
 use Filament\Forms;
 
@@ -17,6 +19,14 @@ trait RespondAction
     public static function getDefaultName(): ?string
     {
         return 'respond';
+    }
+
+    protected static function getAttendeeStatus(Booking $booking): ?BookingAttendeeStatus
+    {
+        $attendee = Filament::auth()->user();
+        $attendee = $booking->attendees()->find($attendee);
+
+        return $attendee?->attendance->status;
     }
 
     protected function setUp(): void
@@ -57,6 +67,7 @@ trait RespondAction
             Forms\Components\Section::make()
                 ->schema([
                     Forms\Components\ToggleButtons::make('status')
+                        ->formatStateUsing(fn (Booking $record) => BookingAttendeeResponse::tryFromStatus(static::getAttendeeStatus($record)))
                         ->label('Can you attend this event?')
                         ->options(BookingAttendeeResponse::class)
                         ->required()->inline(),
@@ -66,7 +77,30 @@ trait RespondAction
 
         $this->action(fn (array $data) => $this->save($data));
 
-        $this->modalSubmitActionLabel('Respond');
+        $this->modalSubmitAction(fn (StaticAction $action) => $action
+            ->label('Respond')
+            ->color('primary')
+        );
+    }
+
+    public function useStatusLabel(): static
+    {
+        $this
+            ->label(fn (?BookingAttendeeStatus $status) => match ($status) {
+                BookingAttendeeStatus::NeedsAction, null => 'Respond',
+                default => $status->getLabel()
+            })
+            ->icon(fn (?BookingAttendeeStatus $status) => match ($status) {
+                BookingAttendeeStatus::NeedsAction, null => null,
+                default => $status->getIcon()
+            })
+            ->color(fn (?BookingAttendeeStatus $status) => match ($status) {
+                BookingAttendeeStatus::NeedsAction, null => null,
+                default => $status->getColor()
+            })
+            ->button();
+
+        return $this;
     }
 
     public function save(array $data): void
@@ -82,5 +116,19 @@ trait RespondAction
         } catch (Exception $e) {
             $this->fail();
         }
+    }
+
+    protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array
+    {
+        $record = $this->getRecord();
+
+        if (! $record) {
+            return parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName);
+        }
+
+        return match ($parameterName) {
+            'status' => [static::getAttendeeStatus($record)],
+            default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
+        };
     }
 }

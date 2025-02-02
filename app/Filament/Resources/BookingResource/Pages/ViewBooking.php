@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\BookingResource\Pages;
 
+use App\Filament\Actions\RespondAction;
 use App\Filament\Clusters\Admin;
 use App\Filament\Resources\BookingResource;
 use Filament\Actions;
+use Filament\Facades\Filament;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
@@ -66,8 +68,10 @@ class ViewBooking extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            BookingResource\Actions\RespondAction::make()
-                ->record($this->getRecord()),
+            RespondAction::make()
+                ->useStatusLabel()
+                ->record($this->getRecord())
+                ->hidden(fn () => Filament::auth()->guest()),
             Actions\ActionGroup::make([
                 Actions\Action::make('edit')
                     ->icon('heroicon-m-pencil-square')
