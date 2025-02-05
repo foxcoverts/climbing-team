@@ -72,11 +72,6 @@ class BookingResource extends Resource
         return [];
     }
 
-    public static function canAccess(): bool
-    {
-        return true;
-    }
-
     public static function canViewAny(): bool
     {
         return static::can('viewOwn');
@@ -85,6 +80,16 @@ class BookingResource extends Resource
     public static function authorizeViewAny(): void
     {
         static::authorize('viewOwn');
+    }
+
+    public static function canView(Model $record): bool
+    {
+        return static::can('preview', $record);
+    }
+
+    public static function authorizeView(Model $record): void
+    {
+        static::authorize('preview', $record);
     }
 
     public static function getPages(): array
