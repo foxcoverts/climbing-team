@@ -32,8 +32,6 @@ class RespondToBooking extends Page
 {
     use HasUnsavedDataChangesAlert, InteractsWithFormActions;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
-
     protected static string $layout = 'filament-panels::components.layout.simple';
 
     protected static string $view = 'filament.pages.respond-to-booking';
@@ -75,10 +73,6 @@ class RespondToBooking extends Page
 
         $this->authorizeAccess();
 
-        if ($this->sequence != $this->booking->sequence) {
-            // TODO: Flag - something has changed.
-        }
-
         $this->fillForm();
     }
 
@@ -111,6 +105,15 @@ class RespondToBooking extends Page
             ->operation('edit')
             ->statePath('data')
             ->schema([
+                Forms\Components\Section::make('This booking has changed!')
+                    ->icon('heroicon-o-information-circle')
+                    ->iconColor('info')
+                    ->visible(fn (Booking $record) => $this->sequence != $record->sequence)
+                    ->schema([
+                        Forms\Components\Placeholder::make('sequence')
+                            ->hiddenLabel()
+                            ->content('Check the details below before you confirm your attendance.'),
+                    ]),
                 Forms\Components\Section::make(fn (Booking $record) => __(':Status Booking', [
                     'status' => $record->status->getLabel(),
                 ]))
