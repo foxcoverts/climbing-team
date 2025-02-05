@@ -205,11 +205,6 @@ class RespondToBooking extends Page
         return false;
     }
 
-    public static function isTenantSubscriptionRequired(Panel $panel): bool
-    {
-        return false;
-    }
-
     public function attendance(): BookingAttendance
     {
         if (! $this->attendee->relationLoaded('attendance')) {
