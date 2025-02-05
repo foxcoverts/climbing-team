@@ -294,9 +294,12 @@ class BookingResource extends Resource
                     ->badge(),
             ])
             ->recordClasses(['actions-align-top'])
-            ->emptyStateHeading(fn ($livewire) => __('No :tab bookings', [
-                'tab' => $livewire->activeTab,
-            ]))
+            ->emptyStateHeading(fn ($livewire) => match ($livewire->activeTab) {
+                'needs-action' => 'No invitations',
+                default => __('No :tab bookings', [
+                    'tab' => $livewire->activeTab,
+                ])
+            })
             ->emptyStateDescription('Try picking another tab or changing the filters for more bookings.')
             ->filters([
                 Tables\Filters\TernaryFilter::make('when')
