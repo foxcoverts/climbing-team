@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\RespondToBookingAction;
+use App\Enums\BookingAttendeeResponse;
 use App\Http\Controllers\Controller;
 use App\Models\MailLog;
 use Illuminate\Http\Request;
@@ -49,7 +50,7 @@ class StoreMailLogController extends Controller
 
                     $respondToBooking(
                         $attendee->getUser(),
-                        $attendee->getStatus(),
+                        BookingAttendeeResponse::tryFromStatus($attendee->getStatus()),
                         $attendee->getComment()
                     );
                     $changes++;

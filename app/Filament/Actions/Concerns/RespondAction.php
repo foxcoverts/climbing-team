@@ -33,7 +33,7 @@ trait RespondAction
     {
         parent::setUp();
 
-        $this->modalHeading(fn (): string => __('Respond :label', ['label' => $this->getRecordTitle()]));
+        $this->modalHeading(fn (): string => __('Respond to :Label', ['label' => $this->getRecordTitle()]));
 
         $this->successNotificationTitle('Attendance updated');
 
@@ -66,13 +66,12 @@ trait RespondAction
                 ]),
             Forms\Components\Section::make()
                 ->schema([
-                    Forms\Components\ToggleButtons::make('status')
+                    Forms\Components\ToggleButtons::make('response')
                         ->formatStateUsing(fn (Booking $record) => BookingAttendeeResponse::tryFromStatus(static::getAttendeeStatus($record)))
                         ->label('Can you attend this event?')
                         ->options(BookingAttendeeResponse::class)
                         ->required()->inline(),
                 ]),
-
         ]);
 
         $this->action(fn (array $data) => $this->save($data));
@@ -106,11 +105,10 @@ trait RespondAction
     public function save(array $data): void
     {
         try {
-            $status = BookingAttendeeResponse::tryFrom($data['status'])->toStatus();
             $attendee = Filament::auth()->user();
 
             $respondToBooking = new RespondToBookingAction($this->getRecord());
-            $respondToBooking($attendee, $status);
+            $respondToBooking($attendee, $data['response']);
 
             $this->success();
         } catch (Exception $e) {
