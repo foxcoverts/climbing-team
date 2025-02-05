@@ -5,6 +5,7 @@ namespace App\Filament\Resources\NewsPostResource\Pages;
 use App\Filament\Clusters\Admin;
 use App\Filament\Resources\NewsPostResource;
 use Filament\Actions;
+use Filament\Panel;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
@@ -15,6 +16,15 @@ use Illuminate\Support\Facades\Gate;
 class ViewNewsPost extends ViewRecord
 {
     protected static string $resource = NewsPostResource::class;
+
+    protected static string|array $withoutRouteMiddleware = ['auth'];
+
+    public static function authorizeResourceAccess(): void {}
+
+    public static function isEmailVerificationRequired(Panel $panel): bool
+    {
+        return false;
+    }
 
     public function render(): View
     {

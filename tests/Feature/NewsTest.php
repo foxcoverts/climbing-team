@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Filament\Pages\Dashboard;
 use App\Filament\Resources\NewsPostResource;
 use App\Filament\Resources\NewsPostResource\Pages\ListNewsPosts;
+use App\Filament\Resources\NewsPostResource\Pages\ViewNewsPost;
 use App\Filament\Widgets\RecentNews;
 use App\Models\NewsPost;
 use App\Models\User;
@@ -45,7 +46,7 @@ class NewsTest extends TestCase
         $post = NewsPost::factory()->for($author, 'author')->create();
 
         $this
-            ->get('/news/'.$post->slug)
+            ->get(ViewNewsPost::getUrl(['record' => $post]))
             ->assertOk()
             ->assertSee($post->title)
             ->assertSee('Please login to view the full post.');
@@ -58,7 +59,7 @@ class NewsTest extends TestCase
 
         $this
             ->actingAs($user)
-            ->get('/news/'.$post->slug)
+            ->get(ViewNewsPost::getUrl(['record' => $post]))
             ->assertOk()
             ->assertSee($post->title)
             ->assertDontSee('Please login to view the full post.');
