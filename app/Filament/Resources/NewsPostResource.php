@@ -24,6 +24,8 @@ class NewsPostResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
+    protected static ?string $activeNavigationIcon = 'heroicon-s-newspaper';
+
     protected static ?string $recordTitleAttribute = 'title';
 
     public static function getGlobalSearchResultDetails(Model $record): array
@@ -31,11 +33,6 @@ class NewsPostResource extends Resource
         return [
             'Posted' => $record->created_at->ago(),
         ];
-    }
-
-    public static function canAccess(): bool
-    {
-        return true;
     }
 
     public static function table(Table $table): Table
