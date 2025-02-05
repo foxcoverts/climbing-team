@@ -1,7 +1,6 @@
 <?php
 
 use App\Filament\Resources\BookingResource\Pages\ViewBooking;
-use App\Filament\Resources\NewsPostResource\Pages\ViewNewsPost;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingController;
@@ -61,6 +60,5 @@ Route::controller(BookingIcsController::class)
     });
 
 Route::get('bookings/{record}', ViewBooking::class);
-Route::get('news/{record}', ViewNewsPost::class);
 
 require __DIR__.'/auth.php';
