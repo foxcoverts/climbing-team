@@ -79,7 +79,7 @@ class RespondToBooking extends Page
     protected function authorizeAccess(): void
     {
         if ($this->invite != $this->attendance()->token) {
-            abort(Response::HTTP_FORBIDDEN, __('Invitation expired'));
+            abort(Response::HTTP_FORBIDDEN, __('Invitation invalid'));
         }
 
         if (! $this->attendee->is(Auth::user())) {
