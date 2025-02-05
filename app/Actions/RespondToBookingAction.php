@@ -2,9 +2,8 @@
 
 namespace App\Actions;
 
-use App\Enums\BookingAttendeeStatus;
+use App\Enums\BookingAttendeeResponse;
 use App\Models\Booking;
-use App\Models\BookingAttendance;
 use App\Models\User;
 use InvalidArgumentException;
 
@@ -24,12 +23,13 @@ class RespondToBookingAction
 
     public function __invoke(
         User $attendee,
-        BookingAttendeeStatus|string $status,
+        BookingAttendeeResponse|string $response,
         ?string $comment = null
     ): void {
         // Prepare data
         $attendee_id = $attendee->id;
-        $status = is_string($status) ? BookingAttendeeStatus::tryFrom($status) : $status;
+        $response = is_string($response) ? BookingAttendeeResponse::tryFrom($response) : $response;
+        $status = $response->toStatus();
         $author = $this->user ?? $attendee;
 
         // Validate

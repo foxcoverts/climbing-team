@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\RespondToBookingAction;
+use App\Enums\BookingAttendeeResponse;
 use App\Http\Requests\UpdateBookingAttendanceRequest;
 use App\Models\Booking;
 use App\Models\BookingAttendance;
@@ -60,7 +61,7 @@ class BookingAttendanceController extends Controller
 
         $respondToBooking(
             $request->user(),
-            $request->validated('status'),
+            BookingAttendeeResponse::tryFromStatus($request->validated('status')),
         );
 
         return redirect($request->session()->get('url.referer', url()->previous()))
