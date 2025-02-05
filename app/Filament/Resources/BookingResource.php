@@ -69,7 +69,9 @@ class BookingResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            'guest-list' => BookingResource\RelationManagers\GuestListRelationManager::class,
+        ];
     }
 
     public static function canViewAny(): bool
