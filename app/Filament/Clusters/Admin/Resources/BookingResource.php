@@ -207,13 +207,11 @@ class BookingResource extends Resource
                 Infolists\Components\TextEntry::make('activity'),
                 Infolists\Components\TextEntry::make('group_name')
                     ->label('Group')
-                    ->hidden(fn () => Filament::auth()->guest()),
+                    ->visible(fn (Booking $record) => static::can('view', $record)),
                 Infolists\Components\TextEntry::make('lead_instructor.name')
-                    ->visible(fn (Booking $record) => filled($record->lead_instructor_id))
-                    ->hidden(fn () => Filament::auth()->guest()),
+                    ->visible(fn (Booking $record) => filled($record->lead_instructor_id) && static::can('view', $record)),
                 Infolists\Components\TextEntry::make('notes')
-                    ->visible(fn (Booking $record) => filled($record->notes))
-                    ->hidden(fn () => Filament::auth()->guest())
+                    ->visible(fn (Booking $record) => filled($record->notes) && static::can('view', $record))
                     ->markdown(),
             ]);
     }
@@ -227,18 +225,18 @@ class BookingResource extends Resource
                     ->footerActions([
                         Infolists\Components\Actions\Action::make('goto')
                             ->label('View full details')
-                            ->visible(fn () => Filament::auth()->guest())
+                            ->hidden(fn () => Filament::auth()->check())
                             ->url(fn (Booking $record) => GotoBooking::getUrl(['record' => $record])),
                     ]),
                 Infolists\Components\TextEntry::make('please-login')
                     ->state('Please login to view the full post.')
                     ->url(fn (Booking $record) => GotoBooking::getUrl(['record' => $record]))
                     ->hiddenLabel()
-                    ->visible(fn () => Filament::auth()->guest())
+                    ->hidden(fn () => Filament::auth()->check())
                     ->alignCenter()
                     ->columnSpanFull(),
                 Activitylog\Infolists\Components\Timeline::make()
-                    ->hidden(fn () => Filament::auth()->guest())
+                    ->visible(fn (Booking $record) => static::can('view', $record))
                     ->label('Activity Log')
                     ->columnSpanFull(),
             ]);

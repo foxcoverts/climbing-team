@@ -11,6 +11,7 @@ use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Actions\StaticAction;
 use Filament\Facades\Filament;
 use Filament\Forms;
+use Illuminate\Support\Facades\Gate;
 
 trait RespondAction
 {
@@ -32,6 +33,12 @@ trait RespondAction
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->visible(function (Booking $record): bool {
+            $user = Filament::auth()->user();
+
+            return Gate::check('respond', [$record, $user]);
+        });
 
         $this->modalHeading(fn (): string => __('Respond to :Label', ['label' => $this->getRecordTitle()]));
 

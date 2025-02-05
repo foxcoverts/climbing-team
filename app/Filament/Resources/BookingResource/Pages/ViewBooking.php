@@ -7,6 +7,7 @@ use App\Filament\Clusters\Admin;
 use App\Filament\Resources\BookingResource;
 use Filament\Actions;
 use Filament\Facades\Filament;
+use Filament\Panel;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
@@ -16,6 +17,20 @@ use Illuminate\Support\Facades\Gate;
 class ViewBooking extends ViewRecord
 {
     protected static string $resource = BookingResource::class;
+
+    protected static string|array $withoutRouteMiddleware = ['auth'];
+
+    public static function authorizeResourceAccess(): void
+    {
+        if (Filament::auth()->check()) {
+            parent::authorizeResourceAccess();
+        }
+    }
+
+    public static function isEmailVerificationRequired(Panel $panel): bool
+    {
+        return false;
+    }
 
     public function render(): View
     {
@@ -70,8 +85,7 @@ class ViewBooking extends ViewRecord
         return [
             RespondAction::make()
                 ->useStatusLabel()
-                ->record($this->getRecord())
-                ->hidden(fn () => Filament::auth()->guest()),
+                ->record($this->getRecord()),
             Actions\ActionGroup::make([
                 Actions\Action::make('edit')
                     ->icon('heroicon-m-pencil-square')

@@ -1,6 +1,5 @@
 <?php
 
-use App\Filament\Resources\BookingResource\Pages\ViewBooking;
 use App\Http\Controllers\BookingAttendanceController;
 use App\Http\Controllers\BookingAttendeeController;
 use App\Http\Controllers\BookingController;
@@ -58,7 +57,5 @@ Route::controller(BookingIcsController::class)
         Route::get('ical/{user:ical_token}/booking.ics', 'index')->name('booking.ics');
         Route::get('ical/{user:ical_token}/rota.ics', 'rota')->name('booking.rota.ics');
     });
-
-Route::get('bookings/{record}', ViewBooking::class);
 
 require __DIR__.'/auth.php';
