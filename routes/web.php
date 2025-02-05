@@ -12,7 +12,6 @@ use App\Http\Controllers\BookingRelatedController;
 use App\Http\Controllers\BookingShareController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncidentController;
-use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TodoIcsController;
 use App\Http\Middleware\Authenticate;
@@ -60,16 +59,6 @@ Route::controller(BookingIcsController::class)
     ->group(function () {
         Route::get('ical/{user:ical_token}/booking.ics', 'index')->name('booking.ics');
         Route::get('ical/{user:ical_token}/rota.ics', 'rota')->name('booking.rota.ics');
-    });
-
-Route::controller(RespondController::class)
-    ->middleware(Authenticate::fromParam('attendee'))
-    ->group(function () {
-        Route::get('respond/{booking}/{attendee}', 'show')->scopeBindings()->name('respond');
-        Route::post('respond/{booking}/{attendee}', 'store')->scopeBindings()->name('respond.store');
-        Route::get('respond/{booking}/{attendee}/accept', 'accept')->scopeBindings()->name('respond.accept');
-        Route::get('respond/{booking}/{attendee}/tentative', 'tentative')->scopeBindings()->name('respond.tentative');
-        Route::get('respond/{booking}/{attendee}/decline', 'decline')->scopeBindings()->name('respond.decline');
     });
 
 Route::get('bookings/{record}', ViewBooking::class);
