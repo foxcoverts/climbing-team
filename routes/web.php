@@ -1,6 +1,5 @@
 <?php
 
-use App\Filament\Pages\PrivacyPolicy;
 use App\Filament\Resources\BookingResource\Pages\ViewBooking;
 use App\Filament\Resources\NewsPostResource\Pages\ViewNewsPost;
 use App\Http\Controllers\BookingAttendanceController;
@@ -63,6 +62,5 @@ Route::controller(BookingIcsController::class)
 
 Route::get('bookings/{record}', ViewBooking::class);
 Route::get('news/{record}', ViewNewsPost::class);
-Route::get('privacy-policy', PrivacyPolicy::class);
 
 require __DIR__.'/auth.php';
