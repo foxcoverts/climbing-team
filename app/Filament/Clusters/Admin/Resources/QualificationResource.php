@@ -58,7 +58,7 @@ class QualificationResource extends Resource
                                         ->options(GirlguidingScheme::class)
                                         ->default(GirlguidingScheme::Climbing)
                                         ->required()
-                                        ->selectablePlaceholder(fn (?GirlguidingScheme $state) => empty($state)),
+                                        ->selectablePlaceholder(fn ($state) => empty($state)),
                                     Forms\Components\TextInput::make('level')
                                         ->integer()
                                         ->minValue(1)
@@ -88,24 +88,24 @@ class QualificationResource extends Resource
                                             )
                                         ))
                                         ->required()
-                                        ->selectablePlaceholder(fn (?MountainTrainingAward $state) => empty($state)),
+                                        ->selectablePlaceholder(fn ($state) => empty($state)),
                                 ],
                                 ScoutPermit::class => [
                                     Forms\Components\Select::make('activity')
                                         ->options(ScoutPermitActivity::class)
                                         ->default(ScoutPermitActivity::ClimbingAndAbseiling)
                                         ->required()
-                                        ->selectablePlaceholder(fn (?ScoutPermitActivity $state) => empty($state)),
+                                        ->selectablePlaceholder(fn ($state) => empty($state)),
                                     Forms\Components\Select::make('category')
                                         ->options(ScoutPermitCategory::class)
                                         ->default(ScoutPermitCategory::ArtificialTopRope)
                                         ->required()
-                                        ->selectablePlaceholder(fn (?ScoutPermitCategory $state) => empty($state)),
+                                        ->selectablePlaceholder(fn ($state) => empty($state)),
                                     Forms\Components\Select::make('permit_type')
                                         ->options(ScoutPermitType::class)
                                         ->default(ScoutPermitType::Leadership)
                                         ->required()
-                                        ->selectablePlaceholder(fn (?ScoutPermitType $state) => empty($state)),
+                                        ->selectablePlaceholder(fn ($state) => empty($state)),
                                     Forms\Components\Textarea::make('restrictions')
                                         ->placeholder('None')
                                         ->autosize()
@@ -138,16 +138,15 @@ class QualificationResource extends Resource
                     ->relationship('detail')
                     ->schema(fn (?Qualification $record): array => match ($record?->detail_type) {
                         GirlguidingQualification::class => [
-                            Infolists\Components\TextEntry::make('scheme'),
-                            Infolists\Components\TextEntry::make('level'),
+                            Infolists\Components\TextEntry::make('summary')
+                                ->label('Award'),
                         ],
                         MountainTrainingQualification::class => [
                             Infolists\Components\TextEntry::make('award'),
                         ],
                         ScoutPermit::class => [
-                            Infolists\Components\TextEntry::make('activity'),
-                            Infolists\Components\TextEntry::make('category'),
-                            Infolists\Components\TextEntry::make('permit_type'),
+                            Infolists\Components\TextEntry::make('summary')
+                                ->label('Permit Type'),
                             Infolists\Components\TextEntry::make('restrictions')
                                 ->placeholder('None'),
                         ],
