@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\RespondToBookingAction;
+use App\Enums\BookingAttendeeResponse;
 use App\Http\Controllers\Controller;
 use App\Models\MailLog;
 use Illuminate\Http\Request;
@@ -25,14 +26,16 @@ class StoreMailLogController extends Controller
             ]);
         } catch (InvalidArgumentException $e) {
             return response()->json([
-                "error" => $e->getMessage()
+                'error' => $e->getMessage(),
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        if ($mail->calendar?->getMethod() == 'REPLY') {
+        if ($mail->calendar?->method == 'REPLY') {
             $changes = 0;
-            foreach ($mail->calendar->getEvents() as $event) {
-                if (!$event->getBooking()) continue;
+            foreach ($mail->calendar->events as $event) {
+                if (! $event->getBooking()) {
+                    continue;
+                }
 
                 try {
                     $respondToBooking = new RespondToBookingAction($event->getBooking());
@@ -41,16 +44,15 @@ class StoreMailLogController extends Controller
                 }
 
                 foreach ($event->getAttendees() as $attendee) {
-                    if (!$attendee->getUser()) continue;
-
-                    if ($change = $respondToBooking(
-                        $attendee->getUser(),
-                        $attendee->getStatus(),
-                        $attendee->getComment()
-                    )) {
-                        $change->created_at = $event->getSentAt();
-                        $change->save();
+                    if (! $attendee->getUser()) {
+                        continue;
                     }
+
+                    $respondToBooking(
+                        $attendee->getUser(),
+                        BookingAttendeeResponse::tryFromStatus($attendee->getStatus()),
+                        $attendee->getComment()
+                    );
                     $changes++;
                 }
             }
@@ -60,6 +62,6 @@ class StoreMailLogController extends Controller
         }
         $mail->save();
 
-        return response()->json("ok", Response::HTTP_OK);
+        return response()->json('ok', Response::HTTP_OK);
     }
 }

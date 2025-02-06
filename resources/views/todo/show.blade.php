@@ -126,8 +126,6 @@
                     </div>
                 @endisset
             </div>
-
-            @include('todo.partials.recent-activity')
         </div>
     </section>
 </x-layout.app>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -55,6 +56,21 @@ class MailLog extends Model
         }
 
         return $this;
+    }
+
+    public function markUnread(): static
+    {
+        $this->read_at = null;
+
+        return $this;
+    }
+
+    /**
+     * Logs that are unread.
+     */
+    public function scopeUnread(Builder $query): void
+    {
+        $query->whereNull('read_at');
     }
 
     /**
@@ -183,7 +199,7 @@ class MailLog extends Model
     protected function booking(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->calendar?->getEvents()->first()?->getBooking()
+            get: fn () => $this->calendar?->events->first()?->booking
                 ?? $this->toBooking,
         );
     }
@@ -191,7 +207,7 @@ class MailLog extends Model
     protected function user(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->calendar?->getEvents()->first()?->getAttendees()->first()?->getUser()
+            get: fn () => $this->calendar?->events->first()?->attendees->first()?->user
                 ?? $this->fromUser,
         );
     }
