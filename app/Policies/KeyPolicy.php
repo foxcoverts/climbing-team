@@ -20,6 +20,14 @@ class KeyPolicy
      */
     public function viewAny(User $user): bool
     {
+        return $user->can('manage', Key::class);
+    }
+
+    /**
+     * Determine whether the user can view their own keys.
+     */
+    public function viewOwn(User $user): bool
+    {
         return true;
     }
 
@@ -28,7 +36,8 @@ class KeyPolicy
      */
     public function view(User $user, Key $key): bool
     {
-        return $user->can('manage', $key);
+        return $user->can('manage', $key)
+        || ($user->id == $key->holder_id);
     }
 
     /**
@@ -44,7 +53,7 @@ class KeyPolicy
      */
     public function transfer(User $user, Key $key): bool
     {
-        return $user->can('manage', Key::class)
+        return $user->can('manage', $key)
             || ($user->id == $key->holder_id);
     }
 

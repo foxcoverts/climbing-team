@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\BookingStatus;
 use App\Models\Booking;
 use App\Models\BookingAttendance;
 use App\Models\User;
@@ -20,19 +19,9 @@ class BookingPolicy
     /**
      * Determine whether the user can view any bookings.
      */
-    public function viewAny(User $user, ?BookingStatus $status = null): bool
+    public function viewAny(User $user): bool
     {
-        switch ($status) {
-            case BookingStatus::Confirmed:
-                return $this->manage($user) || ! $user->isGuest();
-
-            case BookingStatus::Tentative:
-            case BookingStatus::Cancelled:
-                return $this->manage($user);
-
-            default:
-                return $this->manage($user) || ! $user->isGuest();
-        }
+        return ! $user->isGuest();
     }
 
     /**
@@ -44,14 +33,32 @@ class BookingPolicy
     }
 
     /**
-     * Determine whether the user can view the booking.
+     * Determine whether the user can preview the booking.
+     */
+    public function preview(?User $user, Booking $booking): bool
+    {
+        if (is_null($user)) {
+            return ! $booking->isCancelled();
+        } elseif ($booking->attendees->find($user)) {
+            return true;
+        } elseif (! $booking->isCancelled()) {
+            return true;
+        } else {
+            return $this->manage($user);
+        }
+    }
+
+    /**
+     * Determine whether the user can view the details for a booking.
      */
     public function view(User $user, Booking $booking): bool
     {
         if ($booking->attendees->find($user)) {
             return true;
+        } elseif ($booking->isConfirmed() || $user->isPermitHolder()) {
+            return ! $user->isGuest();
         } else {
-            return $this->viewAny($user, $booking->status);
+            return $this->manage($user);
         }
     }
 
