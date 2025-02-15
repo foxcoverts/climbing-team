@@ -2,7 +2,9 @@
 
 namespace App\Mail;
 
+use App\Enums\BookingAttendeeResponse;
 use App\Enums\BookingAttendeeStatus;
+use App\Filament\Pages\RespondToBooking;
 use App\iCal\Domain\Enum\CalendarMethod;
 use App\Models\Booking;
 use App\Models\BookingAttendance;
@@ -108,14 +110,14 @@ class BookingInvite extends Mailable implements ShouldQueue
     /**
      * The URL for the call to action buttons.
      */
-    public function getRespondUrl(?string $action = null): string
+    public function getRespondUrl(?BookingAttendeeResponse $response = null): string
     {
-        $route = (! $action) ? 'respond' : "respond.$action";
-
-        return URL::route($route, [
-            $this->booking, $this->attendee,
+        return RespondToBooking::getUrl([
+            'booking' => $this->booking,
+            'attendee' => $this->attendee,
             'invite' => $this->attendance->token,
             'sequence' => $this->booking->sequence,
+            'response' => $response,
         ]);
     }
 
@@ -141,9 +143,9 @@ class BookingInvite extends Mailable implements ShouldQueue
                 'changed_summary' => $this->buildChangedSummary(),
                 'when' => $this->buildDateString(),
                 'booking_url' => $this->getBookingUrl(),
-                'accept_url' => $this->getRespondUrl('accept'),
-                'decline_url' => $this->getRespondUrl('decline'),
-                'tentative_url' => $this->getRespondUrl('tentative'),
+                'accept_url' => $this->getRespondUrl(BookingAttendeeResponse::Yes),
+                'decline_url' => $this->getRespondUrl(BookingAttendeeResponse::No),
+                'tentative_url' => $this->getRespondUrl(BookingAttendeeResponse::Maybe),
                 'respond_url' => $this->getRespondUrl(),
             ], $this->buildChangedList())
         );

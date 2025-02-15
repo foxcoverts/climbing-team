@@ -30,7 +30,7 @@
                 <button @click="open = !open" x-bind:aria-pressed="open" class="flex items-center space-x-1">
                     <x-icon.cheveron.down aria-hidden="true" class="w-4 h-4 fill-current transition-transform"
                         ::class="open ? '' : '-rotate-90'" />
-                    <span>{{ __("app.attendee.status.$status") }}</span>
+                    <span>{{ __("app.booking.attendee.status.$status") }}</span>
                     <span {{ $status != 'accepted' ? '' : 'x-cloak' }} x-show="!open" x-transition
                         class="bg-gray-200 dark:bg-gray-600 dark:text-white px-2 rounded-xl">{{ count($list) }}</span>
                 </button>
@@ -65,19 +65,6 @@
                     'booking' => $booking,
                     'attendance' => $attendance(),
                 ])
-            </div>
-            <div class="flex flex-wrap gap-4">{{-- flex-group --}}
-                @if ($booking->isFuture() && !$booking->isCancelled())
-                    @can('create', [BookingAttendance::class, $booking])
-                        <x-button.primary :href="route('booking.attendee.invite', $booking)" :label="__('Invite')" />
-
-                        <x-button.primary :href="route('booking.attendee.create', $booking)" :label="__('Add')" />
-                    @endcan
-                @endif
-
-                @can('rollcall', [BookingAttendance::class, $booking])
-                    <x-button.primary :href="route('booking.attendee.index', $booking)" :label="__('Roll call')" />
-                @endcan
             </div>
         </footer>
     @endif

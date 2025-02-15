@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Filament\Resources\KeyResource;
 use App\Models\Key;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -16,8 +17,7 @@ class KeyTransferredTo extends Notification
     public function __construct(
         public Key $key,
         public User $from,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the notification's delivery channels.
@@ -48,6 +48,6 @@ class KeyTransferredTo extends Notification
             ->subject(Lang::get('Key Transferred'))
             ->line(Lang::get('This email is to confirm that you are now the holder of **:name**. It has been passed to you from **:user**.', ['name' => $this->key->name, 'user' => $this->from->name]))
             ->line(Lang::get('Please look after the key. If you pass it on to someone else please update the website or let the **Team Leader** know as soon as possible.'))
-            ->action(Lang::get('View Key'), route('key.index'));
+            ->action(Lang::get('View Key'), KeyResource::getUrl());
     }
 }

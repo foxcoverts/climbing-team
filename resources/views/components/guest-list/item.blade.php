@@ -1,5 +1,6 @@
 @use('App\Enums\Accreditation')
 @use('App\Enums\Role')
+@use('App\Filament\Clusters\Admin\Resources\UserResource')
 @props(['booking', 'attendee', 'currentUser'])
 
 <div x-data @click="if ($refs.link) window.location = $refs.link.href;" class="flex flex-wrap items-start gap-1"
@@ -24,7 +25,7 @@
 
     @if ($attendee->isKeyHolder())
         @can('manage', App\Models\Key::class)
-            <a href="{{ route('key.index') }}">
+            <a href="{{ UserResource::getUrl('view', ['record' => $attendee, 'activeRelationManager' => 'keys']) }}">
                 <x-badge.key-holder label="" class="text-xs whitespace-nowrap" />
             </a>
         @else

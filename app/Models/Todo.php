@@ -4,12 +4,13 @@ namespace App\Models;
 
 use App\Casts\AsSequence;
 use App\Enums\TodoStatus;
+use App\Events\TodoChanged;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Auth;
 
 class Todo extends Model
 {
@@ -21,14 +22,14 @@ class Todo extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'summary',
+        'completed_at',
         'description',
+        'due_at',
         'location',
         'priority',
-        'status',
-        'due_at',
         'started_at',
-        'completed_at',
+        'status',
+        'summary',
     ];
 
     /**
@@ -37,8 +38,8 @@ class Todo extends Model
      * @var array
      */
     protected $attributes = [
-        'status' => TodoStatus::NeedsAction->value,
         'location' => 'Fox Coverts Campsite',
+        'status' => TodoStatus::NeedsAction->value,
     ];
 
     /**
@@ -47,11 +48,12 @@ class Todo extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'status' => TodoStatus::class,
-        'due_at' => 'datetime',
-        'started_at' => 'datetime',
         'completed_at' => 'datetime',
+        'due_at' => 'datetime',
+        'priority' => 'integer',
         'sequence' => AsSequence::class,
+        'started_at' => 'datetime',
+        'status' => TodoStatus::class,
     ];
 
     /**
@@ -60,10 +62,43 @@ class Todo extends Model
     protected function sequenced(): array
     {
         return [
-            'status',
             'due_at',
             'started_at',
+            'status',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Todo $model): void {
+            if ($model->isDirty('status')) {
+                switch ($model->status) {
+                    case TodoStatus::NeedsAction:
+                        $model->started_at = null;
+                        $model->completed_at = null;
+                        break;
+
+                    case TodoStatus::InProcess:
+                        $model->started_at ??= $model->freshTimestamp();
+                        $model->completed_at = null;
+                        break;
+
+                    case TodoStatus::Completed:
+                        $model->completed_at = $model->freshTimestamp();
+                        break;
+
+                    case TodoStatus::Cancelled:
+                        $model->completed_at = $model->freshTimestamp();
+                        break;
+                }
+            }
+        });
+
+        static::saved(function (Todo $model): void {
+            if ($model->wasChanged('sequence') && Auth::check()) {
+                event(new TodoChanged($model, Auth::user(), $model->getChanges()));
+            }
+        });
     }
 
     public function attendees(): BelongsToMany
@@ -72,12 +107,6 @@ class Todo extends Model
             ->withTimestamps()
             ->withPivot('comment', 'status', 'token')->as('attendance')
             ->using(TodoAttendance::class);
-    }
-
-    public function changes(): MorphMany
-    {
-        return $this->morphMany(Change::class, 'changeable')
-            ->orderByDesc('created_at');
     }
 
     /**

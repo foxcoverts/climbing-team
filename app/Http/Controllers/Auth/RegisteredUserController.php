@@ -63,7 +63,7 @@ class RegisteredUserController extends Controller
     public function edit(Request $request, User $user): View|RedirectResponse|Response
     {
         if ($user->password != '') {
-            return redirect()->route('profile');
+            return redirect()->route('dashboard');
         }
         if (! $request->hasValidSignature()) {
             return response()->view('auth.setup-account-expired', [

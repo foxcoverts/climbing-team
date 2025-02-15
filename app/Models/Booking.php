@@ -6,19 +6,27 @@ use App\Casts\AsSequence;
 use App\Casts\AsTimezone;
 use App\Enums\BookingAttendeeStatus;
 use App\Enums\BookingStatus;
+use App\Notifications\BookingCancelled;
+use App\Notifications\BookingChanged;
+use App\Notifications\BookingConfirmed;
+use App\Notifications\BookingInvite;
 use Carbon\Carbon;
+use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Facades\Notification;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-class Booking extends Model
+class Booking extends Model implements HasName
 {
-    use Concerns\HasSequence, Concerns\HasUid, HasFactory, HasUlids;
+    use Concerns\HasSequence, Concerns\HasUid, HasFactory, HasUlids, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -63,6 +71,30 @@ class Booking extends Model
     ];
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array<int, string>
+     */
+    protected $with = [
+        'attendees',
+    ];
+
+    public function getFilamentName(): string
+    {
+        return $this->summary;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logExcept(['status'])
+            ->useAttributeRawValues(['timezone'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    /**
      * The attributes that cause the `sequence` to increase.
      */
     protected function sequenced(): array
@@ -75,18 +107,81 @@ class Booking extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        static::updating(function (Booking $model): void {
+            if ($model->status === BookingStatus::Cancelled && $model->isDirty('status')) {
+                $model->lead_instructor_id = null;
+            }
+        });
+
+        static::updated(function (Booking $model): void {
+            if ($model->wasChanged('status')) {
+                $originalStatus = $model->getOriginal('status');
+
+                if ($originalStatus === BookingStatus::Cancelled) {
+                    $event = 'restored';
+
+                    $invites = $model->attendees->mapWithKeys(fn (User $attendee): array => match (true) {
+                        // Anyone who previously couldn't go probably still can't go
+                        $attendee->attendance->status === BookingAttendeeStatus::Declined => [],
+                        // Re-invite anyone with a verified email address
+                        $attendee->hasVerifiedEmail() => [
+                            $attendee->id => [
+                                'status' => BookingAttendeeStatus::NeedsAction,
+                                'token' => BookingAttendance::generateToken(),
+                            ],
+                        ],
+                        // Mark anyone else as 'Maybe'
+                        default => [
+                            $attendee->id => [
+                                'status' => BookingAttendeeStatus::Tentative,
+                            ],
+                        ]
+                    });
+
+                    $model->attendees()->syncWithoutDetaching($invites);
+                    $model->load('attendees');
+
+                    Notification::send($model->attendees, new BookingInvite($model));
+                } else {
+                    $event = $model->status->value;
+                }
+
+                activity()
+                    ->event($event)
+                    ->on($model)
+                    ->createdAt($model->updated_at)
+                    ->withProperties([
+                        'old' => ['status' => $originalStatus],
+                        'attributes' => ['status' => $model->status],
+                    ])
+                    ->log($event);
+
+                if ($model->isConfirmed()) {
+                    Notification::send($model->attendees, new BookingConfirmed($model, $model->getChanges()));
+                } elseif ($model->isCancelled()) {
+                    Notification::send($model->attendees, new BookingCancelled($model));
+                }
+            } elseif ($model->wasChanged('sequence')) {
+                Notification::send($model->attendees, new BookingChanged($model, $model->getChanges()));
+            }
+        });
+    }
+
+    public function summary(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->activity.' - '.$this->start_at->timezone($this->timezone)->toFormattedDayDateString()
+        );
+    }
+
     public function attendees(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
             ->withTimestamps()
             ->withPivot('comment', 'status', 'token')->as('attendance')
             ->using(BookingAttendance::class);
-    }
-
-    public function changes(): MorphMany
-    {
-        return $this->morphMany(Change::class, 'changeable')
-            ->orderByDesc('created_at');
     }
 
     public function lead_instructor(): BelongsTo
@@ -194,14 +289,19 @@ class Booking extends Model
      *
      * @param  BookingAttendeeStatus[]  $status  (default excludes `Declined`)
      */
-    public function scopeAttendeeStatus(Builder $bookings, User $attendee, array $status = []): void
+    public function scopeAttendeeStatus(Builder $bookings, User $attendee, null|array|BookingAttendeeStatus $status = null): void
     {
+        if (! is_null($status) && ! is_array($status)) {
+            $status = [$status];
+        }
+
         $bookings->whereHas('attendees', function (Builder $query) use ($attendee, $status) {
             $query->where('user_id', $attendee->id);
-            if (empty($status)) {
-                $query->whereNot('status', BookingAttendeeStatus::Declined);
-            } else {
+
+            if (filled($status)) {
                 $query->whereIn('status', $status);
+            } elseif (is_null($status)) {
+                $query->whereNot('status', BookingAttendeeStatus::Declined);
             }
         });
     }
@@ -214,10 +314,10 @@ class Booking extends Model
         if ($user->isGuest()) {
             $bookings->attendeeStatus($user);
         } elseif ($user->cannot('manage', Booking::class)) {
-            $bookings->where(function (Builder $query) use ($user) {
-                $query->attendeeStatus($user)
-                    ->orWhereIn('status', [BookingStatus::Confirmed]);
-            });
+            $bookings->where(fn (Builder $query) => $query
+                ->attendeeStatus($user, [])
+                ->orWhereIn('status', [BookingStatus::Confirmed])
+            );
         }
     }
 }

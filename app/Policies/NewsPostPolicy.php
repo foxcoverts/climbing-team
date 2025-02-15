@@ -14,7 +14,7 @@ class NewsPostPolicy
 
     public function viewAny(User $user)
     {
-        return true;
+        return $user->exists;
     }
 
     public function create(User $user)
@@ -22,7 +22,7 @@ class NewsPostPolicy
         return $user->can('manage', NewsPost::class);
     }
 
-    public function view(User $user, NewsPost $post)
+    public function view(?User $user, NewsPost $post)
     {
         return true;
     }

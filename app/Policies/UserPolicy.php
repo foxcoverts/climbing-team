@@ -19,7 +19,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->manage($user);
+        return ! $user->isGuest();
     }
 
     /**

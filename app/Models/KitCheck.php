@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Contracts\Activity;
 
 class KitCheck extends Model
 {
@@ -31,6 +32,24 @@ class KitCheck extends Model
     public function checked_by(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (KitCheck $record): void {
+            activity()
+                ->event('kitChecked')
+                ->on($record->user)
+                ->by($record->checked_by)
+                ->createdAt($record->checked_on)
+                ->withProperty('kit_check_id', $record->id)
+                ->tap(function (Activity $activity) use ($record): Activity {
+                    $activity->updated_at = $record->updated_at;
+
+                    return $activity;
+                })
+                ->log('kitChecked');
+        });
     }
 
     /**

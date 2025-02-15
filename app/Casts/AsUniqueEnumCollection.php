@@ -81,7 +81,7 @@ class AsUniqueEnumCollection implements Castable
 
             public function serialize($model, string $key, $value, array $attributes)
             {
-                return (new Collection($value->getArrayCopy()))->map(function ($enum) {
+                return (new Collection($value))->map(function ($enum) {
                     return $this->getStorableEnumValue($enum);
                 })->toArray();
             }

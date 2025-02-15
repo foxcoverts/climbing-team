@@ -12,7 +12,6 @@
 
                 @can('update', $booking)
                     <footer class="flex flex-wrap items-start gap-4 mt-4 w-full max-w-prose">
-                        <x-button.primary :href="route('booking.edit', $booking)" :label="__('Edit')" />
                         <x-button.secondary :href="route('booking.related.index', $booking)" :label="__('Related')" />
                         <x-button.secondary :href="route('booking.share', $booking)" :label="__('Share')" />
                     </footer>
@@ -24,8 +23,6 @@
 
                 <x-related-bookings-list :$booking :$currentUser />
             </div>
-
-            @include('booking.partials.recent-activity')
         </div>
     </section>
 </x-layout.app>

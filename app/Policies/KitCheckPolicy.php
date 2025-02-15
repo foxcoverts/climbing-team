@@ -26,6 +26,14 @@ class KitCheckPolicy
     }
 
     /**
+     * Determine whether the user can view their own kit checks.
+     */
+    public function viewOwn(User $user): bool
+    {
+        return true;
+    }
+
+    /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, KitCheck $kitCheck): bool

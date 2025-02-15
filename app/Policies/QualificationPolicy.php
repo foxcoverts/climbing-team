@@ -18,12 +18,24 @@ class QualificationPolicy
     /**
      * Determine whether the user can view any qualifications.
      */
-    public function viewAny(User $user, User $model): bool
+    public function viewAny(User $user, ?User $model = null): bool
     {
+        if (is_null($model)) {
+            return $user->can('manage', Qualification::class);
+        }
+
         return ($user->id == $model->id) ||
             (isset($model->attendance) && $user->can('view', $model->attendance)) ||
             $user->can('manage', Qualification::class) ||
             $user->can('view', $model);
+    }
+
+    /**
+     * Determine whether the user can list their own qualifications.
+     */
+    public function viewOwn(User $user): bool
+    {
+        return true;
     }
 
     /**
@@ -39,8 +51,12 @@ class QualificationPolicy
     /**
      * Determine whether the user can create qualifications.
      */
-    public function create(User $user, User $model): bool
+    public function create(User $user, ?User $model = null): bool
     {
+        if (is_null($model)) {
+            return $user->can('manage', Qualification::class);
+        }
+
         return $user->can('view', $model) && $user->can('manage', Qualification::class);
     }
 
