@@ -22,7 +22,7 @@
         "@tailwindcss/typography": "^0.5.16",
         "alpinejs": "^3.14",
         "autoprefixer": "^10.4",
-        "axios": "^1.7",
+        "axios": "^1.8",
         "laravel-vite-plugin": "^1.2",
         "libphonenumber-js": "^1.12",
         "moment": "^2.30",
