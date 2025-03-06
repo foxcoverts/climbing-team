@@ -41,7 +41,7 @@ class KeyController extends Controller
 
         return view('key.create', [
             'key' => $key,
-            'users' => User::orderBy('name')->get(),
+            'users' => User::ordered()->get(),
         ]);
     }
 

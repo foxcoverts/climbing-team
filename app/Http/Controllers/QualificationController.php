@@ -2,97 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreQualificationRequest;
 use App\Http\Requests\UpdateQualificationRequest;
 use App\Models\Qualification;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class QualificationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * List all qualifications.
      */
-    public function index(User $user): View
+    public function index(Request $request): View
     {
-        Gate::authorize('viewAny', [Qualification::class, $user]);
+        Gate::authorize('viewAny', Qualification::class);
 
-        $qualifications = $user->allQualifications()
-            ->with('detail')->ordered();
+        $qualifications = Qualification::ordered()->with('detail', 'user');
 
         return view('qualification.index', [
-            'user' => $user,
+            'currentUser' => $request->user(),
+            'user' => null,
             'qualifications' => $qualifications->get(),
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show a list of users to create a qualification for.
      */
-    public function create(User $user)
+    public function create(): View
     {
-        Gate::authorize('create', [Qualification::class, $user]);
+        Gate::authorize('create', Qualification::class);
 
-        return view('qualification.create', [
-            'user' => $user,
-            'qualification' => new Qualification(),
+        return view('qualification.pick-user', [
+            'users' => User::ordered()->get(),
         ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display the specified qualification.
      */
-    public function store(StoreQualificationRequest $request, User $user): RedirectResponse
-    {
-        Gate::authorize('create', [Qualification::class, $user]);
-
-        $detail_type = $request->safe()->detail_type;
-
-        $detail = new $detail_type($request->safe()->except(['detail_type', 'expires_on']));
-        $detail->save();
-
-        $qualification = new Qualification;
-        $qualification->fill($request->safe()->only('expires_on'));
-        $qualification->user()->associate($user);
-        $qualification->detail()->associate($detail);
-        $qualification->save();
-
-        return redirect()->route('user.qualification.show', [$user, $qualification])
-            ->with('alert.info', __('Qualification added.'));
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user, Qualification $qualification): View
+    public function show(Request $request, Qualification $qualification): View
     {
         Gate::authorize('view', $qualification);
 
         return view('qualification.show', [
-            'user' => $user,
+            'currentUser' => $request->user(),
             'qualification' => $qualification,
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified qualification.
      */
-    public function edit(User $user, Qualification $qualification): View
+    public function edit(Qualification $qualification): View
     {
         Gate::authorize('update', $qualification);
 
         return view('qualification.edit', [
-            'user' => $user,
             'qualification' => $qualification->load('detail'),
         ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified qualification in storage.
      */
-    public function update(UpdateQualificationRequest $request, User $user, Qualification $qualification)
+    public function update(UpdateQualificationRequest $request, Qualification $qualification)
     {
         Gate::authorize('update', $qualification);
 
@@ -100,20 +75,20 @@ class QualificationController extends Controller
 
         $qualification->update($request->safe()->only('expires_on'));
 
-        return redirect()->route('user.qualification.show', [$user, $qualification])
+        return redirect()->route('qualification.show', $qualification)
             ->with('alert.info', __('Qualification updated.'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified qualification from storage.
      */
-    public function destroy(User $user, Qualification $qualification)
+    public function destroy(Qualification $qualification)
     {
         Gate::authorize('delete', $qualification);
 
         $qualification->delete();
 
-        return redirect()->route('user.qualification.index', $user)
+        return redirect()->route('user.qualification.index', $qualification->user)
             ->with('alert.info', __('Qualification removed.'));
     }
 }

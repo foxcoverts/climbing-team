@@ -26,6 +26,7 @@ use App\Http\Controllers\MailLogController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileNotificationsController;
+use App\Http\Controllers\ProfileQualificationController;
 use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\RespondController;
 use App\Http\Controllers\TodoController;
@@ -35,6 +36,7 @@ use App\Http\Controllers\TrashedDocumentController;
 use App\Http\Controllers\UserBookingController;
 use App\Http\Controllers\UserBookingInviteController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserQualificationController;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
@@ -123,6 +125,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->destroyable();
     });
 
+    Route::get('profile/qualifications', [ProfileQualificationController::class, 'show'])->name('qualification.own.show');
+    Route::resource('qualification', QualificationController::class)->except('store');
+    Route::resource('user.qualification', UserQualificationController::class)->shallow()->only(['index', 'create', 'store']);
+
     Route::middleware('password.confirm')->group(function () {
         Route::controller(ProfileController::class)->group(function () {
             Route::get('profile', 'edit')->name('profile.edit');
@@ -142,7 +148,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
         Route::get('user/{user}/booking', UserBookingController::class)->name('user.booking.index');
         Route::post('user/{user}/invite', [UserController::class, 'sendInvite'])->name('user.invite');
-        Route::resource('user.qualification', QualificationController::class);
         Route::resource('user', UserController::class);
     });
 });

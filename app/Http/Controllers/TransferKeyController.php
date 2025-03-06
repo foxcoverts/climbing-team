@@ -23,7 +23,7 @@ class TransferKeyController extends Controller
         return view('key.transfer', [
             'ajax' => $request->ajax(),
             'key' => $key,
-            'users' => User::orderBy('name')->get(),
+            'users' => User::ordered()->get(),
         ]);
     }
 
