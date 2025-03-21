@@ -32,7 +32,7 @@
                         </template>
                         @foreach ($bookings as $relatedBooking)
                             <option value="{{ $relatedBooking->id }}" @disabled($booking->related->contains($relatedBooking))>
-                                {{ localDate($relatedBooking->start_at, $relatedBooking->timezone)->toFormattedDayDateString() }}
+                                {{ localDate($relatedBooking->start_at, $relatedBooking->timezone)->toDayDateTimeString() }}
                                 - {{ $relatedBooking->activity }}
                                 for {{ $relatedBooking->group_name }}
                             </option>

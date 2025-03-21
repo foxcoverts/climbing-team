@@ -8,7 +8,7 @@
             <li><a href="{{ route('booking.show', $related) }}">
                     {{ $related->activity }}
                     -
-                    <span x-data="{{ Js::from(['start_at' => localDate($related->start_at, $related->timezone)]) }}" x-text="dateString(start_at)">&nbsp;</span>
+                    <span x-data="{{ Js::from(['start_at' => localDate($related->start_at, $related->timezone)]) }}" x-text="dateTimeString(start_at)">&nbsp;</span>
                 </a></li>
         @endforeach
     </ul>
