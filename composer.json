@@ -10,7 +10,7 @@
     "require": {
         "php": "^8.2",
         "eluceo/ical": "^2.13",
-        "laravel/framework": "^11.6",
+        "laravel/framework": "^12.3",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "league/flysystem-read-only": "^3.23",
