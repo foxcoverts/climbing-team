@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "425267e772cc75bd2003a7f30566d36c",
+    "content-hash": "9f8105d69f5b7ab09e488b5d4d678b1d",
     "packages": [
         {
             "name": "brick/math",
@@ -647,16 +647,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php-lite",
-            "version": "9.0.1",
+            "version": "9.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php-lite.git",
-                "reference": "eeb7f1eb5ef2a4030c4e694eed8cebc79c7f283a"
+                "reference": "342981f32855240387c44790a4d92ec8ae3153ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/eeb7f1eb5ef2a4030c4e694eed8cebc79c7f283a",
-                "reference": "eeb7f1eb5ef2a4030c4e694eed8cebc79c7f283a",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/342981f32855240387c44790a4d92ec8ae3153ca",
+                "reference": "342981f32855240387c44790a4d92ec8ae3153ca",
                 "shasum": ""
             },
             "require": {
@@ -721,7 +721,7 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php-lite/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php-lite"
             },
-            "time": "2025-03-21T12:19:12+00:00"
+            "time": "2025-05-08T07:10:02+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -1198,16 +1198,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v12.12.0",
+            "version": "v12.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "8f6cd73696068c28f30f5964556ec9d14e5d90d7"
+                "reference": "52b588bcd8efc6d01bc1493d2d67848f8065f269"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/8f6cd73696068c28f30f5964556ec9d14e5d90d7",
-                "reference": "8f6cd73696068c28f30f5964556ec9d14e5d90d7",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/52b588bcd8efc6d01bc1493d2d67848f8065f269",
+                "reference": "52b588bcd8efc6d01bc1493d2d67848f8065f269",
                 "shasum": ""
             },
             "require": {
@@ -1228,7 +1228,7 @@
                 "guzzlehttp/uri-template": "^1.0",
                 "laravel/prompts": "^0.3.0",
                 "laravel/serializable-closure": "^1.3|^2.0",
-                "league/commonmark": "^2.6",
+                "league/commonmark": "^2.7",
                 "league/flysystem": "^3.25.1",
                 "league/flysystem-local": "^3.25.1",
                 "league/uri": "^7.5.1",
@@ -1320,7 +1320,7 @@
                 "php-http/discovery": "^1.15",
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^10.5.35|^11.5.3|^12.0.1",
-                "predis/predis": "^2.3",
+                "predis/predis": "^2.3|^3.0",
                 "resend/resend-php": "^0.10.0",
                 "symfony/cache": "^7.2.0",
                 "symfony/http-client": "^7.2.0",
@@ -1352,7 +1352,7 @@
                 "pda/pheanstalk": "Required to use the beanstalk queue driver (^5.0).",
                 "php-http/discovery": "Required to use PSR-7 bridging features (^1.15).",
                 "phpunit/phpunit": "Required to use assertions and run tests (^10.5.35|^11.5.3|^12.0.1).",
-                "predis/predis": "Required to use the predis connector (^2.3).",
+                "predis/predis": "Required to use the predis connector (^2.3|^3.0).",
                 "psr/http-message": "Required to allow Storage::put to accept a StreamInterface (^1.0).",
                 "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (^6.0|^7.0).",
                 "resend/resend-php": "Required to enable support for the Resend mail transport (^0.10.0).",
@@ -1409,7 +1409,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-05-01T16:13:12+00:00"
+            "time": "2025-05-07T17:29:01+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -1663,16 +1663,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.6.2",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "06c3b0bf2540338094575612f4a1778d0d2d5e94"
+                "reference": "6fbb36d44824ed4091adbcf4c7d4a3923cdb3405"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/06c3b0bf2540338094575612f4a1778d0d2d5e94",
-                "reference": "06c3b0bf2540338094575612f4a1778d0d2d5e94",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/6fbb36d44824ed4091adbcf4c7d4a3923cdb3405",
+                "reference": "6fbb36d44824ed4091adbcf4c7d4a3923cdb3405",
                 "shasum": ""
             },
             "require": {
@@ -1709,7 +1709,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.7-dev"
+                    "dev-main": "2.8-dev"
                 }
             },
             "autoload": {
@@ -1766,7 +1766,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-18T21:09:27+00:00"
+            "time": "2025-05-05T12:20:28+00:00"
         },
         {
             "name": "league/config",
@@ -2676,31 +2676,31 @@
         },
         {
             "name": "nunomaduro/termwind",
-            "version": "v2.3.0",
+            "version": "v2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/termwind.git",
-                "reference": "52915afe6a1044e8b9cee1bcff836fb63acf9cda"
+                "reference": "dfa08f390e509967a15c22493dc0bac5733d9123"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/termwind/zipball/52915afe6a1044e8b9cee1bcff836fb63acf9cda",
-                "reference": "52915afe6a1044e8b9cee1bcff836fb63acf9cda",
+                "url": "https://api.github.com/repos/nunomaduro/termwind/zipball/dfa08f390e509967a15c22493dc0bac5733d9123",
+                "reference": "dfa08f390e509967a15c22493dc0bac5733d9123",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "php": "^8.2",
-                "symfony/console": "^7.1.8"
+                "symfony/console": "^7.2.6"
             },
             "require-dev": {
-                "illuminate/console": "^11.33.2",
-                "laravel/pint": "^1.18.2",
+                "illuminate/console": "^11.44.7",
+                "laravel/pint": "^1.22.0",
                 "mockery/mockery": "^1.6.12",
-                "pestphp/pest": "^2.36.0",
-                "phpstan/phpstan": "^1.12.11",
-                "phpstan/phpstan-strict-rules": "^1.6.1",
-                "symfony/var-dumper": "^7.1.8",
+                "pestphp/pest": "^2.36.0 || ^3.8.2",
+                "phpstan/phpstan": "^1.12.25",
+                "phpstan/phpstan-strict-rules": "^1.6.2",
+                "symfony/var-dumper": "^7.2.6",
                 "thecodingmachine/phpstan-strict-rules": "^1.0.0"
             },
             "type": "library",
@@ -2743,7 +2743,7 @@
             ],
             "support": {
                 "issues": "https://github.com/nunomaduro/termwind/issues",
-                "source": "https://github.com/nunomaduro/termwind/tree/v2.3.0"
+                "source": "https://github.com/nunomaduro/termwind/tree/v2.3.1"
             },
             "funding": [
                 {
@@ -2759,7 +2759,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-21T10:39:51+00:00"
+            "time": "2025-05-08T08:14:37+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -2838,29 +2838,30 @@
         },
         {
             "name": "propaganistas/laravel-phone",
-            "version": "5.3.6",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Propaganistas/Laravel-Phone.git",
-                "reference": "89f26e8336cf8f8041609148b4fef752f0bd720e"
+                "reference": "433d07645e7ac11f1aa62e2a7f33a0c93a1ad61d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Propaganistas/Laravel-Phone/zipball/89f26e8336cf8f8041609148b4fef752f0bd720e",
-                "reference": "89f26e8336cf8f8041609148b4fef752f0bd720e",
+                "url": "https://api.github.com/repos/Propaganistas/Laravel-Phone/zipball/433d07645e7ac11f1aa62e2a7f33a0c93a1ad61d",
+                "reference": "433d07645e7ac11f1aa62e2a7f33a0c93a1ad61d",
                 "shasum": ""
             },
             "require": {
-                "giggsey/libphonenumber-for-php-lite": "^8.13.35|^9.0.0",
-                "illuminate/contracts": "^10.0|^11.0|^12.0",
-                "illuminate/support": "^10.0|^11.0|^12.0",
-                "illuminate/validation": "^10.0|^11.0|^12.0",
-                "php": "^8.1"
+                "ext-mbstring": "*",
+                "giggsey/libphonenumber-for-php-lite": "^9.0",
+                "illuminate/contracts": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "illuminate/validation": "^11.0|^12.0",
+                "php": "^8.2"
             },
             "require-dev": {
-                "laravel/pint": "^1.14",
+                "laravel/pint": "^1.21",
                 "orchestra/testbench": "*",
-                "phpunit/phpunit": "^10.5|^11.5.3"
+                "phpunit/phpunit": "^11.5.3"
             },
             "type": "library",
             "extra": {
@@ -2897,7 +2898,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Propaganistas/Laravel-Phone/issues",
-                "source": "https://github.com/Propaganistas/Laravel-Phone/tree/5.3.6"
+                "source": "https://github.com/Propaganistas/Laravel-Phone/tree/6.0.1"
             },
             "funding": [
                 {
@@ -2905,7 +2906,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-21T09:07:26+00:00"
+            "time": "2025-05-05T17:53:39+00:00"
         },
         {
             "name": "psr/clock",
