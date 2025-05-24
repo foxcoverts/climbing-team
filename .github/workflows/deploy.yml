@@ -43,7 +43,7 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader --no-dev
 
       - name: Generate dotenv file
-        uses: iamsauravsharma/create-dotenv@v3.1.1
+        uses: iamsauravsharma/create-dotenv@v3.2.0
         with:
           input-prefix: DOTENV_
         env:
