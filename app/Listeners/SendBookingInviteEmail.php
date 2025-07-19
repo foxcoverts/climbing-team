@@ -14,6 +14,9 @@ class SendBookingInviteEmail
      */
     public function handle(BookingInvite $event): void
     {
+        if ($event->attendee->isSuspended()) {
+            return;
+        }
         if ($event->booking->isCancelled() || $event->booking->isPast()) {
             return;
         }

@@ -173,6 +173,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->role == Role::Guest;
     }
 
+    public function isSuspended(): bool
+    {
+        return $this->role == Role::Suspended;
+    }
+
     public function isKeyHolder(): bool
     {
         return $this->keys->isNotEmpty();

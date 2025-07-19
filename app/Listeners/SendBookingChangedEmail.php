@@ -24,6 +24,9 @@ class SendBookingChangedEmail
 
     private function sendMail(User $attendee, Booking $booking, array $changes = []): void
     {
+        if ($attendee->isSuspended()) {
+            return;
+        }
         if ($attendee->attendance->status === BookingAttendeeStatus::Declined) {
             return;
         }

@@ -24,6 +24,9 @@ class SendBookingConfirmedEmail
 
     private function sendMail(User $attendee, Booking $booking, array $changes = []): void
     {
+        if ($attendee->isSuspended()) {
+            return;
+        }
         if (! in_array($attendee->attendance->status, [BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative])) {
             return;
         }
