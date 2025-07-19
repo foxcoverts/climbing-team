@@ -4,6 +4,7 @@
     'color' => match ($role) {
         Role::TeamLeader => 'yellow',
         Role::TeamMember => 'lime',
+        Role::Suspended => 'pink',
         default => 'gray',
     },
     'icon' => null,
