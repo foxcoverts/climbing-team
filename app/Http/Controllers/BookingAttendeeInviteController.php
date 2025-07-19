@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BookingAttendeeStatus;
+use App\Enums\Role;
 use App\Events\BookingInvite;
 use App\Http\Requests\InviteBookingAttendeeRequest;
 use App\Models\Booking;
@@ -30,6 +31,7 @@ class BookingAttendeeInviteController extends Controller
         return view('booking.attendee.invite', [
             'booking' => $booking,
             'users' => User::query()
+                ->whereNot('role', Role::Suspended->value)
                 ->whereNotNull('email_verified_at')
                 ->whereDoesntHave('bookings', fn (Builder $query) => $query->where('booking_id', $booking->id))
                 ->with('qualifications', 'keys')
