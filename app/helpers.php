@@ -19,6 +19,10 @@ if (! function_exists('localDate')) {
             'timezone' => $timezone,
         ]);
 
+        if (is_string($date)) {
+            $date = new Carbon($date);
+        }
+
         return $factory->make($date);
     }
 }
