@@ -204,6 +204,9 @@ class BookingController extends Controller
             if ($originalStatus == BookingStatus::Cancelled) {
                 // When restoring a cancelled booking, re-invite any 'Going' and 'Maybe' attendees.
                 $attendees = $booking->attendees->mapWithKeys(function ($attendee) {
+                    if ($attendee->isSuspended()) {
+                        return [];
+                    }
                     if ($attendee->attendance->status == BookingAttendeeStatus::Declined) {
                         return [$attendee->id => ['status' => BookingAttendeeStatus::Declined]];
                     }

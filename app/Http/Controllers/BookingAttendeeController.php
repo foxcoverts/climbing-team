@@ -36,6 +36,7 @@ class BookingAttendeeController extends Controller
             ])
             ->groupBy('attendance.status');
         $nonAttendees = User::whereNotIn('id', $booking->attendees->pluck('id'))
+            ->whereNot('role', Role::Suspended->value)
             ->orderBy('name')
             ->get();
 

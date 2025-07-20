@@ -25,7 +25,8 @@ class KitCheckController extends Controller
         Gate::authorize('viewAny', KitCheck::class);
 
         return view('kit-check.index', [
-            'users' => User::ordered()
+            'users' => User::whereNot('role', Role::Suspended->value)
+                ->ordered()
                 ->has('latestKitCheck')
                 ->with('latestKitCheck', 'latestKitCheck.checked_by')
                 ->get(),
@@ -47,7 +48,7 @@ class KitCheckController extends Controller
         return view('kit-check.create', [
             'kitCheck' => $kitCheck,
             'checkers' => $this->getCheckers($request->user()),
-            'users' => User::ordered()->get(),
+            'users' => User::whereNot('role', Role::Suspended->value)->ordered()->get(),
             'user_ids' => (array) $request->get('users'),
         ]);
     }
