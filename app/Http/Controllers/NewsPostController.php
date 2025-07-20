@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Http\Requests\StoreNewsPostRequest;
 use App\Http\Requests\UpdateNewsPostRequest;
 use App\Models\NewsPost;
@@ -36,7 +37,8 @@ class NewsPostController extends Controller
 
         return view('news.create', [
             'currentUser' => $request->user(),
-            'authors' => User::ordered()->select('id', 'name')->get(),
+            'authors' => User::whereNot('role', Role::Suspended->value)
+                ->ordered()->select('id', 'name')->get(),
         ]);
     }
 
@@ -80,7 +82,8 @@ class NewsPostController extends Controller
 
         return view('news.edit', [
             'post' => $post,
-            'authors' => User::ordered()->select(['id', 'name'])->get(),
+            'authors' => User::whereNot('role', Role::Suspended->value)
+                ->ordered()->select(['id', 'name'])->get(),
         ]);
     }
 

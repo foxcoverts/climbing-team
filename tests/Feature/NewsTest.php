@@ -13,7 +13,7 @@ class NewsTest extends TestCase
 
     public function test_news_page_is_displayed(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notSuspended()->create();
         $postA = NewsPost::factory()->for($user, 'author')->create();
         $postB = NewsPost::factory()->for($user, 'author')->create();
 
@@ -40,7 +40,7 @@ class NewsTest extends TestCase
 
     public function test_news_article_can_be_previewed(): void
     {
-        $author = User::factory()->create();
+        $author = User::factory()->teamLeader()->create();
         $post = NewsPost::factory()->for($author, 'author')->create();
 
         $this
@@ -52,7 +52,7 @@ class NewsTest extends TestCase
 
     public function test_news_article_can_be_seen_in_full_when_authed(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notSuspended()->create();
         $post = NewsPost::factory()->for($user, 'author')->create();
 
         $this
@@ -65,7 +65,7 @@ class NewsTest extends TestCase
 
     public function test_news_is_displayed_on_dashboard(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notSuspended()->create();
         $post = NewsPost::factory()->for($user, 'author')->create();
 
         $this
@@ -78,5 +78,20 @@ class NewsTest extends TestCase
                 'Posted',
                 'View all news',
             ]);
+    }
+
+    public function test_news_is_hidden_for_suspended_user(): void
+    {
+        $user = User::factory()->suspended()->create();
+        $author = User::factory()->teamLeader()->create();
+        $post = NewsPost::factory()->for($author, 'author')->create();
+
+        $this
+            ->actingAs($user)
+            ->get('/dashboard')
+            ->assertOk()
+            ->assertDontSee('Recent News')
+            ->assertDontSee($post->title);
+
     }
 }

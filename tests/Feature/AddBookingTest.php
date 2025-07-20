@@ -91,6 +91,16 @@ class AddBookingTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_suspended_cannot_add_booking(): void
+    {
+        $user = User::factory()->suspended()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('/booking/create')
+            ->assertForbidden();
+    }
+
     public function test_add_booking_is_auth_protected(): void
     {
         $this

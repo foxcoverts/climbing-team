@@ -13,21 +13,25 @@ class DashboardController extends Controller
 {
     public function __invoke(Request $request): View
     {
-        Gate::authorize('viewOwn', Booking::class);
+        $nextBooking = $invite = $newsPost = null;
 
-        $nextBooking = Booking::future()->notCancelled()
-            ->attendeeStatus($request->user(), [
-                BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative,
-            ])
-            ->ordered()->first();
+        if (Gate::check('viewOwn', Booking::class)) {
+            $nextBooking = Booking::future()->notCancelled()
+                ->attendeeStatus($request->user(), [
+                    BookingAttendeeStatus::Accepted, BookingAttendeeStatus::Tentative,
+                ])
+                ->ordered()->first();
 
-        $invite = Booking::future()->notCancelled()
-            ->attendeeStatus($request->user(), [
-                BookingAttendeeStatus::NeedsAction, BookingAttendeeStatus::Tentative,
-            ])
-            ->ordered()->first();
+            $invite = Booking::future()->notCancelled()
+                ->attendeeStatus($request->user(), [
+                    BookingAttendeeStatus::NeedsAction, BookingAttendeeStatus::Tentative,
+                ])
+                ->ordered()->first();
+        }
 
-        $newsPost = NewsPost::orderByDesc('created_at')->first();
+        if (Gate::check('viewAny', NewsPost::class)) {
+            $newsPost = NewsPost::orderByDesc('created_at')->first();
+        }
 
         return view('dashboard', [
             'next' => $nextBooking,

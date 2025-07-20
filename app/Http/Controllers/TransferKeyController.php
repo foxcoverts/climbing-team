@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Events\KeyTransferred;
 use App\Http\Requests\UpdateKeyTransferRequest;
 use App\Models\Key;
@@ -23,7 +24,7 @@ class TransferKeyController extends Controller
         return view('key.transfer', [
             'ajax' => $request->ajax(),
             'key' => $key,
-            'users' => User::ordered()->get(),
+            'users' => User::whereNot('role', Role::Suspended->value)->ordered()->get(),
         ]);
     }
 

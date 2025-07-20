@@ -14,7 +14,7 @@ class RotaTest extends TestCase
 
     public function test_rota_page_is_displayed(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notSuspended()->create();
         $booking = Booking::factory()->create();
         $booking->attendees()->syncWithPivotValues(
             $user,
@@ -48,6 +48,16 @@ class RotaTest extends TestCase
             );
     }
 
+    public function test_suspended_user_cannot_see_rota(): void
+    {
+        $user = User::factory()->suspended()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('/rota')
+            ->assertForbidden();
+    }
+
     public function test_rota_is_auth_protected(): void
     {
         $this
@@ -59,7 +69,7 @@ class RotaTest extends TestCase
     public function test_next_booking_is_displayed_on_dashboard(): void
     {
 
-        $user = User::factory()->create();
+        $user = User::factory()->notSuspended()->create();
         $booking = Booking::factory()->create();
         $booking->attendees()->syncWithPivotValues(
             $user,
@@ -89,9 +99,37 @@ class RotaTest extends TestCase
             );
     }
 
+    public function test_no_next_booking_is_displayed_on_dashboard_for_suspended(): void
+    {
+        $user = User::factory()->suspended()->create();
+        $booking = Booking::factory()->create();
+        $booking->attendees()->syncWithPivotValues(
+            $user,
+            ['status' => BookingAttendeeStatus::Accepted],
+        );
+        $bookingSummary = __(':activity for :group', [
+            'activity' => $booking->activity,
+            'group' => $booking->group_name,
+        ]);
+
+        $otherBooking = Booking::factory()->create();
+        $otherBookingSummary = __(':activity for :group', [
+            'activity' => $otherBooking->activity,
+            'group' => $otherBooking->group_name,
+        ]);
+
+        $this
+            ->actingAs($user)
+            ->get('/dashboard')
+            ->assertOk()
+            ->assertDontSee('Next Booking')
+            ->assertDontSee($bookingSummary)
+            ->assertDontSee($otherBookingSummary);
+    }
+
     public function test_no_next_booking_is_displayed_on_dashboard_when_there_is_none(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notSuspended()->create();
         $booking = Booking::factory()->create();
 
         $this

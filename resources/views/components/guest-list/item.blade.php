@@ -16,6 +16,8 @@
 
     @if ($attendee->isGuest())
         <x-badge.role :role="Role::Guest" class="text-xs whitespace-nowrap" />
+    @elseif ($attendee->isSuspended())
+        <x-badge.role :role="Role::Suspended" class="text-xs whitespace->nowrap" />
     @endif
 
     @if ($attendee->isUnder18())

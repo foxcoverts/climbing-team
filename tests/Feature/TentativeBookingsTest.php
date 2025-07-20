@@ -61,6 +61,16 @@ class TentativeBookingsTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_suspended_cannot_see_tentative_bookings(): void
+    {
+        $user = User::factory()->suspended()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('/booking/tentative')
+            ->assertForbidden();
+    }
+
     public function test_tentative_bookings_is_auth_protected(): void
     {
         $this

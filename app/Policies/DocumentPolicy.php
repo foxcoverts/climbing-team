@@ -20,7 +20,7 @@ class DocumentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return ! $user->isSuspended();
     }
 
     /**
@@ -28,7 +28,7 @@ class DocumentPolicy
      */
     public function view(User $user, Document $document): bool
     {
-        return true;
+        return ! $user->isSuspended();
     }
 
     /**

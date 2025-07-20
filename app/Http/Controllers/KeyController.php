@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Http\Requests\StoreKeyRequest;
 use App\Http\Requests\UpdateKeyRequest;
 use App\Models\Key;
@@ -41,7 +42,7 @@ class KeyController extends Controller
 
         return view('key.create', [
             'key' => $key,
-            'users' => User::ordered()->get(),
+            'users' => User::whereNot('role', Role::Suspended->value)->ordered()->get(),
         ]);
     }
 

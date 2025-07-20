@@ -98,8 +98,9 @@ return [
         ],
         'role' => [
             'guest' => 'Guest',
-            'team-member' => 'Team Member',
+            'suspended' => 'Suspended',
             'team-leader' => 'Team Leader',
+            'team-member' => 'Team Member',
         ],
         'section' => [
             'squirrel' => 'Squirrel',

@@ -14,7 +14,7 @@ class NewsPostPolicy
 
     public function viewAny(User $user)
     {
-        return true;
+        return ! $user->isSuspended();
     }
 
     public function create(User $user)
@@ -24,7 +24,7 @@ class NewsPostPolicy
 
     public function view(User $user, NewsPost $post)
     {
-        return true;
+        return ! $user->isSuspended();
     }
 
     public function update(User $user, NewsPost $post)

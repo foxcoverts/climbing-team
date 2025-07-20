@@ -12,6 +12,10 @@ class QualificationPolicy
      */
     public function manage(User $user): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return $user->isTeamLeader() || $user->isQualificationManager();
     }
 
@@ -22,6 +26,8 @@ class QualificationPolicy
     {
         if (is_null($model)) {
             return $user->can('manage', Qualification::class);
+        } elseif ($user->isSuspended()) {
+            return false;
         }
 
         return ($user->id == $model->id) ||
@@ -31,10 +37,22 @@ class QualificationPolicy
     }
 
     /**
+     * Determine whether the user can view their own qualifications.
+     */
+    public function viewOwn(User $user): bool
+    {
+        return $this->viewAny($user, $user);
+    }
+
+    /**
      * Determine whether the user can view the qualification.
      */
     public function view(User $user, Qualification $qualification): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return ($user->id == $qualification->user_id) ||
             $user->can('manage', Qualification::class) ||
             $user->can('view', $qualification->user);
@@ -47,6 +65,8 @@ class QualificationPolicy
     {
         if (is_null($model)) {
             return $user->can('manage', Qualification::class);
+        } elseif ($user->isSuspended() || $model->isSuspended()) {
+            return false;
         }
 
         return $user->can('view', $model) && $user->can('manage', Qualification::class);
@@ -57,6 +77,10 @@ class QualificationPolicy
      */
     public function update(User $user, Qualification $qualification): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return $user->can('view', $qualification->user) && $user->can('manage', Qualification::class);
     }
 
@@ -65,6 +89,10 @@ class QualificationPolicy
      */
     public function delete(User $user, Qualification $qualification): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return $user->can('view', $qualification->user) && $user->can('manage', Qualification::class);
     }
 }

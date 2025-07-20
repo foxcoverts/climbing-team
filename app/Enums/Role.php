@@ -7,13 +7,15 @@ enum Role: string
     case TeamLeader = 'team-leader';
     case TeamMember = 'team-member';
     case Guest = 'guest';
+    case Suspended = 'suspended';
 
     protected function rank(): int
     {
         return match ($this) {
-            static::Guest => 0,
-            static::TeamMember => 1,
-            static::TeamLeader => 2,
+            self::TeamLeader => 3,
+            self::TeamMember => 2,
+            self::Guest => 1,
+            self::Suspended => 0,
         };
     }
 

@@ -14,7 +14,7 @@ class ChangeCommentPolicy
             return true;
         }
 
-        return ! $user->isGuest();
+        return ! $user->isGuest() && ! $user->isSuspended();
     }
 
     public function update(User $user, ChangeComment $comment)

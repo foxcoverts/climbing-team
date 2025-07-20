@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BookingAttendeeStatus;
+use App\Enums\TodoAttendeeStatus;
 use App\Events\Registered;
 use App\Http\Requests\DestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\BookingAttendance;
+use App\Models\TodoAttendance;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
@@ -120,6 +124,14 @@ class UserController extends Controller
 
         if ($user->wasChanged('email')) {
             $user->sendEmailVerificationNotification();
+        }
+        if ($user->wasChanged('role') && $user->isSuspended()) {
+            BookingAttendance::where('user_id', $user->id)
+                ->where('status', BookingAttendeeStatus::NeedsAction)
+                ->delete();
+            TodoAttendance::where('user_id', $user->id)
+                ->where('status', TodoAttendeeStatus::NeedsAction)
+                ->delete();
         }
 
         return redirect()->route('user.show', $user)

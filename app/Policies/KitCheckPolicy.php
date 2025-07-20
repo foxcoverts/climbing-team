@@ -20,6 +20,10 @@ class KitCheckPolicy
      */
     public function viewAny(User $user): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return $user->can('manage', KitCheck::class)
             || $user->can('manage', User::class)
             || $user->isKitChecker();
@@ -30,6 +34,10 @@ class KitCheckPolicy
      */
     public function view(User $user, KitCheck $kitCheck): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return $user->id === $kitCheck->user_id
             || $user->can('manage', KitCheck::class)
             || $user->can('manage', User::class)
@@ -41,6 +49,10 @@ class KitCheckPolicy
      */
     public function create(User $user): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return $user->can('manage', KitCheck::class)
             || $user->isKitChecker();
     }
@@ -50,6 +62,10 @@ class KitCheckPolicy
      */
     public function update(User $user, KitCheck $kitCheck): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return $user->can('manage', KitCheck::class)
             || ($user->isKitChecker() && $user->id == $kitCheck->checked_by_id);
     }
@@ -59,6 +75,10 @@ class KitCheckPolicy
      */
     public function delete(User $user, KitCheck $kitCheck): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return $user->can('manage', KitCheck::class)
             || ($user->isKitChecker() && $user->id == $kitCheck->checked_by_id);
     }

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\Role;
 use App\Enums\Section;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -61,6 +62,21 @@ class UserFactory extends Factory
     }
 
     /**
+     * Get a suspended user.
+     */
+    public function suspended(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => Role::Suspended->value,
+        ]);
+    }
+
+    public function notSuspended(): static
+    {
+        return $this->anyRoleExcept(Role::Suspended);
+    }
+
+    /**
      * Get a guest.
      */
     public function guest(): static
@@ -87,6 +103,20 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'role' => Role::TeamLeader->value,
+        ]);
+    }
+
+    public function notTeamLeader(): static
+    {
+        return $this->anyRoleExcept(Role::TeamLeader);
+    }
+
+    protected function anyRoleExcept(Role $role): static
+    {
+        $roles = Arr::reject(Role::cases(), fn (Role $value): bool => $value === $role);
+
+        return $this->state(fn (array $attributes) => [
+            'role' => fake()->randomElement($roles)->value,
         ]);
     }
 }

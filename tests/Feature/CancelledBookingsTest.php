@@ -61,6 +61,16 @@ class CancelledBookingsTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_suspended_cannot_see_cancelled_bookings(): void
+    {
+        $user = User::factory()->suspended()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('/booking/cancelled')
+            ->assertForbidden();
+    }
+
     public function test_cancelled_bookings_is_auth_protected(): void
     {
         $this

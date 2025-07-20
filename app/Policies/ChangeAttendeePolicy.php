@@ -9,6 +9,10 @@ class ChangeAttendeePolicy
 {
     public function view(User $user, ChangeAttendee $attendee)
     {
-        return !$user->isGuest() || $attendee->attendee->is($user);
+        if ($user->isGuest() || $user->isSuspended()) {
+            return false;
+        }
+
+        return $attendee->attendee->is($user);
     }
 }

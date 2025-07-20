@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Http\Requests\UpdateQualificationRequest;
 use App\Models\Qualification;
 use App\Models\User;
@@ -35,7 +36,8 @@ class QualificationController extends Controller
         Gate::authorize('create', Qualification::class);
 
         return view('qualification.pick-user', [
-            'users' => User::ordered()->get(),
+            'users' => User::whereNot('role', Role::Suspended->value)
+                ->ordered()->get(),
         ]);
     }
 
