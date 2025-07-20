@@ -98,7 +98,7 @@ class BookingPolicy
      */
     public function respond(User $user, Booking $booking, User $model): bool
     {
-        if ($user->isSuspended()) {
+        if ($user->isSuspended() || $model->isSuspended()) {
             return false;
         }
 

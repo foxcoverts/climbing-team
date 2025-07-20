@@ -53,7 +53,8 @@ class BookingAttendancePolicy
      */
     public function contact(User $user, BookingAttendance $attendance): bool
     {
-        if ($user->isSuspended()) {
+        if ($user->isSuspended() || $attendance->user->isSuspended()) {
+            // Suspended users cannot make contact, or be contacted.
             return false;
         }
 
@@ -97,6 +98,10 @@ class BookingAttendancePolicy
     {
         $booking = $attendance->booking;
         if ($booking->isPast() || $booking->isCancelled()) {
+            return false;
+        }
+        if ($attendance->user->isSuspended()) {
+            // Suspended users cannot change their attendance.
             return false;
         }
         if ($attendance->isLeadInstructor() && $attendance->isAccepted()) {
