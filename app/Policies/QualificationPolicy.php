@@ -24,10 +24,10 @@ class QualificationPolicy
      */
     public function viewAny(User $user, ?User $model = null): bool
     {
-        if ($user->isSuspended()) {
-            return false;
-        } elseif (is_null($model)) {
+        if (is_null($model)) {
             return $user->can('manage', Qualification::class);
+        } elseif ($user->isSuspended()) {
+            return false;
         }
 
         return ($user->id == $model->id) ||
@@ -63,10 +63,10 @@ class QualificationPolicy
      */
     public function create(User $user, ?User $model = null): bool
     {
-        if ($user->isSuspended()) {
-            return false;
-        } elseif (is_null($model)) {
+        if (is_null($model)) {
             return $user->can('manage', Qualification::class);
+        } elseif ($user->isSuspended() || $model->isSuspended()) {
+            return false;
         }
 
         return $user->can('view', $model) && $user->can('manage', Qualification::class);
