@@ -81,6 +81,16 @@ class ConfirmedBookingsTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_suspended_cannot_see_confirmed_bookings(): void
+    {
+        $user = User::factory()->suspended()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('/booking/confirmed')
+            ->assertForbidden();
+    }
+
     public function test_confirmed_bookings_is_auth_protected(): void
     {
         $this

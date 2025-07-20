@@ -22,7 +22,7 @@ class InviteTest extends TestCase
 
     public function test_invite_displays_needs_action_booking(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notSuspended()->create();
         $booking = Booking::factory()->create();
         $booking->attendees()->syncWithPivotValues(
             $user,
@@ -47,7 +47,7 @@ class InviteTest extends TestCase
 
     public function test_invite_displays_tentative_booking(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notSuspended()->create();
         $booking = Booking::factory()->create();
         $booking->attendees()->syncWithPivotValues(
             $user,
@@ -70,9 +70,19 @@ class InviteTest extends TestCase
             ]);
     }
 
+    public function test_suspended_cannot_see_invites(): void
+    {
+        $user = User::factory()->suspended()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('/invite')
+            ->assertForbidden();
+    }
+
     public function test_invite_displays_on_dashboard(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notSuspended()->create();
         $booking = Booking::factory()->create();
         $booking->attendees()->syncWithPivotValues(
             $user,
@@ -96,7 +106,7 @@ class InviteTest extends TestCase
 
     public function test_dashboard_shows_no_invites_when_there_are_none(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notSuspended()->create();
         $booking = Booking::factory()->create();
 
         $this

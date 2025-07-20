@@ -65,7 +65,7 @@ class ProfileTest extends TestCase
     public function test_user_can_delete_their_account(): void
     {
         // Note: Team Leader cannot delete their own account.
-        $user = User::factory()->teamMember()->create();
+        $user = User::factory()->notTeamLeader()->create();
 
         $this
             ->actingAs($user)
@@ -83,7 +83,7 @@ class ProfileTest extends TestCase
     public function test_correct_password_must_be_provided_to_delete_account(): void
     {
         // Note: Team Leader cannot delete their own account.
-        $user = User::factory()->teamMember()->create();
+        $user = User::factory()->notTeamLeader()->create();
 
         $this
             ->actingAs($user)
