@@ -1,3 +1,4 @@
+@props(['next' => null, 'invite' => null, 'post' => null])
 <x-layout.app :title="__('Dashboard')">
     <div class="divide-y">
         @include('dashboard.partials.next-widget', [
