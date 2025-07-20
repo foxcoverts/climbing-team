@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\RespondToBookingAction;
 use App\Enums\BookingAttendeeStatus;
+use App\Enums\Role;
 use App\Http\Requests\StoreBookingAttendeeRequest;
 use App\Http\Requests\UpdateBookingAttendeeRequest;
 use App\Models\Booking;
@@ -78,6 +79,7 @@ class BookingAttendeeController extends Controller
         return view('booking.attendee.create', [
             'booking' => $booking,
             'users' => User::query()
+                ->whereNot('role', Role::Suspended->value)
                 ->whereDoesntHave('bookings', function (Builder $query) use ($booking) {
                     $query->where('booking_id', $booking->id);
                 })
