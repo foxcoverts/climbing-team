@@ -20,7 +20,11 @@ class TodoPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('manage', Todo::class) || ! $user->isGuest();
+        if ($user->isGuest() || $user->isSuspended()) {
+            return false;
+        }
+
+        return $user->can('manage', Todo::class);
     }
 
     /**
@@ -28,7 +32,11 @@ class TodoPolicy
      */
     public function view(User $user, Todo $todo): bool
     {
-        return $user->can('manage', Todo::class) || ! $user->isGuest();
+        if ($user->isGuest() || $user->isSuspended()) {
+            return false;
+        }
+
+        return $user->can('manage', Todo::class);
     }
 
     /**
@@ -44,7 +52,11 @@ class TodoPolicy
      */
     public function complete(User $user, Todo $todo): bool
     {
-        return ! $user->isGuest() || $this->update($user, $todo);
+        if ($user->isGuest() || $user->isSuspended()) {
+            return false;
+        }
+
+        return $this->update($user, $todo);
     }
 
     /**
@@ -60,7 +72,7 @@ class TodoPolicy
      */
     public function comment(User $user, Todo $todo): bool
     {
-        if ($todo->isComplete() || $user->isGuest()) {
+        if ($todo->isComplete() || $user->isGuest() || $user->isSuspended()) {
             return false;
         }
         if ($this->manage($user)) {

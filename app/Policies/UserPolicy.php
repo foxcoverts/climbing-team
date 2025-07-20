@@ -11,6 +11,10 @@ class UserPolicy
      */
     public function manage(User $user): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return $user->isTeamLeader() || $user->isUserManager();
     }
 

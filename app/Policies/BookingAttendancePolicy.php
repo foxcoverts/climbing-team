@@ -30,7 +30,7 @@ class BookingAttendancePolicy
      */
     public function rollcall(User $user, Booking $booking): bool
     {
-        if ($booking->isCancelled() || ! $booking->isToday()) {
+        if ($booking->isCancelled() || ! $booking->isToday() || $user->isSuspended()) {
             return false;
         }
 
@@ -53,6 +53,10 @@ class BookingAttendancePolicy
      */
     public function contact(User $user, BookingAttendance $attendance): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         $booking = $attendance->booking;
         if ($booking->isCancelled() || $booking->isBeforeToday()) {
             // We may still need to contact attendees after the event on the same day, but
@@ -107,7 +111,7 @@ class BookingAttendancePolicy
                 // If the user has been invited, or has already responded, let them change their response.
                 return true;
             }
-            if ($user->isGuest()) {
+            if ($user->isGuest() || $user->isSuspended()) {
                 // Guests cannot invite themselves to any bookings.
                 return false;
             }

@@ -14,6 +14,10 @@ class BookingPolicy
      */
     public function manage(User $user): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return $user->isTeamLeader() || $user->isBookingManager();
     }
 
@@ -22,6 +26,10 @@ class BookingPolicy
      */
     public function viewAny(User $user, ?BookingStatus $status = null): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         switch ($status) {
             case BookingStatus::Confirmed:
                 return $this->manage($user) || ! $user->isGuest();
@@ -40,7 +48,7 @@ class BookingPolicy
      */
     public function viewOwn(User $user): bool
     {
-        return $user->exists;
+        return $user->exists && ! $user->isSuspended();
     }
 
     /**
@@ -48,7 +56,9 @@ class BookingPolicy
      */
     public function view(User $user, Booking $booking): bool
     {
-        if ($booking->attendees->find($user)) {
+        if ($user->isSuspended()) {
+            return false;
+        } elseif ($booking->attendees->find($user)) {
             return true;
         } else {
             return $this->viewAny($user, $booking->status);
@@ -60,6 +70,10 @@ class BookingPolicy
      */
     public function lead(User $user, Booking $booking): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         return ($user->id === $booking->lead_instructor_id) || $this->manage($user);
     }
 
@@ -84,6 +98,10 @@ class BookingPolicy
      */
     public function respond(User $user, Booking $booking, User $model): bool
     {
+        if ($user->isSuspended()) {
+            return false;
+        }
+
         if ($attendee = $booking->attendees->find($model)) {
             $attendance = $attendee->attendance;
         } else {
@@ -98,7 +116,7 @@ class BookingPolicy
      */
     public function comment(User $user, Booking $booking): bool
     {
-        if ($booking->isPast() || $booking->isCancelled() || $user->isGuest()) {
+        if ($booking->isPast() || $booking->isCancelled() || $user->isGuest() || $user->isSuspended()) {
             return false;
         }
         if ($this->manage($user)) {
