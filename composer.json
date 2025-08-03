@@ -17,7 +17,6 @@
         "propaganistas/laravel-phone": "^6.0",
         "sabre/vobject": "^4.5",
         "symfony/http-client": "^7.0",
-        "symfony/sendgrid-mailer": "^7.0",
         "symfony/yaml": "^7.0"
     },
     "require-dev": {

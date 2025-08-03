@@ -56,12 +56,12 @@ jobs:
           DOTENV_DB_USERNAME: "${{ vars.DB_USERNAME }}"
           DOTENV_DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
 
-          DOTENV_MAIL_MAILER: "smtp/sendgrid"
-          DOTENV_MAIL_HOST: smtp.sendgrid.net
-          DOTENV_MAIL_PORT: 465
-          DOTENV_MAIL_ENCRYPTION: ssl
-          DOTENV_MAIL_USERNAME: apikey
-          DOTENV_MAIL_PASSWORD: "${{ secrets.SENDGRID_API_KEY }}"
+          DOTENV_MAIL_MAILER: "${{ vars.MAILER }}"
+          DOTENV_MAIL_HOST: ${{ vars.MAIL_HOST }}
+          DOTENV_MAIL_PORT: ${{ vars.MAIL_PORT }}
+          DOTENV_MAIL_ENCRYPTION: ${{ vars.MAIL_ENCRYPTION }}
+          DOTENV_MAIL_USERNAME: ${{ vars.MAIL_USERNAME }}
+          DOTENV_MAIL_PASSWORD: "${{ secrets.MAIL_PASSWORD }}"
           DOTENV_SENDGRID_API_KEY: "${{ secrets.SENDGRID_API_KEY }}"
 
       - name: Setup Node
