@@ -65,7 +65,7 @@ jobs:
           DOTENV_SENDGRID_API_KEY: "${{ secrets.SENDGRID_API_KEY }}"
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: v20.x
           cache: yarn
