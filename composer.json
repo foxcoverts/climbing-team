@@ -12,7 +12,7 @@
         "eluceo/ical": "^2.13",
         "laravel/framework": "^12.3",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.9",
+        "laravel/tinker": "^3.0",
         "league/flysystem-read-only": "^3.23",
         "propaganistas/laravel-phone": "^6.0",
         "sabre/vobject": "^4.5",
