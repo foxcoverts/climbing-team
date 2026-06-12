@@ -946,9 +946,9 @@ laravel-vite-plugin@^2.1:
     vite-plugin-full-reload "^1.1.0"
 
 libphonenumber-js@^1.13:
-  version "1.13.5"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.13.5.tgz#89a8d1130faf7982ed8b7db810f698a075cda758"
-  integrity sha512-7/kRezHmQlMfO6pmvt34orO/g3j1C47k8FCBXFgj/mklTLwQdBca1LkhDK6RM8UyM6JqHFAIikMdkKkyfQy39A==
+  version "1.13.6"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.13.6.tgz#83ac92a032292a366edbdd2358f64c5e9c05a983"
+  integrity sha512-NdB6O6QvlGMCoG003m0YIKG2+Xw7DjmCZhmc1RH+K6HncADUbRf8TZeLegxBBN1VFyPHcNpPTKpIhYLXzJVy1Q==
 
 lilconfig@^3.1.1, lilconfig@^3.1.3:
   version "3.1.3"
