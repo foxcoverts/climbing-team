@@ -15,7 +15,7 @@
         "laravel/tinker": "^3.0",
         "league/flysystem-read-only": "^3.23",
         "propaganistas/laravel-phone": "^6.0",
-        "sabre/vobject": "^4.5",
+        "sabre/vobject": "^5.0",
         "symfony/http-client": "^7.0",
         "symfony/yaml": "^7.0"
     },
